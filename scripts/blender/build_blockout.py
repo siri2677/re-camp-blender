@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CH101 art-directed production blockout v002.
+"""Build the CH101 art-directed detail blockout v003.
 
 This is a procedural, documentation-grade 3D blockout based on the locked
 CH101 production sheet. It is not a final sculpt, rig, animation, Unity
@@ -77,6 +77,13 @@ def apply_material(obj: bpy.types.Object, mat: bpy.types.Material) -> bpy.types.
     return obj
 
 
+def smooth_mesh(obj: bpy.types.Object) -> bpy.types.Object:
+    if hasattr(obj.data, "polygons"):
+        for polygon in obj.data.polygons:
+            polygon.use_smooth = True
+    return obj
+
+
 def add_uv_sphere(
     name: str,
     location: tuple[float, float, float],
@@ -87,7 +94,7 @@ def add_uv_sphere(
     obj = bpy.context.object
     obj.name = name
     obj.scale = scale
-    return apply_material(obj, mat)
+    return smooth_mesh(apply_material(obj, mat))
 
 
 def add_cylinder_between(
@@ -110,7 +117,7 @@ def add_cylinder_between(
     obj.name = name
     obj.rotation_mode = "QUATERNION"
     obj.rotation_quaternion = direction.to_track_quat("Z", "Y")
-    return apply_material(obj, mat)
+    return smooth_mesh(apply_material(obj, mat))
 
 
 def add_cube(
@@ -187,15 +194,42 @@ def configure_render(scene: bpy.types.Scene, output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
 
+def add_area_light(
+    name: str,
+    location: tuple[float, float, float],
+    target: Vector,
+    energy: float,
+    color: tuple[float, float, float],
+    size: float,
+) -> bpy.types.Object:
+    light_data = bpy.data.lights.new(name, type="AREA")
+    light_data.energy = energy
+    light_data.color = color
+    light_data.shape = "DISK"
+    light_data.size = size
+    light = bpy.data.objects.new(name, light_data)
+    bpy.context.collection.objects.link(light)
+    light.location = location
+    light.rotation_euler = (target - light.location).to_track_quat("-Z", "Y").to_euler()
+    return light
+
+
 def add_saber(root: bpy.types.Object, mats: dict[str, bpy.types.Material]) -> None:
-    """Add the single canonical gold/graphite/cyan saber from the sheet."""
+    """Add the single canonical gold/graphite/cyan saber and sheath cues."""
     x, y, z = SOCKETS["Socket_Equipment_Primary"]
     handle = add_cylinder_between("Saber_Handle", (x, y, z - 0.42), (x, y, z + 0.08), 0.055, mats["graphite"])
     guard = add_cube("Saber_Guard", (x, y - 0.01, z + 0.10), (0.18, 0.06, 0.045), mats["gold"], bevel=0.025)
     blade = add_cube("Saber_Blade_Cyan", (x, y, z + 0.58), (0.055, 0.035, 0.46), mats["cyan"], bevel=0.025)
     blade_core = add_cube("Saber_Blade_Core", (x, y - 0.038, z + 0.58), (0.018, 0.012, 0.40), mats["glow"], bevel=0.008)
     pommel = add_uv_sphere("Saber_Pommel", (x, y, z - 0.47), (0.09, 0.07, 0.07), mats["gold"])
-    for obj in (handle, guard, blade, blade_core, pommel):
+    sheath = add_cylinder_between("Saber_Sheath", (x + 0.14, y + 0.18, z - 0.36), (x + 0.14, y + 0.18, z + 0.74), 0.075, mats["graphite"])
+    sheath_band = add_cube("Saber_Sheath_GoldBand", (x + 0.14, y + 0.18, z + 0.43), (0.10, 0.09, 0.035), mats["gold"], bevel=0.018)
+    blade_stripes = []
+    for index, stripe_z in enumerate((z + 0.36, z + 0.60, z + 0.84), start=1):
+        stripe = add_cube(f"Saber_Blade_Stripe_{index}", (x - 0.045, y - 0.045, stripe_z), (0.012, 0.008, 0.09), mats["glow"], bevel=0.006)
+        stripe.rotation_euler[1] = math.radians(-28)
+        blade_stripes.append(stripe)
+    for obj in (handle, guard, blade, blade_core, pommel, sheath, sheath_band, *blade_stripes):
         obj.parent = root
 
 
@@ -204,7 +238,9 @@ def add_boot(root: bpy.types.Object, side: str, x: float, mats: dict[str, bpy.ty
     ankle = add_cube(f"Boot_{side}_GraphiteAnkle", (x, -0.08, 0.39), (0.16, 0.20, 0.12), mats["graphite"], bevel=0.04)
     sole = add_cube(f"Boot_{side}_CyanSole", (x, -0.07, 0.035), (0.21, 0.29, 0.035), mats["cyan"], bevel=0.025)
     toe = add_cube(f"Boot_{side}_GraphiteToe", (x, -0.28, 0.15), (0.18, 0.10, 0.12), mats["graphite"], bevel=0.04)
-    for obj in (upper, ankle, sole, toe):
+    side_stripe = add_cube(f"Boot_{side}_CyanSideStripe", (x, -0.385, 0.27), (0.035, 0.012, 0.10), mats["cyan"], bevel=0.012)
+    lace = add_cube(f"Boot_{side}_GoldLace", (x, -0.395, 0.38), (0.08, 0.012, 0.018), mats["gold"], bevel=0.008)
+    for obj in (upper, ankle, sole, toe, side_stripe, lace):
         obj.parent = root
 
 
@@ -228,7 +264,7 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
     root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
-    root["blockout_revision"] = "v002"
+    root["blockout_revision"] = "v003"
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
@@ -247,11 +283,14 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
         ("Jacket_Shoulder_L", (-0.34, -0.02, 2.38), (0.13, 0.15, 0.10)),
         ("Jacket_Shoulder_R", (0.34, -0.02, 2.38), (0.13, 0.15, 0.10)),
         ("Jacket_Hood", (0, 0.14, 2.50), (0.28, 0.13, 0.08)),
+        ("Jacket_BackPanel", (0, 0.25, 2.22), (0.28, 0.05, 0.28)),
     ]
     for name, location, scale in jacket_panels:
         add_cube(name, location, scale, mats["white"], bevel=0.035).parent = root
     add_cube("Jacket_Zipper_Gold", (0, -0.335, 2.22), (0.018, 0.018, 0.27), mats["gold"], bevel=0.01).parent = root
     add_cube("CropTop_CyanBand", (0, -0.30, 1.91), (0.25, 0.045, 0.04), mats["cyan"], bevel=0.015).parent = root
+    add_cube("Jacket_Hem_Cyan_L", (-0.22, -0.30, 1.95), (0.08, 0.018, 0.018), mats["cyan"], bevel=0.008).parent = root
+    add_cube("Jacket_Hem_Cyan_R", (0.22, -0.30, 1.95), (0.08, 0.018, 0.018), mats["cyan"], bevel=0.008).parent = root
 
     arms = [
         ("L", -1, (-0.31, 0, 2.31), (-0.64, -0.01, 1.99), (-0.80, -0.07, 1.72)),
@@ -262,7 +301,8 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
         lower = add_cylinder_between(f"Sleeve_{side}_Lower", elbow, wrist, 0.095, mats["graphite"])
         cuff = add_cube(f"Cuff_{side}_White", wrist, (0.11, 0.12, 0.08), mats["white"], bevel=0.03)
         hand = add_uv_sphere(f"Hand_{side}", (wrist[0] + 0.01 * sign, wrist[1] - 0.01, wrist[2] - 0.10), (0.09, 0.08, 0.11), mats["skin"])
-        for obj in (upper, lower, cuff, hand):
+        sleeve_piping = add_cylinder_between(f"Sleeve_{side}_CyanPiping", shoulder, elbow, 0.018, mats["cyan"])
+        for obj in (upper, lower, cuff, hand, sleeve_piping):
             obj.parent = root
 
     # Shorts, exposed legs, thigh straps, knee guards, and the white/cyan boots.
@@ -292,6 +332,8 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
         add_uv_sphere(f"Hair_Ponytail_{index + 1}", (location_x, location_y, location_z), scale, mats["hair"]).parent = root
     add_uv_sphere("Hair_Ponytail_CyanTip", (0.30, 0.04, 2.58), (0.11, 0.10, 0.20), mats["cyan"]).parent = root
     add_torus("Hair_Tie_Gold", (0.25, 0.10, 3.20), 0.10, 0.025, mats["gold"], rotation=(math.pi / 2, 0, 0)).parent = root
+    add_curve("Hair_Lock_L", [(-0.30, -0.20, 3.10), (-0.42, -0.18, 2.84), (-0.34, -0.16, 2.64)], 0.035, mats["hair"]).parent = root
+    add_curve("Hair_Lock_R", [(0.30, -0.20, 3.10), (0.42, -0.18, 2.84), (0.34, -0.16, 2.64)], 0.035, mats["hair"]).parent = root
     for eye_x in (-0.13, 0.13):
         add_uv_sphere("Eye_Cyan", (eye_x, -0.315, 2.98), (0.035, 0.018, 0.055), mats["glow"]).parent = root
 
@@ -316,13 +358,16 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
 
     scene = bpy.context.scene
     configure_render(scene, output_dir / "renders")
+    add_area_light("Key_Light", (4.5, -6.0, 7.0), Vector((0, 0, 1.9)), 850.0, (1.0, 0.92, 0.82), 5.0)
+    add_area_light("Fill_Light", (-4.0, -3.0, 4.0), Vector((0, 0, 1.8)), 500.0, (0.55, 0.75, 1.0), 4.0)
+    add_area_light("Back_Light", (0.0, 4.0, 5.5), Vector((0, 0, 2.2)), 700.0, (0.15, 0.75, 0.95), 3.5)
     scene["re_camp_gate"] = "Gate B preflight only"
     scene["re_camp_source_commit"] = args.source_commit
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
-    scene["re_camp_blockout_revision"] = "v002"
+    scene["re_camp_blockout_revision"] = "v003"
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v002.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v003.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
@@ -345,7 +390,7 @@ def add_torus(
     )
     obj = bpy.context.object
     obj.name = name
-    return apply_material(obj, mat)
+    return smooth_mesh(apply_material(obj, mat))
 
 
 def render_views(output_dir: Path) -> None:
@@ -364,7 +409,7 @@ def render_views(output_dir: Path) -> None:
 
 
 def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v002.fbx"
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v003.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -382,7 +427,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
-        "revision": "v002",
+        "revision": "v003",
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -400,11 +445,14 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
             "white graphite cyan boots",
             "single gold graphite cyan saber",
             "cyan signal ribbon with gold accent",
+            "saber sheath and blade stripes",
+            "jacket back panel and cyan piping",
+            "review lighting rig",
         ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v002.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v003.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -418,7 +466,7 @@ def main() -> None:
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print("Revision: v002 / art-directed production blockout")
+    print("Revision: v003 / art-directed detail blockout")
     print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 
