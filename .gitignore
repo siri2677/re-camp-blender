@@ -1,0 +1,15 @@
+# Python and Jupyter transient files
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Blender temporary and generated files
+*.blend1
+*.blend2
+*.tmp
+artifacts/
+outputs/
+
+# OS files
+.DS_Store
+Thumbs.db
