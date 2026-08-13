@@ -14,7 +14,7 @@
 - CH101 v004 front/side/back 렌더
 - `.blend`와 `.fbx` export
 - JSON 구조 검증 `PASS`
-- 메시 80개 이상, 소켓 8개, 누락 0개
+- 메시 83개, 소켓 8개, 누락 0개
 
 현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology, UV, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
 
