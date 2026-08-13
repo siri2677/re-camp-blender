@@ -4,17 +4,17 @@
 
 ## 현재 판정
 
-상태: `ART-DIRECTED BLOCKOUT V003 COMPLETE / GATE B PENDING`
+상태: `PRODUCTION MODELING REFINEMENT V004 COMPLETE / GATE B PENDING`
 
 완료된 증거:
 
 - Public 도구 저장소: `siri2677/re-camp-blender`
 - Google Drive 없이 Colab 실행 가능
 - `xvfb-run`을 이용한 headless Blender 실행
-- CH101 v003 front/side/back 렌더
+- CH101 v004 front/side/back 렌더
 - `.blend`와 `.fbx` export
 - JSON 구조 검증 `PASS`
-- 메시 69개, 소켓 8개, 누락 0개
+- 메시 80개 이상, 소켓 8개, 누락 0개
 
 현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology, UV, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
 
@@ -55,7 +55,7 @@
 
 ### Phase 3 — Production Modeling Refinement
 
-상태: `NEXT — v004`
+상태: `COMPLETE — v004`
 
 목표는 Blockout을 실제 제작에 사용할 수 있는 형태로 정리하는 것이다.
 
@@ -72,6 +72,14 @@
 - 카메라 3면에서 큰 형태 충돌이 없다.
 - 리본·세이버·부츠가 기준 시트의 기능적 위치와 일치한다.
 - 변경 전후 렌더와 변경 리포트가 남는다.
+
+v004 적용 항목:
+
+- 얼굴·눈·눈썹·입 가독성 cue
+- 재킷 포켓·뒷면 시안 스트라이프
+- 쇼츠 벨트와 허벅지 스트랩 버클
+- 긴 포니테일 가닥과 시안 연결 가닥
+- 세이버 그립 밴드와 리본 끝단 링크
 
 ### Phase 4 — Technical Asset Preparation
 
@@ -151,4 +159,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Phase 3의 `v004 Production Modeling Refinement`이다. Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 Phase 4의 `Technical Asset Preparation`이다. Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.

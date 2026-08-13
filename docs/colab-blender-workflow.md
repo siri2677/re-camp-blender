@@ -27,9 +27,9 @@ Colab 세션이 끝나면 `/content`의 파일은 삭제되므로 ZIP을 세션 
 
 ## 판정 경계
 
-현재 자동화 결과는 CH101 기준 시트의 의상·헤어·장비·신호 리본에 시스·블레이드 패턴·파이핑·조명 디테일을 추가한 art-directed Detail Blockout v003이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
+현재 자동화 결과는 CH101 기준 시트의 의상·헤어·장비·신호 리본에 얼굴 가독성, 포켓·벨트·버클, 긴 포니테일 가닥, 세이버 그립 밴드, 리본 링크를 추가한 art-directed Production Modeling Refinement v004이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
 
-전체 제작 단계와 다음 v004 작업은 [CH101 Production Roadmap](plans/ch101-production-roadmap.md)에서 관리한다.
+전체 제작 단계와 다음 Phase 4 작업은 [CH101 Production Roadmap](plans/ch101-production-roadmap.md)에서 관리한다.
 
 ## 검증
 
