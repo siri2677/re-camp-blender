@@ -27,7 +27,7 @@ Colab 세션이 끝나면 `/content`의 파일은 삭제되므로 ZIP을 세션 
 
 ## 판정 경계
 
-현재 자동화 결과는 문서용 중립 Blockout이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
+현재 자동화 결과는 CH101 기준 시트의 의상·헤어·장비·신호 리본을 반영한 art-directed Production Blockout v002이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
 
 ## 검증
 

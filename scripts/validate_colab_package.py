@@ -42,7 +42,8 @@ REQUIRED_MARKERS = {
         "418ef96",
         "xvfb-run",
         "files.download",
-        "CH101_Blockout_REVIEW_v001.blend",
+        "CH101_Blockout_REVIEW_v002.blend",
+        "v002",
     ),
 }
 

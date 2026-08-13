@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""Build a documentation-only CH101-style Blender blockout.
+"""Build the CH101 art-directed production blockout v002.
 
-This script is intentionally a neutral humanoid and equipment placeholder.
-It does not claim a final character model, rig, animation, Unity import, or
-Gate B approval. Run it inside Blender, for example:
-
-    blender --background --python build_blockout.py -- \
-        --character CH101 --output-dir /tmp/ch101_blockout --render
+This is a procedural, documentation-grade 3D blockout based on the locked
+CH101 production sheet. It is not a final sculpt, rig, animation, Unity
+import proof, Android performance result, or Gate B approval.
 """
 
 from __future__ import annotations
@@ -22,14 +19,14 @@ from mathutils import Vector
 
 
 SOCKETS = {
-    "Socket_Equipment_Primary": (0.58, -0.12, 1.85),
-    "Socket_Gauntlet_L": (-0.72, -0.02, 2.05),
-    "Socket_Gauntlet_R": (0.72, -0.02, 2.05),
-    "Socket_AnchorRing_Carry": (0.0, -0.48, 2.25),
-    "Socket_AnchorRing_Active": (0.0, -0.64, 2.25),
-    "Socket_LineAttach": (0.0, -0.70, 2.25),
-    "Socket_VFXCenter": (0.0, -0.18, 1.85),
-    "Socket_CameraFocus": (0.0, 0.0, 2.35),
+    "Socket_Equipment_Primary": (0.58, -0.18, 1.92),
+    "Socket_Gauntlet_L": (-0.74, -0.02, 2.06),
+    "Socket_Gauntlet_R": (0.74, -0.02, 2.06),
+    "Socket_AnchorRing_Carry": (0.0, -0.52, 2.38),
+    "Socket_AnchorRing_Active": (0.0, -0.68, 2.38),
+    "Socket_LineAttach": (0.0, -0.72, 2.38),
+    "Socket_VFXCenter": (0.0, -0.24, 1.92),
+    "Socket_CameraFocus": (0.0, 0.0, 2.55),
 }
 
 
@@ -49,17 +46,29 @@ def parse_args() -> argparse.Namespace:
 def clear_scene() -> None:
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
-    for datablocks in (bpy.data.meshes, bpy.data.curves, bpy.data.materials, bpy.data.cameras, bpy.data.lights):
+    for datablocks in (
+        bpy.data.meshes,
+        bpy.data.curves,
+        bpy.data.materials,
+        bpy.data.cameras,
+        bpy.data.lights,
+    ):
         for datablock in list(datablocks):
             if datablock.users == 0:
                 datablocks.remove(datablock)
 
 
-def material(name: str, color: tuple[float, float, float, float], metallic: float = 0.0) -> bpy.types.Material:
+def material(
+    name: str,
+    color: tuple[float, float, float, float],
+    metallic: float = 0.0,
+    roughness: float = 0.58,
+) -> bpy.types.Material:
     mat = bpy.data.materials.get(name) or bpy.data.materials.new(name)
     mat.diffuse_color = color
     mat.metallic = metallic
-    mat.roughness = 0.58
+    mat.roughness = roughness
+    mat["art_token"] = name.replace("MAT_CH101_", "")
     return mat
 
 
@@ -68,7 +77,12 @@ def apply_material(obj: bpy.types.Object, mat: bpy.types.Material) -> bpy.types.
     return obj
 
 
-def add_uv_sphere(name: str, location: tuple[float, float, float], scale: tuple[float, float, float], mat: bpy.types.Material) -> bpy.types.Object:
+def add_uv_sphere(
+    name: str,
+    location: tuple[float, float, float],
+    scale: tuple[float, float, float],
+    mat: bpy.types.Material,
+) -> bpy.types.Object:
     bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, location=location)
     obj = bpy.context.object
     obj.name = name
@@ -76,11 +90,22 @@ def add_uv_sphere(name: str, location: tuple[float, float, float], scale: tuple[
     return apply_material(obj, mat)
 
 
-def add_cylinder_between(name: str, start: tuple[float, float, float], end: tuple[float, float, float], radius: float, mat: bpy.types.Material) -> bpy.types.Object:
+def add_cylinder_between(
+    name: str,
+    start: tuple[float, float, float],
+    end: tuple[float, float, float],
+    radius: float,
+    mat: bpy.types.Material,
+) -> bpy.types.Object:
     start_vec = Vector(start)
     end_vec = Vector(end)
     direction = end_vec - start_vec
-    bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=radius, depth=direction.length, location=(start_vec + end_vec) / 2)
+    bpy.ops.mesh.primitive_cylinder_add(
+        vertices=20,
+        radius=radius,
+        depth=direction.length,
+        location=(start_vec + end_vec) / 2,
+    )
     obj = bpy.context.object
     obj.name = name
     obj.rotation_mode = "QUATERNION"
@@ -88,20 +113,43 @@ def add_cylinder_between(name: str, start: tuple[float, float, float], end: tupl
     return apply_material(obj, mat)
 
 
-def add_cube(name: str, location: tuple[float, float, float], scale: tuple[float, float, float], mat: bpy.types.Material) -> bpy.types.Object:
+def add_cube(
+    name: str,
+    location: tuple[float, float, float],
+    scale: tuple[float, float, float],
+    mat: bpy.types.Material,
+    bevel: float = 0.0,
+) -> bpy.types.Object:
     bpy.ops.mesh.primitive_cube_add(location=location)
     obj = bpy.context.object
     obj.name = name
     obj.scale = scale
+    if bevel:
+        modifier = obj.modifiers.new(name="SoftEdges", type="BEVEL")
+        modifier.width = bevel
+        modifier.segments = 3
     return apply_material(obj, mat)
 
 
-def add_equipment(name: str, location: tuple[float, float, float], mat: bpy.types.Material) -> bpy.types.Object:
-    bpy.ops.mesh.primitive_cube_add(location=location)
-    obj = bpy.context.object
-    obj.name = name
-    obj.scale = (0.10, 0.16, 0.58)
-    obj.rotation_euler[1] = math.radians(-18)
+def add_curve(
+    name: str,
+    points: list[tuple[float, float, float]],
+    bevel_depth: float,
+    mat: bpy.types.Material,
+) -> bpy.types.Object:
+    curve_data = bpy.data.curves.new(name, type="CURVE")
+    curve_data.dimensions = "3D"
+    curve_data.resolution_u = 12
+    curve_data.bevel_depth = bevel_depth
+    curve_data.bevel_resolution = 3
+    spline = curve_data.splines.new("BEZIER")
+    spline.bezier_points.add(len(points) - 1)
+    for point, co in zip(spline.bezier_points, points):
+        point.co = co
+        point.handle_left_type = "AUTO"
+        point.handle_right_type = "AUTO"
+    obj = bpy.data.objects.new(name, curve_data)
+    bpy.context.collection.objects.link(obj)
     return apply_material(obj, mat)
 
 
@@ -139,61 +187,129 @@ def configure_render(scene: bpy.types.Scene, output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
 
+def add_saber(root: bpy.types.Object, mats: dict[str, bpy.types.Material]) -> None:
+    """Add the single canonical gold/graphite/cyan saber from the sheet."""
+    x, y, z = SOCKETS["Socket_Equipment_Primary"]
+    handle = add_cylinder_between("Saber_Handle", (x, y, z - 0.42), (x, y, z + 0.08), 0.055, mats["graphite"])
+    guard = add_cube("Saber_Guard", (x, y - 0.01, z + 0.10), (0.18, 0.06, 0.045), mats["gold"], bevel=0.025)
+    blade = add_cube("Saber_Blade_Cyan", (x, y, z + 0.58), (0.055, 0.035, 0.46), mats["cyan"], bevel=0.025)
+    blade_core = add_cube("Saber_Blade_Core", (x, y - 0.038, z + 0.58), (0.018, 0.012, 0.40), mats["glow"], bevel=0.008)
+    pommel = add_uv_sphere("Saber_Pommel", (x, y, z - 0.47), (0.09, 0.07, 0.07), mats["gold"])
+    for obj in (handle, guard, blade, blade_core, pommel):
+        obj.parent = root
+
+
+def add_boot(root: bpy.types.Object, side: str, x: float, mats: dict[str, bpy.types.Material]) -> None:
+    upper = add_cube(f"Boot_{side}_WhiteUpper", (x, -0.03, 0.20), (0.18, 0.25, 0.18), mats["white"], bevel=0.06)
+    ankle = add_cube(f"Boot_{side}_GraphiteAnkle", (x, -0.08, 0.39), (0.16, 0.20, 0.12), mats["graphite"], bevel=0.04)
+    sole = add_cube(f"Boot_{side}_CyanSole", (x, -0.07, 0.035), (0.21, 0.29, 0.035), mats["cyan"], bevel=0.025)
+    toe = add_cube(f"Boot_{side}_GraphiteToe", (x, -0.28, 0.15), (0.18, 0.10, 0.12), mats["graphite"], bevel=0.04)
+    for obj in (upper, ankle, sole, toe):
+        obj.parent = root
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
     clear_scene()
 
-    body = material("MAT_Blockout_Body", (0.28, 0.42, 0.62, 1.0))
-    hair = material("MAT_Blockout_Hair", (0.08, 0.10, 0.16, 1.0))
-    outfit = material("MAT_Blockout_Outfit", (0.16, 0.19, 0.24, 1.0))
-    equipment = material("MAT_Blockout_Equipment", (0.13, 0.58, 0.68, 1.0), metallic=0.35)
-    ring = material("MAT_Blockout_Ring", (0.86, 0.48, 0.12, 1.0), metallic=0.55)
+    mats = {
+        "skin": material("MAT_CH101_Skin", (0.72, 0.38, 0.28, 1.0), roughness=0.72),
+        "white": material("MAT_CH101_White", (0.92, 0.92, 0.86, 1.0), roughness=0.68),
+        "graphite": material("MAT_CH101_Graphite", (0.035, 0.045, 0.065, 1.0), roughness=0.48),
+        "hair": material("MAT_CH101_Hair", (0.025, 0.032, 0.045, 1.0), roughness=0.42),
+        "gold": material("MAT_CH101_Gold", (0.78, 0.46, 0.10, 1.0), metallic=0.55, roughness=0.34),
+        "cyan": material("MAT_CH101_Cyan", (0.0, 0.55, 0.68, 1.0), metallic=0.12, roughness=0.38),
+        "glow": material("MAT_CH101_CyanGlow", (0.24, 0.85, 0.95, 1.0), roughness=0.28),
+    }
 
     root = bpy.data.objects.new(f"{args.character}_Blockout_Root", None)
     root.empty_display_type = "PLAIN_AXES"
     root["character_id"] = args.character
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
+    root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
+    root["blockout_revision"] = "v002"
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
-    torso = add_cylinder_between("Body_Torso", (0, 0, 1.55), (0, 0, 2.45), 0.34, outfit)
-    torso.parent = root
-    pelvis = add_uv_sphere("Body_Pelvis", (0, 0, 1.32), (0.38, 0.28, 0.22), outfit)
-    pelvis.parent = root
-    neck = add_cylinder_between("Body_Neck", (0, 0, 2.40), (0, 0, 2.58), 0.14, body)
-    neck.parent = root
-    head = add_uv_sphere("Body_Head", (0, -0.01, 2.92), (0.38, 0.34, 0.44), body)
-    head.parent = root
-    hair_obj = add_uv_sphere("Hair_Blockout", (0, 0.08, 3.08), (0.43, 0.38, 0.37), hair)
-    hair_obj.parent = root
-
-    parts = [
-        ("Arm_L_Upper", (-0.30, 0, 2.30), (-0.62, -0.01, 1.98), 0.11),
-        ("Arm_L_Lower", (-0.62, -0.01, 1.98), (-0.78, -0.03, 1.70), 0.09),
-        ("Arm_R_Upper", (0.30, 0, 2.30), (0.62, -0.01, 1.98), 0.11),
-        ("Arm_R_Lower", (0.62, -0.01, 1.98), (0.78, -0.03, 1.70), 0.09),
-        ("Leg_L_Upper", (-0.18, 0, 1.30), (-0.23, 0, 0.72), 0.14),
-        ("Leg_L_Lower", (-0.23, 0, 0.72), (-0.25, -0.04, 0.12), 0.11),
-        ("Leg_R_Upper", (0.18, 0, 1.30), (0.23, 0, 0.72), 0.14),
-        ("Leg_R_Lower", (0.23, 0, 0.72), (0.25, -0.04, 0.12), 0.11),
-    ]
-    for name, start, end, radius in parts:
-        obj = add_cylinder_between(name, start, end, radius, body if "Arm" in name else outfit)
+    # Feminine runner proportions with a cropped jacket, shorts, and exposed legs.
+    torso = add_cylinder_between("Body_Torso", (0, 0, 1.62), (0, 0, 2.42), 0.30, mats["graphite"])
+    pelvis = add_uv_sphere("Body_Pelvis", (0, 0, 1.35), (0.37, 0.27, 0.23), mats["graphite"])
+    neck = add_cylinder_between("Body_Neck", (0, 0, 2.40), (0, 0, 2.58), 0.13, mats["skin"])
+    head = add_uv_sphere("Body_Head", (0, -0.01, 2.93), (0.36, 0.32, 0.43), mats["skin"])
+    for obj in (torso, pelvis, neck, head):
         obj.parent = root
 
-    equipment_obj = add_equipment("Equipment_Primary_Blockout", SOCKETS["Socket_Equipment_Primary"], equipment)
-    equipment_obj.parent = root
+    # White cropped jacket, hood/collar, black sleeves, and gold zipper cue.
+    jacket_panels = [
+        ("Jacket_Panel_L", (-0.24, -0.27, 2.22), (0.11, 0.055, 0.30)),
+        ("Jacket_Panel_R", (0.24, -0.27, 2.22), (0.11, 0.055, 0.30)),
+        ("Jacket_Shoulder_L", (-0.34, -0.02, 2.38), (0.13, 0.15, 0.10)),
+        ("Jacket_Shoulder_R", (0.34, -0.02, 2.38), (0.13, 0.15, 0.10)),
+        ("Jacket_Hood", (0, 0.14, 2.50), (0.28, 0.13, 0.08)),
+    ]
+    for name, location, scale in jacket_panels:
+        add_cube(name, location, scale, mats["white"], bevel=0.035).parent = root
+    add_cube("Jacket_Zipper_Gold", (0, -0.335, 2.22), (0.018, 0.018, 0.27), mats["gold"], bevel=0.01).parent = root
+    add_cube("CropTop_CyanBand", (0, -0.30, 1.91), (0.25, 0.045, 0.04), mats["cyan"], bevel=0.015).parent = root
 
-    for side, x in (("L", -0.78), ("R", 0.78)):
-        gauntlet = add_cube(f"Gauntlet_{side}_Blockout", (x, -0.05, 1.70), (0.12, 0.13, 0.16), equipment)
-        gauntlet.parent = root
+    arms = [
+        ("L", -1, (-0.31, 0, 2.31), (-0.64, -0.01, 1.99), (-0.80, -0.07, 1.72)),
+        ("R", 1, (0.31, 0, 2.31), (0.64, -0.01, 1.99), (0.80, -0.07, 1.72)),
+    ]
+    for side, sign, shoulder, elbow, wrist in arms:
+        upper = add_cylinder_between(f"Sleeve_{side}_Upper", shoulder, elbow, 0.115, mats["graphite"])
+        lower = add_cylinder_between(f"Sleeve_{side}_Lower", elbow, wrist, 0.095, mats["graphite"])
+        cuff = add_cube(f"Cuff_{side}_White", wrist, (0.11, 0.12, 0.08), mats["white"], bevel=0.03)
+        hand = add_uv_sphere(f"Hand_{side}", (wrist[0] + 0.01 * sign, wrist[1] - 0.01, wrist[2] - 0.10), (0.09, 0.08, 0.11), mats["skin"])
+        for obj in (upper, lower, cuff, hand):
+            obj.parent = root
 
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.26, minor_radius=0.045, major_segments=24, minor_segments=8, location=SOCKETS["Socket_AnchorRing_Carry"], rotation=(math.pi / 2, 0, 0))
-    ring_obj = bpy.context.object
-    ring_obj.name = "AnchorRing_Blockout"
-    ring_obj.parent = root
-    apply_material(ring_obj, ring)
+    # Shorts, exposed legs, thigh straps, knee guards, and the white/cyan boots.
+    add_cube("Shorts_Waistband", (0, -0.02, 1.48), (0.34, 0.25, 0.10), mats["graphite"], bevel=0.04).parent = root
+    for side, x in (("L", -0.20), ("R", 0.20)):
+        add_cube(f"Shorts_{side}_Leg", (x, -0.04, 1.28), (0.16, 0.22, 0.17), mats["graphite"], bevel=0.04).parent = root
+        thigh = add_cylinder_between(f"Leg_{side}_Upper", (x, 0, 1.14), (x * 1.12, 0, 0.70), 0.12, mats["skin"])
+        shin = add_cylinder_between(f"Leg_{side}_Lower", (x * 1.12, 0, 0.70), (x * 1.18, -0.04, 0.43), 0.10, mats["skin"])
+        strap = add_cube(f"ThighStrap_{side}", (x * 1.05, -0.25, 1.05), (0.14, 0.035, 0.04), mats["white"], bevel=0.012)
+        knee = add_cube(f"KneeGuard_{side}", (x * 1.12, -0.14, 0.64), (0.115, 0.07, 0.08), mats["graphite"], bevel=0.025)
+        for obj in (thigh, shin, strap, knee):
+            obj.parent = root
+        add_boot(root, side, x * 1.18, mats)
+
+    # High ponytail, loose bangs, cyan ends, and a gold tie cue.
+    hair_main = add_uv_sphere("Hair_Main", (0, 0.08, 3.10), (0.42, 0.36, 0.36), mats["hair"])
+    bangs = [(-0.18, -0.28, 3.12), (0.0, -0.31, 3.16), (0.18, -0.28, 3.12)]
+    hair_tail = [
+        (0.24, 0.10, 3.18, (0.18, 0.16, 0.27)),
+        (0.42, 0.12, 2.98, (0.16, 0.14, 0.28)),
+        (0.37, 0.08, 2.76, (0.13, 0.12, 0.22)),
+    ]
+    hair_main.parent = root
+    for index, location in enumerate(bangs):
+        add_uv_sphere(f"Hair_Bang_{index + 1}", location, (0.13, 0.08, 0.22), mats["hair"]).parent = root
+    for index, (location_x, location_y, location_z, scale) in enumerate(hair_tail):
+        add_uv_sphere(f"Hair_Ponytail_{index + 1}", (location_x, location_y, location_z), scale, mats["hair"]).parent = root
+    add_uv_sphere("Hair_Ponytail_CyanTip", (0.30, 0.04, 2.58), (0.11, 0.10, 0.20), mats["cyan"]).parent = root
+    add_torus("Hair_Tie_Gold", (0.25, 0.10, 3.20), 0.10, 0.025, mats["gold"], rotation=(math.pi / 2, 0, 0)).parent = root
+    for eye_x in (-0.13, 0.13):
+        add_uv_sphere("Eye_Cyan", (eye_x, -0.315, 2.98), (0.035, 0.018, 0.055), mats["glow"]).parent = root
+
+    add_saber(root, mats)
+
+    # One canonical signal ribbon: a cyan flowing path with a gold clasp.
+    ribbon_points = [
+        (-0.86, -0.22, 2.48),
+        (-1.12, -0.18, 3.08),
+        (-0.78, -0.16, 3.62),
+        (0.0, -0.14, 3.80),
+        (0.78, -0.16, 3.54),
+        (1.04, -0.18, 2.94),
+        (0.55, -0.22, 2.56),
+    ]
+    add_curve("SignalRibbon_Cyan_Path", ribbon_points, 0.055, mats["cyan"]).parent = root
+    add_curve("SignalRibbon_Gold_Accent", ribbon_points[1:5], 0.014, mats["gold"]).parent = root
+    add_cube("SignalRibbon_GoldClasp", (-0.86, -0.24, 2.48), (0.10, 0.04, 0.06), mats["gold"], bevel=0.025).parent = root
 
     for socket_name, location in SOCKETS.items():
         add_socket(socket_name, location, root)
@@ -204,19 +320,41 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_source_commit"] = args.source_commit
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
+    scene["re_camp_blockout_revision"] = "v002"
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v001.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v002.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
 
+def add_torus(
+    name: str,
+    location: tuple[float, float, float],
+    major_radius: float,
+    minor_radius: float,
+    mat: bpy.types.Material,
+    rotation: tuple[float, float, float] = (0, 0, 0),
+) -> bpy.types.Object:
+    bpy.ops.mesh.primitive_torus_add(
+        major_radius=major_radius,
+        minor_radius=minor_radius,
+        major_segments=24,
+        minor_segments=8,
+        location=location,
+        rotation=rotation,
+    )
+    obj = bpy.context.object
+    obj.name = name
+    return apply_material(obj, mat)
+
+
 def render_views(output_dir: Path) -> None:
     scene = bpy.context.scene
-    target = Vector((0, 0, 1.75))
+    target = Vector((0, 0, 1.85))
     views = {
-        "front": (0, -10.5, 2.1),
-        "side": (10.5, 0, 2.1),
-        "back": (0, 10.5, 2.1),
+        "front": (0, -11.4, 2.15),
+        "side": (11.4, 0, 2.15),
+        "back": (0, 11.4, 2.15),
     }
     for view, location in views.items():
         camera = add_camera(f"RenderCamera_{view}", location, target)
@@ -226,7 +364,7 @@ def render_views(output_dir: Path) -> None:
 
 
 def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v001.fbx"
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v002.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -244,6 +382,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
+        "revision": "v002",
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -253,11 +392,19 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "mesh_object_count": len(meshes),
         "object_count": len(objects),
         "socket_names": sorted(name for name in SOCKETS if bpy.data.objects.get(name)),
-        "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_Blockout_")),
+        "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")),
+        "art_features": [
+            "cropped white-black sport jacket",
+            "black shorts and thigh straps",
+            "high ponytail with cyan tip",
+            "white graphite cyan boots",
+            "single gold graphite cyan saber",
+            "cyan signal ribbon with gold accent",
+        ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v001.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v002.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -271,7 +418,8 @@ def main() -> None:
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print(f"Status: documentation-only / Gate B not approved / technical proof not tested")
+    print("Revision: v002 / art-directed production blockout")
+    print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 
 if __name__ == "__main__":
