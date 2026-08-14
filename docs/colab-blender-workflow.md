@@ -21,15 +21,15 @@ Notebook은 다음 원본 브랜치와 커밋을 기준으로 CH101 소스를 �
 3. Colab runtime에 Blender를 설치한다.
 4. 화면 장치가 없는 runtime에서는 `xvfb-run`을 자동으로 사용한다.
 5. front/side/back 렌더, `.blend`, `.fbx`, JSON 검증 리포트를 생성한다.
-6. `/content/re-camp-CH101-blockout.zip`을 브라우저로 다운로드한다.
+6. `/content/re-camp-CH101-blockout-v005.zip`을 브라우저로 다운로드한다.
 
 Colab 세션이 끝나면 `/content`의 파일은 삭제되므로 ZIP을 세션 종료 전에 다운로드해야 한다.
 
 ## 판정 경계
 
-현재 자동화 결과는 CH101 기준 시트의 의상·헤어·장비·신호 리본에 얼굴 가독성, 포켓·벨트·버클, 긴 포니테일 가닥, 세이버 그립 밴드, 리본 링크를 추가한 art-directed Production Modeling Refinement v004이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
+현재 자동화 결과는 v004 시각 정밀화 위에 procedural curve의 mesh 변환, modifier 적용, scale transform 적용, UV 생성, material slot 검사, triangle 수 기록, `LOD0 ONLY / LOD PENDING` 메타데이터를 추가한 Technical Asset Preparation v005이다. 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
 
-전체 제작 단계와 다음 Phase 4 작업은 [CH101 Production Roadmap](plans/ch101-production-roadmap.md)에서 관리한다.
+전체 제작 단계와 다음 Phase 5 작업은 [CH101 Production Roadmap](plans/ch101-production-roadmap.md)에서 관리한다.
 
 ## 검증
 

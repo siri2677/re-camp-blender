@@ -13,7 +13,7 @@ The notebooks clone the source art repository from the locked branch and commit:
 
 `art/current-roster-gate-a-ch102` at `418ef96`
 
-The current generated asset is an art-directed CH101 production refinement blockout v004: readable face cues, jacket pockets and back stripe, shorts belt and strap buckles, extended ponytail locks, saber grip bands, and linked signal ribbon ends. It is still not a final character model, Unity import proof, Android performance result, or Gate B approval.
+The current generated asset is an art-directed CH101 technical-prep blockout v005: the v004 visual refinement plus applied transforms, procedural-curve-to-mesh conversion, UV generation, material-slot inspection, triangle reporting, and LOD0 metadata. It is still not a final character model, Unity import proof, Android performance result, or Gate B approval.
 
 ## Run in Google Colab
 
@@ -21,7 +21,7 @@ Open the no-Drive notebook when Google Drive authorization is blocked:
 
 `notebooks/00_colab_blender_nodrive_test.ipynb`
 
-The notebook clones `siri2677/re-camp` into `/content`, installs Blender, uses `xvfb-run` when the runtime has no display, builds the v004 refinement blockout from the locked CH101 sheet, renders front/side/back views, exports `.blend` and `.fbx`, validates the structure, and creates a ZIP for browser download.
+The notebook clones `siri2677/re-camp` into `/content`, installs Blender, uses `xvfb-run` when the runtime has no display, builds the v005 technical-prep blockout from the locked CH101 sheet, renders front/side/back views, exports `.blend` and `.fbx`, validates UV/material/triangle/LOD metadata, and creates a ZIP for browser download.
 
 Colab session files are temporary. Download the ZIP before the runtime ends.
 

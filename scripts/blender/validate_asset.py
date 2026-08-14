@@ -48,13 +48,31 @@ def main() -> int:
     if not meshes:
         errors.append("no mesh objects found")
 
+    uv_missing = sorted(obj.name for obj in meshes if not obj.data.uv_layers)
+    materialless_meshes = sorted(obj.name for obj in meshes if not obj.data.materials)
+    triangle_count = 0
+    for obj in meshes:
+        obj.data.calc_loop_triangles()
+        triangle_count += len(obj.data.loop_triangles)
+    if uv_missing:
+        errors.append(f"missing UV maps: {', '.join(uv_missing)}")
+    if materialless_meshes:
+        errors.append(f"missing material slots: {', '.join(materialless_meshes)}")
+
     report = {
         "blend": str(Path(args.blend).resolve()),
         "status": "PASS" if not errors else "FAIL",
         "technical_proof": "NOT TESTED",
+        "revision": bpy.context.scene.get("re_camp_blockout_revision", ""),
         "mesh_object_count": len(meshes),
+        "triangle_count": triangle_count,
         "socket_count": len(REQUIRED_SOCKETS - set(missing)),
         "missing": missing,
+        "uv_missing": uv_missing,
+        "materialless_meshes": materialless_meshes,
+        "uv_status": bpy.context.scene.get("re_camp_uv_status", "NOT SET"),
+        "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),
+        "technical_preparation": "PASS" if not uv_missing and not materialless_meshes else "FAIL",
         "errors": errors,
         "source_commit": bpy.context.scene.get("re_camp_source_commit", ""),
         "gate": bpy.context.scene.get("re_camp_gate", "Gate B preflight only"),

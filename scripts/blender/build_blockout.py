@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CH101 art-directed refinement blockout v004.
+"""Build the CH101 art-directed technical-prep blockout v005.
 
 This is a procedural, documentation-grade 3D blockout based on the locked
 CH101 production sheet. It is not a final sculpt, rig, animation, Unity
@@ -244,6 +244,63 @@ def add_boot(root: bpy.types.Object, side: str, x: float, mats: dict[str, bpy.ty
         obj.parent = root
 
 
+def prepare_technical_asset(root: bpy.types.Object) -> dict[str, int]:
+    """Convert procedural curves and make the v005 export technically inspectable."""
+    for obj in list(bpy.context.scene.objects):
+        if obj.type != "CURVE":
+            continue
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.convert(target="MESH")
+
+    meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
+    uv_missing = 0
+    materialless = 0
+    triangle_count = 0
+    for obj in meshes:
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        for modifier in list(obj.modifiers):
+            try:
+                bpy.ops.object.modifier_apply(modifier=modifier.name)
+            except RuntimeError:
+                obj["modifier_status"] = "PENDING / APPLY FAILED"
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        if not obj.data.uv_layers:
+            uv_missing += 1
+            try:
+                bpy.ops.object.mode_set(mode="EDIT")
+                bpy.ops.mesh.select_all(action="SELECT")
+                bpy.ops.uv.smart_project(angle_limit=1.15192, island_margin=0.03)
+                bpy.ops.object.mode_set(mode="OBJECT")
+            except (RuntimeError, TypeError):
+                if bpy.context.object and bpy.context.object.mode != "OBJECT":
+                    bpy.ops.object.mode_set(mode="OBJECT")
+        if not obj.data.materials:
+            materialless += 1
+        obj.data.update()
+        obj.data.calc_loop_triangles()
+        triangle_count += len(obj.data.loop_triangles)
+        obj["technical_revision"] = "v005"
+        obj["uv_status"] = "PASS" if obj.data.uv_layers else "FAIL"
+        obj["material_slot_status"] = "PASS" if obj.data.materials else "FAIL"
+        obj["lod_status"] = "LOD0 ONLY / LOD PENDING"
+    bpy.ops.object.select_all(action="DESELECT")
+    root["technical_prepared"] = True
+    root["uv_missing_before_prepare"] = uv_missing
+    root["materialless_mesh_count"] = materialless
+    root["triangle_count"] = triangle_count
+    root["lod_status"] = "LOD0 ONLY / LOD PENDING"
+    return {
+        "mesh_object_count": len(meshes),
+        "uv_missing_after_prepare": sum(1 for obj in meshes if not obj.data.uv_layers),
+        "materialless_mesh_count": sum(1 for obj in meshes if not obj.data.materials),
+        "triangle_count": triangle_count,
+    }
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
     clear_scene()
@@ -264,7 +321,7 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
     root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
-    root["blockout_revision"] = "v004"
+    root["blockout_revision"] = "v005"
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
@@ -381,9 +438,12 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_source_commit"] = args.source_commit
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
-    scene["re_camp_blockout_revision"] = "v004"
+    technical_stats = prepare_technical_asset(root)
+    scene["re_camp_blockout_revision"] = "v005"
+    scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
+    scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v004.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v005.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
@@ -425,7 +485,7 @@ def render_views(output_dir: Path) -> None:
 
 
 def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v004.fbx"
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v005.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -443,7 +503,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
-        "revision": "v004",
+        "revision": "v005",
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -452,6 +512,10 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "fbx": str(fbx_path) if fbx_path else None,
         "mesh_object_count": len(meshes),
         "object_count": len(objects),
+        "triangle_count": sum(len(obj.data.loop_triangles) for obj in meshes),
+        "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
+        "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
+        "lod_status": "LOD0 ONLY / LOD PENDING",
         "socket_names": sorted(name for name in SOCKETS if bpy.data.objects.get(name)),
         "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")),
         "art_features": [
@@ -468,11 +532,14 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
             "jacket pockets and shorts belt",
             "strap buckles and saber grip bands",
             "extended ponytail locks and ribbon links",
+            "applied transforms and bevel modifiers",
+            "mesh conversion for procedural curves",
+            "UV maps and technical material slots",
         ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v004.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v005.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -486,7 +553,7 @@ def main() -> None:
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print("Revision: v004 / production modeling refinement blockout")
+    print("Revision: v005 / technical asset preparation")
     print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 

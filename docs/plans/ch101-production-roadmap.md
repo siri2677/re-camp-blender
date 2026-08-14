@@ -4,19 +4,19 @@
 
 ## 현재 판정
 
-상태: `PRODUCTION MODELING REFINEMENT V004 COMPLETE / GATE B PENDING`
+상태: `TECHNICAL ASSET PREPARATION V005 IMPLEMENTED / COLAB VERIFICATION PENDING / GATE B PENDING`
 
 완료된 증거:
 
 - Public 도구 저장소: `siri2677/re-camp-blender`
 - Google Drive 없이 Colab 실행 가능
 - `xvfb-run`을 이용한 headless Blender 실행
-- CH101 v004 front/side/back 렌더
+- CH101 v005 front/side/back 렌더 자동화
 - `.blend`와 `.fbx` export
-- JSON 구조 검증 `PASS`
-- 메시 83개, 소켓 8개, 누락 0개
+- UV·material slot·triangle·LOD metadata 검증 자동화
+- 소켓 8개 유지
 
-현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology, UV, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
+현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology 최적화, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
 
 ## 단계별 계획
 
@@ -83,17 +83,16 @@ v004 적용 항목:
 
 ### Phase 4 — Technical Asset Preparation
 
-상태: `PENDING`
+상태: `IMPLEMENTED — v005 / COLAB VERIFICATION PENDING`
 
-- 적용 가능한 topology 정리
-- normals와 smoothing 확인
-- UV 전개
-- material slot 정리
-- 텍스처 슬롯과 파일 경로 규칙 확정
-- LOD 또는 모바일용 단순화 기준 추가
-- FBX 재수출 및 파일 크기 확인
+- procedural curve 오브젝트를 mesh로 변환
+- bevel 등 modifier 적용 및 scale transform 적용
+- UV가 없는 메시의 smart projection 생성
+- material slot 누락 검사와 triangle 수 기록
+- `LOD0 ONLY / LOD PENDING` 메타데이터 기록
+- v005 `.blend`와 `.fbx` 재수출
 
-완료 기준: Unity에서 재현 가능한 material slot·transform·파일 구조가 존재한다.
+완료 기준: Colab에서 UV·material slot 검증 `PASS`, triangle 수와 LOD 상태가 JSON에 기록되고 v005 산출물이 재생성된다.
 
 ### Phase 5 — Rig and Motion Preparation
 
@@ -159,4 +158,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Phase 4의 `Technical Asset Preparation`이다. Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 Colab에서 v005 산출물과 검증 JSON을 재생성하는 것이다. 그 확인이 끝나면 다음 작업은 Phase 5의 `Rig and Motion Preparation`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
