@@ -4,7 +4,7 @@
 
 ## 현재 판정
 
-상태: `TECHNICAL ASSET PREPARATION V005 COMPLETE / GATE B PENDING`
+상태: `RIG AND MOTION PREPARATION V006 IMPLEMENTED / COLAB VERIFICATION PENDING / GATE B PENDING`
 
 완료된 증거:
 
@@ -99,14 +99,15 @@ v004 적용 항목:
 
 ### Phase 5 — Rig and Motion Preparation
 
-상태: `PENDING`
+상태: `IMPLEMENTED — v006 / COLAB VERIFICATION PENDING`
 
-- humanoid 기준 bone 구조 설계
-- 팔·다리·손·헤어·리본의 변형 범위 정의
-- 기본 A-pose/T-pose와 관절 충돌 확인
-- 최소 idle/run/attack 테스트 모션
+- Unity Humanoid 역할명에 맞춘 22-bone armature prototype
+- 8개 socket을 hand/chest/hips/head bone에 연결
+- `CH101_A_Pose_Check` review action 추가
+- `CH101_Idle`, `CH101_Run`, `CH101_Attack` review action 추가
+- 스킨 웨이트는 적용하지 않고 `NOT WEIGHTED / PENDING SKINNING`으로 명시
 
-완료 기준: Blender에서 pose 검증이 가능하고, 내보낸 리그가 Unity Humanoid 기준을 만족한다.
+완료 기준: Colab에서 bone·socket·motion clip 검증 `PASS`를 확인한다. Unity Humanoid 최종 매핑과 스킨 웨이트는 Unity 환경 준비 후 별도 확인한다.
 
 ### Phase 6 — Unity Import Proof
 
@@ -161,4 +162,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Phase 5의 `Rig and Motion Preparation`이다. Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 Phase 5 v006의 Colab 산출물과 리그 검증을 확인하는 것이다. 확인 후 다음 단계는 Phase 6의 `Unity Import Proof`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.

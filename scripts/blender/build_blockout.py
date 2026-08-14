@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CH101 art-directed technical-prep blockout v005.
+"""Build the CH101 art-directed rig-prep blockout v006.
 
 This is a procedural, documentation-grade 3D blockout based on the locked
 CH101 production sheet. It is not a final sculpt, rig, animation, Unity
@@ -27,6 +27,52 @@ SOCKETS = {
     "Socket_LineAttach": (0.0, -0.72, 2.38),
     "Socket_VFXCenter": (0.0, -0.24, 1.92),
     "Socket_CameraFocus": (0.0, 0.0, 2.55),
+}
+
+
+RIG_BONES = {
+    "Root": ((0.0, 0.0, 0.0), (0.0, 0.0, 0.20), None),
+    "Hips": ((0.0, 0.0, 1.28), (0.0, 0.0, 1.55), "Root"),
+    "Spine": ((0.0, 0.0, 1.55), (0.0, 0.0, 2.05), "Hips"),
+    "Chest": ((0.0, 0.0, 2.05), (0.0, 0.0, 2.40), "Spine"),
+    "Neck": ((0.0, 0.0, 2.40), (0.0, 0.0, 2.58), "Chest"),
+    "Head": ((0.0, 0.0, 2.58), (0.0, 0.0, 3.12), "Neck"),
+    "LeftShoulder": ((-0.12, 0.0, 2.35), (-0.31, 0.0, 2.31), "Chest"),
+    "LeftUpperArm": ((-0.31, 0.0, 2.31), (-0.64, -0.01, 1.99), "LeftShoulder"),
+    "LeftLowerArm": ((-0.64, -0.01, 1.99), (-0.80, -0.07, 1.72), "LeftUpperArm"),
+    "LeftHand": ((-0.80, -0.07, 1.72), (-0.81, -0.08, 1.58), "LeftLowerArm"),
+    "RightShoulder": ((0.12, 0.0, 2.35), (0.31, 0.0, 2.31), "Chest"),
+    "RightUpperArm": ((0.31, 0.0, 2.31), (0.64, -0.01, 1.99), "RightShoulder"),
+    "RightLowerArm": ((0.64, -0.01, 1.99), (0.80, -0.07, 1.72), "RightUpperArm"),
+    "RightHand": ((0.80, -0.07, 1.72), (0.81, -0.08, 1.58), "RightLowerArm"),
+    "LeftUpperLeg": ((-0.20, 0.0, 1.40), (-0.224, 0.0, 0.70), "Hips"),
+    "LeftLowerLeg": ((-0.224, 0.0, 0.70), (-0.236, -0.04, 0.43), "LeftUpperLeg"),
+    "LeftFoot": ((-0.236, -0.04, 0.43), (-0.236, -0.22, 0.15), "LeftLowerLeg"),
+    "LeftToes": ((-0.236, -0.22, 0.15), (-0.236, -0.40, 0.12), "LeftFoot"),
+    "RightUpperLeg": ((0.20, 0.0, 1.40), (0.224, 0.0, 0.70), "Hips"),
+    "RightLowerLeg": ((0.224, 0.0, 0.70), (0.236, -0.04, 0.43), "RightUpperLeg"),
+    "RightFoot": ((0.236, -0.04, 0.43), (0.236, -0.22, 0.15), "RightLowerLeg"),
+    "RightToes": ((0.236, -0.22, 0.15), (0.236, -0.40, 0.12), "RightFoot"),
+}
+
+
+SOCKET_BONE_MAP = {
+    "Socket_Equipment_Primary": "RightHand",
+    "Socket_Gauntlet_L": "LeftHand",
+    "Socket_Gauntlet_R": "RightHand",
+    "Socket_AnchorRing_Carry": "Chest",
+    "Socket_AnchorRing_Active": "Chest",
+    "Socket_LineAttach": "Chest",
+    "Socket_VFXCenter": "Hips",
+    "Socket_CameraFocus": "Head",
+}
+
+
+MOTION_CLIPS = {
+    "CH101_Idle": 48,
+    "CH101_Run": 24,
+    "CH101_Attack": 24,
+    "CH101_A_Pose_Check": 2,
 }
 
 
@@ -301,6 +347,144 @@ def prepare_technical_asset(root: bpy.types.Object) -> dict[str, int]:
     }
 
 
+def _reset_pose(armature: bpy.types.Object) -> None:
+    for pose_bone in armature.pose.bones:
+        pose_bone.rotation_mode = "XYZ"
+        pose_bone.location = (0.0, 0.0, 0.0)
+        pose_bone.rotation_euler = (0.0, 0.0, 0.0)
+        pose_bone.scale = (1.0, 1.0, 1.0)
+
+
+def _create_motion_action(
+    armature: bpy.types.Object,
+    name: str,
+    frame_end: int,
+    keyframes: list[tuple[int, dict[str, tuple[float, float, float]]]],
+) -> bpy.types.Action:
+    action = bpy.data.actions.new(name)
+    action.use_fake_user = True
+    armature.animation_data_create()
+    armature.animation_data.action = action
+    _reset_pose(armature)
+    for frame, rotations in keyframes:
+        for bone_name, rotation in rotations.items():
+            pose_bone = armature.pose.bones.get(bone_name)
+            if pose_bone is None:
+                continue
+            pose_bone.rotation_mode = "XYZ"
+            pose_bone.rotation_euler = rotation
+            pose_bone.keyframe_insert(data_path="rotation_euler", frame=frame, group=bone_name)
+    action.frame_start = 1
+    action.frame_end = frame_end
+    return action
+
+
+def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
+    """Create an unweighted humanoid-aligned rig prototype and review actions."""
+    armature_data = bpy.data.armatures.new("CH101_Rig_Armature")
+    armature = bpy.data.objects.new("CH101_Rig_Armature", armature_data)
+    bpy.context.collection.objects.link(armature)
+    armature.parent = root
+    armature["rig_revision"] = "v006"
+    armature["rig_status"] = "PROTOTYPE / UNWEIGHTED"
+    armature["deformation_status"] = "NOT WEIGHTED / PENDING SKINNING"
+    armature["humanoid_mapping_status"] = "ROLE NAMES PREPARED / UNITY CHECK PENDING"
+    armature["rest_pose_status"] = "NEUTRAL BLOCKOUT POSE / A-POSE CHECK ACTION INCLUDED"
+    armature["motion_status"] = "IDLE RUN ATTACK REVIEW CLIPS"
+
+    bpy.ops.object.select_all(action="DESELECT")
+    armature.select_set(True)
+    bpy.context.view_layer.objects.active = armature
+    bpy.ops.object.mode_set(mode="EDIT")
+    edit_bones: dict[str, bpy.types.EditBone] = {}
+    for name, (head, tail, parent_name) in RIG_BONES.items():
+        bone = armature_data.edit_bones.new(name)
+        bone.head = head
+        bone.tail = tail
+        if parent_name:
+            bone.parent = edit_bones[parent_name]
+            bone.use_connect = name not in {"LeftShoulder", "RightShoulder", "LeftUpperLeg", "RightUpperLeg"}
+        edit_bones[name] = bone
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    humanoid_roles = {
+        "Hips": "Hips", "Spine": "Spine", "Chest": "Chest", "Neck": "Neck", "Head": "Head",
+        "LeftUpperArm": "LeftUpperArm", "LeftLowerArm": "LeftLowerArm", "LeftHand": "LeftHand",
+        "RightUpperArm": "RightUpperArm", "RightLowerArm": "RightLowerArm", "RightHand": "RightHand",
+        "LeftUpperLeg": "LeftUpperLeg", "LeftLowerLeg": "LeftLowerLeg", "LeftFoot": "LeftFoot",
+        "RightUpperLeg": "RightUpperLeg", "RightLowerLeg": "RightLowerLeg", "RightFoot": "RightFoot",
+    }
+    for bone_name, role in humanoid_roles.items():
+        armature_data.bones[bone_name]["humanoid_role"] = role
+
+    for socket_name, bone_name in SOCKET_BONE_MAP.items():
+        socket = bpy.data.objects.get(socket_name)
+        if socket is None:
+            continue
+        world_matrix = socket.matrix_world.copy()
+        socket.parent = armature
+        socket.parent_type = "BONE"
+        socket.parent_bone = bone_name
+        socket.matrix_world = world_matrix
+        socket["rig_parent_bone"] = bone_name
+
+    idle = _create_motion_action(
+        armature,
+        "CH101_Idle",
+        MOTION_CLIPS["CH101_Idle"],
+        [
+            (1, {"Chest": (0.0, 0.0, 0.0), "Head": (0.0, 0.0, 0.0)}),
+            (24, {"Chest": (math.radians(-2.0), 0.0, 0.0), "Head": (math.radians(2.0), 0.0, 0.0)}),
+            (48, {"Chest": (0.0, 0.0, 0.0), "Head": (0.0, 0.0, 0.0)}),
+        ],
+    )
+    run = _create_motion_action(
+        armature,
+        "CH101_Run",
+        MOTION_CLIPS["CH101_Run"],
+        [
+            (1, {"LeftUpperArm": (math.radians(-28), 0.0, 0.0), "RightUpperArm": (math.radians(28), 0.0, 0.0), "LeftUpperLeg": (math.radians(28), 0.0, 0.0), "RightUpperLeg": (math.radians(-28), 0.0, 0.0)}),
+            (12, {"LeftUpperArm": (math.radians(28), 0.0, 0.0), "RightUpperArm": (math.radians(-28), 0.0, 0.0), "LeftUpperLeg": (math.radians(-28), 0.0, 0.0), "RightUpperLeg": (math.radians(28), 0.0, 0.0)}),
+            (24, {"LeftUpperArm": (math.radians(-28), 0.0, 0.0), "RightUpperArm": (math.radians(28), 0.0, 0.0), "LeftUpperLeg": (math.radians(28), 0.0, 0.0), "RightUpperLeg": (math.radians(-28), 0.0, 0.0)}),
+        ],
+    )
+    attack = _create_motion_action(
+        armature,
+        "CH101_Attack",
+        MOTION_CLIPS["CH101_Attack"],
+        [
+            (1, {"RightUpperArm": (0.0, 0.0, 0.0), "RightLowerArm": (0.0, 0.0, 0.0)}),
+            (8, {"RightUpperArm": (math.radians(-55), math.radians(-18), math.radians(-12)), "RightLowerArm": (math.radians(-70), 0.0, 0.0)}),
+            (16, {"RightUpperArm": (math.radians(25), math.radians(12), math.radians(8)), "RightLowerArm": (math.radians(-30), 0.0, 0.0)}),
+            (24, {"RightUpperArm": (0.0, 0.0, 0.0), "RightLowerArm": (0.0, 0.0, 0.0)}),
+        ],
+    )
+    a_pose = _create_motion_action(
+        armature,
+        "CH101_A_Pose_Check",
+        MOTION_CLIPS["CH101_A_Pose_Check"],
+        [
+            (1, {"LeftUpperArm": (math.radians(-42), 0.0, 0.0), "RightUpperArm": (math.radians(42), 0.0, 0.0)}),
+            (2, {"LeftUpperArm": (math.radians(-42), 0.0, 0.0), "RightUpperArm": (math.radians(42), 0.0, 0.0)}),
+        ],
+    )
+    armature.animation_data.action = idle
+    _reset_pose(armature)
+    bpy.ops.object.select_all(action="DESELECT")
+    root["rig_prepared"] = True
+    root["rig_status"] = "PROTOTYPE / UNWEIGHTED"
+    root["deformation_status"] = "NOT WEIGHTED / PENDING SKINNING"
+    root["motion_clip_names"] = ",".join((idle.name, run.name, attack.name, a_pose.name))
+    root["socket_bone_parenting"] = "PASS"
+    return {
+        "armature_name": armature.name,
+        "bone_count": len(armature_data.bones),
+        "action_names": sorted(action.name for action in (idle, run, attack, a_pose)),
+        "socket_bone_map": SOCKET_BONE_MAP,
+        "deformation_status": armature["deformation_status"],
+    }
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
     clear_scene()
@@ -321,7 +505,7 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
     root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
-    root["blockout_revision"] = "v005"
+    root["blockout_revision"] = "v006"
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
@@ -439,11 +623,17 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
     technical_stats = prepare_technical_asset(root)
-    scene["re_camp_blockout_revision"] = "v005"
+    rig_stats = prepare_rig_and_motion(root)
+    scene["re_camp_blockout_revision"] = "v006"
     scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
     scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
+    scene["re_camp_rig_status"] = "PROTOTYPE / UNWEIGHTED"
+    scene["re_camp_deformation_status"] = "NOT WEIGHTED / PENDING SKINNING"
+    scene["re_camp_motion_status"] = "IDLE RUN ATTACK REVIEW CLIPS"
+    scene["re_camp_armature_name"] = rig_stats["armature_name"]
+    scene["re_camp_bone_count"] = rig_stats["bone_count"]
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v005.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v006.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
@@ -485,7 +675,7 @@ def render_views(output_dir: Path) -> None:
 
 
 def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v005.fbx"
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v006.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -494,6 +684,11 @@ def export_fbx(output_dir: Path, character: str) -> Path:
         axis_forward="-Z",
         axis_up="Y",
         add_leaf_bones=False,
+        use_armature_deform_only=False,
+        bake_anim=True,
+        bake_anim_use_all_actions=True,
+        bake_anim_step=1.0,
+        bake_anim_simplify_factor=0.0,
     )
     return fbx_path
 
@@ -503,7 +698,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
-        "revision": "v005",
+        "revision": "v006",
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -516,6 +711,13 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
         "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
         "lod_status": "LOD0 ONLY / LOD PENDING",
+        "armature_name": bpy.context.scene.get("re_camp_armature_name", ""),
+        "bone_count": bpy.context.scene.get("re_camp_bone_count", 0),
+        "rig_status": bpy.context.scene.get("re_camp_rig_status", "NOT SET"),
+        "deformation_status": bpy.context.scene.get("re_camp_deformation_status", "NOT SET"),
+        "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
+        "motion_clips": sorted(action.name for action in bpy.data.actions if action.name.startswith("CH101_")),
+        "socket_bone_map": SOCKET_BONE_MAP,
         "socket_names": sorted(name for name in SOCKETS if bpy.data.objects.get(name)),
         "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")),
         "art_features": [
@@ -535,11 +737,14 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
             "applied transforms and bevel modifiers",
             "mesh conversion for procedural curves",
             "UV maps and technical material slots",
+            "humanoid-aligned armature prototype",
+            "idle run attack and A-pose review actions",
+            "socket-to-bone parenting metadata",
         ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v005.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v006.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -553,7 +758,7 @@ def main() -> None:
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print("Revision: v005 / technical asset preparation")
+    print("Revision: v006 / rig and motion preparation")
     print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 

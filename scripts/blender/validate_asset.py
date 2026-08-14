@@ -22,6 +22,49 @@ REQUIRED_SOCKETS = {
     "Socket_CameraFocus",
 }
 
+REQUIRED_RIG_BONES = {
+    "Root",
+    "Hips",
+    "Spine",
+    "Chest",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftUpperArm",
+    "LeftLowerArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightUpperArm",
+    "RightLowerArm",
+    "RightHand",
+    "LeftUpperLeg",
+    "LeftLowerLeg",
+    "LeftFoot",
+    "LeftToes",
+    "RightUpperLeg",
+    "RightLowerLeg",
+    "RightFoot",
+    "RightToes",
+}
+
+REQUIRED_MOTION_CLIPS = {
+    "CH101_Idle",
+    "CH101_Run",
+    "CH101_Attack",
+    "CH101_A_Pose_Check",
+}
+
+SOCKET_BONE_MAP = {
+    "Socket_Equipment_Primary": "RightHand",
+    "Socket_Gauntlet_L": "LeftHand",
+    "Socket_Gauntlet_R": "RightHand",
+    "Socket_AnchorRing_Carry": "Chest",
+    "Socket_AnchorRing_Active": "Chest",
+    "Socket_LineAttach": "Chest",
+    "Socket_VFXCenter": "Hips",
+    "Socket_CameraFocus": "Head",
+}
+
 
 def parse_args() -> argparse.Namespace:
     argv = sys.argv
@@ -40,6 +83,8 @@ def main() -> int:
     missing = sorted(REQUIRED_SOCKETS - names)
     root = next((obj for obj in objects if obj.name.endswith("_Blockout_Root")), None)
     meshes = [obj for obj in objects if obj.type == "MESH"]
+    armatures = [obj for obj in objects if obj.type == "ARMATURE"]
+    armature = next((obj for obj in armatures if obj.name == "CH101_Rig_Armature"), None)
     errors: list[str] = []
     if missing:
         errors.append(f"missing sockets: {', '.join(missing)}")
@@ -47,6 +92,25 @@ def main() -> int:
         errors.append("missing blockout root empty")
     if not meshes:
         errors.append("no mesh objects found")
+    if armature is None:
+        errors.append("missing CH101_Rig_Armature")
+
+    missing_rig_bones = sorted(REQUIRED_RIG_BONES - {bone.name for bone in armature.data.bones}) if armature else sorted(REQUIRED_RIG_BONES)
+    if missing_rig_bones:
+        errors.append(f"missing rig bones: {', '.join(missing_rig_bones)}")
+
+    motion_clips = sorted(action.name for action in bpy.data.actions if action.name.startswith("CH101_"))
+    missing_motion_clips = sorted(REQUIRED_MOTION_CLIPS - set(motion_clips))
+    if missing_motion_clips:
+        errors.append(f"missing motion clips: {', '.join(missing_motion_clips)}")
+
+    socket_bone_errors = []
+    for socket_name, bone_name in SOCKET_BONE_MAP.items():
+        socket = bpy.data.objects.get(socket_name)
+        if socket is None or socket.parent != armature or socket.parent_type != "BONE" or socket.parent_bone != bone_name:
+            socket_bone_errors.append(f"{socket_name}->{bone_name}")
+    if socket_bone_errors:
+        errors.append(f"socket bone parenting mismatch: {', '.join(socket_bone_errors)}")
 
     uv_missing = sorted(obj.name for obj in meshes if not obj.data.uv_layers)
     materialless_meshes = sorted(obj.name for obj in meshes if not obj.data.materials)
@@ -73,6 +137,18 @@ def main() -> int:
         "uv_status": bpy.context.scene.get("re_camp_uv_status", "NOT SET"),
         "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),
         "technical_preparation": "PASS" if not uv_missing and not materialless_meshes else "FAIL",
+        "armature_count": len(armatures),
+        "armature_name": armature.name if armature else "",
+        "bone_count": len(armature.data.bones) if armature else 0,
+        "missing_rig_bones": missing_rig_bones,
+        "motion_clips": motion_clips,
+        "missing_motion_clips": missing_motion_clips,
+        "socket_bone_map": SOCKET_BONE_MAP,
+        "socket_bone_errors": socket_bone_errors,
+        "rig_status": bpy.context.scene.get("re_camp_rig_status", "NOT SET"),
+        "deformation_status": bpy.context.scene.get("re_camp_deformation_status", "NOT SET"),
+        "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
+        "rig_preparation": "PASS" if armature and not missing_rig_bones and not missing_motion_clips and not socket_bone_errors else "FAIL",
         "errors": errors,
         "source_commit": bpy.context.scene.get("re_camp_source_commit", ""),
         "gate": bpy.context.scene.get("re_camp_gate", "Gate B preflight only"),
