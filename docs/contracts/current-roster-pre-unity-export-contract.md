@@ -27,6 +27,18 @@ be executed without changing Blender-side naming or scale assumptions.
 - Review actions are `<CHARACTER>_A_Pose_Check`, `<CHARACTER>_Idle`,
   `<CHARACTER>_Run`, and `<CHARACTER>_Attack`.
 
+## Pre-Unity automated checks
+
+- Every exported FBX is re-imported in Blender 3.0.1 with animation enabled,
+  leaf bones ignored, and the `-Z` forward / `Y` up contract.
+- The re-import check verifies the armature name, required 22-bone set, four
+  action names, non-empty mesh geometry, non-degenerate bounds, and unit object
+  scale for CH101 through CH105.
+- The current soft performance budget is 25,000 LOD0 triangles, 15,000 LOD1
+  triangles, 8,000 LOD2 triangles, 64 LOD0 mesh objects, 128 LOD mesh objects,
+  and 32 bones per character. These are regression gates, not final Android
+  targets.
+
 The package is a documentation-grade blockout and technical preflight. Final
 production skinning, Unity import settings, prefab hookup, runtime socket proof,
 and Android measurements remain outside this contract.

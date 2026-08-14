@@ -94,6 +94,8 @@ def main() -> int:
     parser.add_argument("--art-root", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--contact-sheet", type=Path, required=True)
+    parser.add_argument("--fbx-smoke-report", type=Path)
+    parser.add_argument("--budget-report", type=Path)
     args = parser.parse_args()
 
     roster_manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
@@ -111,6 +113,16 @@ def main() -> int:
 
     if any(missing_by_character.values()):
         raise RuntimeError(f"Missing pre-Unity artifacts: {missing_by_character}")
+    fbx_smoke = None
+    if args.fbx_smoke_report:
+        fbx_smoke = json.loads(args.fbx_smoke_report.read_text(encoding="utf-8"))
+        if fbx_smoke.get("status") != "PASS":
+            raise RuntimeError("FBX re-import smoke test did not PASS")
+    budget = None
+    if args.budget_report:
+        budget = json.loads(args.budget_report.read_text(encoding="utf-8"))
+        if budget.get("status") != "PASS":
+            raise RuntimeError("Pre-Unity performance budget check did not PASS")
     make_contact_sheet(args.output_root, args.art_root, roster, args.contact_sheet)
 
     files = []
@@ -139,6 +151,8 @@ def main() -> int:
             "pose_render_count": 20,
         },
         "export_contract": EXPORT_CONTRACT,
+        "fbx_reimport_smoke_test": fbx_smoke,
+        "performance_budget": budget,
         "files": files,
     }
     destination = args.output_root / "pre_unity_package_manifest.json"

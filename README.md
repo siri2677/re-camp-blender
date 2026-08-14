@@ -30,8 +30,10 @@ The current roster notebook clones `siri2677/re-camp` into `/content`, installs
 Blender, uses `xvfb-run` when the runtime has no display, builds all five v007
 blockouts from the locked sheets, renders front/side/back plus pose-review views,
 exports `.blend` and `.fbx`, validates UV/material/triangle/LOD plus
-rig/weight/motion metadata, creates a source-vs-render visual QA contact sheet,
-records per-file SHA256 hashes, and creates a ZIP for browser download.
+rig/weight/motion metadata, re-imports every FBX for a Blender-side handoff
+smoke test, checks the current pre-Unity performance budget, creates a
+source-vs-render visual QA contact sheet, records per-file SHA256 hashes, and
+creates a ZIP for browser download.
 
 Colab session files are temporary. Download the ZIP before the runtime ends.
 

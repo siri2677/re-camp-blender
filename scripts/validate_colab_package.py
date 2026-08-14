@@ -22,6 +22,8 @@ BLENDER_SCRIPTS = (
 )
 QA_SCRIPTS = (
     "scripts/qa/prepare_pre_unity_package.py",
+    "scripts/qa/smoke_test_fbx.py",
+    "scripts/qa/check_pre_unity_budget.py",
 )
 REQUIRED_MARKERS = {
     "notebooks/00_colab_blender_setup.ipynb": (
@@ -66,6 +68,10 @@ REQUIRED_MARKERS = {
         "d876bbc0c2eef7e9e549de274c15b3ab190ad6ce",
         "current-roster-pre-unity-v001",
         "prepare_pre_unity_package.py",
+        "smoke_test_fbx.py",
+        "check_pre_unity_budget.py",
+        "fbx_reimport_smoke_test",
+        "pre_unity_budget_report",
         "current_roster_visual_qa_contact_sheet",
         "archive_hash",
     ),
@@ -132,7 +138,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print("Colab Blender package validation passed (4 notebooks, 3 Blender scripts, and 1 QA script checked).")
+    print("Colab Blender package validation passed (4 notebooks, 3 Blender scripts, and 3 QA scripts checked).")
     return 0
 
 
