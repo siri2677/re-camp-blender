@@ -112,6 +112,24 @@ def main() -> int:
     if socket_bone_errors:
         errors.append(f"socket bone parenting mismatch: {', '.join(socket_bone_errors)}")
 
+    skinning_errors = []
+    weighted_meshes = []
+    if armature:
+        for obj in meshes:
+            armature_modifiers = [
+                modifier for modifier in obj.modifiers
+                if modifier.type == "ARMATURE" and modifier.object == armature
+            ]
+            has_vertex_weights = any(bool(vertex.groups) for vertex in obj.data.vertices)
+            if not armature_modifiers:
+                skinning_errors.append(f"{obj.name}: missing armature modifier")
+            if not has_vertex_weights:
+                skinning_errors.append(f"{obj.name}: no vertex weights")
+            if armature_modifiers and has_vertex_weights:
+                weighted_meshes.append(obj.name)
+    if skinning_errors:
+        errors.append(f"skinning errors: {'; '.join(skinning_errors)}")
+
     uv_missing = sorted(obj.name for obj in meshes if not obj.data.uv_layers)
     materialless_meshes = sorted(obj.name for obj in meshes if not obj.data.materials)
     triangle_count = 0
@@ -149,6 +167,12 @@ def main() -> int:
         "deformation_status": bpy.context.scene.get("re_camp_deformation_status", "NOT SET"),
         "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
         "rig_preparation": "PASS" if armature and not missing_rig_bones and not missing_motion_clips and not socket_bone_errors else "FAIL",
+        "weighted_mesh_object_count": len(weighted_meshes),
+        "skinning_errors": skinning_errors,
+        "skinning_status": bpy.context.scene.get("re_camp_skinning_status", "NOT SET"),
+        "pose_review_status": bpy.context.scene.get("re_camp_pose_review_status", "NOT RENDERED"),
+        "pose_review_names": sorted(name for name in bpy.context.scene.get("re_camp_pose_review_names", "").split(",") if name),
+        "skinning_preparation": "PASS" if armature and not skinning_errors else "FAIL",
         "errors": errors,
         "source_commit": bpy.context.scene.get("re_camp_source_commit", ""),
         "gate": bpy.context.scene.get("re_camp_gate", "Gate B preflight only"),

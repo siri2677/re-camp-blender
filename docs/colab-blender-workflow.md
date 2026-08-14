@@ -21,13 +21,13 @@ Notebook은 다음 원본 브랜치와 커밋을 기준으로 CH101 소스를 �
 3. Colab runtime에 Blender를 설치한다.
 4. 화면 장치가 없는 runtime에서는 `xvfb-run`을 자동으로 사용한다.
 5. front/side/back 렌더, `.blend`, `.fbx`, JSON 검증 리포트를 생성한다.
-6. `/content/re-camp-CH101-blockout-v006.zip`을 브라우저로 다운로드한다.
+6. `/content/re-camp-CH101-blockout-v007.zip`을 브라우저로 다운로드한다.
 
 Colab 세션이 끝나면 `/content`의 파일은 삭제되므로 ZIP을 세션 종료 전에 다운로드해야 한다.
 
 ## 판정 경계
 
-현재 자동화 결과는 v005 기술 준비 위에 humanoid-aligned armature 프로토타입, socket-to-bone 연결, idle/run/attack/A-pose 검토 클립을 추가한 Rig and Motion Preparation v006이다. 스킨 웨이트는 적용하지 않았으며, 최종 캐릭터 모델, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
+현재 자동화 결과는 v006 리그 위에 파츠별 rigid blockout weight, Armature modifier, idle/run/attack/A-pose 변형 렌더를 추가한 Skinned Deformation Review v007이다. 최종 production skinning, Unity Import, Android 성능, Gate B 승인을 의미하지 않는다.
 
 전체 제작 단계와 다음 Phase 6 작업은 [CH101 Production Roadmap](plans/ch101-production-roadmap.md)에서 관리한다.
 

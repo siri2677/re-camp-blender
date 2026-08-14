@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CH101 art-directed rig-prep blockout v006.
+"""Build the CH101 art-directed skinned blockout v007.
 
 This is a procedural, documentation-grade 3D blockout based on the locked
 CH101 production sheet. It is not a final sculpt, rig, animation, Unity
@@ -485,6 +485,82 @@ def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
     }
 
 
+def _skinning_bone_for_object(name: str) -> str:
+    """Return a deliberate rigid-blockout bone assignment for a mesh part."""
+    if name.startswith(("Hair_", "Face_", "Eye_")) or name in {"Body_Head"}:
+        return "Head"
+    if name == "Body_Neck":
+        return "Neck"
+    if name in {"Body_Pelvis", "Shorts_Waistband", "Shorts_Belt_Cyan"}:
+        return "Hips"
+    if name == "Body_Torso" or name.startswith(("Jacket_", "CropTop_", "SignalRibbon_")):
+        return "Chest"
+    if name.startswith("Saber_"):
+        return "RightHand"
+    if name.startswith("Sleeve_L_Upper"):
+        return "LeftUpperArm"
+    if name.startswith("Sleeve_L_Lower"):
+        return "LeftLowerArm"
+    if name.startswith(("Cuff_L", "Hand_L")):
+        return "LeftHand"
+    if name.startswith("Sleeve_R_Upper"):
+        return "RightUpperArm"
+    if name.startswith("Sleeve_R_Lower"):
+        return "RightLowerArm"
+    if name.startswith(("Cuff_R", "Hand_R")):
+        return "RightHand"
+    if name.startswith(("Shorts_L_", "Leg_L_Upper", "ThighStrap_L")):
+        return "LeftUpperLeg"
+    if name.startswith(("KneeGuard_L", "Leg_L_Lower")):
+        return "LeftLowerLeg"
+    if name.startswith("Boot_L"):
+        return "LeftFoot"
+    if name.startswith(("Shorts_R_", "Leg_R_Upper", "ThighStrap_R")):
+        return "RightUpperLeg"
+    if name.startswith(("KneeGuard_R", "Leg_R_Lower")):
+        return "RightLowerLeg"
+    if name.startswith("Boot_R"):
+        return "RightFoot"
+    return "Hips"
+
+
+def prepare_blockout_skinning(root: bpy.types.Object) -> dict[str, object]:
+    """Bind each blockout part rigidly to one rig bone for deformation review."""
+    armature = bpy.data.objects.get("CH101_Rig_Armature")
+    if armature is None:
+        raise RuntimeError("CH101_Rig_Armature is required before skinning")
+    weighted_meshes = 0
+    assignment_counts: dict[str, int] = {}
+    for obj in (item for item in bpy.context.scene.objects if item.type == "MESH"):
+        bone_name = _skinning_bone_for_object(obj.name)
+        if armature.data.bones.get(bone_name) is None:
+            raise RuntimeError(f"Missing skinning bone {bone_name} for {obj.name}")
+        group = obj.vertex_groups.get(bone_name) or obj.vertex_groups.new(name=bone_name)
+        group.add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
+        modifier = obj.modifiers.get("CH101_ArmatureDeform") or obj.modifiers.new(name="CH101_ArmatureDeform", type="ARMATURE")
+        modifier.object = armature
+        obj["skinning_revision"] = "v007"
+        obj["skinning_mode"] = "RIGID BLOCKOUT WEIGHT"
+        obj["skinning_bone"] = bone_name
+        weighted_meshes += 1
+        assignment_counts[bone_name] = assignment_counts.get(bone_name, 0) + 1
+    armature["skinning_revision"] = "v007"
+    armature["skinning_status"] = "RIGID BLOCKOUT WEIGHTS / DEFORMATION REVIEW"
+    armature["deformation_status"] = "RIGID BLOCKOUT WEIGHTS / PROTOTYPE"
+    armature["weighted_mesh_object_count"] = weighted_meshes
+    armature["skinning_assignment_counts"] = json.dumps(assignment_counts, sort_keys=True)
+    root["skinning_prepared"] = True
+    root["skinning_status"] = "RIGID BLOCKOUT WEIGHTS / DEFORMATION REVIEW"
+    root["deformation_status"] = "RIGID BLOCKOUT WEIGHTS / PROTOTYPE"
+    root["weighted_mesh_object_count"] = weighted_meshes
+    root["skinning_assignment_counts"] = json.dumps(assignment_counts, sort_keys=True)
+    return {
+        "weighted_mesh_object_count": weighted_meshes,
+        "skinning_status": armature["skinning_status"],
+        "assignment_counts": assignment_counts,
+    }
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
     clear_scene()
@@ -505,7 +581,7 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
     root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
-    root["blockout_revision"] = "v006"
+    root["blockout_revision"] = "v007"
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
@@ -624,16 +700,20 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_technical_proof"] = "NOT TESTED"
     technical_stats = prepare_technical_asset(root)
     rig_stats = prepare_rig_and_motion(root)
-    scene["re_camp_blockout_revision"] = "v006"
+    skinning_stats = prepare_blockout_skinning(root)
+    scene["re_camp_blockout_revision"] = "v007"
     scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
     scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
-    scene["re_camp_rig_status"] = "PROTOTYPE / UNWEIGHTED"
-    scene["re_camp_deformation_status"] = "NOT WEIGHTED / PENDING SKINNING"
+    scene["re_camp_rig_status"] = "PROTOTYPE / RIGID BLOCKOUT WEIGHTS"
+    scene["re_camp_deformation_status"] = skinning_stats["skinning_status"]
     scene["re_camp_motion_status"] = "IDLE RUN ATTACK REVIEW CLIPS"
     scene["re_camp_armature_name"] = rig_stats["armature_name"]
     scene["re_camp_bone_count"] = rig_stats["bone_count"]
+    scene["re_camp_skinning_status"] = skinning_stats["skinning_status"]
+    scene["re_camp_weighted_mesh_count"] = skinning_stats["weighted_mesh_object_count"]
+    scene["re_camp_pose_review_status"] = "PENDING RENDER"
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v006.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v007.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
@@ -674,8 +754,43 @@ def render_views(output_dir: Path) -> None:
         bpy.ops.render.render(write_still=True)
 
 
+def render_pose_previews(output_dir: Path) -> None:
+    """Render visible deformation checks for the generated review actions."""
+    scene = bpy.context.scene
+    armature = bpy.data.objects.get("CH101_Rig_Armature")
+    if armature is None:
+        raise RuntimeError("CH101_Rig_Armature is required for pose previews")
+    target = Vector((0, 0, 1.85))
+    camera = add_camera("RenderCamera_pose_review", (0, -11.4, 2.15), target)
+    scene.camera = camera
+    pose_frames = {
+        "CH101_A_Pose_Check": 1,
+        "CH101_Idle": 24,
+        "CH101_Run": 12,
+        "CH101_Attack": 16,
+    }
+    pose_dir = output_dir / "renders" / "poses"
+    pose_dir.mkdir(parents=True, exist_ok=True)
+    rendered: list[str] = []
+    for action_name, frame in pose_frames.items():
+        action = bpy.data.actions.get(action_name)
+        if action is None:
+            continue
+        armature.animation_data.action = action
+        scene.frame_set(frame)
+        scene.render.filepath = str(pose_dir / f"{action_name}.png")
+        bpy.ops.render.render(write_still=True)
+        rendered.append(action_name)
+    idle = bpy.data.actions.get("CH101_Idle")
+    if idle is not None:
+        armature.animation_data.action = idle
+    scene.frame_set(1)
+    scene["re_camp_pose_review_status"] = "PASS" if len(rendered) == len(pose_frames) else "PARTIAL"
+    scene["re_camp_pose_review_names"] = ",".join(rendered)
+
+
 def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v006.fbx"
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v007.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -698,7 +813,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
-        "revision": "v006",
+        "revision": "v007",
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -715,6 +830,10 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "bone_count": bpy.context.scene.get("re_camp_bone_count", 0),
         "rig_status": bpy.context.scene.get("re_camp_rig_status", "NOT SET"),
         "deformation_status": bpy.context.scene.get("re_camp_deformation_status", "NOT SET"),
+        "skinning_status": bpy.context.scene.get("re_camp_skinning_status", "NOT SET"),
+        "weighted_mesh_object_count": bpy.context.scene.get("re_camp_weighted_mesh_count", 0),
+        "pose_review_status": bpy.context.scene.get("re_camp_pose_review_status", "NOT RENDERED"),
+        "pose_review_names": sorted(name for name in bpy.context.scene.get("re_camp_pose_review_names", "").split(",") if name),
         "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
         "motion_clips": sorted(action.name for action in bpy.data.actions if action.name.startswith("CH101_")),
         "socket_bone_map": SOCKET_BONE_MAP,
@@ -740,11 +859,13 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
             "humanoid-aligned armature prototype",
             "idle run attack and A-pose review actions",
             "socket-to-bone parenting metadata",
+            "rigid blockout weights and armature modifiers",
+            "A-pose idle run attack deformation previews",
         ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v006.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v007.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -754,11 +875,12 @@ def main() -> None:
     del root
     if args.render:
         render_views(output_dir)
+        render_pose_previews(output_dir)
         bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print("Revision: v006 / rig and motion preparation")
+    print("Revision: v007 / skinned deformation review")
     print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 

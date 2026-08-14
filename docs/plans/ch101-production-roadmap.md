@@ -4,7 +4,7 @@
 
 ## 현재 판정
 
-상태: `RIG AND MOTION PREPARATION V006 COMPLETE / UNITY IMPORT PROOF BLOCKED / GATE B PENDING`
+상태: `SKINNED DEFORMATION REVIEW V007 IMPLEMENTED / COLAB VERIFICATION PENDING / UNITY IMPORT PROOF BLOCKED / GATE B PENDING`
 
 완료된 증거:
 
@@ -22,7 +22,7 @@
 - 22본 armature, motion clip 4개, socket bone mismatch 0개
 - `/content/re-camp-output/CH101_v006/` 산출물과 `/content/re-camp-CH101-blockout-v006.zip` 생성
 
-현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology 최적화, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
+현재 결과는 최종 캐릭터 모델이 아니다. production topology 최적화, final skinning, Unity Import, Android 성능 증거가 아직 없다.
 
 ## 단계별 계획
 
@@ -102,15 +102,18 @@ v004 적용 항목:
 
 ### Phase 5 — Rig and Motion Preparation
 
-상태: `COMPLETE — v006 / UNITY IMPORT PENDING`
+상태: `IMPLEMENTED — v007 / COLAB VERIFICATION PENDING / UNITY IMPORT PENDING`
 
 - Unity Humanoid 역할명에 맞춘 22-bone armature prototype
 - 8개 socket을 hand/chest/hips/head bone에 연결
 - `CH101_A_Pose_Check` review action 추가
 - `CH101_Idle`, `CH101_Run`, `CH101_Attack` review action 추가
-- 스킨 웨이트는 적용하지 않고 `NOT WEIGHTED / PENDING SKINNING`으로 명시
+- production skinning은 적용하지 않고 rigid blockout weight prototype으로 명시
+- 각 메시 파츠에 rigid blockout weight와 Armature modifier 적용
+- A-pose·idle·run·attack 변형 preview render 생성
+- weighted mesh 수와 skinning 오류를 JSON으로 검증
 
-완료 기준: Colab에서 bone·socket·motion clip 검증 `PASS`를 확인한다. 충족됨. Unity Humanoid 최종 매핑과 스킨 웨이트는 Unity 환경 준비 후 별도 확인한다.
+완료 기준: Colab에서 bone·socket·motion clip·weight·pose render 검증 `PASS`를 확인한다. Unity Humanoid 최종 매핑과 production skinning은 Unity 환경 준비 후 별도 확인한다.
 
 ### Phase 6 — Unity Import Proof
 
@@ -165,4 +168,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Phase 5 v006의 Colab 산출물과 리그 검증을 확인하는 것이다. 확인 후 다음 단계는 Phase 6의 `Unity Import Proof`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 Phase 5 v007의 Colab 산출물과 변형 렌더 검증을 확인하는 것이다. 확인 후 다음 단계는 Phase 6의 `Unity Import Proof`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
