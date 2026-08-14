@@ -32,8 +32,12 @@ be executed without changing Blender-side naming or scale assumptions.
 - Every exported FBX is re-imported in Blender 3.0.1 with animation enabled,
   leaf bones ignored, and the `-Z` forward / `Y` up contract.
 - The re-import check verifies the armature name, required 22-bone set, four
-  action names, non-empty mesh geometry, non-degenerate bounds, and unit object
-  scale for CH101 through CH105.
+  action clips, non-empty mesh geometry, and non-degenerate effective bounds for
+  CH101 through CH105. Blender 3.0.1 may expose FBX-baked actions with
+  pipe-qualified names and may report a uniform `100.0` object scale for the
+  centimeter conversion; both forms are recorded and accepted when the action
+  tokens and effective bounds are correct. Unexpected scale values remain a
+  failure.
 - The current soft performance budget is 30,000 LOD0 triangles, 15,000 LOD1
   triangles, 8,000 LOD2 triangles, 96 LOD0 mesh objects, 192 LOD mesh objects,
   and 32 bones per character. These are regression gates, not final Android

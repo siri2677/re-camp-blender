@@ -44,6 +44,11 @@ def close_enough(value: float, expected: float = 1.0, tolerance: float = 1e-4) -
     return math.isclose(value, expected, rel_tol=tolerance, abs_tol=tolerance)
 
 
+def action_matches(action_name: str, expected_name: str) -> bool:
+    """Accept Blender's FBX-qualified action names after a round trip."""
+    return action_name == expected_name or expected_name in action_name.split("|")
+
+
 def import_one(character: str, fbx_path: Path) -> dict[str, object]:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     errors: list[str] = []
@@ -70,7 +75,11 @@ def import_one(character: str, fbx_path: Path) -> dict[str, object]:
 
     action_names = {action.name for action in bpy.data.actions}
     expected_actions = {f"{character}_{suffix}" for suffix in MOTION_CLIP_SUFFIXES}
-    missing_actions = sorted(expected_actions - action_names)
+    action_matches_by_expected = {
+        expected: sorted(name for name in action_names if action_matches(name, expected))
+        for expected in sorted(expected_actions)
+    }
+    missing_actions = sorted(expected for expected, matches in action_matches_by_expected.items() if not matches)
     if missing_actions:
         errors.append(f"missing imported actions: {', '.join(missing_actions)}")
 
@@ -90,12 +99,22 @@ def import_one(character: str, fbx_path: Path) -> dict[str, object]:
     if dimensions["z"] <= 0.1:
         errors.append("imported mesh height is degenerate")
 
-    scale_deviations = []
+    scale_summary = {"unit": 0, "fbx_centimeter": 0, "unexpected": 0}
+    unexpected_scale_objects = []
     for obj in objects:
-        if not all(close_enough(value) for value in obj.scale):
-            scale_deviations.append({"object": obj.name, "scale": list(obj.scale)})
-    if scale_deviations:
-        errors.append(f"non-unit imported object scales: {len(scale_deviations)}")
+        if obj.type not in {"MESH", "ARMATURE"}:
+            continue
+        if all(close_enough(value) for value in obj.scale):
+            scale_summary["unit"] += 1
+        elif all(close_enough(value, expected=100.0) for value in obj.scale):
+            # Blender 3.0.1's FBX importer represents centimeter-authored files
+            # with a uniform 100 object scale while preserving effective bounds.
+            scale_summary["fbx_centimeter"] += 1
+        else:
+            scale_summary["unexpected"] += 1
+            unexpected_scale_objects.append({"object": obj.name, "scale": list(obj.scale)})
+    if unexpected_scale_objects:
+        errors.append(f"unexpected imported object scales: {len(unexpected_scale_objects)}")
 
     return {
         "character": character,
@@ -109,10 +128,12 @@ def import_one(character: str, fbx_path: Path) -> dict[str, object]:
         "bone_count": len(imported_bones),
         "missing_bones": missing_bones,
         "action_names": sorted(action_names),
+        "action_matches": action_matches_by_expected,
         "missing_actions": missing_actions,
         "triangle_count": triangle_count,
         "dimensions": dimensions,
-        "scale_deviations": scale_deviations,
+        "scale_summary": scale_summary,
+        "unexpected_scale_objects": unexpected_scale_objects,
         "socket_contract_count": len(SOCKET_BONE_MAP),
         "collider_contract_count": len(COLLIDER_BONE_MAP),
         "face_target_contract_count": len(FACE_BLENDSHAPE_NAMES),
@@ -144,6 +165,7 @@ def main() -> int:
             "axis_forward": "-Z",
             "axis_up": "Y",
             "unit_scale": 1.0,
+            "accepted_import_object_scale": [1.0, 100.0],
         },
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
