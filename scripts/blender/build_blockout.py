@@ -68,12 +68,16 @@ SOCKET_BONE_MAP = {
 }
 
 
-MOTION_CLIPS = {
-    "CH101_Idle": 48,
-    "CH101_Run": 24,
-    "CH101_Attack": 24,
-    "CH101_A_Pose_Check": 2,
+MOTION_CLIP_FRAMES = {
+    "Idle": 48,
+    "Run": 24,
+    "Attack": 24,
+    "A_Pose_Check": 2,
 }
+
+
+def motion_clip_names(character: str) -> dict[str, str]:
+    return {key: f"{character}_{key}" for key in MOTION_CLIP_FRAMES}
 
 
 def parse_args() -> argparse.Namespace:
@@ -379,10 +383,11 @@ def _create_motion_action(
     return action
 
 
-def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
+def prepare_rig_and_motion(root: bpy.types.Object, character: str = "CH101") -> dict[str, object]:
     """Create an unweighted humanoid-aligned rig prototype and review actions."""
-    armature_data = bpy.data.armatures.new("CH101_Rig_Armature")
-    armature = bpy.data.objects.new("CH101_Rig_Armature", armature_data)
+    armature_name = f"{character}_Rig_Armature"
+    armature_data = bpy.data.armatures.new(armature_name)
+    armature = bpy.data.objects.new(armature_name, armature_data)
     bpy.context.collection.objects.link(armature)
     armature.parent = root
     armature["rig_revision"] = "v006"
@@ -428,10 +433,11 @@ def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
         socket.matrix_world = world_matrix
         socket["rig_parent_bone"] = bone_name
 
+    clips = motion_clip_names(character)
     idle = _create_motion_action(
         armature,
-        "CH101_Idle",
-        MOTION_CLIPS["CH101_Idle"],
+        clips["Idle"],
+        MOTION_CLIP_FRAMES["Idle"],
         [
             (1, {"Chest": (0.0, 0.0, 0.0), "Head": (0.0, 0.0, 0.0)}),
             (24, {"Chest": (math.radians(-2.0), 0.0, 0.0), "Head": (math.radians(2.0), 0.0, 0.0)}),
@@ -440,8 +446,8 @@ def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
     )
     run = _create_motion_action(
         armature,
-        "CH101_Run",
-        MOTION_CLIPS["CH101_Run"],
+        clips["Run"],
+        MOTION_CLIP_FRAMES["Run"],
         [
             (1, {"LeftUpperArm": (math.radians(-28), 0.0, 0.0), "RightUpperArm": (math.radians(28), 0.0, 0.0), "LeftUpperLeg": (math.radians(28), 0.0, 0.0), "RightUpperLeg": (math.radians(-28), 0.0, 0.0)}),
             (12, {"LeftUpperArm": (math.radians(28), 0.0, 0.0), "RightUpperArm": (math.radians(-28), 0.0, 0.0), "LeftUpperLeg": (math.radians(-28), 0.0, 0.0), "RightUpperLeg": (math.radians(28), 0.0, 0.0)}),
@@ -450,8 +456,8 @@ def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
     )
     attack = _create_motion_action(
         armature,
-        "CH101_Attack",
-        MOTION_CLIPS["CH101_Attack"],
+        clips["Attack"],
+        MOTION_CLIP_FRAMES["Attack"],
         [
             (1, {"RightUpperArm": (0.0, 0.0, 0.0), "RightLowerArm": (0.0, 0.0, 0.0)}),
             (8, {"RightUpperArm": (math.radians(-55), math.radians(-18), math.radians(-12)), "RightLowerArm": (math.radians(-70), 0.0, 0.0)}),
@@ -461,8 +467,8 @@ def prepare_rig_and_motion(root: bpy.types.Object) -> dict[str, object]:
     )
     a_pose = _create_motion_action(
         armature,
-        "CH101_A_Pose_Check",
-        MOTION_CLIPS["CH101_A_Pose_Check"],
+        clips["A_Pose_Check"],
+        MOTION_CLIP_FRAMES["A_Pose_Check"],
         [
             (1, {"LeftUpperArm": (math.radians(-42), 0.0, 0.0), "RightUpperArm": (math.radians(42), 0.0, 0.0)}),
             (2, {"LeftUpperArm": (math.radians(-42), 0.0, 0.0), "RightUpperArm": (math.radians(42), 0.0, 0.0)}),
@@ -524,11 +530,11 @@ def _skinning_bone_for_object(name: str) -> str:
     return "Hips"
 
 
-def prepare_blockout_skinning(root: bpy.types.Object) -> dict[str, object]:
+def prepare_blockout_skinning(root: bpy.types.Object, character: str = "CH101") -> dict[str, object]:
     """Bind each blockout part rigidly to one rig bone for deformation review."""
-    armature = bpy.data.objects.get("CH101_Rig_Armature")
+    armature = bpy.data.objects.get(f"{character}_Rig_Armature")
     if armature is None:
-        raise RuntimeError("CH101_Rig_Armature is required before skinning")
+        raise RuntimeError(f"{character}_Rig_Armature is required before skinning")
     weighted_meshes = 0
     assignment_counts: dict[str, int] = {}
     for obj in (item for item in bpy.context.scene.objects if item.type == "MESH"):
@@ -537,7 +543,8 @@ def prepare_blockout_skinning(root: bpy.types.Object) -> dict[str, object]:
             raise RuntimeError(f"Missing skinning bone {bone_name} for {obj.name}")
         group = obj.vertex_groups.get(bone_name) or obj.vertex_groups.new(name=bone_name)
         group.add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
-        modifier = obj.modifiers.get("CH101_ArmatureDeform") or obj.modifiers.new(name="CH101_ArmatureDeform", type="ARMATURE")
+        modifier_name = f"{character}_ArmatureDeform"
+        modifier = obj.modifiers.get(modifier_name) or obj.modifiers.new(name=modifier_name, type="ARMATURE")
         modifier.object = armature
         obj["skinning_revision"] = "v007"
         obj["skinning_mode"] = "RIGID BLOCKOUT WEIGHT"
@@ -699,8 +706,8 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
     technical_stats = prepare_technical_asset(root)
-    rig_stats = prepare_rig_and_motion(root)
-    skinning_stats = prepare_blockout_skinning(root)
+    rig_stats = prepare_rig_and_motion(root, args.character)
+    skinning_stats = prepare_blockout_skinning(root, args.character)
     scene["re_camp_blockout_revision"] = "v007"
     scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
     scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
@@ -754,20 +761,21 @@ def render_views(output_dir: Path) -> None:
         bpy.ops.render.render(write_still=True)
 
 
-def render_pose_previews(output_dir: Path) -> None:
+def render_pose_previews(output_dir: Path, character: str = "CH101") -> None:
     """Render visible deformation checks for the generated review actions."""
     scene = bpy.context.scene
-    armature = bpy.data.objects.get("CH101_Rig_Armature")
+    armature = bpy.data.objects.get(f"{character}_Rig_Armature")
     if armature is None:
-        raise RuntimeError("CH101_Rig_Armature is required for pose previews")
+        raise RuntimeError(f"{character}_Rig_Armature is required for pose previews")
     target = Vector((0, 0, 1.85))
     camera = add_camera("RenderCamera_pose_review", (0, -11.4, 2.15), target)
     scene.camera = camera
+    clips = motion_clip_names(character)
     pose_frames = {
-        "CH101_A_Pose_Check": 1,
-        "CH101_Idle": 24,
-        "CH101_Run": 12,
-        "CH101_Attack": 16,
+        clips["A_Pose_Check"]: 1,
+        clips["Idle"]: 24,
+        clips["Run"]: 12,
+        clips["Attack"]: 16,
     }
     pose_dir = output_dir / "renders" / "poses"
     pose_dir.mkdir(parents=True, exist_ok=True)
@@ -781,7 +789,7 @@ def render_pose_previews(output_dir: Path) -> None:
         scene.render.filepath = str(pose_dir / f"{action_name}.png")
         bpy.ops.render.render(write_still=True)
         rendered.append(action_name)
-    idle = bpy.data.actions.get("CH101_Idle")
+    idle = bpy.data.actions.get(clips["Idle"])
     if idle is not None:
         armature.animation_data.action = idle
     scene.frame_set(1)
@@ -875,7 +883,7 @@ def main() -> None:
     del root
     if args.render:
         render_views(output_dir)
-        render_pose_previews(output_dir)
+        render_pose_previews(output_dir, args.character)
         bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)

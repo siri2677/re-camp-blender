@@ -47,12 +47,7 @@ REQUIRED_RIG_BONES = {
     "RightToes",
 }
 
-REQUIRED_MOTION_CLIPS = {
-    "CH101_Idle",
-    "CH101_Run",
-    "CH101_Attack",
-    "CH101_A_Pose_Check",
-}
+MOTION_CLIP_SUFFIXES = ("Idle", "Run", "Attack", "A_Pose_Check")
 
 SOCKET_BONE_MAP = {
     "Socket_Equipment_Primary": "RightHand",
@@ -72,6 +67,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--blend", required=True)
     parser.add_argument("--report", required=True)
+    parser.add_argument("--character", default="CH101")
     return parser.parse_args(script_args)
 
 
@@ -80,11 +76,13 @@ def main() -> int:
     bpy.ops.wm.open_mainfile(filepath=str(Path(args.blend).resolve()))
     objects = list(bpy.data.objects)
     names = {obj.name for obj in objects}
+    armature_name = f"{args.character}_Rig_Armature"
+    required_motion_clips = {f"{args.character}_{suffix}" for suffix in MOTION_CLIP_SUFFIXES}
     missing = sorted(REQUIRED_SOCKETS - names)
     root = next((obj for obj in objects if obj.name.endswith("_Blockout_Root")), None)
     meshes = [obj for obj in objects if obj.type == "MESH"]
     armatures = [obj for obj in objects if obj.type == "ARMATURE"]
-    armature = next((obj for obj in armatures if obj.name == "CH101_Rig_Armature"), None)
+    armature = next((obj for obj in armatures if obj.name == armature_name), None)
     errors: list[str] = []
     if missing:
         errors.append(f"missing sockets: {', '.join(missing)}")
@@ -93,14 +91,14 @@ def main() -> int:
     if not meshes:
         errors.append("no mesh objects found")
     if armature is None:
-        errors.append("missing CH101_Rig_Armature")
+        errors.append(f"missing {armature_name}")
 
     missing_rig_bones = sorted(REQUIRED_RIG_BONES - {bone.name for bone in armature.data.bones}) if armature else sorted(REQUIRED_RIG_BONES)
     if missing_rig_bones:
         errors.append(f"missing rig bones: {', '.join(missing_rig_bones)}")
 
-    motion_clips = sorted(action.name for action in bpy.data.actions if action.name.startswith("CH101_"))
-    missing_motion_clips = sorted(REQUIRED_MOTION_CLIPS - set(motion_clips))
+    motion_clips = sorted(action.name for action in bpy.data.actions if action.name.startswith(f"{args.character}_"))
+    missing_motion_clips = sorted(required_motion_clips - set(motion_clips))
     if missing_motion_clips:
         errors.append(f"missing motion clips: {', '.join(missing_motion_clips)}")
 
@@ -142,6 +140,7 @@ def main() -> int:
         errors.append(f"missing material slots: {', '.join(materialless_meshes)}")
 
     report = {
+        "character": args.character,
         "blend": str(Path(args.blend).resolve()),
         "status": "PASS" if not errors else "FAIL",
         "technical_proof": "NOT TESTED",

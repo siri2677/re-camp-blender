@@ -13,9 +13,11 @@ NOTEBOOKS = (
     "notebooks/00_colab_blender_setup.ipynb",
     "notebooks/01_ch101_blockout.ipynb",
     "notebooks/00_colab_blender_nodrive_test.ipynb",
+    "notebooks/02_current_roster_pre_unity.ipynb",
 )
 BLENDER_SCRIPTS = (
     "scripts/blender/build_blockout.py",
+    "scripts/blender/build_roster.py",
     "scripts/blender/validate_asset.py",
 )
 REQUIRED_MARKERS = {
@@ -44,6 +46,22 @@ REQUIRED_MARKERS = {
         "files.download",
         "CH101_Blockout_REVIEW_v007.blend",
         "v007",
+    ),
+    "notebooks/02_current_roster_pre_unity.ipynb": (
+        "CH101",
+        "CH102",
+        "CH103",
+        "CH104",
+        "CH105",
+        "build_roster.py",
+        "validate_asset.py",
+        "art/current-roster-gate-a-ch102",
+        "ae111815f356f105a170bf1c473ae3cd086fee4c",
+        "c01a4e2d90919872997dccf46679cf8ab10f1e87",
+        "f231ed5a4491eaa274237b7a2c8d4911d538b0ab",
+        "2dcb002f2691006008d0c20fa8157cbdd7d52538",
+        "d876bbc0c2eef7e9e549de274c15b3ab190ad6ce",
+        "current-roster-pre-unity-v001",
     ),
 }
 
@@ -106,7 +124,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print("Colab Blender package validation passed (3 notebooks and 2 Blender scripts checked).")
+    print("Colab Blender package validation passed (4 notebooks and 3 Blender scripts checked).")
     return 0
 
 
