@@ -4,7 +4,7 @@
 
 ## 현재 판정
 
-상태: `SKINNED DEFORMATION REVIEW V007 IMPLEMENTED / COLAB VERIFICATION PENDING / UNITY IMPORT PROOF BLOCKED / GATE B PENDING`
+상태: `SKINNED DEFORMATION REVIEW V007 COMPLETE / UNITY IMPORT PROOF BLOCKED / GATE B PENDING`
 
 완료된 증거:
 
@@ -21,6 +21,9 @@
 - CH101 v006 Colab 검증 `PASS`: 메시 89개, 삼각형 26,584개, 소켓 8개
 - 22본 armature, motion clip 4개, socket bone mismatch 0개
 - `/content/re-camp-output/CH101_v006/` 산출물과 `/content/re-camp-CH101-blockout-v006.zip` 생성
+- CH101 v007 Colab 검증 `PASS`: weighted mesh 89개, skinning 오류 0개
+- A-pose·idle·run·attack pose review render 4개 생성
+- `/content/re-camp-output/CH101_v007/` 산출물과 `/content/re-camp-CH101-blockout-v007.zip` 생성
 
 현재 결과는 최종 캐릭터 모델이 아니다. production topology 최적화, final skinning, Unity Import, Android 성능 증거가 아직 없다.
 
@@ -102,7 +105,7 @@ v004 적용 항목:
 
 ### Phase 5 — Rig and Motion Preparation
 
-상태: `IMPLEMENTED — v007 / COLAB VERIFICATION PENDING / UNITY IMPORT PENDING`
+상태: `COMPLETE — v007 / UNITY IMPORT PENDING`
 
 - Unity Humanoid 역할명에 맞춘 22-bone armature prototype
 - 8개 socket을 hand/chest/hips/head bone에 연결
@@ -113,7 +116,7 @@ v004 적용 항목:
 - A-pose·idle·run·attack 변형 preview render 생성
 - weighted mesh 수와 skinning 오류를 JSON으로 검증
 
-완료 기준: Colab에서 bone·socket·motion clip·weight·pose render 검증 `PASS`를 확인한다. Unity Humanoid 최종 매핑과 production skinning은 Unity 환경 준비 후 별도 확인한다.
+완료 기준: Colab에서 bone·socket·motion clip·weight·pose render 검증 `PASS`를 확인한다. 충족됨. Unity Humanoid 최종 매핑과 production skinning은 Unity 환경 준비 후 별도 확인한다.
 
 ### Phase 6 — Unity Import Proof
 
