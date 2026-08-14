@@ -5,7 +5,7 @@ The five-character batch notebook was executed in Google Colab on 2026-08-14 (KS
 - Art source branch: `art/current-roster-gate-a-ch102`
 - Art checkout: `b6c9b3128358e061eee6184230929413eba84101`
 - Tools branch: `agent/current-roster-pre-unity`
-- Tools checkout: `a5cea50cdee6d4e190eb81bd62e321a8516ac166`
+- Tools checkout: `33cc1b0ca81085adcde7eb284afd1dfbdfe93ce0`
 - Blender: `3.0.1`
 
 ## Result
@@ -31,6 +31,16 @@ For each character, the batch completed the build and the character-aware valida
 - rigid blockout weights and armature deformation modifiers;
 - front/side/back and four pose-review render passes;
 - `.blend`, `.fbx`, and validation JSON output.
+
+The final validation also reported non-zero LOD triangle totals:
+
+| Character | LOD1 triangles | LOD2 triangles |
+| --- | ---: | ---: |
+| CH101 | 12,323 | 6,316 |
+| CH102 | 7,464 | 3,977 |
+| CH103 | 8,042 | 4,261 |
+| CH104 | 7,672 | 4,076 |
+| CH105 | 7,803 | 4,142 |
 
 The combined archive was created at:
 
