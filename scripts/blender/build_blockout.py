@@ -68,6 +68,29 @@ SOCKET_BONE_MAP = {
 }
 
 
+COLLIDER_BONE_MAP = {
+    "Collider_Hips": "Hips",
+    "Collider_Chest": "Chest",
+    "Collider_Head": "Head",
+    "Collider_LeftHand": "LeftHand",
+    "Collider_RightHand": "RightHand",
+    "Collider_LeftFoot": "LeftFoot",
+    "Collider_RightFoot": "RightFoot",
+}
+
+
+FACE_BLENDSHAPE_NAMES = (
+    "Blink_L",
+    "Blink_R",
+    "Viseme_A",
+    "Viseme_I",
+    "Viseme_U",
+    "Viseme_E",
+    "Viseme_O",
+    "Face_Smile",
+)
+
+
 MOTION_CLIP_FRAMES = {
     "Idle": 48,
     "Run": 24,
@@ -568,6 +591,121 @@ def prepare_blockout_skinning(root: bpy.types.Object, character: str = "CH101") 
     }
 
 
+def _add_review_collider(
+    name: str,
+    location: tuple[float, float, float],
+    scale: tuple[float, float, float],
+    root: bpy.types.Object,
+) -> bpy.types.Object:
+    collider = bpy.data.objects.get(name) or bpy.data.objects.new(name, None)
+    collider.empty_display_type = "CUBE"
+    collider.empty_display_size = 1.0
+    collider.location = location
+    collider.scale = scale
+    collider.parent = root
+    collider["collider_type"] = "BOX_PROXY"
+    collider["unity_status"] = "REVIEW PENDING"
+    if collider.name not in bpy.context.scene.objects:
+        bpy.context.collection.objects.link(collider)
+    return collider
+
+
+def prepare_pre_unity_review(root: bpy.types.Object, character: str = "CH101") -> dict[str, object]:
+    """Add the remaining editor-independent review contracts before Unity."""
+    armature = bpy.data.objects.get(f"{character}_Rig_Armature")
+    if armature is None:
+        raise RuntimeError(f"{character}_Rig_Armature is required for pre-Unity review")
+
+    collider_specs = {
+        "Collider_Hips": ((0.0, 0.0, 1.35), (0.34, 0.25, 0.22)),
+        "Collider_Chest": ((0.0, 0.0, 2.10), (0.31, 0.24, 0.34)),
+        "Collider_Head": ((0.0, 0.0, 2.95), (0.30, 0.28, 0.37)),
+        "Collider_LeftHand": ((-0.81, -0.08, 1.62), (0.12, 0.11, 0.12)),
+        "Collider_RightHand": ((0.81, -0.08, 1.62), (0.12, 0.11, 0.12)),
+        "Collider_LeftFoot": ((-0.24, -0.22, 0.15), (0.20, 0.28, 0.13)),
+        "Collider_RightFoot": ((0.24, -0.22, 0.15), (0.20, 0.28, 0.13)),
+    }
+    colliders = []
+    for name, (location, scale) in collider_specs.items():
+        collider = _add_review_collider(name, location, scale, root)
+        world_matrix = collider.matrix_world.copy()
+        collider.parent = armature
+        collider.parent_type = "BONE"
+        collider.parent_bone = COLLIDER_BONE_MAP[name]
+        collider.matrix_world = world_matrix
+        collider["rig_parent_bone"] = COLLIDER_BONE_MAP[name]
+        colliders.append(collider)
+
+    head = bpy.data.objects.get("Body_Head")
+    if head is None or head.type != "MESH":
+        raise RuntimeError("Body_Head mesh is required for face blendshape review")
+    if head.data.shape_keys is None:
+        head.shape_key_add(name="Basis")
+    for shape_name in FACE_BLENDSHAPE_NAMES:
+        if head.data.shape_keys.key_blocks.get(shape_name) is None:
+            head.shape_key_add(name=shape_name)
+    head["face_blendshape_status"] = "PLACEHOLDER TARGETS / UNITY DRIVER PENDING"
+
+    lod_collection_name = f"{character}_LOD_Proxies"
+    lod_collection = bpy.data.collections.get(lod_collection_name)
+    if lod_collection is None:
+        lod_collection = bpy.data.collections.new(lod_collection_name)
+        bpy.context.scene.collection.children.link(lod_collection)
+    base_meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH" and not obj.get("lod_level")]
+    lod_stats: dict[str, dict[str, int]] = {}
+    for level, ratio in (("LOD1", 0.45), ("LOD2", 0.22)):
+        object_count = 0
+        triangle_count = 0
+        for source in base_meshes:
+            proxy = source.copy()
+            proxy.data = source.data.copy()
+            proxy.name = f"{character}_{level}_{source.name}"
+            proxy.parent = root
+            proxy.hide_render = True
+            proxy.hide_set(True)
+            proxy["lod_level"] = level
+            proxy["lod_source"] = source.name
+            proxy["lod_status"] = "GENERATED PROXY / UNITY LOD GROUP PENDING"
+            lod_collection.objects.link(proxy)
+            for modifier in list(proxy.modifiers):
+                if modifier.type == "ARMATURE":
+                    proxy.modifiers.remove(modifier)
+            bpy.ops.object.select_all(action="DESELECT")
+            proxy.hide_set(False)
+            proxy.select_set(True)
+            bpy.context.view_layer.objects.active = proxy
+            decimate = proxy.modifiers.new(name=f"{level}_Decimate", type="DECIMATE")
+            decimate.ratio = ratio
+            try:
+                bpy.ops.object.modifier_apply(modifier=decimate.name)
+            except RuntimeError:
+                proxy["lod_status"] = "GENERATED PROXY / DECIMATE APPLY PENDING"
+            proxy.hide_set(True)
+            armature_modifier = proxy.modifiers.new(name=f"{character}_ArmatureDeform", type="ARMATURE")
+            armature_modifier.object = armature
+            proxy.data.calc_loop_triangles()
+            object_count += 1
+            triangle_count += len(proxy.data.loop_triangles)
+        lod_stats[level] = {"object_count": object_count, "triangle_count": triangle_count}
+
+    lod_status = "LOD0/LOD1/LOD2 GENERATED / UNITY LOD GROUP PENDING"
+    root["lod_status"] = lod_status
+    root["lod_object_counts"] = json.dumps({key: value["object_count"] for key, value in lod_stats.items()}, sort_keys=True)
+    root["lod_triangle_counts"] = json.dumps({key: value["triangle_count"] for key, value in lod_stats.items()}, sort_keys=True)
+    root["collider_status"] = "7 BOX PROXIES / UNITY PHYSICS REVIEW PENDING"
+    root["collider_names"] = ",".join(sorted(collider.name for collider in colliders))
+    root["face_blendshape_status"] = "8 PLACEHOLDER TARGETS / UNITY DRIVER PENDING"
+    root["face_blendshape_names"] = ",".join(FACE_BLENDSHAPE_NAMES)
+    return {
+        "lod_status": lod_status,
+        "lod_stats": lod_stats,
+        "collider_status": root["collider_status"],
+        "collider_names": sorted(collider.name for collider in colliders),
+        "face_blendshape_status": root["face_blendshape_status"],
+        "face_blendshape_names": list(FACE_BLENDSHAPE_NAMES),
+    }
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
     clear_scene()
@@ -708,9 +846,16 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     technical_stats = prepare_technical_asset(root)
     rig_stats = prepare_rig_and_motion(root, args.character)
     skinning_stats = prepare_blockout_skinning(root, args.character)
+    pre_unity_stats = prepare_pre_unity_review(root, args.character)
     scene["re_camp_blockout_revision"] = "v007"
     scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
-    scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
+    scene["re_camp_lod_status"] = pre_unity_stats["lod_status"]
+    scene["re_camp_lod_object_counts"] = json.dumps({key: value["object_count"] for key, value in pre_unity_stats["lod_stats"].items()}, sort_keys=True)
+    scene["re_camp_lod_triangle_counts"] = json.dumps({key: value["triangle_count"] for key, value in pre_unity_stats["lod_stats"].items()}, sort_keys=True)
+    scene["re_camp_collider_status"] = pre_unity_stats["collider_status"]
+    scene["re_camp_collider_names"] = ",".join(pre_unity_stats["collider_names"])
+    scene["re_camp_face_blendshape_status"] = pre_unity_stats["face_blendshape_status"]
+    scene["re_camp_face_blendshape_names"] = ",".join(pre_unity_stats["face_blendshape_names"])
     scene["re_camp_rig_status"] = "PROTOTYPE / RIGID BLOCKOUT WEIGHTS"
     scene["re_camp_deformation_status"] = skinning_stats["skinning_status"]
     scene["re_camp_motion_status"] = "IDLE RUN ATTACK REVIEW CLIPS"
@@ -818,7 +963,12 @@ def export_fbx(output_dir: Path, character: str) -> Path:
 
 def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, fbx_path: Path | None) -> None:
     objects = list(bpy.data.objects)
-    meshes = [obj for obj in objects if obj.type == "MESH"]
+    meshes = [obj for obj in objects if obj.type == "MESH" and not obj.get("lod_level")]
+    lod_meshes = [obj for obj in objects if obj.type == "MESH" and obj.get("lod_level")]
+    lod_triangle_counts = {
+        level: sum(len(obj.data.loop_triangles) for obj in lod_meshes if obj.get("lod_level") == level)
+        for level in sorted({str(obj.get("lod_level")) for obj in lod_meshes})
+    }
     report = {
         "character": args.character,
         "revision": "v007",
@@ -833,7 +983,9 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "triangle_count": sum(len(obj.data.loop_triangles) for obj in meshes),
         "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
         "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
-        "lod_status": "LOD0 ONLY / LOD PENDING",
+        "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),
+        "lod_mesh_object_count": len(lod_meshes),
+        "lod_triangle_counts": lod_triangle_counts,
         "armature_name": bpy.context.scene.get("re_camp_armature_name", ""),
         "bone_count": bpy.context.scene.get("re_camp_bone_count", 0),
         "rig_status": bpy.context.scene.get("re_camp_rig_status", "NOT SET"),
@@ -846,6 +998,12 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "motion_clips": sorted(action.name for action in bpy.data.actions if action.name.startswith("CH101_")),
         "socket_bone_map": SOCKET_BONE_MAP,
         "socket_names": sorted(name for name in SOCKETS if bpy.data.objects.get(name)),
+        "collider_names": sorted(name for name in COLLIDER_BONE_MAP if bpy.data.objects.get(name)),
+        "collider_status": bpy.context.scene.get("re_camp_collider_status", "NOT SET"),
+        "face_blendshape_names": sorted(
+            key.name for key in bpy.data.objects["Body_Head"].data.shape_keys.key_blocks if key.name != "Basis"
+        ) if bpy.data.objects.get("Body_Head") and bpy.data.objects["Body_Head"].data.shape_keys else [],
+        "face_blendshape_status": bpy.context.scene.get("re_camp_face_blendshape_status", "NOT SET"),
         "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")),
         "art_features": [
             "cropped white-black sport jacket",

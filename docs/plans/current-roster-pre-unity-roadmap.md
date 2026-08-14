@@ -25,13 +25,15 @@ For each character, the batch job produces:
 1. Approved-sheet provenance in the scene and JSON report.
 2. Art-directed blockout silhouette and equipment cue.
 3. Mesh conversion, applied transforms/modifiers, UV maps, material slots,
-   triangle count, and LOD0 metadata.
+   triangle count, and generated LOD1/LOD2 proxy meshes.
 4. Shared 22-bone humanoid-aligned rig prototype.
 5. Eight sockets parented to the expected bones.
 6. `Idle`, `Run`, `Attack`, and `A_Pose_Check` review actions.
 7. Rigid blockout weights and armature modifiers for deformation review.
-8. Front/side/back and four pose preview renders.
-9. `.blend`, `.fbx`, per-character validation JSON, and one combined ZIP.
+8. Seven collider proxy empties parented to rig bones and eight face target
+   placeholders for later Unity wiring.
+9. Front/side/back and four pose preview renders.
+10. `.blend`, `.fbx`, per-character validation JSON, and one combined ZIP.
 
 The generated weights are deliberately marked as `RIGID BLOCKOUT WEIGHTS`.
 They prove pipeline wiring and deformation review only; they are not final
@@ -44,7 +46,7 @@ production skinning.
   folding bow, orb baton and veil, prism fan and map ring, and paired
   gauntlets with anchor ring.
 - `validate_asset.py --character CH10x` validates the same contract for every
-  character.
+  character, including LOD1/LOD2, collider parenting, and face target names.
 - `notebooks/02_current_roster_pre_unity.ipynb` runs all five characters in a
   single Colab workflow and downloads
   `re-camp-current-roster-pre-unity-v001.zip`.

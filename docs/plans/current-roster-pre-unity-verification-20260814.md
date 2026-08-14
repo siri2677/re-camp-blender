@@ -23,7 +23,10 @@ For each character, the batch completed the build and the character-aware valida
 
 - 2D approved-sheet path and per-character approval commit metadata;
 - blockout mesh with UV and material slots;
+- generated LOD1/LOD2 proxy meshes;
 - 8 sockets and the shared 22-bone rig prototype;
+- 7 collider proxies with bone-parenting checks;
+- 8 face blendshape target placeholders;
 - 4 review actions: A-pose, idle, run, and attack;
 - rigid blockout weights and armature deformation modifiers;
 - front/side/back and four pose-review render passes;
