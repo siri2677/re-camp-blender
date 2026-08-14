@@ -20,6 +20,9 @@ BLENDER_SCRIPTS = (
     "scripts/blender/build_roster.py",
     "scripts/blender/validate_asset.py",
 )
+QA_SCRIPTS = (
+    "scripts/qa/prepare_pre_unity_package.py",
+)
 REQUIRED_MARKERS = {
     "notebooks/00_colab_blender_setup.ipynb": (
         "drive.mount('/content/drive')",
@@ -62,6 +65,9 @@ REQUIRED_MARKERS = {
         "2dcb002f2691006008d0c20fa8157cbdd7d52538",
         "d876bbc0c2eef7e9e549de274c15b3ab190ad6ce",
         "current-roster-pre-unity-v001",
+        "prepare_pre_unity_package.py",
+        "current_roster_visual_qa_contact_sheet",
+        "archive_hash",
     ),
 }
 
@@ -119,12 +125,14 @@ def main() -> int:
         validate_notebook(notebook, errors)
     for script in BLENDER_SCRIPTS:
         validate_blender_script(script, errors)
+    for script in QA_SCRIPTS:
+        validate_blender_script(script, errors)
     if errors:
         print("Colab Blender package validation failed:\n")
         for error in errors:
             print(f"- {error}")
         return 1
-    print("Colab Blender package validation passed (4 notebooks and 3 Blender scripts checked).")
+    print("Colab Blender package validation passed (4 notebooks, 3 Blender scripts, and 1 QA script checked).")
     return 0
 
 
