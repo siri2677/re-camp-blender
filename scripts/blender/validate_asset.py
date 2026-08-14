@@ -53,6 +53,11 @@ FACE_BLENDSHAPE_NAMES = {
     "Face_Smile",
 }
 
+
+def mesh_triangle_count(mesh: bpy.types.Mesh) -> int:
+    """Return a stable triangle estimate without relying on loop-triangle cache."""
+    return sum(max(len(poly.vertices) - 2, 0) for poly in mesh.polygons)
+
 REQUIRED_RIG_BONES = {
     "Root",
     "Hips",
@@ -192,8 +197,7 @@ def main() -> int:
     lod_materialless_meshes = sorted(obj.name for obj in lod_meshes if not obj.data.materials)
     triangle_count = 0
     for obj in meshes:
-        obj.data.calc_loop_triangles()
-        triangle_count += len(obj.data.loop_triangles)
+        triangle_count += mesh_triangle_count(obj.data)
     if uv_missing:
         errors.append(f"missing UV maps: {', '.join(uv_missing)}")
     if materialless_meshes:
@@ -205,7 +209,7 @@ def main() -> int:
     lod_triangle_counts = {}
     for level in lod_levels:
         lod_triangle_counts[level] = sum(
-            len(obj.data.loop_triangles)
+            mesh_triangle_count(obj.data)
             for obj in lod_meshes
             if obj.get("lod_level") == level
         )

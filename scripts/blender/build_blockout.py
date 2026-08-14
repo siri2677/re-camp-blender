@@ -18,6 +18,11 @@ import bpy
 from mathutils import Vector
 
 
+def mesh_triangle_count(mesh: bpy.types.Mesh) -> int:
+    """Return a stable triangle estimate without relying on loop-triangle cache."""
+    return sum(max(len(poly.vertices) - 2, 0) for poly in mesh.polygons)
+
+
 SOCKETS = {
     "Socket_Equipment_Primary": (0.58, -0.18, 1.92),
     "Socket_Gauntlet_L": (-0.74, -0.02, 2.06),
@@ -354,8 +359,7 @@ def prepare_technical_asset(root: bpy.types.Object) -> dict[str, int]:
         if not obj.data.materials:
             materialless += 1
         obj.data.update()
-        obj.data.calc_loop_triangles()
-        triangle_count += len(obj.data.loop_triangles)
+        triangle_count += mesh_triangle_count(obj.data)
         obj["technical_revision"] = "v005"
         obj["uv_status"] = "PASS" if obj.data.uv_layers else "FAIL"
         obj["material_slot_status"] = "PASS" if obj.data.materials else "FAIL"
@@ -685,9 +689,8 @@ def prepare_pre_unity_review(root: bpy.types.Object, character: str = "CH101") -
             proxy.hide_set(True)
             armature_modifier = proxy.modifiers.new(name=f"{character}_ArmatureDeform", type="ARMATURE")
             armature_modifier.object = armature
-            proxy.data.calc_loop_triangles()
             object_count += 1
-            triangle_count += len(proxy.data.loop_triangles)
+            triangle_count += mesh_triangle_count(proxy.data)
         lod_stats[level] = {"object_count": object_count, "triangle_count": triangle_count}
 
     lod_status = "LOD0/LOD1/LOD2 GENERATED / UNITY LOD GROUP PENDING"
@@ -968,7 +971,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH" and not obj.get("lod_level")]
     lod_meshes = [obj for obj in objects if obj.type == "MESH" and obj.get("lod_level")]
     lod_triangle_counts = {
-        level: sum(len(obj.data.loop_triangles) for obj in lod_meshes if obj.get("lod_level") == level)
+        level: sum(mesh_triangle_count(obj.data) for obj in lod_meshes if obj.get("lod_level") == level)
         for level in sorted({str(obj.get("lod_level")) for obj in lod_meshes})
     }
     report = {
@@ -982,7 +985,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "fbx": str(fbx_path) if fbx_path else None,
         "mesh_object_count": len(meshes),
         "object_count": len(objects),
-        "triangle_count": sum(len(obj.data.loop_triangles) for obj in meshes),
+        "triangle_count": sum(mesh_triangle_count(obj.data) for obj in meshes),
         "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
         "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
         "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),

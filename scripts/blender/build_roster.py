@@ -38,6 +38,7 @@ from build_blockout import (
     configure_render,
     export_fbx,
     material,
+    mesh_triangle_count,
     motion_clip_names,
     prepare_blockout_skinning,
     prepare_pre_unity_review,
@@ -429,7 +430,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in bpy.data.objects if obj.type == "MESH" and not obj.get("lod_level")]
     lod_meshes = [obj for obj in bpy.data.objects if obj.type == "MESH" and obj.get("lod_level")]
     lod_triangle_counts = {
-        level: sum(len(obj.data.loop_triangles) for obj in lod_meshes if obj.get("lod_level") == level)
+        level: sum(mesh_triangle_count(obj.data) for obj in lod_meshes if obj.get("lod_level") == level)
         for level in sorted({str(obj.get("lod_level")) for obj in lod_meshes})
     }
     head = bpy.data.objects.get("Body_Head")
@@ -446,7 +447,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "fbx": str(fbx_path) if fbx_path else None,
         "mesh_object_count": len(meshes),
         "object_count": len(bpy.data.objects),
-        "triangle_count": sum(len(obj.data.loop_triangles) for obj in meshes),
+        "triangle_count": sum(mesh_triangle_count(obj.data) for obj in meshes),
         "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
         "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
         "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),
