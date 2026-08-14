@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import bpy
+from mathutils import Vector
 
 
 BLENDER_DIR = Path(__file__).resolve().parents[1] / "blender"
@@ -79,7 +80,7 @@ def import_one(character: str, fbx_path: Path) -> dict[str, object]:
 
     bounds = []
     for mesh in meshes:
-        corners = [mesh.matrix_world @ corner for corner in mesh.bound_box]
+        corners = [mesh.matrix_world @ Vector(corner) for corner in mesh.bound_box]
         bounds.extend(corners)
     dimensions = {
         "x": max((corner.x for corner in bounds), default=0.0) - min((corner.x for corner in bounds), default=0.0),

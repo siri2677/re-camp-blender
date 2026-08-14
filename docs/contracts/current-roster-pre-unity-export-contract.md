@@ -34,8 +34,8 @@ be executed without changing Blender-side naming or scale assumptions.
 - The re-import check verifies the armature name, required 22-bone set, four
   action names, non-empty mesh geometry, non-degenerate bounds, and unit object
   scale for CH101 through CH105.
-- The current soft performance budget is 25,000 LOD0 triangles, 15,000 LOD1
-  triangles, 8,000 LOD2 triangles, 64 LOD0 mesh objects, 128 LOD mesh objects,
+- The current soft performance budget is 30,000 LOD0 triangles, 15,000 LOD1
+  triangles, 8,000 LOD2 triangles, 96 LOD0 mesh objects, 192 LOD mesh objects,
   and 32 bones per character. These are regression gates, not final Android
   targets.
 

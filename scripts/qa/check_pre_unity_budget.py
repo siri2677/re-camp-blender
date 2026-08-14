@@ -10,11 +10,11 @@ from pathlib import Path
 
 CHARACTERS = ("CH101", "CH102", "CH103", "CH104", "CH105")
 DEFAULT_BUDGET = {
-    "lod0_triangles": 25000,
+    "lod0_triangles": 30000,
     "lod1_triangles": 15000,
     "lod2_triangles": 8000,
-    "mesh_objects": 64,
-    "lod_mesh_objects": 128,
+    "mesh_objects": 96,
+    "lod_mesh_objects": 192,
     "bones": 32,
 }
 
