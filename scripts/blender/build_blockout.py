@@ -661,12 +661,14 @@ def prepare_pre_unity_review(root: bpy.types.Object, character: str = "CH101") -
             proxy.data = source.data.copy()
             proxy.name = f"{character}_{level}_{source.name}"
             proxy.parent = root
+            # Link before calling hide_set(); Blender 3.x rejects hide_set on
+            # objects that are not yet part of the active view layer.
+            lod_collection.objects.link(proxy)
             proxy.hide_render = True
             proxy.hide_set(True)
             proxy["lod_level"] = level
             proxy["lod_source"] = source.name
             proxy["lod_status"] = "GENERATED PROXY / UNITY LOD GROUP PENDING"
-            lod_collection.objects.link(proxy)
             for modifier in list(proxy.modifiers):
                 if modifier.type == "ARMATURE":
                     proxy.modifiers.remove(modifier)
