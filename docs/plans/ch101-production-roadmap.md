@@ -4,7 +4,7 @@
 
 ## 현재 판정
 
-상태: `TECHNICAL ASSET PREPARATION V005 IMPLEMENTED / COLAB VERIFICATION PENDING / GATE B PENDING`
+상태: `TECHNICAL ASSET PREPARATION V005 COMPLETE / GATE B PENDING`
 
 완료된 증거:
 
@@ -14,7 +14,10 @@
 - CH101 v005 front/side/back 렌더 자동화
 - `.blend`와 `.fbx` export
 - UV·material slot·triangle·LOD metadata 검증 자동화
-- 소켓 8개 유지
+- Colab validation `PASS`: 메시 89개, 삼각형 26,584개, 소켓 8개
+- UV 누락 0개, material slot 누락 0개
+- `LOD0 ONLY / LOD PENDING` 상태 기록
+- `/content/re-camp-output/CH101_v005/` 산출물과 `/content/re-camp-CH101-blockout-v005.zip` 생성
 
 현재 결과는 최종 캐릭터 모델이 아니다. 실제 topology 최적화, rig, animation, Unity Import, Android 성능 증거가 아직 없다.
 
@@ -83,7 +86,7 @@ v004 적용 항목:
 
 ### Phase 4 — Technical Asset Preparation
 
-상태: `IMPLEMENTED — v005 / COLAB VERIFICATION PENDING`
+상태: `COMPLETE — v005`
 
 - procedural curve 오브젝트를 mesh로 변환
 - bevel 등 modifier 적용 및 scale transform 적용
@@ -92,7 +95,7 @@ v004 적용 항목:
 - `LOD0 ONLY / LOD PENDING` 메타데이터 기록
 - v005 `.blend`와 `.fbx` 재수출
 
-완료 기준: Colab에서 UV·material slot 검증 `PASS`, triangle 수와 LOD 상태가 JSON에 기록되고 v005 산출물이 재생성된다.
+완료 기준: Colab에서 UV·material slot 검증 `PASS`, triangle 수와 LOD 상태가 JSON에 기록되고 v005 산출물이 재생성된다. 충족됨.
 
 ### Phase 5 — Rig and Motion Preparation
 
@@ -158,4 +161,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Colab에서 v005 산출물과 검증 JSON을 재생성하는 것이다. 그 확인이 끝나면 다음 작업은 Phase 5의 `Rig and Motion Preparation`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 Phase 5의 `Rig and Motion Preparation`이다. Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
