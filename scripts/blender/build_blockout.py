@@ -374,8 +374,8 @@ def _create_motion_action(
             pose_bone.rotation_mode = "XYZ"
             pose_bone.rotation_euler = rotation
             pose_bone.keyframe_insert(data_path="rotation_euler", frame=frame, group=bone_name)
-    action.frame_start = 1
-    action.frame_end = frame_end
+    action["review_frame_start"] = 1
+    action["review_frame_end"] = frame_end
     return action
 
 
