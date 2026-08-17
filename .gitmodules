@@ -1,0 +1,3 @@
+[submodule "vendor/mpfb2"]
+	path = vendor/mpfb2
+	url = https://github.com/makehumancommunity/mpfb2.git

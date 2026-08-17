@@ -191,4 +191,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 CH101을 프리미티브 스캐폴드에서 고품질 3D 제작 모델로 교체하는 시각 제작 단계다. 공통 베이스 run3/4와 연결 Skin Modifier run2를 실행했지만 모두 레고·토이형 표면으로 반려되었으므로 Gate B 후보로 승격하지 않는다. 실제 고해상도 베이스 메시와 의상 패턴이 확보된 뒤에만 Unity 라이선스가 활성화된 Editor에서 v010 기술 계약을 새 모델에 적용하고 Import/LODGroup/Prefab/Animator/AndroidPlayer 증거를 수집한다.
+현재 바로 진행할 작업은 CH101을 프리미티브 스캐폴드에서 고품질 3D 제작 모델로 교체하는 시각 제작 단계다. 공통 베이스 run3/4, 연결 Skin run2, voxel body run1을 실행했지만 모두 레고·토이형 표면으로 반려되었으므로 Gate B 후보로 승격하지 않는다. 실제 고해상도 수동/스컬프 베이스 메시와 의상 패턴이 `CH101_A_HighRes_Production_v001.blend`로 확보된 뒤에만 Unity 라이선스가 활성화된 Editor에서 v010 기술 계약을 새 모델에 적용하고 Import/LODGroup/Prefab/Animator/AndroidPlayer 증거를 수집한다.

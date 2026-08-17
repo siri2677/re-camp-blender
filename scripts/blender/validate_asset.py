@@ -65,6 +65,11 @@ SOCKET_BONE_MAP = {
     "Socket_CameraFocus": "Head",
 }
 
+BODY_TRIANGLE_BUDGET = 18_000
+EQUIPMENT_TRIANGLE_BUDGET = 2_000
+COMBINED_TRIANGLE_BUDGET = BODY_TRIANGLE_BUDGET + EQUIPMENT_TRIANGLE_BUDGET
+MATERIAL_SLOT_BUDGET = 6
+
 
 def parse_args() -> argparse.Namespace:
     argv = sys.argv
@@ -83,6 +88,10 @@ def main() -> int:
     missing = sorted(REQUIRED_SOCKETS - names)
     root = next((obj for obj in objects if obj.name.endswith("_Blockout_Root")), None)
     meshes = [obj for obj in objects if obj.type == "MESH"]
+    lod_meshes = {
+        level: [obj for obj in meshes if obj.get("lod_level", "LOD0") == level]
+        for level in ("LOD0", "LOD1", "LOD2")
+    }
     armatures = [obj for obj in objects if obj.type == "ARMATURE"]
     armature = next((obj for obj in armatures if obj.name == "CH101_Rig_Armature"), None)
     errors: list[str] = []
@@ -125,21 +134,30 @@ def main() -> int:
                 skinning_errors.append(f"{obj.name}: missing armature modifier")
             if not has_vertex_weights:
                 skinning_errors.append(f"{obj.name}: no vertex weights")
-            if armature_modifiers and has_vertex_weights:
+            if armature_modifiers and has_vertex_weights and obj.get("lod_level", "LOD0") == "LOD0":
                 weighted_meshes.append(obj.name)
     if skinning_errors:
         errors.append(f"skinning errors: {'; '.join(skinning_errors)}")
 
     uv_missing = sorted(obj.name for obj in meshes if not obj.data.uv_layers)
     materialless_meshes = sorted(obj.name for obj in meshes if not obj.data.materials)
-    triangle_count = 0
+    material_names = sorted(
+        {material.name for obj in meshes for material in obj.data.materials if material.name.startswith("MAT_CH101_")}
+    )
+    material_budget_status = "PASS" if len(material_names) <= MATERIAL_SLOT_BUDGET else "FAIL / MATERIAL CONSOLIDATION REQUIRED"
+    lod_triangle_counts = {level: 0 for level in lod_meshes}
     for obj in meshes:
         obj.data.calc_loop_triangles()
-        triangle_count += len(obj.data.loop_triangles)
+        lod_triangle_counts[obj.get("lod_level", "LOD0")] += len(obj.data.loop_triangles)
+    triangle_count = lod_triangle_counts["LOD0"]
     if uv_missing:
         errors.append(f"missing UV maps: {', '.join(uv_missing)}")
     if materialless_meshes:
         errors.append(f"missing material slots: {', '.join(materialless_meshes)}")
+    if len(material_names) > MATERIAL_SLOT_BUDGET:
+        errors.append(f"material budget exceeded: {len(material_names)} > {MATERIAL_SLOT_BUDGET}")
+
+    triangle_budget_status = "PASS" if triangle_count <= COMBINED_TRIANGLE_BUDGET else "FAIL / SIMPLIFICATION REQUIRED"
 
     report = {
         "blend": str(Path(args.blend).resolve()),
@@ -147,11 +165,23 @@ def main() -> int:
         "technical_proof": "NOT TESTED",
         "revision": bpy.context.scene.get("re_camp_blockout_revision", ""),
         "mesh_object_count": len(meshes),
+        "lod_mesh_counts": {level: len(items) for level, items in lod_meshes.items()},
         "triangle_count": triangle_count,
+        "lod_triangle_counts": lod_triangle_counts,
+        "triangle_budget": {
+            "body": BODY_TRIANGLE_BUDGET,
+            "equipment": EQUIPMENT_TRIANGLE_BUDGET,
+            "combined_review_limit": COMBINED_TRIANGLE_BUDGET,
+        },
+        "triangle_budget_status": triangle_budget_status,
         "socket_count": len(REQUIRED_SOCKETS - set(missing)),
         "missing": missing,
         "uv_missing": uv_missing,
         "materialless_meshes": materialless_meshes,
+        "material_names": material_names,
+        "material_slot_count": len(material_names),
+        "material_budget": {"combined_review_limit": MATERIAL_SLOT_BUDGET},
+        "material_budget_status": material_budget_status,
         "uv_status": bpy.context.scene.get("re_camp_uv_status", "NOT SET"),
         "lod_status": bpy.context.scene.get("re_camp_lod_status", "NOT SET"),
         "technical_preparation": "PASS" if not uv_missing and not materialless_meshes else "FAIL",
@@ -168,6 +198,15 @@ def main() -> int:
         "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
         "rig_preparation": "PASS" if armature and not missing_rig_bones and not missing_motion_clips and not socket_bone_errors else "FAIL",
         "weighted_mesh_object_count": len(weighted_meshes),
+        "max_influences_per_vertex": max(
+            (len(vertex.groups) for obj in meshes for vertex in obj.data.vertices),
+            default=0,
+        ),
+        "average_influences_per_vertex": round(
+            sum(len(vertex.groups) for obj in meshes for vertex in obj.data.vertices)
+            / max(1, sum(len(obj.data.vertices) for obj in meshes)),
+            3,
+        ),
         "skinning_errors": skinning_errors,
         "skinning_status": bpy.context.scene.get("re_camp_skinning_status", "NOT SET"),
         "pose_review_status": bpy.context.scene.get("re_camp_pose_review_status", "NOT RENDERED"),

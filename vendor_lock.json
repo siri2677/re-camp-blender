@@ -1,0 +1,10 @@
+{
+  "name": "makehumancommunity/mpfb2",
+  "repository": "https://github.com/makehumancommunity/mpfb2.git",
+  "commit": "437dd513888a92399d1d3202d0e80859fae55abc",
+  "asset_path": "src/mpfb/data/3dobjs/base.obj",
+  "asset_license": "CC0 1.0 Universal",
+  "code_license": "GPLv3",
+  "purpose": "CH101-A real human topology source only; not a final CH101 visual asset",
+  "retrieved": "2026-08-17"
+}
