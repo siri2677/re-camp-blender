@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CH101 art-directed skinned blockout v007.
+"""Build the CH101 art-directed skinned blockout review variants.
 
 This is a procedural, documentation-grade 3D blockout based on the locked
 CH101 production sheet. It is not a final sculpt, rig, animation, Unity
@@ -75,6 +75,10 @@ MOTION_CLIPS = {
     "CH101_A_Pose_Check": 2,
 }
 
+BODY_TRIANGLE_BUDGET = 18_000
+EQUIPMENT_TRIANGLE_BUDGET = 2_000
+COMBINED_TRIANGLE_BUDGET = BODY_TRIANGLE_BUDGET + EQUIPMENT_TRIANGLE_BUDGET
+
 
 def parse_args() -> argparse.Namespace:
     argv = sys.argv
@@ -82,10 +86,28 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--character", default="CH101")
     parser.add_argument("--source-asset", default="")
-    parser.add_argument("--source-commit", default="418ef96")
+    parser.add_argument(
+        "--source-commit",
+        default="b6c9b3128358e061eee6184230929413eba84101",
+    )
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--render", action="store_true")
     parser.add_argument("--export-fbx", action="store_true")
+    parser.add_argument(
+        "--optimize-budget",
+        action="store_true",
+        help="Create the budget-review variant by simplifying LOD0 meshes.",
+    )
+    parser.add_argument(
+        "--generate-lods",
+        action="store_true",
+        help="Create hidden LOD1/LOD2 review meshes from the optimized LOD0.",
+    )
+    parser.add_argument(
+        "--production-skinning-review",
+        action="store_true",
+        help="Replace rigid blockout weights with deterministic blended review weights.",
+    )
     return parser.parse_args(script_args)
 
 
@@ -266,13 +288,13 @@ def add_saber(root: bpy.types.Object, mats: dict[str, bpy.types.Material]) -> No
     handle = add_cylinder_between("Saber_Handle", (x, y, z - 0.42), (x, y, z + 0.08), 0.055, mats["graphite"])
     guard = add_cube("Saber_Guard", (x, y - 0.01, z + 0.10), (0.18, 0.06, 0.045), mats["gold"], bevel=0.025)
     blade = add_cube("Saber_Blade_Cyan", (x, y, z + 0.58), (0.055, 0.035, 0.46), mats["cyan"], bevel=0.025)
-    blade_core = add_cube("Saber_Blade_Core", (x, y - 0.038, z + 0.58), (0.018, 0.012, 0.40), mats["glow"], bevel=0.008)
+    blade_core = add_cube("Saber_Blade_Core", (x, y - 0.038, z + 0.58), (0.018, 0.012, 0.40), mats["cyan"], bevel=0.008)
     pommel = add_uv_sphere("Saber_Pommel", (x, y, z - 0.47), (0.09, 0.07, 0.07), mats["gold"])
     sheath = add_cylinder_between("Saber_Sheath", (x + 0.14, y + 0.18, z - 0.36), (x + 0.14, y + 0.18, z + 0.74), 0.075, mats["graphite"])
     sheath_band = add_cube("Saber_Sheath_GoldBand", (x + 0.14, y + 0.18, z + 0.43), (0.10, 0.09, 0.035), mats["gold"], bevel=0.018)
     blade_stripes = []
     for index, stripe_z in enumerate((z + 0.36, z + 0.60, z + 0.84), start=1):
-        stripe = add_cube(f"Saber_Blade_Stripe_{index}", (x - 0.045, y - 0.045, stripe_z), (0.012, 0.008, 0.09), mats["glow"], bevel=0.006)
+        stripe = add_cube(f"Saber_Blade_Stripe_{index}", (x - 0.045, y - 0.045, stripe_z), (0.012, 0.008, 0.09), mats["cyan"], bevel=0.006)
         stripe.rotation_euler[1] = math.radians(-28)
         blade_stripes.append(stripe)
     for obj in (handle, guard, blade, blade_core, pommel, sheath, sheath_band, *blade_stripes):
@@ -332,6 +354,7 @@ def prepare_technical_asset(root: bpy.types.Object) -> dict[str, int]:
         obj["technical_revision"] = "v005"
         obj["uv_status"] = "PASS" if obj.data.uv_layers else "FAIL"
         obj["material_slot_status"] = "PASS" if obj.data.materials else "FAIL"
+        obj["lod_level"] = "LOD0"
         obj["lod_status"] = "LOD0 ONLY / LOD PENDING"
     bpy.ops.object.select_all(action="DESELECT")
     root["technical_prepared"] = True
@@ -345,6 +368,104 @@ def prepare_technical_asset(root: bpy.types.Object) -> dict[str, int]:
         "materialless_mesh_count": sum(1 for obj in meshes if not obj.data.materials),
         "triangle_count": triangle_count,
     }
+
+
+def optimize_lod0_budget(root: bpy.types.Object) -> dict[str, int | str]:
+    """Simplify the review LOD0 without changing object names, sockets, or materials."""
+    meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
+
+    def triangle_count() -> int:
+        count = 0
+        for obj in meshes:
+            obj.data.calc_loop_triangles()
+            count += len(obj.data.loop_triangles)
+        return count
+
+    initial = triangle_count()
+    before = initial
+    iterations = 0
+    while before > COMBINED_TRIANGLE_BUDGET and iterations < 3:
+        ratio = max(0.25, min(0.92, (COMBINED_TRIANGLE_BUDGET / before) * 0.96))
+        for obj in meshes:
+            obj.data.calc_loop_triangles()
+            if len(obj.data.loop_triangles) <= 12:
+                continue
+            bpy.ops.object.select_all(action="DESELECT")
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            modifier = obj.modifiers.new(name="CH101_LOD0_BudgetSimplify", type="DECIMATE")
+            modifier.decimate_type = "COLLAPSE"
+            modifier.ratio = ratio
+            try:
+                bpy.ops.object.modifier_apply(modifier=modifier.name)
+            except RuntimeError:
+                obj["lod_simplify_status"] = "PENDING / APPLY FAILED"
+        before = triangle_count()
+        iterations += 1
+
+    after = triangle_count()
+    status = "PASS" if after <= COMBINED_TRIANGLE_BUDGET else "FAIL / SIMPLIFICATION REQUIRED"
+    for obj in meshes:
+        obj["lod_status"] = "LOD0 OPTIMIZED / LOD1-2 PENDING"
+        obj["triangle_budget_status"] = status
+    root["triangle_count_before_optimization"] = initial
+    root["triangle_count_after_optimization"] = after
+    root["triangle_budget_status"] = status
+    root["lod_status"] = "LOD0 OPTIMIZED / LOD1-2 PENDING"
+    return {
+        "triangle_count_before": initial,
+        "triangle_count_after": after,
+        "triangle_budget_status": status,
+        "iterations": iterations,
+    }
+
+
+def generate_lod_variants(root: bpy.types.Object) -> dict[str, object]:
+    """Create hidden LOD1/LOD2 review meshes with stable source metadata."""
+    sources = [
+        obj
+        for obj in bpy.context.scene.objects
+        if obj.type == "MESH" and obj.get("lod_level", "LOD0") == "LOD0"
+    ]
+    lod_ratios = {"LOD1": 0.55, "LOD2": 0.30}
+    lod_counts: dict[str, int] = {"LOD0": 0, "LOD1": 0, "LOD2": 0}
+    for source in sources:
+        source.data.calc_loop_triangles()
+        lod_counts["LOD0"] += len(source.data.loop_triangles)
+    for lod_name, ratio in lod_ratios.items():
+        for source in sources:
+            lod_object = source.copy()
+            lod_object.data = source.data.copy()
+            lod_object.name = f"{source.name}_{lod_name}"
+            lod_object["lod_level"] = lod_name
+            lod_object["lod_source"] = source.name
+            lod_object["lod_ratio"] = ratio
+            lod_object["lod_status"] = "GENERATED / REVIEW PENDING"
+            bpy.context.collection.objects.link(lod_object)
+            lod_object.hide_render = True
+            lod_object.hide_set(True)
+
+            for modifier in list(lod_object.modifiers):
+                if modifier.type != "ARMATURE":
+                    lod_object.modifiers.remove(modifier)
+            decimate = lod_object.modifiers.new(name=f"CH101_{lod_name}_Simplify", type="DECIMATE")
+            decimate.decimate_type = "COLLAPSE"
+            decimate.ratio = ratio
+            bpy.context.view_layer.objects.active = lod_object
+            while lod_object.modifiers.find(decimate.name) > 0:
+                bpy.ops.object.modifier_move_up(modifier=decimate.name)
+            lod_object.select_set(True)
+            try:
+                bpy.ops.object.modifier_apply(modifier=decimate.name)
+            except RuntimeError:
+                lod_object["lod_status"] = "GENERATED / DECIMATE APPLY FAILED"
+            lod_object.select_set(False)
+            lod_object.data.calc_loop_triangles()
+            lod_counts[lod_name] += len(lod_object.data.loop_triangles)
+    root["lod_levels"] = "LOD0,LOD1,LOD2"
+    root["lod_triangle_counts"] = json.dumps(lod_counts, sort_keys=True)
+    root["lod_status"] = "LOD0/LOD1/LOD2 GENERATED / REVIEW PENDING"
+    return {"lod_triangle_counts": lod_counts, "source_mesh_count": len(sources)}
 
 
 def _reset_pose(armature: bpy.types.Object) -> None:
@@ -561,8 +682,111 @@ def prepare_blockout_skinning(root: bpy.types.Object) -> dict[str, object]:
     }
 
 
+def _production_weight_profile(name: str) -> list[tuple[str, float]]:
+    """Return a small, deterministic influence profile for the review mesh.
+
+    The generated blockout is made from separate rigid parts, so this is not a
+    claim of final sculpt-quality deformation. It does, however, exercise the
+    same two-bone transitions that the Unity import and pose review will use.
+    """
+    if name.startswith(("Hair_", "Face_", "Eye_")) or name in {"Body_Head"}:
+        return [("Neck", 0.18), ("Head", 0.82)]
+    if name == "Body_Neck":
+        return [("Chest", 0.35), ("Neck", 0.65)]
+    if name in {"Body_Pelvis", "Shorts_Waistband", "Shorts_Belt_Cyan"}:
+        return [("Hips", 0.72), ("Spine", 0.28)]
+    if name == "Body_Torso" or name.startswith(("Jacket_", "CropTop_", "SignalRibbon_")):
+        return [("Spine", 0.30), ("Chest", 0.70)]
+    if name.startswith("Saber_"):
+        return [("RightLowerArm", 0.30), ("RightHand", 0.70)]
+    if name.startswith("Sleeve_L_Upper"):
+        return [("LeftShoulder", 0.30), ("LeftUpperArm", 0.70)]
+    if name.startswith("Sleeve_L_Lower"):
+        return [("LeftUpperArm", 0.30), ("LeftLowerArm", 0.70)]
+    if name.startswith(("Cuff_L", "Hand_L")):
+        return [("LeftLowerArm", 0.30), ("LeftHand", 0.70)]
+    if name.startswith("Sleeve_R_Upper"):
+        return [("RightShoulder", 0.30), ("RightUpperArm", 0.70)]
+    if name.startswith("Sleeve_R_Lower"):
+        return [("RightUpperArm", 0.30), ("RightLowerArm", 0.70)]
+    if name.startswith(("Cuff_R", "Hand_R")):
+        return [("RightLowerArm", 0.30), ("RightHand", 0.70)]
+    if name.startswith(("Shorts_L_", "Leg_L_Upper", "ThighStrap_L")):
+        return [("Hips", 0.25), ("LeftUpperLeg", 0.75)]
+    if name.startswith(("KneeGuard_L", "Leg_L_Lower")):
+        return [("LeftUpperLeg", 0.30), ("LeftLowerLeg", 0.70)]
+    if name.startswith("Boot_L"):
+        return [("LeftLowerLeg", 0.25), ("LeftFoot", 0.75)]
+    if name.startswith(("Shorts_R_", "Leg_R_Upper", "ThighStrap_R")):
+        return [("Hips", 0.25), ("RightUpperLeg", 0.75)]
+    if name.startswith(("KneeGuard_R", "Leg_R_Lower")):
+        return [("RightUpperLeg", 0.30), ("RightLowerLeg", 0.70)]
+    if name.startswith("Boot_R"):
+        return [("RightLowerLeg", 0.25), ("RightFoot", 0.75)]
+    return [("Hips", 1.0)]
+
+
+def prepare_production_skinning_review(root: bpy.types.Object) -> dict[str, object]:
+    """Apply normalized two-bone review weights to the LOD0 blockout parts."""
+    armature = bpy.data.objects.get("CH101_Rig_Armature")
+    if armature is None:
+        raise RuntimeError("CH101_Rig_Armature is required before production skinning review")
+    weighted_meshes = 0
+    assignment_counts: dict[str, int] = {}
+    influence_counts: list[int] = []
+    for obj in (
+        item for item in bpy.context.scene.objects
+        if item.type == "MESH" and item.get("lod_level", "LOD0") == "LOD0"
+    ):
+        profile = _production_weight_profile(obj.name)
+        for group in list(obj.vertex_groups):
+            obj.vertex_groups.remove(group)
+        groups = []
+        for bone_name, weight in profile:
+            if armature.data.bones.get(bone_name) is None:
+                raise RuntimeError(f"Missing production skinning bone {bone_name} for {obj.name}")
+            groups.append((obj.vertex_groups.new(name=bone_name), weight))
+            assignment_counts[bone_name] = assignment_counts.get(bone_name, 0) + 1
+        vertices = list(obj.data.vertices)
+        for vertex in vertices:
+            for group, weight in groups:
+                group.add([vertex.index], weight, "REPLACE")
+            influence_counts.append(len(groups))
+        modifier = obj.modifiers.get("CH101_ArmatureDeform") or obj.modifiers.new(
+            name="CH101_ArmatureDeform", type="ARMATURE"
+        )
+        modifier.object = armature
+        obj["skinning_revision"] = "v010"
+        obj["skinning_mode"] = "BLENDED PRODUCTION REVIEW WEIGHTS"
+        obj["skinning_profile"] = ",".join(f"{bone}:{weight:.2f}" for bone, weight in profile)
+        weighted_meshes += 1
+    average_influences = round(sum(influence_counts) / len(influence_counts), 3) if influence_counts else 0.0
+    armature["skinning_revision"] = "v010"
+    armature["skinning_status"] = "BLENDED WEIGHTS / PRODUCTION REVIEW"
+    armature["deformation_status"] = "BLENDED WEIGHTS / PRODUCTION REVIEW"
+    armature["max_influences_per_vertex"] = max(influence_counts, default=0)
+    armature["average_influences_per_vertex"] = average_influences
+    armature["weighted_mesh_object_count"] = weighted_meshes
+    armature["skinning_assignment_counts"] = json.dumps(assignment_counts, sort_keys=True)
+    root["skinning_prepared"] = True
+    root["skinning_status"] = "BLENDED WEIGHTS / PRODUCTION REVIEW"
+    root["deformation_status"] = "BLENDED WEIGHTS / PRODUCTION REVIEW"
+    root["weighted_mesh_object_count"] = weighted_meshes
+    root["max_influences_per_vertex"] = max(influence_counts, default=0)
+    root["average_influences_per_vertex"] = average_influences
+    root["skinning_assignment_counts"] = json.dumps(assignment_counts, sort_keys=True)
+    return {
+        "weighted_mesh_object_count": weighted_meshes,
+        "skinning_status": armature["skinning_status"],
+        "assignment_counts": assignment_counts,
+        "max_influences_per_vertex": max(influence_counts, default=0),
+        "average_influences_per_vertex": average_influences,
+    }
+
+
 def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     output_dir = Path(args.output_dir).resolve()
+    revision = "v010" if args.production_skinning_review else ("v009" if args.generate_lods else ("v008" if args.optimize_budget else "v007"))
     clear_scene()
 
     mats = {
@@ -572,7 +796,6 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
         "hair": material("MAT_CH101_Hair", (0.025, 0.032, 0.045, 1.0), roughness=0.42),
         "gold": material("MAT_CH101_Gold", (0.78, 0.46, 0.10, 1.0), metallic=0.55, roughness=0.34),
         "cyan": material("MAT_CH101_Cyan", (0.0, 0.55, 0.68, 1.0), metallic=0.12, roughness=0.38),
-        "glow": material("MAT_CH101_CyanGlow", (0.24, 0.85, 0.95, 1.0), roughness=0.28),
     }
 
     root = bpy.data.objects.new(f"{args.character}_Blockout_Root", None)
@@ -581,7 +804,7 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     root["source_asset"] = args.source_asset
     root["source_commit"] = args.source_commit
     root["art_direction"] = "CH101 Route Sprint / white-black sport jacket / cyan-gold signal ribbon"
-    root["blockout_revision"] = "v007"
+    root["blockout_revision"] = revision
     root["blockout_status"] = "DOCUMENTATION ONLY / NOT GATE B APPROVED"
     bpy.context.collection.objects.link(root)
 
@@ -657,7 +880,9 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     add_curve("Hair_Lock_L", [(-0.30, -0.20, 3.10), (-0.42, -0.18, 2.84), (-0.34, -0.16, 2.64)], 0.035, mats["hair"]).parent = root
     add_curve("Hair_Lock_R", [(0.30, -0.20, 3.10), (0.42, -0.18, 2.84), (0.34, -0.16, 2.64)], 0.035, mats["hair"]).parent = root
     for eye_x in (-0.13, 0.13):
-        add_uv_sphere("Eye_Cyan", (eye_x, -0.315, 2.98), (0.035, 0.018, 0.055), mats["glow"]).parent = root
+        eye = add_uv_sphere("Eye_Cyan", (eye_x, -0.315, 2.98), (0.035, 0.018, 0.055), mats["cyan"])
+        eye["emission_review"] = "CYAN EYE ACCENT / SHADER EMISSION PENDING"
+        eye.parent = root
     add_uv_sphere("Face_Chin", (0, -0.25, 2.78), (0.19, 0.08, 0.11), mats["skin"]).parent = root
     add_cube("Face_Mouth", (0, -0.337, 2.84), (0.055, 0.008, 0.012), mats["graphite"], bevel=0.006).parent = root
     add_cube("Face_Brow_L", (-0.13, -0.332, 3.08), (0.065, 0.008, 0.012), mats["hair"], bevel=0.006).parent = root
@@ -699,21 +924,43 @@ def build_scene(args: argparse.Namespace) -> tuple[bpy.types.Object, Path]:
     scene["re_camp_source_asset"] = args.source_asset
     scene["re_camp_technical_proof"] = "NOT TESTED"
     technical_stats = prepare_technical_asset(root)
+    optimization_stats = optimize_lod0_budget(root) if args.optimize_budget else None
+    if optimization_stats is not None:
+        technical_stats["triangle_count"] = int(optimization_stats["triangle_count_after"])
     rig_stats = prepare_rig_and_motion(root)
-    skinning_stats = prepare_blockout_skinning(root)
-    scene["re_camp_blockout_revision"] = "v007"
+    skinning_stats = (
+        prepare_production_skinning_review(root)
+        if args.production_skinning_review
+        else prepare_blockout_skinning(root)
+    )
+    lod_stats = generate_lod_variants(root) if args.generate_lods else None
+    scene["re_camp_blockout_revision"] = revision
     scene["re_camp_uv_status"] = "PASS" if technical_stats["uv_missing_after_prepare"] == 0 else "FAIL"
-    scene["re_camp_lod_status"] = "LOD0 ONLY / LOD PENDING"
-    scene["re_camp_rig_status"] = "PROTOTYPE / RIGID BLOCKOUT WEIGHTS"
+    scene["re_camp_lod_status"] = (
+        "LOD0/LOD1/LOD2 GENERATED / REVIEW PENDING"
+        if lod_stats
+        else ("LOD0 OPTIMIZED / LOD1-2 PENDING" if args.optimize_budget else "LOD0 ONLY / LOD PENDING")
+    )
+    scene["re_camp_lod_triangle_counts"] = json.dumps(lod_stats["lod_triangle_counts"], sort_keys=True) if lod_stats else json.dumps({"LOD0": technical_stats["triangle_count"]}, sort_keys=True)
+    scene["re_camp_triangle_count_before_optimization"] = int(optimization_stats["triangle_count_before"]) if optimization_stats else technical_stats["triangle_count"]
+    scene["re_camp_triangle_count_after_optimization"] = int(optimization_stats["triangle_count_after"]) if optimization_stats else technical_stats["triangle_count"]
+    scene["re_camp_triangle_budget_status"] = optimization_stats["triangle_budget_status"] if optimization_stats else "FAIL / SIMPLIFICATION REQUIRED"
+    scene["re_camp_rig_status"] = (
+        "PROTOTYPE / BLENDED PRODUCTION REVIEW WEIGHTS"
+        if args.production_skinning_review
+        else "PROTOTYPE / RIGID BLOCKOUT WEIGHTS"
+    )
     scene["re_camp_deformation_status"] = skinning_stats["skinning_status"]
     scene["re_camp_motion_status"] = "IDLE RUN ATTACK REVIEW CLIPS"
     scene["re_camp_armature_name"] = rig_stats["armature_name"]
     scene["re_camp_bone_count"] = rig_stats["bone_count"]
     scene["re_camp_skinning_status"] = skinning_stats["skinning_status"]
     scene["re_camp_weighted_mesh_count"] = skinning_stats["weighted_mesh_object_count"]
+    scene["re_camp_max_influences_per_vertex"] = skinning_stats.get("max_influences_per_vertex", 1)
+    scene["re_camp_average_influences_per_vertex"] = skinning_stats.get("average_influences_per_vertex", 1.0)
     scene["re_camp_pose_review_status"] = "PENDING RENDER"
 
-    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_v007.blend"
+    blend_path = output_dir / f"{args.character}_Blockout_REVIEW_{revision}.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     return root, blend_path
 
@@ -789,8 +1036,8 @@ def render_pose_previews(output_dir: Path) -> None:
     scene["re_camp_pose_review_names"] = ",".join(rendered)
 
 
-def export_fbx(output_dir: Path, character: str) -> Path:
-    fbx_path = output_dir / f"{character}_Blockout_REVIEW_v007.fbx"
+def export_fbx(output_dir: Path, character: str, revision: str) -> Path:
+    fbx_path = output_dir / f"{character}_Blockout_REVIEW_{revision}.fbx"
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.fbx(
         filepath=str(fbx_path),
@@ -813,7 +1060,7 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
     meshes = [obj for obj in objects if obj.type == "MESH"]
     report = {
         "character": args.character,
-        "revision": "v007",
+        "revision": bpy.context.scene.get("re_camp_blockout_revision", "v007"),
         "source_asset": args.source_asset,
         "source_commit": args.source_commit,
         "status": "DOCUMENTATION ONLY / NOT GATE B APPROVED",
@@ -823,15 +1070,35 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "mesh_object_count": len(meshes),
         "object_count": len(objects),
         "triangle_count": sum(len(obj.data.loop_triangles) for obj in meshes),
+        "triangle_count_total_all_lods": sum(len(obj.data.loop_triangles) for obj in meshes),
+        "triangle_count_before_optimization": bpy.context.scene.get("re_camp_triangle_count_before_optimization", 0),
+        "triangle_count_after_optimization": bpy.context.scene.get("re_camp_triangle_count_after_optimization", 0),
+        "triangle_budget": {
+            "body": BODY_TRIANGLE_BUDGET,
+            "equipment": EQUIPMENT_TRIANGLE_BUDGET,
+            "combined_review_limit": COMBINED_TRIANGLE_BUDGET,
+        },
+        "triangle_budget_status": bpy.context.scene.get("re_camp_triangle_budget_status", (
+            "PASS"
+            if sum(len(obj.data.loop_triangles) for obj in meshes) <= COMBINED_TRIANGLE_BUDGET
+            else "FAIL / SIMPLIFICATION REQUIRED"
+        )),
+        "lod_triangle_counts": json.loads(bpy.context.scene.get("re_camp_lod_triangle_counts", "{}")),
+        "lod_mesh_counts": {
+            level: sum(1 for obj in meshes if obj.get("lod_level", "LOD0") == level)
+            for level in ("LOD0", "LOD1", "LOD2")
+        },
         "uv_missing": sorted(obj.name for obj in meshes if not obj.data.uv_layers),
         "materialless_meshes": sorted(obj.name for obj in meshes if not obj.data.materials),
-        "lod_status": "LOD0 ONLY / LOD PENDING",
+        "lod_status": bpy.context.scene.get("re_camp_lod_status", "LOD0 ONLY / LOD PENDING"),
         "armature_name": bpy.context.scene.get("re_camp_armature_name", ""),
         "bone_count": bpy.context.scene.get("re_camp_bone_count", 0),
         "rig_status": bpy.context.scene.get("re_camp_rig_status", "NOT SET"),
         "deformation_status": bpy.context.scene.get("re_camp_deformation_status", "NOT SET"),
         "skinning_status": bpy.context.scene.get("re_camp_skinning_status", "NOT SET"),
         "weighted_mesh_object_count": bpy.context.scene.get("re_camp_weighted_mesh_count", 0),
+        "max_influences_per_vertex": bpy.context.scene.get("re_camp_max_influences_per_vertex", 0),
+        "average_influences_per_vertex": bpy.context.scene.get("re_camp_average_influences_per_vertex", 0.0),
         "pose_review_status": bpy.context.scene.get("re_camp_pose_review_status", "NOT RENDERED"),
         "pose_review_names": sorted(name for name in bpy.context.scene.get("re_camp_pose_review_names", "").split(",") if name),
         "motion_status": bpy.context.scene.get("re_camp_motion_status", "NOT SET"),
@@ -839,6 +1106,13 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
         "socket_bone_map": SOCKET_BONE_MAP,
         "socket_names": sorted(name for name in SOCKETS if bpy.data.objects.get(name)),
         "material_names": sorted(mat.name for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")),
+        "material_slot_count": len([mat for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")]),
+        "material_budget": {"combined_review_limit": 6},
+        "material_budget_status": (
+            "PASS"
+            if len([mat for mat in bpy.data.materials if mat.name.startswith("MAT_CH101_")]) <= 6
+            else "FAIL / MATERIAL CONSOLIDATION REQUIRED"
+        ),
         "art_features": [
             "cropped white-black sport jacket",
             "black shorts and thigh straps",
@@ -859,13 +1133,14 @@ def write_report(output_dir: Path, args: argparse.Namespace, blend_path: Path, f
             "humanoid-aligned armature prototype",
             "idle run attack and A-pose review actions",
             "socket-to-bone parenting metadata",
-            "rigid blockout weights and armature modifiers",
+            "blended production-review weights and armature modifiers",
             "A-pose idle run attack deformation previews",
         ],
         "render_views": ["front", "side", "back"] if args.render else [],
     }
     (output_dir / "reports").mkdir(parents=True, exist_ok=True)
-    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_v007.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    revision = bpy.context.scene.get("re_camp_blockout_revision", "v007")
+    (output_dir / "reports" / f"{args.character}_Blockout_REVIEW_{revision}.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def main() -> None:
@@ -877,10 +1152,11 @@ def main() -> None:
         render_views(output_dir)
         render_pose_previews(output_dir)
         bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
-    fbx_path = export_fbx(output_dir, args.character) if args.export_fbx else None
+    revision = bpy.context.scene.get("re_camp_blockout_revision", "v007")
+    fbx_path = export_fbx(output_dir, args.character, revision) if args.export_fbx else None
     write_report(output_dir, args, blend_path, fbx_path)
     print(f"Blockout generated: {blend_path}")
-    print("Revision: v007 / skinned deformation review")
+    print(f"Revision: {revision} / skinned deformation review")
     print("Status: documentation-only / Gate B not approved / technical proof not tested")
 
 

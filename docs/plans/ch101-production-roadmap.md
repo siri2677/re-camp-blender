@@ -1,10 +1,10 @@
 # CH101 Production Roadmap
 
-이 문서는 `re-camp`의 잠긴 CH101 아트 시트를 Blender·Unity 작업으로 연결하는 전체 계획이다. 현재 기준 아트는 `re-camp`의 `art/current-roster-gate-a-ch102` 브랜치와 커밋 `418ef96`이다.
+이 문서는 `re-camp`의 잠긴 CH101 아트 시트를 Blender·Unity 작업으로 연결하는 전체 계획이다. 현재 기준 아트는 `re-camp`의 `current/art-roster-gate-a-ch102` 브랜치와 커밋 `b6c9b3128358e061eee6184230929413eba84101`이다.
 
 ## 현재 판정
 
-상태: `SKINNED DEFORMATION REVIEW V007 COMPLETE / UNITY IMPORT PROOF BLOCKED / GATE B PENDING`
+상태: `TECHNICAL SCAFFOLD V010 COMPLETE / VISUAL PRODUCTION MODEL NOT STARTED / GATE B BLOCKED`
 
 완료된 증거:
 
@@ -24,8 +24,14 @@
 - CH101 v007 Colab 검증 `PASS`: weighted mesh 89개, skinning 오류 0개
 - A-pose·idle·run·attack pose review render 4개 생성
 - `/content/re-camp-output/CH101_v007/` 산출물과 `/content/re-camp-CH101-blockout-v007.zip` 생성
+- 2026-08-16 locked source commit `183b0f0983969937d779f70b2ac51e53fc976203` 기준 로컬 v007 재생성·FBX export·validation `PASS`
+- 로컬 산출물: `artifacts/CH101_v007_run1/` (blend, FBX, 3면 렌더, pose 렌더, JSON report)
+- Unity review budget 주의: 측정 삼각형 26,584개이며 LOD0 본체 18,000 + 장비 2,000 기준을 아직 분리 충족하지 않음
+- 2026-08-16 v008 budget-review variant: deterministic LOD0 simplification으로 19,090 tris, combined review budget `PASS`; LOD1/LOD2는 계속 대기
+- 2026-08-16 v009 LOD review: LOD0/LOD1/LOD2가 각각 19,090/10,383/5,704 tris로 생성되고 구조 검증 `PASS`; Unity `LODGroup` 연결은 Phase 6에서 수행
+- 2026-08-16 v010 production-skinning review: LOD0/LOD1/LOD2 동일 예산을 유지하면서 89개 LOD0 파츠에 정규화된 최대 2-bone influence를 적용하고, 6개 material slot budget을 `PASS`
 
-현재 결과는 최종 캐릭터 모델이 아니다. production topology 최적화, final skinning, Unity Import, Android 성능 증거가 아직 없다.
+현재 결과는 최종 캐릭터 모델이 아니다. v010은 프리미티브 기반 Blender 기술 스캐폴드이며, 사용자가 요구한 원신·니케·젠레스 존 제로 계열의 매력적인 일본 서브컬처 캐릭터 품질을 충족하지 않는다. Unity Import 이전에 고품질 3D 제작 모델 단계가 새로 필요하다.
 
 ## 단계별 계획
 
@@ -64,9 +70,17 @@
 
 ### Phase 3 — Production Modeling Refinement
 
-상태: `COMPLETE — v004`
+상태: `REOPENED — VISUAL QUALITY NOT ACCEPTED`
 
-목표는 Blockout을 실제 제작에 사용할 수 있는 형태로 정리하는 것이다.
+기존 v004는 파츠 분리와 기술 이름 정리만 완료했으며, 사용자가 확인할 수 있는 최종 시각 품질은 충족하지 못했다. 목표는 프리미티브 블록아웃을 참고용으로 보존한 뒤, 실제 5~6등신 스타일라이즈드 일본 서브컬처 캐릭터 모델로 교체하는 것이다.
+
+필수 품질 기준:
+
+- 얼굴은 평면 구체가 아니라 눈·눈썹·코·입·턱선이 분리된 애니메이션 얼굴 구조여야 한다.
+- 머리카락은 덩어리 구체가 아니라 앞머리·옆머리·포니테일의 곡면 락 구조와 시안 포인트를 가져야 한다.
+- 재킷·쇼츠·허벅지 노출·장비는 실제 패턴과 두께가 보이고, 쿼터뷰에서도 여성 실루엣과 캐릭터 훅이 읽혀야 한다.
+- 평면 색상만으로 끝내지 않고 피부·천·가죽·금속·발광 재질과 셀 셰이딩을 분리해야 한다.
+- 128px 얼굴·전신 실루엣·저채도 비교에서 CH101이 다른 4인과 구분되어야 한다.
 
 - 얼굴·눈·앞머리·포니테일 실루엣 정밀화
 - 재킷 패널, 후드, 소매, 쇼츠, 스트랩 분리
@@ -81,6 +95,9 @@
 - 카메라 3면에서 큰 형태 충돌이 없다.
 - 리본·세이버·부츠가 기준 시트의 기능적 위치와 일치한다.
 - 변경 전후 렌더와 변경 리포트가 남는다.
+
+시각 품질 완료 기준: 사람이 정면·측면·후면·쿼터뷰를 보고 레고/회색 박스가
+아닌 프리미엄 서브컬처 캐릭터로 판정하고 Gate A를 통과한다.
 
 v004 적용 항목:
 
@@ -105,22 +122,24 @@ v004 적용 항목:
 
 ### Phase 5 — Rig and Motion Preparation
 
-상태: `COMPLETE — v007 / UNITY IMPORT PENDING`
+상태: `TECHNICAL COMPLETE — V010 SCAFFOLD / VISUAL MODEL REQUIRED`
 
 - Unity Humanoid 역할명에 맞춘 22-bone armature prototype
 - 8개 socket을 hand/chest/hips/head bone에 연결
 - `CH101_A_Pose_Check` review action 추가
 - `CH101_Idle`, `CH101_Run`, `CH101_Attack` review action 추가
-- production skinning은 적용하지 않고 rigid blockout weight prototype으로 명시
-- 각 메시 파츠에 rigid blockout weight와 Armature modifier 적용
+- v007~v009 rigid blockout/LOD 비교본 보존
+- v010에서 각 LOD0 메시 파츠에 정규화된 2-bone production-review weight와 Armature modifier 적용
+- v010에서 6개 material slot budget과 max 2 influences/vertex를 검증
+- LOD0 예산 최적화와 LOD1/LOD2 review mesh 생성
 - A-pose·idle·run·attack 변형 preview render 생성
 - weighted mesh 수와 skinning 오류를 JSON으로 검증
 
-완료 기준: Colab에서 bone·socket·motion clip·weight·pose render 검증 `PASS`를 확인한다. 충족됨. Unity Humanoid 최종 매핑과 production skinning은 Unity 환경 준비 후 별도 확인한다.
+완료 기준: 로컬/Colab에서 bone·socket·motion clip·weight·pose render·LOD·material budget 검증 `PASS`를 확인한다. 충족됨. Unity Humanoid 최종 매핑, LODGroup, prefab, Android 성능은 Phase 6~7에서 별도 확인한다.
 
 ### Phase 6 — Unity Import Proof
 
-상태: `BLOCKED UNTIL UNITY ENVIRONMENT`
+상태: `IN PROGRESS — PREFLIGHT CONTRACT / UNITY LICENSE BLOCKED`
 
 - FBX Import Settings 기록
 - material과 texture 재연결
@@ -129,7 +148,8 @@ v004 적용 항목:
 - prefab 생성 및 씬 배치
 - 콘솔 오류와 경고 기록
 
-완료 기준: Unity Editor 화면, Import 설정, prefab, 실행 캡처가 증거로 남는다.
+완료 기준: Unity Editor 화면, Import 설정, prefab, 실행 캡처가 증거로 남는다. 현재 Unity
+`6000.5.3f1` batch editor는 유효 라이선스가 없어 import proof 실행 전 단계에서 종료된다.
 
 ### Phase 7 — Android Performance Proof
 
@@ -171,4 +191,4 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 Phase 5 v007의 Colab 산출물과 변형 렌더 검증을 확인하는 것이다. 확인 후 다음 단계는 Phase 6의 `Unity Import Proof`이며, Unity와 Android 단계는 해당 실행 환경이 준비되기 전까지 계획·검증 기준만 유지한다.
+현재 바로 진행할 작업은 CH101을 프리미티브 스캐폴드에서 고품질 3D 제작 모델로 교체하는 시각 제작 단계다. 공통 베이스 run3/4와 연결 Skin Modifier run2를 실행했지만 모두 레고·토이형 표면으로 반려되었으므로 Gate B 후보로 승격하지 않는다. 실제 고해상도 베이스 메시와 의상 패턴이 확보된 뒤에만 Unity 라이선스가 활성화된 Editor에서 v010 기술 계약을 새 모델에 적용하고 Import/LODGroup/Prefab/Animator/AndroidPlayer 증거를 수집한다.
