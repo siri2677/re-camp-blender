@@ -77,6 +77,25 @@ Review Asset에 Production validator를 실행한 결과 `FAIL`이었다.
 
 따라서 자동 Review 파일의 이름이나 기술 구성만으로 Production Mesh가 되지 않는다.
 
+## Colab 실행 기록
+
+GitHub `feature/ch101-free-ai3d-autobuild` 브랜치의 Notebook을 Colab T4
+runtime에서 실행했다.
+
+- 도구 commit: `f7b1481ae072013b74329b406b3a11c428d47d24`
+- 승인 참조 준비: PASS (`REFERENCE_VIEWS_READY`)
+- Tripo 후보 계획: 4개
+- `TRIPO_API_KEY`: 없음
+- 실제 외부 생성 호출 및 credit 소비: 없음
+- 다운로드 후보: 0개
+- ranking: 후보가 없어 실행하지 않음
+- 산출 ZIP: `/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip`
+- 실행 결과: PASS (dry-run 완료)
+
+초기 실행에서 짧은 Git SHA fetch가 실패했으며, Notebook을 전체 도구 commit SHA로
+고정한 뒤 재실행해 통과했다. 이후부터는 Colab이 `feature/` 브랜치의 정확한 도구
+commit을 checkout한다.
+
 ## 남은 외부 차단
 
 실제 AI 후보 생성에는 다음 중 하나가 필요하다.
