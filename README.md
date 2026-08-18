@@ -100,4 +100,17 @@ to assign the exported LOD0/LOD1/LOD2 objects to a `LODGroup`.
 ## Production roadmap
 
 The full CH101 production plan, phase status, acceptance criteria, and Unity/Android blockers are documented in [docs/plans/ch101-production-roadmap.md](docs/plans/ch101-production-roadmap.md).
+
+## Shared branch naming
+
+New shared branches use one prefix convention:
+
+- `feature/<scope>-<short-description>` for implementation work
+- `fix/<scope>-<short-description>` for corrections
+- `docs/<scope>-<short-description>` for documentation-only work
+- `chore/<scope>-<short-description>` for tooling and maintenance
+
+`agent/` and `codex/` are not used for new shared branches. Existing historical
+branches are preserved for traceability, but new Colab links, commits, and draft
+PRs should use the `feature/` convention when they contain implementation work.
 The execution checklist for production mesh intake is in [docs/plans/ch101-production-mesh-intake-checklist.md](docs/plans/ch101-production-mesh-intake-checklist.md).
