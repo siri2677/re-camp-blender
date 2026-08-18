@@ -1,0 +1,43 @@
+name: Validate Blender package
+
+on:
+  push:
+    paths:
+      - ".github/workflows/validate-package.yml"
+      - "contracts/**"
+      - "notebooks/**"
+      - "scripts/**"
+      - "source_lock.json"
+      - "tests/**"
+  pull_request:
+    paths:
+      - ".github/workflows/validate-package.yml"
+      - "contracts/**"
+      - "notebooks/**"
+      - "scripts/**"
+      - "source_lock.json"
+      - "tests/**"
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate package contract
+        run: python scripts/validate_colab_package.py
+
+      - name: Validate free AI 3D package
+        run: python scripts/validate_ai3d_free_package.py
+
+      - name: Compile Python sources
+        run: python -m compileall -q scripts tests
+
+      - name: Run handoff merge tests
+        run: python -m unittest discover -s tests -p "test_*.py"

@@ -29,6 +29,51 @@ The notebook clones `siri2677/re-camp` into `/content`, installs Blender, uses `
 
 Colab session files are temporary. Download the ZIP before the runtime ends.
 
+When a real high-resolution production model is available, use
+notebooks/03_ch101_production_mesh_intake.ipynb. It checks out the tool
+repository at pinned commit c2f8247ec4fd9b29877ff38b92af64eca18f56aa,
+uploads CH101_A_HighRes_Production_v001.blend, runs
+validate_ch101_mesh_intake.py with headless Blender, and downloads the
+validation report, SHA256, handoff JSON, and ZIP. A successful technical
+intake sets sourceStatus to PRODUCTION_MESH_READY, but leaves gateB as
+PENDING_HUMAN_REVIEW; it does not approve visual quality or unlock Unity.
+
+For CH102-CH105, use
+notebooks/04_current_roster_production_mesh_intake.ipynb. Set CHARACTER_CODE
+to the character being checked; the roster validator applies the character's
+equipment/socket contract together with the common mesh budget.
+
+The single socket contract is
+contracts/current_roster_socket_contract_v001.json. After all five technical
+handoffs are downloaded, merge them into a Unity-gated manifest:
+
+```text
+python scripts/merge_current_roster_handoffs.py --handoff-dir /path/to/handoffs --output /path/to/current-roster-manifest.json
+```
+
+The merge command never enables Unity input automatically. The generated
+manifest remains `unityInputAllowed: false` until a separate human Gate B
+decision is recorded.
+
+## Free AI 3D candidate path
+
+`notebooks/05_ch101_ai3d_free_autobuild.ipynb` prepares the locked CH101
+front/right/back references, plans or runs a free-tier candidate provider,
+renders four cardinal Blender views, scores silhouettes, and builds a
+non-production review scene from the best eligible candidate.
+
+The preferred order is the Tripo API new-account trial, Stable Fast 3D in
+Colab, and TripoSR as the final fallback. Secrets are read from Colab Secrets
+or environment variables and are never stored in Git. Every generated result
+remains `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`, and
+`unityInputAllowed: false`.
+
+The detailed zero-cost plan, expected quality, license constraints, commands,
+and stopping rules are documented in
+[docs/plans/ch101-free-ai3d-autobuild-plan.md](docs/plans/ch101-free-ai3d-autobuild-plan.md).
+The local dry-run and Blender negative-gate evidence is recorded in
+[docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md](docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md).
+
 ## Local checks
 
 ```text
@@ -55,3 +100,4 @@ to assign the exported LOD0/LOD1/LOD2 objects to a `LODGroup`.
 ## Production roadmap
 
 The full CH101 production plan, phase status, acceptance criteria, and Unity/Android blockers are documented in [docs/plans/ch101-production-roadmap.md](docs/plans/ch101-production-roadmap.md).
+The execution checklist for production mesh intake is in [docs/plans/ch101-production-mesh-intake-checklist.md](docs/plans/ch101-production-mesh-intake-checklist.md).

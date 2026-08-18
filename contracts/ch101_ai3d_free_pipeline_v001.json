@@ -1,0 +1,114 @@
+{
+  "contractVersion": "ch101-ai3d-free-pipeline-v001",
+  "createdAt": "2026-08-18",
+  "character": "CH101",
+  "subject": "AmasawaRin",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "authoritativeSource": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+  "generationSource": {
+    "path": "art_refs/characters/rin/concept/CH101_Rin_Turnaround_REVIEW_v001.png",
+    "role": "CLEAN_CROP_HELPER_ONLY",
+    "expectedSize": [
+      1665,
+      944
+    ]
+  },
+  "referenceViews": {
+    "front": {
+      "providerKey": "front",
+      "crop": [
+        32,
+        12,
+        520,
+        936
+      ]
+    },
+    "right": {
+      "providerKey": "right",
+      "crop": [
+        500,
+        12,
+        890,
+        936
+      ]
+    },
+    "back": {
+      "providerKey": "back",
+      "crop": [
+        872,
+        12,
+        1360,
+        936
+      ]
+    }
+  },
+  "referenceCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "margin": 48,
+    "background": [
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "providers": {
+    "tripoApi": {
+      "mode": "FREE_TRIAL_ONLY",
+      "baseUrl": "https://openapi.tripo3d.ai/v3",
+      "model": "v3.1-20260211",
+      "requiresSecret": "TRIPO_API_KEY",
+      "candidateSeeds": [
+        101001,
+        101002,
+        101003,
+        101004
+      ],
+      "texture": true,
+      "pbr": true,
+      "geometryQuality": "detailed"
+    },
+    "stableFast3D": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_FALLBACK",
+      "repository": "https://github.com/Stability-AI/stable-fast-3d.git",
+      "commit": "ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2",
+      "model": "stabilityai/stable-fast-3d",
+      "requiresSecret": "HF_TOKEN_WHEN_MODEL_ACCESS_REQUIRES_IT",
+      "license": "Stability AI Community License",
+      "targetVertexCount": 20000,
+      "textureResolution": 1024
+    },
+    "tripoSR": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_LAST_FALLBACK",
+      "repository": "https://github.com/VAST-AI-Research/TripoSR.git",
+      "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+      "model": "stabilityai/TripoSR",
+      "license": "MIT",
+      "marchingCubesResolution": 256
+    }
+  },
+  "candidateAcceptance": {
+    "minimumOverallScore": 0.5,
+    "minimumSilhouetteScore": 0.35,
+    "minimumAppearanceScore": 0.25,
+    "minimumColorScore": 0.2,
+    "minimumFaceDetailScore": 0.12,
+    "maximumSourceTriangles": 300000,
+    "reviewRenderSize": 512
+  },
+  "statusPolicy": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "excludedProviders": {
+    "hunyuan3d2": "The official community license excludes South Korea.",
+    "trellis2": "The current local machine has no supported NVIDIA GPU and the documented minimum is not available."
+  }
+}
