@@ -228,3 +228,13 @@ TripoSR fallback은 승인 Turnaround의 입력 방향도 시도별로 바꾸도
 `front`·`right`·`back` 후보를 실제 T4에서 비교했지만 최고 overall은 `0.452043`으로
 여전히 기준 미달이었다. 따라서 이 입력 다양화만으로도 Unity 승격 조건을 충족하지
 않으며, `REGENERATE_REQUIRED`를 유지한다.
+
+2026-08-19 최신 branch commit `382d1d4`를 새 Colab T4에서 위 순서대로 자동 실행했다.
+Stable Fast 3D와 InstantMesh는 provider 실행 단계에서 실패했고 TripoSR이 세 후보를
+생성했다. 최신 후보 점수는 `0.452120`, `0.451603`, `0.463577`이며 모두
+`REGENERATE_REQUIRED`였다. 최고 후보는 기술 점수 `1.0`, 색상 점수 `0.261198`로
+기술·색상 파이프라인은 통과했지만, 선택된 오른쪽 방향 실루엣이 `0.262132`로 낮아
+단일 시점 형상 복원의 측면 불일치가 반복 미달의 주원인으로 확인됐다. 다음 무료
+시도는 단일 시점 TripoSR 반복보다 다중 시점 또는 reference-conditioned provider를
+우선 검증한다. 이번 실행 기록은
+`docs/records/ch101-ai3d/2026-08-19-colab-t4-automatic-run.json`에 남긴다.

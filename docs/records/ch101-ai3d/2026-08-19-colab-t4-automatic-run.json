@@ -1,0 +1,115 @@
+{
+  "recordVersion": "ch101-ai3d-colab-t4-automatic-run-v001",
+  "recordedAt": "2026-08-19",
+  "character": "CH101",
+  "runType": "FRESH_AUTOMATIC_PROVIDER_FALLBACK_AND_EVALUATION",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101",
+    "referenceManifestSha256": "6dc1db10e09fd382097876c1aef390533f7d432dd6ff26a6a26b72396f0b1d2"
+  },
+  "toolsLock": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "commit": "382d1d4"
+  },
+  "runtime": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "blender": "/usr/bin/blender",
+    "maxAttempts": 3,
+    "apiCreditUsed": 0
+  },
+  "providerFallback": [
+    {
+      "provider": "sf3d",
+      "providerCommit": "ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "note": "Stable Fast 3D setup completed, but provider execution returned non-zero status."
+    },
+    {
+      "provider": "instantmesh",
+      "providerCommit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "note": "InstantMesh dependency bootstrap completed through nvdiffrast, but provider execution returned non-zero status."
+    },
+    {
+      "provider": "tripoSR",
+      "providerCommit": "107cefdc244c39106fa830359024f6a2f1c78871",
+      "status": "GENERATED",
+      "note": "Three single-view candidates were generated and evaluated."
+    }
+  ],
+  "candidates": [
+    {
+      "attempt": 1,
+      "referenceView": "front",
+      "foregroundRatio": 0.75,
+      "candidateSha256": "4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5",
+      "overallScore": 0.45212,
+      "silhouetteScore": 0.39242,
+      "appearanceScore": 0.388189,
+      "colorScore": 0.250803,
+      "faceDetailScore": 0.426753,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "attempt": 2,
+      "referenceView": "right",
+      "foregroundRatio": 0.85,
+      "candidateSha256": "5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2",
+      "overallScore": 0.451603,
+      "silhouetteScore": 0.390909,
+      "appearanceScore": 0.390049,
+      "colorScore": 0.219866,
+      "faceDetailScore": 0.503231,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "attempt": 3,
+      "referenceView": "back",
+      "foregroundRatio": 0.95,
+      "candidateSha256": "6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4",
+      "overallScore": 0.463577,
+      "silhouetteScore": 0.41414,
+      "appearanceScore": 0.377546,
+      "colorScore": 0.261198,
+      "faceDetailScore": 0.411742,
+      "technicalScore": 1.0,
+      "selectedOrientation": {
+        "front": "neg_x",
+        "back": "pos_x",
+        "right": "neg_y",
+        "rightSilhouetteScore": 0.262132,
+        "rightAppearanceScore": 0.342119
+      },
+      "status": "REGENERATE_REQUIRED"
+    }
+  ],
+  "diagnosis": {
+    "threshold": 0.5,
+    "bestCandidateMarginToThreshold": -0.036423,
+    "technicalPipeline": "PASS",
+    "primaryFailure": "SINGLE_VIEW_GEOMETRY_SIDE_SILHOUETTE_MISMATCH",
+    "evidence": "Best candidate right-side silhouette is 0.262132 while front/back silhouettes are approximately 0.465.",
+    "colorPipeline": "PASS",
+    "nextImprovement": "PRIORITIZE_MULTI_VIEW_OR_REFERENCE_CONDITIONED_PROVIDER",
+    "notAProductionMesh": true
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "selectedCandidate": null,
+    "reviewAssetCreated": false
+  },
+  "artifacts": {
+    "archive": "/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip",
+    "binaryArtifactsTracked": false,
+    "localDownloadVerified": true
+  }
+}
