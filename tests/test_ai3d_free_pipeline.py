@@ -125,6 +125,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('"workstream": "NO_GPU"', source)
         self.assertIn('"unityInputAllowed": False', source)
         self.assertIn("--skip-reference", source)
+        self.assertIn('RE_CAMP_SOURCE_DIR', source)
         self.assertNotIn("--execute", source)
 
     def test_no_gpu_execution_record_is_gate_locked_and_inference_free(self):
@@ -134,6 +135,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
         )
         self.assertFalse(record["actualInference"])
+        self.assertEqual(record["sourceTreeCheck"], "PASS")
         self.assertEqual(record["steps"]["unitTests"]["count"], 16)
         self.assertEqual(record["steps"]["tripoMultiviewPayload"], "PASS_DRY_RUN")
         self.assertFalse(record["gate"]["unityInputAllowed"])

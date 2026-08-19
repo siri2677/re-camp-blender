@@ -24,6 +24,10 @@ productionPromotionAllowed: false
 7. Colab runtime preflight와 후보 manifest 재사용 로직 검증
 8. README·실행 계획·실행 기록·CI 동기화
 
+로컬에 art 저장소가 있으면 runner가 `RE_CAMP_SOURCE_DIR`를 자동으로 연결해
+source lock의 커밋과 권위 CH101 원본 파일까지 확인한다. art 저장소가 없는 CI나
+새 환경에서는 이 교차 저장소 확인만 건너뛰고 나머지 정적 검증을 계속한다.
+
 실행 명령:
 
 ```text

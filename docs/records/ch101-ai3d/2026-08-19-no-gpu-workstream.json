@@ -6,6 +6,7 @@
   "gpuRequired": false,
   "actualInference": false,
   "artRootAvailable": true,
+  "sourceTreeCheck": "PASS",
   "steps": {
     "colabPackageValidation": "PASS",
     "freeAi3dPackageValidation": "PASS",
@@ -37,6 +38,7 @@
   "notes": [
     "No provider inference was executed and no paid API credit was consumed.",
     "Reference preparation and Tripo payload generation were dry-run only.",
+    "The source lock commit and CH101 approved reference were verified in the local art repository.",
     "Run colab_runtime_preflight.py before resuming provider inference."
   ]
 }

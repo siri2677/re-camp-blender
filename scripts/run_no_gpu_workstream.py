@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -29,8 +30,15 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def run_step(name: str, command: list[str]) -> dict[str, Any]:
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
+def run_step(name: str, command: list[str], env: dict[str, str] | None = None) -> dict[str, Any]:
+    result = subprocess.run(
+        command,
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
+    )
     return {
         "name": name,
         "status": "PASS" if result.returncode == 0 else "FAIL",
@@ -76,8 +84,17 @@ def run_reference_dry_run(art_root: Path) -> list[dict[str, Any]]:
 
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
+    art_root = args.art_root.resolve()
+    source_env = None
+    if (art_root / ".git").is_dir():
+        source_env = os.environ.copy()
+        source_env["RE_CAMP_SOURCE_DIR"] = str(art_root)
     steps = [
-        run_step("colab-package-validation", [sys.executable, "scripts/validate_colab_package.py"]),
+        run_step(
+            "colab-package-validation",
+            [sys.executable, "scripts/validate_colab_package.py"],
+            env=source_env,
+        ),
         run_step("free-ai3d-package-validation", [sys.executable, "scripts/validate_ai3d_free_package.py"]),
         run_step("python-compile", [sys.executable, "-m", "compileall", "-q", "scripts", "tests"]),
         run_step("unittest", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"]),
