@@ -264,3 +264,14 @@ InstantMesh의 `diffusers==0.20.2`가 `huggingface_hub.cached_download`를 impor
 보정 전 실행의 세 TripoSR 점수는 기존과 같은 `0.452120`, `0.451603`, `0.463577`이고
 최고 후보도 `REGENERATE_REQUIRED`였다. 보정 후 InstantMesh 실제 inference는 아직
 검증 전이며, SF3D gated 접근·Gate B·Unity 입력은 계속 차단한다.
+
+`933c162` 최신 Colab T4 재실행에서는 `cached_download`와 레거시 JAX `KeyArray`
+호환 shim이 모두 적용되어 InstantMesh dependency smoke test와 provider 초기화가
+통과했고 실제 geometry inference까지 진입했다. 그러나 T4의 총 VRAM 14.56GB에서
+15.00GB CUDA 할당을 요구해 OOM으로 중단되었다. TripoSR fallback은 front/right/back
+세 후보를 생성·평가했지만 점수 `0.452120`, `0.451603`, `0.463577` 모두
+`REGENERATE_REQUIRED`였다. 따라서 Review `.blend`, Gate B, Unity 입력은 여전히
+생성하지 않았고, 상세 실행 기록은
+`docs/records/ch101-ai3d/2026-08-19-colab-t4-provider-compatibility-rerun-v003.json`에
+보관한다. 다음 무료 시도는 T4에 맞춘 InstantMesh 저메모리 설정 또는 다른 다중 시점
+provider의 정적·실행 가능성을 먼저 검토한다.

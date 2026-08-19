@@ -25,6 +25,10 @@ InstantMesh 상한 버전 보정 전후의 smoke test와 provider 실행 결과�
 최신 상한 버전 재실행에서 확인된 `diffusers==0.20.2`의 `cached_download` 오류와
 격리 shim 보정 내용은 `2026-08-19-colab-t4-provider-compatibility-rerun-v002.json`에
 보관한다.
+JAX 레거시 심볼 보정까지 포함한 최신 T4 실행에서 InstantMesh가 실제 추론 단계에
+진입했지만 15GB CUDA 할당 요청으로 OOM 되었고, TripoSR 세 후보가 다시
+`0.452120`, `0.451603`, `0.463577`로 기준 미달한 결과는
+`2026-08-19-colab-t4-provider-compatibility-rerun-v003.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
