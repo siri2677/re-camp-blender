@@ -100,7 +100,9 @@ Tripo를 선택할 경우에만 키를 Colab Secret의 `TRIPO_API_KEY`로 전달
 2026-08-19 기준 Colab T4에서 TripoSR 생성·Blender 평가·점수 계산까지 실제 실행을
 확인했다. 최신 NumPy 호환을 위해 `trimesh>=4.4.0`, rembg 초기화를 위해
 `onnxruntime-gpu`를 자동 설치한다. 생성 후보는 품질 게이트를 통과하지 못하면
-`REGENERATE_REQUIRED`로 남으며, 세션이 끝나면 `/content` 산출물은 삭제될 수 있다.
+`REGENERATE_REQUIRED`로 남는다. `foreground-ratio` `0.75`·`0.85`·`0.95` 변형을
+실행해도 최고 overall `0.456930`으로 기준 `0.50`에 미달했으며, 세션이 끝나면
+`/content` 산출물은 삭제될 수 있다.
 
 후보 보정 스크립트는 `scripts/blender/refine_ai3d_candidate.py`이며, 결과는
 `REFINED_REVIEW_CANDIDATE`로 표시된다. 이 결과는 기술·Review 보정본일 뿐이고,

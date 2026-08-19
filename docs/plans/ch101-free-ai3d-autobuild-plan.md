@@ -62,7 +62,7 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 ### Phase B — 후보 생성
 
-상태: `IMPLEMENTED / FREE-FIRST / REAL COLAB PASS / VARIANT RETRY READY`
+상태: `IMPLEMENTED / FREE-FIRST / REAL COLAB PASS / VARIANT RETRY EXECUTED / REGENERATE_REQUIRED`
 
 1. 기본 Provider는 Stable Fast 3D이며 최대 3회 후보를 생성한다.
 2. Stable Fast 3D가 실패하면 각 시도에서 TripoSR로 동일한 정면 입력을 재시도한다.
@@ -196,3 +196,8 @@ LOD·22본 Rig·Socket Review Asset 생성, Production validator 역검증까지
 후보 3개를 생성했다. 세 후보 모두 자동 점수 기준 미달로 `REGENERATE_REQUIRED`가
 되었으므로 Review `.blend`, Gate B, Unity 입력은 아직 차단되어 있다. Tripo API는
 무료 경로의 필수 조건이 아니다.
+
+추가로 TripoSR의 공식 `--foreground-ratio`를 `0.75`, `0.85`, `0.95`로 나누어
+재실행했다. 후보 SHA는 각각 달라졌지만 overall 점수는 `0.439426`, `0.455933`,
+`0.456930`으로 모두 `0.50` 기준에 미달했다. 따라서 최고 후보도 선택하지 않았고
+Review `.blend`를 만들지 않았다.

@@ -212,3 +212,23 @@ Gate B와 Unity 연결은 계속 차단한다.
 전경 크기 전처리만 바꾸며, 후보 manifest의 `providerParameters`에 기록한다.
 이는 품질 통과를 보장하지 않으며, 세 번 모두 기준 미달이면 계속
 `REGENERATE_REQUIRED`로 유지한다.
+
+## Foreground ratio 변형 실제 실행 결과
+
+2026-08-19에 최신 도구 commit `3dd36fd`를 원격 branch에서 Colab T4로 반영한 뒤,
+노트북 화면에 남아 있던 이전 셀 코드는 재사용하지 않고 동일 Provider 실행기를
+시도별 인자와 함께 직접 실행했다. 권위 art reference와 reference manifest hash는
+그대로 유지했고 TripoSR 생성·Blender 보정·5방향 렌더·점수화를 모두 완료했다.
+
+| 시도 | foreground ratio | 후보 SHA256 | overall | 판정 |
+|---|---:|---|---:|---|
+| 01 | 0.75 | `4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5` | 0.439426 | `REGENERATE_REQUIRED` |
+| 02 | 0.85 | `1c735d95df588e1aebcf30398f8d75df6e231ba6c231b05bc89284e1674d2a52` | 0.455933 | `REGENERATE_REQUIRED` |
+| 03 | 0.95 | `dc5988cfdc9e49a54c57a23162fd88a6f915c03ec874c8fbaaf84755bfcce800` | 0.456930 | `REGENERATE_REQUIRED` |
+
+최고 후보(03)의 세부 점수는 silhouette `0.418686`, appearance `0.339136`,
+color `0.148622`, face detail `0.373681`, technical `1.0`이다. 세 후보 모두
+Alpha Review 최소 overall `0.50`을 넘지 못했으므로 Review Asset을 선택 생성하지
+않았고, 최종 상태는 `unityInputAllowed=false`, `productionPromotionAllowed=false`
+로 유지한다. 산출물 archive는 `/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip`
+이다.
