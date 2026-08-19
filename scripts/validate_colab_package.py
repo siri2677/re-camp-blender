@@ -41,6 +41,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/prepare_reference_views.py",
     "scripts/ai3d/tripo_api.py",
     "scripts/ai3d/run_open_source_provider.py",
+    "scripts/ai3d/colab_runtime_preflight.py",
     "scripts/ai3d/score_candidate_renders.py",
     "scripts/ai3d/rank_candidates.py",
 )

@@ -107,10 +107,18 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("['front', 'right', 'back']", notebook)
         self.assertIn("RE_CAMP_REUSE_CANDIDATES", notebook)
         self.assertIn("status': 'REUSED'", notebook)
+        self.assertIn("colab_runtime_preflight.py", notebook)
         self.assertIn("--material-mode", notebook)
         self.assertIn("'preserve'", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
+
+    def test_runtime_preflight_is_secret_free_and_gate_locked(self):
+        source = Path("scripts/ai3d/colab_runtime_preflight.py").read_text(encoding="utf-8")
+        self.assertIn("BLOCKED_GPU_UNAVAILABLE", source)
+        self.assertIn("READY_NO_GPU_REQUIRED", source)
+        self.assertIn('"unityInputAllowed": False', source)
+        self.assertNotIn("TRIPO_API_KEY", source)
 
     def test_refinement_script_preserves_locked_gate(self):
         source = Path("scripts/blender/refine_ai3d_candidate.py").read_text(encoding="utf-8")
