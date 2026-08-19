@@ -103,6 +103,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--no-build-isolation", notebook)
         self.assertIn("TORCH_CUDA_ARCH_LIST", notebook)
         self.assertIn("import nvdiffrast.torch", notebook)
+        self.assertIn("attempt_provider in {'instantmesh', 'triposr'}", notebook)
+        self.assertIn("['front', 'right', 'back']", notebook)
         self.assertIn("--material-mode", notebook)
         self.assertIn("'preserve'", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)

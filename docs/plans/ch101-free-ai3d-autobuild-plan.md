@@ -50,6 +50,11 @@ productionPromotionAllowed: false
 - API 크레딧 소비와 서비스 약관을 확인한 뒤 실행한다.
 - 가격·API 기준: https://docs.tripo3d.ai/get-started/pricing.html
 
+InstantMesh 재시도도 `front`·`right`·`back` 입력을 시도별로 순환한다. 이는
+다중 이미지를 한 번에 입력하는 기능이 아니라, sparse-view provider 후보를 서로 다른
+승인 방향으로 생성해 비교하는 무료 보강 경로다. 후보가 기준을 통과하지 않으면
+여전히 `REGENERATE_REQUIRED`로 유지한다.
+
 ### 제외 경로
 
 - Meshy 무료 플랜: 현재 모델 다운로드와 API 접근이 없어 자동 파이프라인에 사용하지 않는다.
