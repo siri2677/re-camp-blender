@@ -105,10 +105,8 @@ def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector]:
 def normalize_candidate(imported: list[bpy.types.Object], target_height: float = 1.68) -> bpy.types.Object:
     meshes = [obj for obj in imported if obj.type == "MESH"]
     minimum, maximum = world_bounds(meshes)
-    height = maximum.z - minimum.z
-    if height <= 1e-6:
-        raise ValueError("candidate has zero height")
-    center = (minimum + maximum) * 0.5
+    dimensions = maximum - minimum
+    source_up_axis = max(range(3), key=lambda axis: dimensions[axis])
     root = bpy.data.objects.new("CH101_AI_Candidate_Root", None)
     bpy.context.scene.collection.objects.link(root)
     for obj in imported:
@@ -116,12 +114,31 @@ def normalize_candidate(imported: list[bpy.types.Object], target_height: float =
             world = obj.matrix_world.copy()
             obj.parent = root
             obj.matrix_world = world
+
+    # TripoSR exports are commonly Y-up while the review contract is Z-up.
+    # Align the longest human-body axis before computing the target scale so
+    # the evaluator does not mistake depth for height.
+    orientation_fix = "NONE"
+    if source_up_axis == 1:
+        root.rotation_euler = (math.radians(90.0), 0.0, 0.0)
+        orientation_fix = "Y_TO_Z"
+    elif source_up_axis == 0:
+        root.rotation_euler = (0.0, math.radians(-90.0), 0.0)
+        orientation_fix = "X_TO_Z"
+    bpy.context.view_layer.update()
+    minimum, maximum = world_bounds(meshes)
+    height = maximum.z - minimum.z
+    if height <= 1e-6:
+        raise ValueError("candidate has zero height after orientation normalization")
+    center = (minimum + maximum) * 0.5
     scale = target_height / height
     root.scale = (scale, scale, scale)
     root.location = (-center.x * scale, -center.y * scale, -minimum.z * scale)
     root["source_status"] = SOURCE_STATUS
     root["gate_b"] = GATE_B
     root["unity_input_allowed"] = False
+    root["source_up_axis"] = "XYZ"[source_up_axis]
+    root["orientation_fix"] = orientation_fix
     return root
 
 
@@ -233,7 +250,7 @@ def main() -> int:
     meshes = [obj for obj in imported if obj.type == "MESH"]
     if not meshes:
         raise ValueError("candidate contains no mesh objects")
-    normalize_candidate(imported)
+    root = normalize_candidate(imported)
     bpy.context.view_layer.update()
     metrics = collect_metrics(meshes)
     render_color_mode = detect_render_color_mode(meshes)
@@ -264,6 +281,8 @@ def main() -> int:
         "renders": renders,
         "cardinalViewOrder": list(CARDINAL_VIEWS),
         "normalizedBlend": str(normalized_blend) if normalized_blend else "",
+        "sourceUpAxis": root.get("source_up_axis", "Z"),
+        "orientationFix": root.get("orientation_fix", "NONE"),
         "warnings": [
             "Orientation is selected by silhouette scoring after rendering.",
             "This normalized scene is an AI review candidate, not a production mesh.",

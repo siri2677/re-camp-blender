@@ -22,15 +22,22 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",
     ROOT / "scripts" / "ai3d" / "rank_candidates.py",
     ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py",
+    ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
 )
 NOTEBOOK_MARKERS = (
     "TRIPO_API_KEY",
     "HF_TOKEN",
+    "RE_CAMP_AI3D_PROVIDER",
+    "'sf3d'",
     "prepare_reference_views.py",
     "tripo_api.py",
     "run_open_source_provider.py",
     "evaluate_ai3d_candidate.py",
+    "refine_ai3d_candidate.py",
+    "MAX_ATTEMPTS",
+    "REFINED_REVIEW_CANDIDATE",
+    "AUTO_ESTIMATED_NOT_APPROVED",
     "score_candidate_renders.py",
     "rank_candidates.py",
     "build_ai3d_review_asset.py",
@@ -94,6 +101,15 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, f"invalid AI 3D contract: {exc}")
         return
     providers = contract["providers"]
+    provider_policy = contract.get("providerPolicy", {})
+    if provider_policy.get("mode") != "FREE_FIRST":
+        fail(errors, "providerPolicy.mode must be FREE_FIRST")
+    if provider_policy.get("defaultProvider") != "stableFast3D":
+        fail(errors, "stableFast3D must be the default provider")
+    if provider_policy.get("freeFallbackOrder") != ["stableFast3D", "tripoSR"]:
+        fail(errors, "freeFallbackOrder must be stableFast3D then tripoSR")
+    if provider_policy.get("apiCreditsRequiredByDefault") is not False:
+        fail(errors, "API credits must not be required by default")
     for key in ("stableFast3D", "tripoSR"):
         commit = providers[key].get("commit", "")
         if not isinstance(commit, str) or len(commit) != 40:

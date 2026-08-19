@@ -57,6 +57,16 @@
       255
     ]
   },
+  "providerPolicy": {
+    "mode": "FREE_FIRST",
+    "defaultProvider": "stableFast3D",
+    "freeFallbackOrder": [
+      "stableFast3D",
+      "tripoSR"
+    ],
+    "optionalPaidProvider": "tripoApi",
+    "apiCreditsRequiredByDefault": false
+  },
   "providers": {
     "tripoApi": {
       "mode": "FREE_TRIAL_ONLY",

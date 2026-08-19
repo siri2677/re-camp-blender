@@ -17,29 +17,29 @@ productionPromotionAllowed: false
 
 ## 무료 Provider 순서
 
-### 1. Tripo API 신규 계정 무료 체험
+### 1. Stable Fast 3D 무료 기본 경로
 
-- CH101 정면·우측면·후면 입력을 동시에 사용하는 첫 번째 경로다.
-- API 키는 Colab Secret 또는 `TRIPO_API_KEY` 환경 변수에서만 읽는다.
-- 2026-08-18 확인 기준 신규 API 계정은 2주 동안 300 무료 크레딧을 제공한다.
-- 후보 네 개를 먼저 생성하고 자동 점수가 가장 높은 후보 하나에만 리깅·애니메이션을 적용해 크레딧을 절약한다.
-- 무료 체험 산출물은 라이선스 확인 전 개발·평가 후보로만 취급한다.
-- 가격·API 기준: https://docs.tripo3d.ai/get-started/pricing.html
-
-### 2. Stable Fast 3D Colab 대체 경로
-
-- Tripo 무료 크레딧이 없거나 API 생성이 실패할 때 사용한다.
-- 단일 정면 이미지 기반이므로 다중 시점 일치도는 Tripo 경로보다 낮다.
+- API 크레딧 없이 Colab GPU에서 단일 정면 이미지 기반 후보를 만든다.
+- UV, 텍스처, 기본 재질이 포함된 GLB를 생성하고 Blender에서 다중 방향으로 평가한다.
+- Hugging Face 모델 접근 승인과 `HF_TOKEN`이 필요할 수 있다.
 - 공식 저장소를 커밋 `ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2`로 고정한다.
-- 약 6GB VRAM과 Hugging Face 모델 접근 승인이 필요할 수 있다.
+- 약 6GB VRAM이 필요할 수 있다.
 - 저장소: https://github.com/Stability-AI/stable-fast-3d
 
-### 3. TripoSR Colab 최후 대체 경로
+### 2. TripoSR 무료 fallback
 
-- Stable Fast 3D 모델 접근이 막힐 때 사용하는 단일 이미지 경로다.
+- Stable Fast 3D 모델 접근 또는 실행이 막힐 때 사용하는 단일 이미지 경로다.
 - 공식 저장소를 커밋 `107cefdc244c39106fa830359024f6a2f1c78871`로 고정한다.
 - GLB와 vertex color 중심의 기술 후보를 만들며 최종 Texture 품질은 기대하지 않는다.
 - 저장소: https://github.com/VAST-AI-Research/TripoSR
+
+### 3. Tripo API 선택 경로
+
+- 무료 Provider로 충분한 후보가 나오지 않을 때만 선택한다.
+- 정면·우측면·후면을 동시에 사용하는 다중 시점 후보 생성 경로다.
+- API 키는 Colab Secret 또는 `TRIPO_API_KEY` 환경 변수에서만 읽는다.
+- API 크레딧 소비와 서비스 약관을 확인한 뒤 실행한다.
+- 가격·API 기준: https://docs.tripo3d.ai/get-started/pricing.html
 
 ### 제외 경로
 
@@ -62,14 +62,14 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 ### Phase B — 후보 생성
 
-상태: `IMPLEMENTED / DRY-RUN PASS / EXTERNAL EXECUTION BLOCKED`
+상태: `IMPLEMENTED / FREE-FIRST / MAX 3 ATTEMPTS / EXTERNAL GPU EXECUTION REQUIRED`
 
-1. 기본 후보 수는 네 개다.
-2. Tripo 입력 이미지는 한 번만 업로드하고 seed만 바꿔 후보를 생성한다.
-3. 작업 ID를 즉시 manifest에 저장해 Colab 중단 후 같은 작업을 재조회한다.
-4. 완료 URL은 만료되기 전에 GLB와 preview를 즉시 다운로드한다.
-5. API 키가 없으면 크레딧을 소비하지 않는 Dry-run plan만 생성한다.
-6. Tripo를 사용할 수 없으면 Stable Fast 3D, 이후 TripoSR 순서로 전환한다.
+1. 기본 Provider는 Stable Fast 3D이며 최대 3회 후보를 생성한다.
+2. Stable Fast 3D가 실패하면 각 시도에서 TripoSR로 동일한 정면 입력을 재시도한다.
+3. 각 시도는 `attempts/01`~`attempts/03` 아래 manifest와 후보 파일을 보존한다.
+4. Tripo를 선택한 경우에만 정면·우측면·후면을 업로드하고 seed 네 개로 후보를 생성한다.
+5. Tripo API 키가 없으면 크레딧을 소비하지 않는 Dry-run plan만 생성한다.
+6. 어떤 Provider를 사용해도 생성 결과는 검토 후보이며 Production Mesh로 승격하지 않는다.
 
 ### Phase C — Blender 자동 평가
 
@@ -84,9 +84,24 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 자동 점수는 사람의 시각 승인이 아니며, 기준 미달이면 `REGENERATE_REQUIRED`로 끝난다.
 
+### Phase C-1 — Blender 후보 자동 보정
+
+상태: `IMPLEMENTED / REAL COLAB RUN PENDING`
+
+선정 전 후보마다 별도 review 산출물을 만든다.
+
+- Y-up/X-up 방향, 중심, 1.68m 높이 정규화
+- 중복 정점 제거와 법선 재계산
+- UV가 없을 때 Smart UV Project 실행
+- 최종 재질이 아닌 중립 Review Material 부여
+- 보정 GLB·정규화 `.blend`·refinement report 생성
+- 원본 후보 SHA256, 시도 번호, Provider, 부모 hash 기록
+
+이 단계는 얼굴·헤어·의상 의미를 복원하거나 Production Mesh로 승격하지 않는다.
+
 ### Phase D — Blender Review Asset 자동 구성
 
-상태: `IMPLEMENTED / LOCAL SMOKE PASS / SELECTED REAL CANDIDATE REQUIRED`
+상태: `IMPLEMENTED / LOCAL SMOKE PASS / SELECTED REFINED CANDIDATE REQUIRED`
 
 선택 후보에 다음 항목을 적용한다.
 
@@ -127,9 +142,12 @@ reference-views/
   CH101_back.png
   reference-views-manifest.json
 candidates/
-  candidate-manifest.json
-  CH101_<provider>_cand_001.glb
+  attempts/01/candidates/<provider>/candidate-manifest.json
+  attempts/01/candidates/<provider>/CH101_<provider>_cand_001.glb
 evaluation/<candidate-id>/
+  <candidate-id>_refined.glb
+  <candidate-id>_refined_NOT_PRODUCTION.blend
+  refinement-report.json
   renders/*.png
   evaluation-report.json
   candidate-score.json
@@ -160,6 +178,8 @@ python scripts/ai3d/tripo_api.py --reference-manifest /path/to/reference-views-m
 - Notebook JSON과 모든 Python/Blender script compile PASS
 - Reference crop SHA256 manifest 생성 PASS
 - Provider Dry-run payload 검증 PASS
+- 최대 3회 후보 생성과 Stable Fast 3D → TripoSR fallback 정적 검증 PASS
+- 후보별 Blender 보정 GLB·UV·중립 재질·SHA256 report 생성
 - 후보 manifest 재개·중복 방지 테스트 PASS
 - 점수·순위 manifest가 Unity를 잠근 상태로 생성됨
 - 실제 후보 확보 후 자동 렌더·평가·Review `.blend` 생성
@@ -170,5 +190,6 @@ LOD·22본 Rig·Socket Review Asset 생성, Production validator 역검증까지
 [ch101-free-ai3d-local-verification-2026-08-18.md](ch101-free-ai3d-local-verification-2026-08-18.md)에
 기록한다.
 
-마지막 항목의 실제 AI 후보 생성만 Tripo API 키 또는 Colab GPU가 준비되기 전까지
-`Blocked`다. 모든 저장소 변경은 별도 지시 전까지 로컬에만 유지하며 commit/push하지 않는다.
+마지막 항목의 실제 AI 후보 생성만 Colab GPU와 모델 접근 권한이 준비되기 전까지
+`Blocked`다. Tripo API는 무료 경로의 필수 조건이 아니다. 모든 저장소 변경은 별도
+지시 전까지 로컬에만 유지하며 commit/push하지 않는다.

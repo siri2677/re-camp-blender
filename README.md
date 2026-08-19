@@ -62,9 +62,12 @@ front/right/back references, plans or runs a free-tier candidate provider,
 renders four cardinal Blender views, scores silhouettes, and builds a
 non-production review scene from the best eligible candidate.
 
-The preferred order is the Tripo API new-account trial, Stable Fast 3D in
-Colab, and TripoSR as the final fallback. Secrets are read from Colab Secrets
-or environment variables and are never stored in Git. Every generated result
+The preferred free-only order is Stable Fast 3D in Colab followed by TripoSR.
+The Notebook automatically switches to TripoSR when Stable Fast 3D cannot access its
+model or fails during execution.
+Tripo API remains an optional multiview path when its credits and terms are
+acceptable. Secrets are read from Colab Secrets or environment variables and
+are never stored in Git. Every generated result
 remains `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`, and
 `unityInputAllowed: false`.
 
@@ -73,6 +76,9 @@ and stopping rules are documented in
 [docs/plans/ch101-free-ai3d-autobuild-plan.md](docs/plans/ch101-free-ai3d-autobuild-plan.md).
 The local dry-run and Blender negative-gate evidence is recorded in
 [docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md](docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md).
+The notebook caps free candidate generation at three attempts and runs
+`scripts/blender/refine_ai3d_candidate.py` before scoring. Refinement produces a
+review-only artifact; it does not create a Production Mesh or unlock Unity.
 
 ## Local checks
 

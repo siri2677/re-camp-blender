@@ -31,6 +31,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/validate_current_roster_mesh_intake.py",
     "scripts/blender/validate_ch101_mesh_intake.py",
     "scripts/blender/evaluate_ai3d_candidate.py",
+    "scripts/blender/refine_ai3d_candidate.py",
     "scripts/blender/build_ai3d_review_asset.py",
 )
 UTILITY_SCRIPTS = (
@@ -128,7 +129,14 @@ REQUIRED_MARKERS = {
         "prepare_reference_views.py",
         "tripo_api.py",
         "run_open_source_provider.py",
+        "provider_attempts",
+        "trimesh>=4.4.0",
+        "onnxruntime-gpu",
         "evaluate_ai3d_candidate.py",
+        "refine_ai3d_candidate.py",
+        "REFINED_REVIEW_CANDIDATE",
+        "face_driver_status",
+        "AUTO_ESTIMATED_NOT_APPROVED",
         "score_candidate_renders.py",
         "rank_candidates.py",
         "build_ai3d_review_asset.py",

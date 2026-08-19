@@ -76,6 +76,20 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--model-save-format", command)
         self.assertIn("glb", command)
 
+    def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
+        notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")
+        self.assertIn("MAX_ATTEMPTS = 3", notebook)
+        self.assertIn("provider_attempts = [PROVIDER, 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
+        self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
+        self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
+
+    def test_refinement_script_preserves_locked_gate(self):
+        source = Path("scripts/blender/refine_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn('SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"', source)
+        self.assertIn('GATE_B = "PENDING_HUMAN_REVIEW"', source)
+        self.assertIn('"unityInputAllowed": False', source)
+        self.assertIn('"productionPromotionAllowed": False', source)
+
     def test_ranking_selects_only_eligible_candidate_without_unlocking_unity(self):
         base = {
             "contractVersion": self.contract["contractVersion"],

@@ -76,16 +76,33 @@ Runtime Socket과 캐릭터별 상세 Socket, Unity alias 관계, production 파
 Character Sheet를 권위 기준으로 잠그고 Turnaround에서 front/right/back 입력을
 분리한 뒤 다음 순서로 진행한다.
 
-1. Tripo API 무료 체험을 우선 사용하고, 키가 없으면 크레딧을 쓰지 않는 dry-run만 만든다.
-2. Tripo를 사용할 수 없으면 Stable Fast 3D, 이후 TripoSR 순서로 전환한다.
-3. 생성된 GLB/OBJ를 Blender에서 1.68m로 정규화하고 4방향과 3/4 렌더를 만든다.
-4. 실루엣·외형·색상·얼굴 디테일·기술 점수를 계산하고 기준 미달 후보를 자동 탈락시킨다.
-5. 통과 후보에만 LOD0/1/2, 22본 Review Rig, 자동 Weight, 공용·CH101 상세 Socket을 만든다.
+실행 재현성이 필요한 경우 Colab 환경변수
+`RE_CAMP_BLENDER_TOOLS_COMMIT`에 전체 도구 commit SHA를 지정한다. 값을 비워두면
+`RE_CAMP_BLENDER_TOOLS_REF`의 최신 branch tip을 checkout하고, 실제 checkout된
+SHA를 런타임 manifest에 기록한다. 최신 로컬 변경을 실행하려면 먼저 해당 변경이
+원격 branch에 반영되어 있어야 한다.
 
-Tripo 키는 Colab Secret의 `TRIPO_API_KEY`로만 전달한다. Stable Fast 3D를
-사용할 경우 Hugging Face 접근 토큰과 GPU runtime이 필요할 수 있다. 어떤 경로도
+1. Stable Fast 3D를 기본 무료 Provider로 사용한다. API 키나 Tripo 크레딧은 필요하지 않다.
+2. Stable Fast 3D 모델 접근 또는 GPU 실행이 실패하면 Notebook이 오류를 기록하고
+   자동으로 TripoSR로 전환한다.
+3. Tripo API는 다중 시점 비교가 필요할 때만 선택적으로 사용한다.
+4. 최대 3회 생성한 후보를 Blender에서 1.68m로 정규화하고, 중복 정점·법선·UV·Review Material을 보정한다.
+5. 보정된 후보마다 4방향과 3/4 렌더를 만들고 실루엣·외형·색상·얼굴 디테일·기술 점수를 계산한다.
+6. 기준을 통과한 후보에만 LOD0/1/2, 22본 Review Rig, 자동 Weight, 공용·CH101 상세 Socket을 만든다.
+
+Stable Fast 3D를 사용할 경우 Hugging Face 접근 토큰과 GPU runtime이 필요할 수 있다.
+Tripo를 선택할 경우에만 키를 Colab Secret의 `TRIPO_API_KEY`로 전달한다. 어떤 경로도
 사람 Gate B를 자동 승인하거나 Unity package를 export하지 않으며 결과는 항상
 `unityInputAllowed=false`다.
+
+2026-08-19 기준 Colab T4에서 TripoSR 생성·Blender 평가·점수 계산까지 실제 실행을
+확인했다. 최신 NumPy 호환을 위해 `trimesh>=4.4.0`, rembg 초기화를 위해
+`onnxruntime-gpu`를 자동 설치한다. 생성 후보는 품질 게이트를 통과하지 못하면
+`REGENERATE_REQUIRED`로 남으며, 세션이 끝나면 `/content` 산출물은 삭제될 수 있다.
+
+후보 보정 스크립트는 `scripts/blender/refine_ai3d_candidate.py`이며, 결과는
+`REFINED_REVIEW_CANDIDATE`로 표시된다. 이 결과는 기술·Review 보정본일 뿐이고,
+얼굴 BlendShape와 장비 Socket은 각각 차단·추정 상태로 남는다.
 
 로컬 dry-run과 Blender smoke 검증 근거는
 [실행 기록](plans/ch101-free-ai3d-local-verification-2026-08-18.md), 전체 규칙은
