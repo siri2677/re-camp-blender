@@ -81,11 +81,13 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 1. 기본 Provider는 Stable Fast 3D이며 최대 3회 후보를 생성한다.
 2. Stable Fast 3D가 실패하면 각 시도에서 TripoSR로 동일한 정면 입력을 재시도한다.
 3. 각 시도는 `attempts/01`~`attempts/03` 아래 manifest와 후보 파일을 보존한다.
-4. TripoSR fallback은 시도별 foreground ratio `0.75`, `0.85`, `0.95`를 적용해
+4. 재실행 시 검증된 후보 manifest와 실제 파일이 있으면 기본적으로 재사용해 GPU를
+   다시 소모하지 않는다. 강제 재생성은 `RE_CAMP_REUSE_CANDIDATES=0`으로 지정한다.
+5. TripoSR fallback은 시도별 foreground ratio `0.75`, `0.85`, `0.95`를 적용해
    동일한 deterministic 결과를 반복하지 않도록 하고, 적용값을 manifest에 기록한다.
-5. Tripo를 선택한 경우에만 정면·우측면·후면을 업로드하고 seed 네 개로 후보를 생성한다.
-6. Tripo API 키가 없으면 크레딧을 소비하지 않는 Dry-run plan만 생성한다.
-7. 어떤 Provider를 사용해도 생성 결과는 검토 후보이며 Production Mesh로 승격하지 않는다.
+6. Tripo를 선택한 경우에만 정면·우측면·후면을 업로드하고 seed 네 개로 후보를 생성한다.
+7. Tripo API 키가 없으면 크레딧을 소비하지 않는 Dry-run plan만 생성한다.
+8. 어떤 Provider를 사용해도 생성 결과는 검토 후보이며 Production Mesh로 승격하지 않는다.
 
 ### Phase C — Blender 자동 평가
 
