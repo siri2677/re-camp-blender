@@ -117,6 +117,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--provider-repo", required=True, type=Path)
     parser.add_argument("--reference-manifest", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--reference-view", choices=("front", "right", "back"), default="front")
     parser.add_argument("--foreground-ratio", type=float)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--execute", action="store_true")
@@ -137,11 +138,11 @@ def main() -> int:
         raise ValueError(
             f"provider repository must be pinned to {provider['commit']}, got {actual_head}"
         )
-    front_image = Path(references["views"]["front"]["path"]).resolve()
-    if not front_image.is_file():
-        raise FileNotFoundError(front_image)
-    if sha256_file(front_image) != references["views"]["front"]["sha256"]:
-        raise ValueError("front reference hash mismatch")
+    input_image = Path(references["views"][args.reference_view]["path"]).resolve()
+    if not input_image.is_file():
+        raise FileNotFoundError(input_image)
+    if sha256_file(input_image) != references["views"][args.reference_view]["sha256"]:
+        raise ValueError(f"{args.reference_view} reference hash mismatch")
 
     output_dir = args.output_dir.resolve()
     working_output = output_dir / f".{args.provider}-work"
@@ -149,7 +150,7 @@ def main() -> int:
         args.provider,
         provider,
         repo_dir,
-        front_image,
+        input_image,
         working_output,
         foreground_ratio=args.foreground_ratio,
     )
@@ -165,6 +166,7 @@ def main() -> int:
         "referenceManifest": str(args.reference_manifest.resolve()),
         "referenceManifestSha256": sha256_file(args.reference_manifest.resolve()),
         "providerParameters": {
+            "referenceView": args.reference_view,
             "foregroundRatio": args.foreground_ratio,
         },
         **candidate_gate_fields(contract),

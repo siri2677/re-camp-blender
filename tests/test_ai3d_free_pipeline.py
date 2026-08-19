@@ -79,6 +79,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("glb", command)
         self.assertIn("--foreground-ratio", command)
         self.assertIn("0.75", command)
+        self.assertEqual(
+            self.contract["providers"]["tripoSR"]["referenceViews"],
+            ["front", "right", "back"],
+        )
         instantmesh = self.contract["providers"]["instantMesh"]
         command = build_command(
             "instantmesh", instantmesh, Path("instantmesh-repo"), front, output
@@ -91,6 +95,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("MAX_ATTEMPTS = 3", notebook)
         self.assertIn("provider_attempts = [PROVIDER, 'instantmesh', 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
         self.assertIn("foreground_ratios", notebook)
+        self.assertIn("reference_views", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
 

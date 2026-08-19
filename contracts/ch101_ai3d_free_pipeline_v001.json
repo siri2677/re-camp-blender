@@ -111,6 +111,11 @@
       "model": "stabilityai/TripoSR",
       "license": "MIT",
       "marchingCubesResolution": 256,
+      "referenceViews": [
+        "front",
+        "right",
+        "back"
+      ],
       "foregroundRatios": [
         0.75,
         0.85,
