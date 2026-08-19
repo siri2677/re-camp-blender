@@ -130,6 +130,16 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertEqual(record["runtimeVerification"]["accelerator"], "Tesla T4")
         self.assertTrue(record["runtimeVerification"]["actualInference"])
         self.assertEqual(record["runtimeVerification"]["generatedAttempts"], [1, 2, 3])
+        self.assertEqual(record["runtimeVerification"]["fallbackResilienceCommit"], "bdf21ae")
+        self.assertEqual(
+            record["runtimeVerification"]["fallbackResilienceVerification"]["notebookJson"],
+            "PASS",
+        )
+        self.assertFalse(
+            record["runtimeVerification"]["fallbackResilienceVerification"][
+                "actualAutomaticColabRerun"
+            ]
+        )
         serialized = json.dumps(record)
         self.assertNotIn("API_KEY", serialized)
         self.assertNotIn("HF_TOKEN", serialized)

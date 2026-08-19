@@ -11,7 +11,9 @@
 2. art commit `b6c9b3128358e061eee6184230929413eba84101`에서 정면·우측·후면
    reference view와 SHA256을 생성했다.
 3. Stable Fast 3D 실행은 gated Hugging Face 모델 접근 오류로 fallback 되었다.
-4. InstantMesh는 `nvdiffrast` 설치에서 중단되었다.
+4. InstantMesh는 `nvdiffrast` 설치에서 중단되었다. 이후 notebook을 수정해
+   이 setup 예외를 기록하고 다음 fallback provider로 계속하도록 했다
+   (`bdf21ae`).
 5. TripoSR 공식 requirements에서 누락된 `torchmcubes`를 확인하고
    `git+https://github.com/tatsy/torchmcubes.git`를 설치한 뒤 T4 추론을 완료했다.
 6. front/right/back 입력과 foreground ratio `0.75/0.85/0.95`로 3개 후보를 만들고,
@@ -36,3 +38,14 @@ Colab 세션 산출물:
 이번 실행은 실제 GPU 추론 경로와 의존성 누락을 확인한 기술 검증이다. 최종 상태는
 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`,
 `unityInputAllowed=false`로 유지한다.
+
+## 최신 fallback 검증 상태
+
+- notebook JSON 검증: `PASS`
+- Python unittest: `PASS`
+- InstantMesh setup 실패를 잡고 TripoSR로 진행하는 코드 경로: `PASS`
+- 수정 commit: `bdf21ae`
+- 수정 후 새 Colab에서 자동으로 3회 전체 재실행한 증거: 아직 없음
+
+따라서 현재 기록은 실제 T4 추론 결과와 최신 fallback 코드 검증을 함께 보존하지만,
+InstantMesh 실패부터 TripoSR 완료까지의 새 자동 실행을 완료했다고 주장하지 않는다.
