@@ -185,18 +185,47 @@ def sync_workbench_material_colors(meshes: list[bpy.types.Object]) -> int:
 
 def configure_render(size: int, color_mode: str) -> bpy.types.Object:
     scene = bpy.context.scene
-    scene.render.engine = "BLENDER_WORKBENCH"
+    # Workbench is fast and useful for silhouette checks, but Blender's
+    # Workbench renderer can still flatten imported GLB material slots to a
+    # gray studio value in headless sessions.  Eevee keeps the review render
+    # deterministic while honoring the synchronized Principled colors and
+    # palette fallback used by the scoring pass.
+    try:
+        scene.render.engine = "BLENDER_EEVEE_NEXT"
+    except (TypeError, ValueError):
+        scene.render.engine = "BLENDER_EEVEE"
     scene.render.resolution_x = size
     scene.render.resolution_y = size
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
     scene.render.image_settings.color_mode = "RGBA"
     scene.render.film_transparent = True
-    scene.display.shading.light = "STUDIO"
-    scene.display.shading.show_shadows = True
-    scene.display.shading.show_cavity = True
-    scene.display.shading.cavity_type = "WORLD"
-    scene.display.shading.color_type = color_mode
+    if scene.world is None:
+        scene.world = bpy.data.worlds.new("AI3D_Review_World")
+    scene.world.use_nodes = True
+    background = scene.world.node_tree.nodes.get("Background")
+    if background is not None:
+        background.inputs["Color"].default_value = (0.06, 0.08, 0.11, 1.0)
+        background.inputs["Strength"].default_value = 0.42
+
+    def area_light(name: str, location: tuple[float, float, float], energy: float, size: float) -> None:
+        light_data = bpy.data.lights.new(name, type="AREA")
+        light_data.energy = energy
+        light_data.shape = "DISK"
+        light_data.size = size
+        light = bpy.data.objects.new(name, light_data)
+        bpy.context.scene.collection.objects.link(light)
+        light.location = location
+        look_at(light, Vector((0.0, 0.0, 0.84)))
+
+    area_light("AI3D_Key", (3.2, -4.0, 4.4), 850.0, 3.0)
+    area_light("AI3D_Fill", (-3.0, -1.5, 2.8), 520.0, 3.5)
+    area_light("AI3D_Rim", (0.0, 3.5, 4.8), 720.0, 2.5)
+    try:
+        scene.view_settings.view_transform = "Standard"
+        scene.view_settings.look = "None"
+    except (TypeError, ValueError):
+        pass
     camera_data = bpy.data.cameras.new("AI3D_Review_Camera")
     camera = bpy.data.objects.new("AI3D_Review_Camera", camera_data)
     scene.collection.objects.link(camera)
@@ -302,6 +331,7 @@ def main() -> int:
         "productionPromotionAllowed": False,
         "metrics": metrics,
         "renderColorMode": render_color_mode,
+        "renderEngine": bpy.context.scene.render.engine,
         "workbenchMaterialsSynced": workbench_materials_synced,
         "renders": renders,
         "cardinalViewOrder": list(CARDINAL_VIEWS),

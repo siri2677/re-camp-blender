@@ -123,6 +123,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("sync_workbench_material_colors", source)
         self.assertIn('material.diffuse_color = tuple(base_color.default_value)', source)
         self.assertIn('"workbenchMaterialsSynced": workbench_materials_synced', source)
+        self.assertIn('scene.render.engine = "BLENDER_EEVEE_NEXT"', source)
+        self.assertIn('"renderEngine": bpy.context.scene.render.engine', source)
 
     def test_persisted_ch101_run_record_is_secret_free_and_gate_locked(self):
         record = json.loads(
