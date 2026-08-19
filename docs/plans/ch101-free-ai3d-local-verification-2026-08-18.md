@@ -246,3 +246,22 @@ Python 의존성 설치는 완료했지만, 공식 실행 코드가 import하는
 따라서 InstantMesh는 `BLOCKED_COLAB_NVDIFFRAST_BUILD`로 기록하고 품질 점수를 생성하지
 않았다. 이 결과는 Provider 품질 실패가 아니라 현재 Colab 런타임의 CUDA 확장 설치
 차단이며, TripoSR의 마지막 통과 가능한 무료 fallback 결과와 분리한다.
+
+## TripoSR reference-view 변형 실제 실행 결과
+
+InstantMesh bootstrap 과정에서 내려간 Python 의존성으로 TripoSR와 Blender import도
+일시적으로 깨졌으나, TripoSR용 Hugging Face 패키지와 Blender 3.10용 NumPy 1.23.5를
+복구한 뒤 변형 실행을 완료했다. 승인 reference manifest는 그대로 유지했고, 시도별
+입력 방향과 foreground ratio를 함께 기록했다.
+
+| 시도 | 입력 방향 | foreground ratio | 후보 SHA256 | overall | 판정 |
+|---|---|---:|---|---:|---|
+| 01 | front | 0.75 | `4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5` | 0.439426 | `REGENERATE_REQUIRED` |
+| 02 | right | 0.85 | `5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2` | 0.443631 | `REGENERATE_REQUIRED` |
+| 03 | back | 0.95 | `6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4` | 0.452043 | `REGENERATE_REQUIRED` |
+
+최고 후보(03)의 세부 점수는 silhouette `0.413896`, appearance `0.332043`,
+color `0.146237`, face detail `0.391916`, technical `1.0`이다. 세 후보 모두
+overall `0.50`과 color 최소 기준을 충족하지 못했고, ranking manifest의 선택 후보는
+없다. Review Asset·Gate B·Unity 입력은 생성하지 않았으며, archive는
+`/content/re-camp-CH101-ai3d-reference-view-variants-NOT-PRODUCTION.zip`이다.

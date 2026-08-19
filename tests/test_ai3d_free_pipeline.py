@@ -96,6 +96,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("provider_attempts = [PROVIDER, 'instantmesh', 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
         self.assertIn("foreground_ratios", notebook)
         self.assertIn("reference_views", notebook)
+        self.assertIn("huggingface-hub==0.25.2", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
 

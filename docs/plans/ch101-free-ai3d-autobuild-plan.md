@@ -215,3 +215,8 @@ Review `.blend`를 만들지 않았다.
 필수 `nvdiffrast.torch` CUDA 확장 wheel 생성이 완료되지 않아 후보 생성 전
 `BLOCKED_COLAB_NVDIFFRAST_BUILD`로 중단했다. 이 경로의 품질 점수는 아직 측정하지
 않았으며, 실제 후보가 없는 상태에서 Alpha Review나 Unity 입력을 만들지 않는다.
+
+TripoSR fallback은 승인 Turnaround의 입력 방향도 시도별로 바꾸도록 확장했다.
+`front`·`right`·`back` 후보를 실제 T4에서 비교했지만 최고 overall은 `0.452043`으로
+여전히 기준 미달이었다. 따라서 이 입력 다양화만으로도 Unity 승격 조건을 충족하지
+않으며, `REGENERATE_REQUIRED`를 유지한다.
