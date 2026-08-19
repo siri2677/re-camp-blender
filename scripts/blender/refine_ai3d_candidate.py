@@ -35,6 +35,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--provider", required=True)
     parser.add_argument("--attempt", required=True, type=int)
     parser.add_argument("--parent-sha256", default="")
+    parser.add_argument(
+        "--material-mode",
+        choices=("neutral", "preserve"),
+        default="neutral",
+        help="Use a neutral review material or preserve imported material slots/colors.",
+    )
     return parser.parse_args(raw)
 
 
@@ -155,7 +161,10 @@ def clean_mesh(obj: bpy.types.Object) -> dict[str, object]:
     }
 
 
-def ensure_review_material(obj: bpy.types.Object) -> str:
+def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[str]:
+    if material_mode == "preserve" and len(obj.data.materials) > 0:
+        return [material.name for material in obj.data.materials if material is not None]
+
     material = bpy.data.materials.get(REVIEW_MATERIAL_NAME)
     if material is None:
         material = bpy.data.materials.new(REVIEW_MATERIAL_NAME)
@@ -169,7 +178,7 @@ def ensure_review_material(obj: bpy.types.Object) -> str:
     material_index = obj.data.materials.find(material.name)
     for polygon in obj.data.polygons:
         polygon.material_index = material_index
-    return material.name
+    return [material.name]
 
 
 def main() -> int:
@@ -185,7 +194,13 @@ def main() -> int:
     imported = import_candidate(candidate)
     transform = transform_candidate(imported)
     cleanup = [clean_mesh(obj) for obj in imported]
-    material_names = sorted({ensure_review_material(obj) for obj in imported})
+    material_names = sorted(
+        {
+            material_name
+            for obj in imported
+            for material_name in ensure_review_material(obj, args.material_mode)
+        }
+    )
     minimum, maximum = world_bounds(imported)
     triangle_count = sum(len(obj.data.loop_triangles) for obj in imported)
     uv_missing = [obj.name for obj in imported if not obj.data.uv_layers]
@@ -235,8 +250,13 @@ def main() -> int:
             "blendShapeCount": 0,
         },
         "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+        "materialMode": args.material_mode,
         "warnings": [
-            "Neutral review material is automatic and not a final art material.",
+            (
+                "Imported material slots and vertex colors were preserved for review scoring."
+                if args.material_mode == "preserve"
+                else "Neutral review material is automatic and not a final art material."
+            ),
             "The refined candidate is not a Production Mesh.",
             "Human Gate B review is required before any Unity input.",
         ],

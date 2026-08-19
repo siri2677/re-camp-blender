@@ -97,6 +97,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("foreground_ratios", notebook)
         self.assertIn("reference_views", notebook)
         self.assertIn("huggingface-hub==0.25.2", notebook)
+        self.assertIn("--material-mode", notebook)
+        self.assertIn("'preserve'", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
 
@@ -108,6 +110,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('GATE_B = "PENDING_HUMAN_REVIEW"', source)
         self.assertIn('"unityInputAllowed": False', source)
         self.assertIn('"productionPromotionAllowed": False', source)
+        self.assertIn('choices=("neutral", "preserve")', source)
+        self.assertIn('"materialMode": args.material_mode', source)
 
     def test_ranking_selects_only_eligible_candidate_without_unlocking_unity(self):
         base = {
