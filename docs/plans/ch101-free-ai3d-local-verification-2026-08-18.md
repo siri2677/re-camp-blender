@@ -232,3 +232,17 @@ Alpha Review 최소 overall `0.50`을 넘지 못했으므로 Review Asset을 선
 않았고, 최종 상태는 `unityInputAllowed=false`, `productionPromotionAllowed=false`
 로 유지한다. 산출물 archive는 `/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip`
 이다.
+
+## InstantMesh 무료 fallback bootstrap 결과
+
+2026-08-19에 도구 commit `7cebf20`을 Colab T4에 반영하고 InstantMesh 공식 저장소를
+commit `08822c52fdc399b93ea00e4fa9e596344ed52ccc`로 고정했다. Repository clone과
+Python 의존성 설치는 완료했지만, 공식 실행 코드가 import하는 필수
+`nvdiffrast.torch` 확장은 다음 두 방식 모두 후보 생성 전 단계에서 막혔다.
+
+- 일반 PEP 517 설치: build requirements 단계 실패
+- `--no-build-isolation`, `MAX_JOBS=2` 소스 빌드: wheel 생성이 완료되지 않아 취소
+
+따라서 InstantMesh는 `BLOCKED_COLAB_NVDIFFRAST_BUILD`로 기록하고 품질 점수를 생성하지
+않았다. 이 결과는 Provider 품질 실패가 아니라 현재 Colab 런타임의 CUDA 확장 설치
+차단이며, TripoSR의 마지막 통과 가능한 무료 fallback 결과와 분리한다.

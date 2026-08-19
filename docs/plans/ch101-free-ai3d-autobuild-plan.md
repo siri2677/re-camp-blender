@@ -210,3 +210,8 @@ LOD·22본 Rig·Socket Review Asset 생성, Production validator 역검증까지
 재실행했다. 후보 SHA는 각각 달라졌지만 overall 점수는 `0.439426`, `0.455933`,
 `0.456930`으로 모두 `0.50` 기준에 미달했다. 따라서 최고 후보도 선택하지 않았고
 Review `.blend`를 만들지 않았다.
+
+다음 무료 Provider로 InstantMesh fallback을 추가했지만, Colab T4 bootstrap에서
+필수 `nvdiffrast.torch` CUDA 확장 wheel 생성이 완료되지 않아 후보 생성 전
+`BLOCKED_COLAB_NVDIFFRAST_BUILD`로 중단했다. 이 경로의 품질 점수는 아직 측정하지
+않았으며, 실제 후보가 없는 상태에서 Alpha Review나 Unity 입력을 만들지 않는다.
