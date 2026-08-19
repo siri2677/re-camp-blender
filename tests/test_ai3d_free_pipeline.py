@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import tempfile
+import json
 from pathlib import Path
 import unittest
 
@@ -112,6 +113,21 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('"productionPromotionAllowed": False', source)
         self.assertIn('choices=("neutral", "preserve")', source)
         self.assertIn('"materialMode": args.material_mode', source)
+
+    def test_persisted_ch101_run_record_is_secret_free_and_gate_locked(self):
+        record = json.loads(
+            Path(
+                "docs/records/ch101-ai3d/2026-08-19-triposr-reference-and-material-preserve.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(record["character"], "CH101")
+        self.assertEqual(len(record["providerRuns"]), 3)
+        self.assertIsNone(record["gate"]["selectedCandidate"])
+        self.assertFalse(record["gate"]["unityInputAllowed"])
+        self.assertFalse(record["gate"]["productionPromotionAllowed"])
+        serialized = json.dumps(record)
+        self.assertNotIn("API_KEY", serialized)
+        self.assertNotIn("HF_TOKEN", serialized)
 
     def test_ranking_selects_only_eligible_candidate_without_unlocking_unity(self):
         base = {

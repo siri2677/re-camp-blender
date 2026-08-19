@@ -76,6 +76,8 @@ and stopping rules are documented in
 [docs/plans/ch101-free-ai3d-autobuild-plan.md](docs/plans/ch101-free-ai3d-autobuild-plan.md).
 The local dry-run and Blender negative-gate evidence is recorded in
 [docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md](docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md).
+The durable, secret-free CH101 run metadata is tracked in
+[docs/records/ch101-ai3d/2026-08-19-triposr-reference-and-material-preserve.json](docs/records/ch101-ai3d/2026-08-19-triposr-reference-and-material-preserve.json).
 The notebook caps free candidate generation at three attempts and runs
 `scripts/blender/refine_ai3d_candidate.py` before scoring. Refinement produces a
 review-only artifact; it does not create a Production Mesh or unlock Unity.
