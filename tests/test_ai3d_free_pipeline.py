@@ -79,11 +79,17 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("glb", command)
         self.assertIn("--foreground-ratio", command)
         self.assertIn("0.75", command)
+        instantmesh = self.contract["providers"]["instantMesh"]
+        command = build_command(
+            "instantmesh", instantmesh, Path("instantmesh-repo"), front, output
+        )
+        self.assertIn("instant-mesh-large.yaml", " ".join(command))
+        self.assertIn("--export_texmap", command)
 
     def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
         notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")
         self.assertIn("MAX_ATTEMPTS = 3", notebook)
-        self.assertIn("provider_attempts = [PROVIDER, 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
+        self.assertIn("provider_attempts = [PROVIDER, 'instantmesh', 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
         self.assertIn("foreground_ratios", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)

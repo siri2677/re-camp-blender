@@ -62,6 +62,7 @@
     "defaultProvider": "stableFast3D",
     "freeFallbackOrder": [
       "stableFast3D",
+      "instantMesh",
       "tripoSR"
     ],
     "optionalPaidProvider": "tripoApi",
@@ -92,6 +93,16 @@
       "license": "Stability AI Community License",
       "targetVertexCount": 20000,
       "textureResolution": 1024
+    },
+    "instantMesh": {
+      "mode": "OPEN_SOURCE_SPARSE_VIEW_SINGLE_IMAGE_FALLBACK",
+      "repository": "https://github.com/TencentARC/InstantMesh.git",
+      "commit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "model": "instant-mesh-large",
+      "config": "configs/instant-mesh-large.yaml",
+      "license": "Apache-2.0",
+      "view": 6,
+      "exportTextureMap": true
     },
     "tripoSR": {
       "mode": "OPEN_SOURCE_SINGLE_VIEW_LAST_FALLBACK",

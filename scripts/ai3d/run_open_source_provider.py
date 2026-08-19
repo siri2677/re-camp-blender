@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a pinned single-view open-source fallback and register its GLB output."""
+"""Run a pinned open-source image-to-3D provider and register its output."""
 
 from __future__ import annotations
 
@@ -31,7 +31,11 @@ except ImportError:
     )
 
 
-PROVIDER_KEYS = {"sf3d": "stableFast3D", "triposr": "tripoSR"}
+PROVIDER_KEYS = {
+    "instantmesh": "instantMesh",
+    "sf3d": "stableFast3D",
+    "triposr": "tripoSR",
+}
 
 
 def utc_now() -> str:
@@ -56,6 +60,21 @@ def build_command(
     working_output: Path,
     foreground_ratio: float | None = None,
 ) -> list[str]:
+    if provider_name == "instantmesh":
+        command = [
+            sys.executable,
+            str(repo_dir / "run.py"),
+            str(repo_dir / provider["config"]),
+            str(front_image),
+            "--output_path",
+            str(working_output),
+            "--view",
+            str(provider.get("view", 6)),
+        ]
+        if provider.get("exportTextureMap", True):
+            command.append("--export_texmap")
+        return command
+
     command = [
         sys.executable,
         str(repo_dir / "run.py"),
@@ -76,7 +95,7 @@ def build_command(
                 str(provider["targetVertexCount"]),
             ]
         )
-    else:
+    elif provider_name == "triposr":
         command.extend(
             [
                 "--pretrained-model-name-or-path",
@@ -162,11 +181,29 @@ def main() -> int:
             raise ValueError(f"refusing to remove unexpected work directory: {working_output}")
         shutil.rmtree(working_output)
     subprocess.run(command, cwd=repo_dir, check=True)
-    generated = working_output / "0" / "mesh.glb"
-    if not generated.is_file() or generated.stat().st_size == 0:
-        raise RuntimeError(f"provider did not produce expected GLB: {generated}")
-    destination = output_dir / f"{contract['character']}_{args.provider}_cand_001.glb"
-    shutil.copy2(generated, destination)
+    if args.provider == "instantmesh":
+        generated_candidates = sorted(working_output.rglob("*.obj"))
+        if len(generated_candidates) != 1:
+            raise RuntimeError(
+                f"InstantMesh must produce exactly one OBJ, found {generated_candidates}"
+            )
+        generated = generated_candidates[0]
+        asset_dir = output_dir / f"{contract['character']}_{args.provider}_cand_001"
+        if asset_dir.exists():
+            if asset_dir.parent != output_dir or asset_dir.name != f"{contract['character']}_{args.provider}_cand_001":
+                raise ValueError(f"refusing to remove unexpected asset directory: {asset_dir}")
+            shutil.rmtree(asset_dir)
+        shutil.copytree(generated.parent, asset_dir)
+        destination = asset_dir / generated.name
+        asset_files = sorted(str(path.relative_to(asset_dir)) for path in asset_dir.rglob("*"))
+    else:
+        extension = ".glb"
+        generated = working_output / "0" / f"mesh{extension}"
+        if not generated.is_file() or generated.stat().st_size == 0:
+            raise RuntimeError(f"provider did not produce expected GLB: {generated}")
+        destination = output_dir / f"{contract['character']}_{args.provider}_cand_001{extension}"
+        shutil.copy2(generated, destination)
+        asset_files = [destination.name]
     plan.update(
         {
             "status": "CANDIDATES_DOWNLOADED",
@@ -178,6 +215,7 @@ def main() -> int:
                     "modelPath": str(destination),
                     "sha256": sha256_file(destination),
                     "bytes": destination.stat().st_size,
+                    "assetFiles": asset_files,
                     **candidate_gate_fields(contract),
                 }
             ],

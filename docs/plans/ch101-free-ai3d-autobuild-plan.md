@@ -33,7 +33,16 @@ productionPromotionAllowed: false
 - GLB와 vertex color 중심의 기술 후보를 만들며 최종 Texture 품질은 기대하지 않는다.
 - 저장소: https://github.com/VAST-AI-Research/TripoSR
 
-### 3. Tripo API 선택 경로
+### 3. InstantMesh 무료 sparse-view fallback
+
+- Stable Fast 3D가 gated 모델 접근에 실패하면 InstantMesh를 먼저 시도한다.
+- 단일 정면 입력에서 내부적으로 sparse-view 이미지를 생성한 뒤 OBJ를 재구성한다.
+- 공식 저장소 commit `08822c52fdc399b93ea00e4fa9e596344ed52ccc`와 Apache-2.0 라이선스를 고정한다.
+- 텍스처 맵을 요청하되, 결과는 여전히 AI Review 후보로만 취급한다.
+- T4 실행 가능 여부와 실제 점수는 CH101 1회 실험으로 확인한다.
+- 저장소: https://github.com/TencentARC/InstantMesh
+
+### 4. Tripo API 선택 경로
 
 - 무료 Provider로 충분한 후보가 나오지 않을 때만 선택한다.
 - 정면·우측면·후면을 동시에 사용하는 다중 시점 후보 생성 경로다.
