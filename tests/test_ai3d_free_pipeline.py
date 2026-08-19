@@ -124,6 +124,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("huggingface-hub==0.25.2", notebook)
         self.assertIn("huggingface-hub>=0.26.0,<1.0", notebook)
         self.assertIn("split_torch_state_dict_into_shards", notebook)
+        self.assertIn("instantmesh_hf_compat_sitecustomize.py", notebook)
+        self.assertIn("from diffusers import DiffusionPipeline", notebook)
         self.assertIn("SF3D model access may be gated", notebook)
         self.assertIn("git+https://github.com/tatsy/torchmcubes.git", notebook)
         self.assertIn("InstantMesh setup failed; continuing to next fallback", notebook)

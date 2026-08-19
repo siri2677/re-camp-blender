@@ -22,6 +22,9 @@ Workbench→Eevee 색상 렌더 재검증 결과는 `2026-08-19-color-render-rer
 TripoSR 재평가 결과는 `2026-08-19-colab-t4-provider-diagnostics.json`에 보관한다.
 InstantMesh 상한 버전 보정 전후의 smoke test와 provider 실행 결과는
 `2026-08-19-colab-t4-provider-compatibility-rerun.json`에 보관한다.
+최신 상한 버전 재실행에서 확인된 `diffusers==0.20.2`의 `cached_download` 오류와
+격리 shim 보정 내용은 `2026-08-19-colab-t4-provider-compatibility-rerun-v002.json`에
+보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의

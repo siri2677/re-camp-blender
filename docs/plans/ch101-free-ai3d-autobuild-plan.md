@@ -254,3 +254,13 @@ Hugging Face 접근 약관을 승인하고 `HF_TOKEN`을 Colab Secret으로 제�
 실행 단계에서 거부되었다. 따라서 Notebook의 범위를 `huggingface-hub>=0.26.0,<1.0`
 으로 다시 고정했다. 이번 재실행은 실제 후보 생성이 아니라 이 의존성 보정과
 fallback gate를 검증하는 목적이며, 결과는 별도 compatibility 기록에 남긴다.
+
+`6d33b19`의 상한 버전 재실행에서는 Hub helper import smoke test는 통과했지만,
+InstantMesh의 `diffusers==0.20.2`가 `huggingface_hub.cached_download`를 import하는
+단계에서 다시 실패했다. 이 심볼은 Hub `0.26` 이후 제거된 것으로 확인되어,
+`scripts/ai3d/instantmesh_hf_compat_sitecustomize.py`를 provider subprocess에만
+`sitecustomize`로 주입하는 보정을 추가했다. 이 shim은 raw community-pipeline URL만
+격리 캐시에 저장하고, 일반 Hub 다운로드와 provider checkout은 수정하지 않는다.
+보정 전 실행의 세 TripoSR 점수는 기존과 같은 `0.452120`, `0.451603`, `0.463577`이고
+최고 후보도 `REGENERATE_REQUIRED`였다. 보정 후 InstantMesh 실제 inference는 아직
+검증 전이며, SF3D gated 접근·Gate B·Unity 입력은 계속 차단한다.
