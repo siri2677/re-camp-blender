@@ -156,6 +156,24 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertNotIn("API_KEY", serialized)
         self.assertNotIn("HF_TOKEN", serialized)
 
+    def test_color_render_rerun_is_persisted_and_stays_gate_locked(self):
+        record = json.loads(
+            Path(
+                "docs/records/ch101-ai3d/2026-08-19-color-render-rerun.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(record["tools"]["pipelineCommit"], "e6d9c1946ede26fe7669fcfa1b49597981877811")
+        self.assertEqual(len(record["candidateRuns"]), 3)
+        self.assertTrue(record["appliedReviewFixes"]["renderedMaterialPixelsVerified"])
+        self.assertGreater(record["candidateRuns"][2]["improved"]["color"], record["candidateRuns"][2]["baseline"]["color"])
+        self.assertLess(record["candidateRuns"][2]["improved"]["overall"], 0.50)
+        self.assertIsNone(record["gate"]["selectedCandidate"])
+        self.assertFalse(record["gate"]["unityInputAllowed"])
+        self.assertFalse(record["gate"]["productionPromotionAllowed"])
+        serialized = json.dumps(record)
+        self.assertNotIn("API_KEY", serialized)
+        self.assertNotIn("HF_TOKEN", serialized)
+
     def test_ranking_selects_only_eligible_candidate_without_unlocking_unity(self):
         base = {
             "contractVersion": self.contract["contractVersion"],

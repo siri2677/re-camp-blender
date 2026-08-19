@@ -30,12 +30,30 @@
   `paletteFallbackUsed=true`와 경고를 남긴다.
 - `unityInputAllowed=false`, `productionPromotionAllowed=false` 및 Gate B 대기는 그대로 유지한다.
 
+## T4 색상 렌더 재검증 결과
+
+최신 코드 `e6d9c19`를 Colab T4에 반영해 기존 세 후보를 Eevee로 다시 렌더링했다.
+색상 파이프라인은 개선됐지만, 형상 점수가 기준을 넘지 않아 전체 후보는 계속
+`REGENERATE_REQUIRED`다.
+
+| 시도 | overall 전→후 | color 전→후 | 판정 |
+|---|---:|---:|---|
+| 1 | 0.439426 → 0.452120 | 0.153887 → 0.250803 | 미달 |
+| 2 | 0.443631 → 0.451603 | 0.151301 → 0.219866 | 미달 |
+| 3 | 0.452043 → 0.463577 | 0.146237 → 0.261198 | 미달 |
+
+최고 후보의 색상 점수는 `+0.114961`, overall은 `+0.011534` 상승했다. 따라서
+반복된 미달의 주원인은 이제 색상 표시가 아니라 단일 뷰에서 생성된 형상과 승인
+turnaround의 불일치다. 다음 개선은 다중 참조 입력 또는 reference-conditioned
+형상 재구성이고, 현재 후보를 Production Mesh로 승격할 근거는 없다.
+
 ## 다음 검증
 
-최신 코드를 Colab T4에서 다시 실행해 다음을 비교한다.
+재검증은 완료됐다. 기록은
+`2026-08-19-color-render-rerun.json`에서 확인할 수 있다. 다음 실행에서는 다음을 비교한다.
 
-- Workbench 색 동기화 전후 `colorScore`
-- 팔레트 fallback 전후 `appearanceScore`와 `overallScore`
+- Eevee 색상 렌더의 안정성
+- 다중 참조/조건부 생성 후 `silhouetteScore`와 `overallScore`
 - 3개 후보 모두에 대해 동일한 SHA256·art commit·Gate 검증
 
 이 개선은 색상 표시와 Review 가독성을 높이는 보정이다. 단일 이미지 3D 모델의
