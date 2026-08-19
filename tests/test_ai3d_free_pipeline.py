@@ -85,6 +85,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
 
     def test_refinement_script_preserves_locked_gate(self):
         source = Path("scripts/blender/refine_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn('sys.argv[sys.argv.index("--") + 1 :]', source)
         self.assertIn('SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"', source)
         self.assertIn('GATE_B = "PENDING_HUMAN_REVIEW"', source)
         self.assertIn('"unityInputAllowed": False', source)

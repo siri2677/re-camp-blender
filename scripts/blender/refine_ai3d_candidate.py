@@ -25,6 +25,7 @@ REVIEW_MATERIAL_NAME = "AI_REVIEW_NEUTRAL_AUTO"
 
 
 def parse_args() -> argparse.Namespace:
+    raw = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True, type=Path)
     parser.add_argument("--output-glb", required=True, type=Path)
@@ -33,7 +34,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--provider", required=True)
     parser.add_argument("--attempt", required=True, type=int)
     parser.add_argument("--parent-sha256", default="")
-    return parser.parse_args()
+    return parser.parse_args(raw)
 
 
 def sha256_file(path: Path) -> str:
