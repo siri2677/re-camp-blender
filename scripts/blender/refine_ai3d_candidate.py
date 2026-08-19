@@ -23,6 +23,14 @@ from mathutils import Matrix, Vector
 SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
 GATE_B = "PENDING_HUMAN_REVIEW"
 REVIEW_MATERIAL_NAME = "AI_REVIEW_NEUTRAL_AUTO"
+PALETTE_MATERIALS = {
+    "white": (0.957, 0.957, 0.933, 1.0),
+    "graphite": (0.008, 0.008, 0.012, 1.0),
+    "gold": (0.668, 0.391, 0.063, 1.0),
+    "cyan": (0.0, 0.455, 0.672, 1.0),
+    "skin": (0.957, 0.957, 0.933, 1.0),
+    "hair": (0.008, 0.008, 0.012, 1.0),
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -165,6 +173,9 @@ def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[st
     if material_mode == "preserve" and len(obj.data.materials) > 0:
         return [material.name for material in obj.data.materials if material is not None]
 
+    if material_mode == "preserve":
+        return apply_palette_review_materials(obj)
+
     material = bpy.data.materials.get(REVIEW_MATERIAL_NAME)
     if material is None:
         material = bpy.data.materials.new(REVIEW_MATERIAL_NAME)
@@ -181,6 +192,56 @@ def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[st
     return [material.name]
 
 
+def apply_palette_review_materials(obj: bpy.types.Object) -> list[str]:
+    """Apply a conservative CH101 palette approximation when textures are absent.
+
+    This is a review aid for untextured AI meshes, not texture generation. The
+    bands are deliberately coarse and the report labels the result as an
+    approximation so it cannot be mistaken for final art.
+    """
+    materials = {}
+    for key, rgba in PALETTE_MATERIALS.items():
+        name = f"AI_REVIEW_PALETTE_{key.upper()}"
+        material = bpy.data.materials.get(name) or bpy.data.materials.new(name)
+        material.use_nodes = True
+        material.diffuse_color = rgba
+        principled = material.node_tree.nodes.get("Principled BSDF")
+        if principled is not None:
+            principled.inputs["Base Color"].default_value = rgba
+            principled.inputs["Roughness"].default_value = 0.58
+        materials[key] = material
+
+    obj.data.materials.clear()
+    ordered = [materials[key] for key in ("white", "graphite", "gold", "cyan", "skin", "hair")]
+    for material in ordered:
+        obj.data.materials.append(material)
+    height = max(obj.dimensions.z, 1e-6)
+    for polygon in obj.data.polygons:
+        world_center = obj.matrix_world @ polygon.center
+        normalized_z = max(0.0, min(1.0, (world_center.z - 0.0) / height))
+        world_normal = obj.matrix_world.to_3x3() @ polygon.normal
+        front_facing = world_normal.y < -0.2
+        if normalized_z < 0.16:
+            key = "white" if front_facing else "graphite"
+        elif normalized_z < 0.56:
+            key = "skin"
+        elif normalized_z < 0.69:
+            key = "graphite"
+        elif normalized_z < 0.84:
+            key = "white" if front_facing else "graphite"
+        elif normalized_z < 0.92:
+            key = "skin" if front_facing else "hair"
+        else:
+            key = "hair"
+        # Keep small cyan/gold accents sparse and deterministic for review.
+        if polygon.index % 37 == 0 and normalized_z > 0.20:
+            key = "cyan"
+        elif polygon.index % 53 == 0 and normalized_z > 0.30:
+            key = "gold"
+        polygon.material_index = ("white", "graphite", "gold", "cyan", "skin", "hair").index(key)
+    return [material.name for material in ordered]
+
+
 def main() -> int:
     args = parse_args()
     candidate = args.candidate.resolve()
@@ -194,6 +255,11 @@ def main() -> int:
     imported = import_candidate(candidate)
     transform = transform_candidate(imported)
     cleanup = [clean_mesh(obj) for obj in imported]
+    had_imported_materials = any(
+        material is not None
+        for obj in imported
+        for material in obj.data.materials
+    )
     material_names = sorted(
         {
             material_name
@@ -201,6 +267,7 @@ def main() -> int:
             for material_name in ensure_review_material(obj, args.material_mode)
         }
     )
+    palette_fallback_used = args.material_mode == "preserve" and not had_imported_materials
     minimum, maximum = world_bounds(imported)
     triangle_count = sum(len(obj.data.loop_triangles) for obj in imported)
     uv_missing = [obj.name for obj in imported if not obj.data.uv_layers]
@@ -217,6 +284,22 @@ def main() -> int:
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output_blend))
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
+
+    warnings = [
+        (
+            "Imported material slots and vertex colors were preserved for review scoring."
+            if args.material_mode == "preserve"
+            else "Neutral review material is automatic and not a final art material."
+        ),
+    ]
+    if palette_fallback_used:
+        warnings.append(
+            "No imported material was present; CH101 palette was assigned by coarse geometry bands for review only."
+        )
+    warnings.extend([
+        "The refined candidate is not a Production Mesh.",
+        "Human Gate B review is required before any Unity input.",
+    ])
 
     report = {
         "character": "CH101",
@@ -251,15 +334,8 @@ def main() -> int:
         },
         "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
         "materialMode": args.material_mode,
-        "warnings": [
-            (
-                "Imported material slots and vertex colors were preserved for review scoring."
-                if args.material_mode == "preserve"
-                else "Neutral review material is automatic and not a final art material."
-            ),
-            "The refined candidate is not a Production Mesh.",
-            "Human Gate B review is required before any Unity input.",
-        ],
+        "paletteFallbackUsed": palette_fallback_used,
+        "warnings": warnings,
     }
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))

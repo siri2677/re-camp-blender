@@ -115,6 +115,14 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('"productionPromotionAllowed": False', source)
         self.assertIn('choices=("neutral", "preserve")', source)
         self.assertIn('"materialMode": args.material_mode', source)
+        self.assertIn("apply_palette_review_materials", source)
+        self.assertIn('"paletteFallbackUsed": palette_fallback_used', source)
+
+    def test_workbench_material_sync_prevents_false_gray_render(self):
+        source = Path("scripts/blender/evaluate_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("sync_workbench_material_colors", source)
+        self.assertIn('material.diffuse_color = tuple(base_color.default_value)', source)
+        self.assertIn('"workbenchMaterialsSynced": workbench_materials_synced', source)
 
     def test_persisted_ch101_run_record_is_secret_free_and_gate_locked(self):
         record = json.loads(
@@ -140,6 +148,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
                 "actualAutomaticColabRerun"
             ]
         )
+        self.assertIn("SYNC_PRINCIPLED_BASE_COLOR_TO_WORKBENCH_DIFFUSE_COLOR", record["scoreDiagnosis"]["implementedFixes"])
+        self.assertEqual(record["scoreDiagnosis"]["nextColabVerification"], "PENDING")
         serialized = json.dumps(record)
         self.assertNotIn("API_KEY", serialized)
         self.assertNotIn("HF_TOKEN", serialized)

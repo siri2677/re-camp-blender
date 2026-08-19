@@ -76,6 +76,17 @@
     "status": "REGENERATE_REQUIRED",
     "colabArchive": "/content/re-camp-CH101-ai3d-material-preserve-NOT-PRODUCTION.zip"
   },
+  "scoreDiagnosis": {
+    "primaryGeometryLimitation": "SINGLE_VIEW_PROVIDER_CANNOT_RECONSTRUCT_ALL_TURNAROUND_SIDES",
+    "primaryAppearanceLimitation": "GENERATED_GLB_HAS_NO_IMPORTED_MATERIAL_OR_TEXTURE",
+    "pipelineDisplayBug": "WORKBENCH_MATERIAL_MODE_DID_NOT_SYNC_PRINCIPLED_BASE_COLOR",
+    "implementedFixes": [
+      "SYNC_PRINCIPLED_BASE_COLOR_TO_WORKBENCH_DIFFUSE_COLOR",
+      "APPLY_CH101_PALETTE_GEOMETRIC_REVIEW_FALLBACK_WHEN_MATERIALS_ARE_ABSENT"
+    ],
+    "nextColabVerification": "PENDING",
+    "productionImpact": "NO_AUTO_PROMOTION"
+  },
   "providerBlockers": {
     "stableFast3D": "BLOCKED_HUGGING_FACE_GATED_MODEL_ACCESS",
     "instantMesh": "BLOCKED_COLAB_NVDIFFRAST_BUILD_CONTINUES_TO_NEXT_FALLBACK"

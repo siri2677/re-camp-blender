@@ -160,6 +160,29 @@ def detect_render_color_mode(meshes: list[bpy.types.Object]) -> str:
     return "MATERIAL"
 
 
+def sync_workbench_material_colors(meshes: list[bpy.types.Object]) -> int:
+    """Copy Principled base colors into Blender's Workbench display colors.
+
+    Workbench's MATERIAL mode reads ``Material.diffuse_color``. Imported GLB
+    materials often only populate the Principled BSDF input, which otherwise
+    makes a colored candidate render as the default gray material.
+    """
+    synced = 0
+    for obj in meshes:
+        for material in obj.data.materials:
+            if material is None or material.node_tree is None:
+                continue
+            principled = material.node_tree.nodes.get("Principled BSDF")
+            if principled is None:
+                continue
+            base_color = principled.inputs.get("Base Color")
+            if base_color is None or not hasattr(base_color, "default_value"):
+                continue
+            material.diffuse_color = tuple(base_color.default_value)
+            synced += 1
+    return synced
+
+
 def configure_render(size: int, color_mode: str) -> bpy.types.Object:
     scene = bpy.context.scene
     scene.render.engine = "BLENDER_WORKBENCH"
@@ -254,6 +277,7 @@ def main() -> int:
     bpy.context.view_layer.update()
     metrics = collect_metrics(meshes)
     render_color_mode = detect_render_color_mode(meshes)
+    workbench_materials_synced = sync_workbench_material_colors(meshes)
     camera = configure_render(max(256, args.render_size), render_color_mode)
     renders = render_views(camera, output_dir / "renders")
     scene = bpy.context.scene
@@ -278,6 +302,7 @@ def main() -> int:
         "productionPromotionAllowed": False,
         "metrics": metrics,
         "renderColorMode": render_color_mode,
+        "workbenchMaterialsSynced": workbench_materials_synced,
         "renders": renders,
         "cardinalViewOrder": list(CARDINAL_VIEWS),
         "normalizedBlend": str(normalized_blend) if normalized_blend else "",
