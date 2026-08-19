@@ -29,6 +29,10 @@ JAX 레거시 심볼 보정까지 포함한 최신 T4 실행에서 InstantMesh�
 진입했지만 15GB CUDA 할당 요청으로 OOM 되었고, TripoSR 세 후보가 다시
 `0.452120`, `0.451603`, `0.463577`로 기준 미달한 결과는
 `2026-08-19-colab-t4-provider-compatibility-rerun-v003.json`에 보관한다.
+T4-safe base 프로파일과 4-view 설정으로 InstantMesh가 OOM 없이 front/right/back
+세 후보를 생성했지만, 시도 번호 보존 결함을 수정한 재평가에서도 최고 점수
+`0.461022`로 기준 미달한 결과와 원본 OBJ·manifest SHA256은
+`2026-08-19-colab-t4-instantmesh-base-rerun-v001.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의

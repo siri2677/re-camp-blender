@@ -281,3 +281,15 @@ provider의 정적·실행 가능성을 먼저 검토한다.
 품질을 보장하는 변경이 아니며, T4에서 실제 후보 생성까지 도달하는지 확인하기 위한
 보수적 실행 프로파일이다. texture map 출력과 모든 Production·Unity gate는 그대로
 잠겨 있다.
+
+base 프로파일 T4 실행에서는 InstantMesh가 front/right/back 세 OBJ 후보를 모두
+생성했고, 기존의 15GB CUDA OOM은 해소되었다. 첫 실행의 후처리 셀에서
+InstantMesh manifest의 `attempts/<n>` 경로를 숫자로 인식하지 못해 모든 결과가
+`attempt_00`으로 덮어쓰이는 기록 결함이 발견되었다. Notebook은 이제 모든 Provider의
+숫자 시도 디렉터리를 보존하도록 수정되었고, 기존 산출물도 올바른 시도 번호로
+재평가했다. 수정된 점수는 `0.461022`, `0.454798`, `0.458890`이며 최고 점수도
+`0.461022`로 기준 `0.50`에 미달했다. 따라서 `selectedCandidate: null`과
+`REGENERATE_REQUIRED`를 유지하고, Review `.blend` 생성 및 Unity 입력을 진행하지
+않는다. 상세 해시와 결과는
+`docs/records/ch101-ai3d/2026-08-19-colab-t4-instantmesh-base-rerun-v001.json`에
+기록한다.

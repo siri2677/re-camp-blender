@@ -93,6 +93,23 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertEqual(instantmesh["memoryProfile"], "T4_SAFE_BASE")
         self.assertEqual(instantmesh["view"], 4)
 
+    def test_notebook_keeps_numeric_attempt_label_for_all_providers(self):
+        notebook = json.loads(
+            (Path(__file__).parents[1] / "notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(
+                encoding="utf-8"
+            )
+        )
+        source = "\n".join(
+            "".join(cell.get("source", []))
+            for cell in notebook.get("cells", [])
+            if cell.get("cell_type") == "code"
+        )
+        self.assertIn(
+            "attempt_labels = [parent.name for parent in manifest_path.parents if parent.name.isdigit()]",
+            source,
+        )
+        self.assertIn("attempt_label = attempt_labels[0] if attempt_labels else 'attempt_00'", source)
+
     def test_provider_failure_persists_diagnostic_logs_without_unlocking_gate(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
