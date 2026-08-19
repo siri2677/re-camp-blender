@@ -56,6 +56,15 @@ python scripts/run_no_gpu_workstream.py --skip-reference
 | 실제 무료 Provider 후보 생성 | BLOCKED_COLAB_GPU_QUOTA |
 | Unity·Android | BLOCKED_EXTERNAL_ENVIRONMENT |
 
+## 최근 실행 기록
+
+2026-08-19 기준으로 No-GPU runner를 실행했다. Colab 패키지, 무료 AI3D
+패키지, Python compile, 16개 unittest, front/right/back reference 준비와
+Tripo multiview payload dry-run이 모두 통과했다. 실제 Provider 추론은 실행하지
+않았고, Gate와 Unity 입력 잠금은 유지했다.
+
+상세 기록: `docs/records/ch101-ai3d/2026-08-19-no-gpu-workstream.json`
+
 ## 재개 규칙
 
 GPU가 연결되면 먼저 runtime preflight를 실행하고, `READY_GPU_VISIBLE`일 때만

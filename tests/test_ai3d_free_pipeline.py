@@ -127,6 +127,22 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--skip-reference", source)
         self.assertNotIn("--execute", source)
 
+    def test_no_gpu_execution_record_is_gate_locked_and_inference_free(self):
+        record = json.loads(
+            Path(
+                "docs/records/ch101-ai3d/2026-08-19-no-gpu-workstream.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertFalse(record["actualInference"])
+        self.assertEqual(record["steps"]["unitTests"]["count"], 16)
+        self.assertEqual(record["steps"]["tripoMultiviewPayload"], "PASS_DRY_RUN")
+        self.assertFalse(record["gate"]["unityInputAllowed"])
+        self.assertFalse(record["gate"]["productionPromotionAllowed"])
+        self.assertIn("Android build and device validation", record["blocked"])
+        serialized = json.dumps(record)
+        self.assertNotIn("API_KEY", serialized)
+        self.assertNotIn("HF_TOKEN", serialized)
+
     def test_refinement_script_preserves_locked_gate(self):
         source = Path("scripts/blender/refine_ai3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("import sys", source)

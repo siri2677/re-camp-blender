@@ -1,0 +1,42 @@
+{
+  "character": "CH101",
+  "workstream": "NO_GPU",
+  "recordedDate": "2026-08-19",
+  "pipelineCommit": "c7261bd",
+  "gpuRequired": false,
+  "actualInference": false,
+  "artRootAvailable": true,
+  "steps": {
+    "colabPackageValidation": "PASS",
+    "freeAi3dPackageValidation": "PASS",
+    "pythonCompile": "PASS",
+    "unitTests": {
+      "status": "PASS",
+      "count": 16
+    },
+    "referenceViews": {
+      "status": "PASS",
+      "views": ["front", "right", "back"]
+    },
+    "tripoMultiviewPayload": "PASS_DRY_RUN"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "blocked": [
+    "Stable Fast 3D inference",
+    "InstantMesh inference",
+    "TripoSR inference",
+    "production mesh generation",
+    "Unity import and Play Mode",
+    "Android build and device validation"
+  ],
+  "notes": [
+    "No provider inference was executed and no paid API credit was consumed.",
+    "Reference preparation and Tripo payload generation were dry-run only.",
+    "Run colab_runtime_preflight.py before resuming provider inference."
+  ]
+}
