@@ -111,6 +111,67 @@ def build_command(
     return command
 
 
+def run_provider_command(
+    command: list[str],
+    *,
+    repo_dir: Path,
+    output_dir: Path,
+    provider: str,
+    reference_view: str,
+) -> subprocess.CompletedProcess[str]:
+    """Run a provider and persist stdout/stderr for reproducible diagnosis."""
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stdout_path = output_dir / "provider-stdout.log"
+    stderr_path = output_dir / "provider-stderr.log"
+    try:
+        result = subprocess.run(
+            command,
+            cwd=repo_dir,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        stdout = getattr(error, "stdout", None) or ""
+        stderr = getattr(error, "stderr", None) or ""
+        stdout_path.write_text(stdout, encoding="utf-8")
+        stderr_path.write_text(stderr, encoding="utf-8")
+        write_json(
+            output_dir / "provider-failure.json",
+            {
+                "provider": provider,
+                "referenceView": reference_view,
+                "command": command,
+                "returnCode": getattr(error, "returncode", None),
+                "errorType": type(error).__name__,
+                "stdoutLog": str(stdout_path),
+                "stderrLog": str(stderr_path),
+                "status": "FAILED_PROVIDER_EXECUTION",
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            },
+        )
+        raise
+    stdout_path.write_text(result.stdout or "", encoding="utf-8")
+    stderr_path.write_text(result.stderr or "", encoding="utf-8")
+    write_json(
+        output_dir / "provider-execution.json",
+        {
+            "provider": provider,
+            "referenceView": reference_view,
+            "command": command,
+            "returnCode": result.returncode,
+            "stdoutLog": str(stdout_path),
+            "stderrLog": str(stderr_path),
+            "status": "SUCCEEDED",
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
+        },
+    )
+    return result
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--provider", choices=sorted(PROVIDER_KEYS), required=True)
@@ -182,7 +243,13 @@ def main() -> int:
         if working_output.parent != output_dir or working_output.name != f".{args.provider}-work":
             raise ValueError(f"refusing to remove unexpected work directory: {working_output}")
         shutil.rmtree(working_output)
-    subprocess.run(command, cwd=repo_dir, check=True)
+    run_provider_command(
+        command,
+        repo_dir=repo_dir,
+        output_dir=output_dir,
+        provider=args.provider,
+        reference_view=args.reference_view,
+    )
     if args.provider == "instantmesh":
         generated_candidates = sorted(working_output.rglob("*.obj"))
         if len(generated_candidates) != 1:

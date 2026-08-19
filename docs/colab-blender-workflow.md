@@ -88,6 +88,9 @@ SHA를 런타임 manifest에 기록한다. 최신 로컬 변경을 실행하려�
 3. InstantMesh 실패 시 TripoSR fallback으로 전환한다. TripoSR은 시도별 입력 방향
    `front`·`right`·`back`과 foreground ratio `0.75`·`0.85`·`0.95`를 조합해 후보
    다양성을 확보하고 manifest에 기록한다.
+   Provider 실행 실패 시 해당 시도 디렉터리에 `provider-failure.json`,
+   `provider-stdout.log`, `provider-stderr.log`를 남겨 다음 실행의 오류 원인을
+   재현할 수 있도록 한다.
 4. Tripo API는 다중 시점 비교가 필요할 때만 선택적으로 사용한다.
 5. 최대 3회 생성한 후보를 Blender에서 1.68m로 정규화하고, 중복 정점·법선·UV·Review Material을 보정한다.
 6. 보정된 후보마다 4방향과 3/4 렌더를 만들고 실루엣·외형·색상·얼굴 디테일·기술 점수를 계산한다.

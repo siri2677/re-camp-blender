@@ -13,7 +13,7 @@ from scripts.ai3d.common import (
 )
 from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.rank_candidates import rank_reports
-from scripts.ai3d.run_open_source_provider import build_command
+from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
 from scripts.ai3d.tripo_api import build_multiview_payload
 
 
@@ -90,6 +90,30 @@ class AI3DFreePipelineTests(unittest.TestCase):
         )
         self.assertIn("instant-mesh-large.yaml", " ".join(command))
         self.assertIn("--export_texmap", command)
+
+    def test_provider_failure_persists_diagnostic_logs_without_unlocking_gate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output_dir = root / "provider-output"
+            command = [
+                "python",
+                "-c",
+                "import sys; print('stdout-diagnostic'); print('stderr-diagnostic', file=sys.stderr); sys.exit(7)",
+            ]
+            with self.assertRaises(Exception):
+                run_provider_command(
+                    command,
+                    repo_dir=root,
+                    output_dir=output_dir,
+                    provider="instantmesh",
+                    reference_view="right",
+                )
+            failure = json.loads((output_dir / "provider-failure.json").read_text(encoding="utf-8"))
+            self.assertEqual(failure["status"], "FAILED_PROVIDER_EXECUTION")
+            self.assertEqual(failure["returnCode"], 7)
+            self.assertFalse(failure["unityInputAllowed"])
+            self.assertIn("stdout-diagnostic", (output_dir / "provider-stdout.log").read_text(encoding="utf-8"))
+            self.assertIn("stderr-diagnostic", (output_dir / "provider-stderr.log").read_text(encoding="utf-8"))
 
     def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
         notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")
