@@ -72,14 +72,19 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--target_vertex_count", command)
         self.assertIn(str(sf3d["targetVertexCount"]), command)
         triposr = self.contract["providers"]["tripoSR"]
-        command = build_command("triposr", triposr, Path("triposr-repo"), front, output)
+        command = build_command(
+            "triposr", triposr, Path("triposr-repo"), front, output, foreground_ratio=0.75
+        )
         self.assertIn("--model-save-format", command)
         self.assertIn("glb", command)
+        self.assertIn("--foreground-ratio", command)
+        self.assertIn("0.75", command)
 
     def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
         notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")
         self.assertIn("MAX_ATTEMPTS = 3", notebook)
         self.assertIn("provider_attempts = [PROVIDER, 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
+        self.assertIn("foreground_ratios", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
 

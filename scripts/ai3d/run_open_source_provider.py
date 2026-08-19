@@ -54,6 +54,7 @@ def build_command(
     repo_dir: Path,
     front_image: Path,
     working_output: Path,
+    foreground_ratio: float | None = None,
 ) -> list[str]:
     command = [
         sys.executable,
@@ -86,6 +87,8 @@ def build_command(
                 str(provider["marchingCubesResolution"]),
             ]
         )
+        if foreground_ratio is not None:
+            command.extend(["--foreground-ratio", str(foreground_ratio)])
     return command
 
 
@@ -95,6 +98,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--provider-repo", required=True, type=Path)
     parser.add_argument("--reference-manifest", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--foreground-ratio", type=float)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--execute", action="store_true")
     return parser.parse_args()
@@ -122,7 +126,14 @@ def main() -> int:
 
     output_dir = args.output_dir.resolve()
     working_output = output_dir / f".{args.provider}-work"
-    command = build_command(args.provider, provider, repo_dir, front_image, working_output)
+    command = build_command(
+        args.provider,
+        provider,
+        repo_dir,
+        front_image,
+        working_output,
+        foreground_ratio=args.foreground_ratio,
+    )
     plan = {
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
@@ -134,6 +145,9 @@ def main() -> int:
         "command": command,
         "referenceManifest": str(args.reference_manifest.resolve()),
         "referenceManifestSha256": sha256_file(args.reference_manifest.resolve()),
+        "providerParameters": {
+            "foregroundRatio": args.foreground_ratio,
+        },
         **candidate_gate_fields(contract),
     }
     output_dir.mkdir(parents=True, exist_ok=True)

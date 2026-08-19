@@ -203,3 +203,12 @@ Production Mesh 또는 Unity 입력 승인 결과가 아니다.
 끝까지 동작한다는 것을 확인했지만, 시각 품질 기준을 통과한 Alpha Review 후보를
 확보한 것은 아니다. 다음 단계는 새 무료 후보 생성 또는 참조·Provider 개선이며,
 Gate B와 Unity 연결은 계속 차단한다.
+
+## 다음 무료 후보 다양화 보정
+
+동일한 TripoSR 입력은 세 번 모두 같은 SHA와 점수를 만들었다. 다음 실행부터는
+권위 art reference와 manifest hash는 고정한 채 TripoSR의 공식
+`--foreground-ratio` 입력만 시도별 `0.75`, `0.85`, `0.95`로 변경한다. 이 값은
+전경 크기 전처리만 바꾸며, 후보 manifest의 `providerParameters`에 기록한다.
+이는 품질 통과를 보장하지 않으며, 세 번 모두 기준 미달이면 계속
+`REGENERATE_REQUIRED`로 유지한다.
