@@ -275,3 +275,9 @@ InstantMesh의 `diffusers==0.20.2`가 `huggingface_hub.cached_download`를 impor
 `docs/records/ch101-ai3d/2026-08-19-colab-t4-provider-compatibility-rerun-v003.json`에
 보관한다. 다음 무료 시도는 T4에 맞춘 InstantMesh 저메모리 설정 또는 다른 다중 시점
 provider의 정적·실행 가능성을 먼저 검토한다.
+
+다음 실행을 위해 InstantMesh 계약을 upstream의 `configs/instant-mesh-base.yaml`과
+`--view 4`로 낮추고 `memoryProfile: T4_SAFE_BASE`를 기록했다. 이는 large 모델의
+품질을 보장하는 변경이 아니며, T4에서 실제 후보 생성까지 도달하는지 확인하기 위한
+보수적 실행 프로파일이다. texture map 출력과 모든 Production·Unity gate는 그대로
+잠겨 있다.

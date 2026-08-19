@@ -88,8 +88,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
         command = build_command(
             "instantmesh", instantmesh, Path("instantmesh-repo"), front, output
         )
-        self.assertIn("instant-mesh-large.yaml", " ".join(command))
+        self.assertIn("instant-mesh-base.yaml", " ".join(command))
         self.assertIn("--export_texmap", command)
+        self.assertEqual(instantmesh["memoryProfile"], "T4_SAFE_BASE")
+        self.assertEqual(instantmesh["view"], 4)
 
     def test_provider_failure_persists_diagnostic_logs_without_unlocking_gate(self):
         with tempfile.TemporaryDirectory() as temporary:

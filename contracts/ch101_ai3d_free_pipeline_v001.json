@@ -99,9 +99,10 @@
       "repository": "https://github.com/TencentARC/InstantMesh.git",
       "commit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
       "model": "instant-mesh-large",
-      "config": "configs/instant-mesh-large.yaml",
+      "config": "configs/instant-mesh-base.yaml",
       "license": "Apache-2.0",
-      "view": 6,
+      "memoryProfile": "T4_SAFE_BASE",
+      "view": 4,
       "exportTextureMap": true
     },
     "tripoSR": {
