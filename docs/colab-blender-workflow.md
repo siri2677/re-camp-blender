@@ -108,6 +108,9 @@ Tripo를 선택할 경우에만 키를 Colab Secret의 `TRIPO_API_KEY`로 전달
 후보 보정 스크립트는 `scripts/blender/refine_ai3d_candidate.py`이며, 결과는
 `REFINED_REVIEW_CANDIDATE`로 표시된다. 이 결과는 기술·Review 보정본일 뿐이고,
 얼굴 BlendShape와 장비 Socket은 각각 차단·추정 상태로 남는다.
+기본 인테이크는 `--material-mode preserve`로 입력 GLB의 재질과 vertex color를
+보존하며, 입력에 재질이 없을 때만 중립 Review Material로 fallback한다. 2026-08-19
+실제 TripoSR 후보에는 imported material이 없어 이 옵션만으로 점수는 개선되지 않았다.
 
 로컬 dry-run과 Blender smoke 검증 근거는
 [실행 기록](plans/ch101-free-ai3d-local-verification-2026-08-18.md), 전체 규칙은
