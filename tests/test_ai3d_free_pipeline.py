@@ -99,6 +99,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("reference_views", notebook)
         self.assertIn("huggingface-hub==0.25.2", notebook)
         self.assertIn("git+https://github.com/tatsy/torchmcubes.git", notebook)
+        self.assertIn("InstantMesh setup failed; continuing to next fallback", notebook)
         self.assertIn("--material-mode", notebook)
         self.assertIn("'preserve'", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
