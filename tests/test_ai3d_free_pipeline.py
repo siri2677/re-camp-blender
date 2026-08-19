@@ -126,6 +126,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("split_torch_state_dict_into_shards", notebook)
         self.assertIn("instantmesh_hf_compat_sitecustomize.py", notebook)
         self.assertIn("from diffusers import DiffusionPipeline", notebook)
+        self.assertIn("KeyArray", Path("scripts/ai3d/instantmesh_hf_compat_sitecustomize.py").read_text(encoding="utf-8"))
         self.assertIn("SF3D model access may be gated", notebook)
         self.assertIn("git+https://github.com/tatsy/torchmcubes.git", notebook)
         self.assertIn("InstantMesh setup failed; continuing to next fallback", notebook)

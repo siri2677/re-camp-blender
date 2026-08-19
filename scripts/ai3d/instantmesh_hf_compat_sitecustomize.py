@@ -53,3 +53,18 @@ if _huggingface_hub is not None and not hasattr(_huggingface_hub, "cached_downlo
 
 
     _huggingface_hub.cached_download = cached_download
+
+
+# Colab can ship a newer JAX where these legacy annotation aliases are gone.
+# diffusers 0.20.2 imports the Flax modules even when InstantMesh does not use
+# them, so provide process-local aliases without changing the installed JAX.
+try:
+    import jax
+except Exception:  # pragma: no cover - JAX is optional for this provider
+    jax = None
+
+if jax is not None and hasattr(jax, "random"):
+    _jax_array_type = getattr(jax, "Array", object)
+    for _legacy_name in ("KeyArray", "PRNGKeyArray"):
+        if not hasattr(jax.random, _legacy_name):
+            setattr(jax.random, _legacy_name, _jax_array_type)
