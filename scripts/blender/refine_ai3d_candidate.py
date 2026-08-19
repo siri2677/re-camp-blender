@@ -12,6 +12,7 @@ import argparse
 import json
 import math
 import hashlib
+import sys
 from pathlib import Path
 
 import bmesh
