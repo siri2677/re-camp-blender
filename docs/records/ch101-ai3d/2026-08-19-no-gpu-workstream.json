@@ -7,6 +7,7 @@
   "actualInference": false,
   "artRootAvailable": true,
   "sourceTreeCheck": "PASS",
+  "unityHandoffValidation": "PASS",
   "steps": {
     "colabPackageValidation": "PASS",
     "freeAi3dPackageValidation": "PASS",
@@ -39,6 +40,7 @@
     "No provider inference was executed and no paid API credit was consumed.",
     "Reference preparation and Tripo payload generation were dry-run only.",
     "The source lock commit and CH101 approved reference were verified in the local art repository.",
+    "The available CH101-CH105 Unity handoff validator passed without opening Unity Editor.",
     "Run colab_runtime_preflight.py before resuming provider inference."
   ]
 }

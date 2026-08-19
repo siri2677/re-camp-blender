@@ -22,6 +22,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def is_git_tree(path: Path) -> bool:
+    return (path / ".git").exists()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--art-root", type=Path, default=ROOT.parent / "re-camp-art")
@@ -30,10 +34,15 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def run_step(name: str, command: list[str], env: dict[str, str] | None = None) -> dict[str, Any]:
+def run_step(
+    name: str,
+    command: list[str],
+    env: dict[str, str] | None = None,
+    cwd: Path = ROOT,
+) -> dict[str, Any]:
     result = subprocess.run(
         command,
-        cwd=ROOT,
+        cwd=cwd,
         capture_output=True,
         text=True,
         check=False,
@@ -80,13 +89,31 @@ def run_reference_dry_run(art_root: Path) -> list[dict[str, Any]]:
                 "1",
             ],
         )
-        return [prepare, dry_run]
+    return [prepare, dry_run]
+
+
+def run_unity_handoff_validation(art_root: Path) -> dict[str, Any]:
+    validator = art_root / "scripts" / "validate_unity_character_handoff.py"
+    if not validator.is_file():
+        return {
+            "name": "unity-handoff-static-validation",
+            "status": "SKIPPED",
+            "reason": f"missing validator: {validator}",
+        }
+    environment = os.environ.copy()
+    environment["RE_CAMP_SOURCE_DIR"] = str(art_root)
+    return run_step(
+        "unity-handoff-static-validation",
+        [sys.executable, str(validator)],
+        env=environment,
+        cwd=art_root,
+    )
 
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
     art_root = args.art_root.resolve()
     source_env = None
-    if (art_root / ".git").is_dir():
+    if is_git_tree(art_root):
         source_env = os.environ.copy()
         source_env["RE_CAMP_SOURCE_DIR"] = str(art_root)
     steps = [
@@ -103,6 +130,16 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         steps.append({"name": "reference-and-provider-dry-run", "status": "SKIPPED", "reason": "--skip-reference"})
     else:
         steps.extend(run_reference_dry_run(args.art_root.resolve()))
+    if is_git_tree(args.art_root.resolve()):
+        steps.append(run_unity_handoff_validation(args.art_root.resolve()))
+    else:
+        steps.append(
+            {
+                "name": "unity-handoff-static-validation",
+                "status": "SKIPPED",
+                "reason": "art repository is unavailable",
+            }
+        )
     failed = [step for step in steps if step.get("status") == "FAIL"]
     return {
         "workstream": "NO_GPU",

@@ -27,6 +27,8 @@ productionPromotionAllowed: false
 로컬에 art 저장소가 있으면 runner가 `RE_CAMP_SOURCE_DIR`를 자동으로 연결해
 source lock의 커밋과 권위 CH101 원본 파일까지 확인한다. art 저장소가 없는 CI나
 새 환경에서는 이 교차 저장소 확인만 건너뛰고 나머지 정적 검증을 계속한다.
+Unity handoff validator가 art 저장소에 있으면 CH101~CH105 계약 검증도 같은
+실행에 포함한다.
 
 실행 명령:
 
@@ -56,6 +58,7 @@ python scripts/run_no_gpu_workstream.py --skip-reference
 | 저장소 정적 검증 runner | IMPLEMENTED |
 | 계약·handoff·Gate 음성 검증 | IMPLEMENTED |
 | reference·Tripo payload dry-run | IMPLEMENTED WHEN ART ROOT EXISTS |
+| Unity handoff 정적 검증 | IMPLEMENTED WHEN ART ROOT EXISTS |
 | GPU runtime preflight | IMPLEMENTED |
 | 실제 무료 Provider 후보 생성 | BLOCKED_COLAB_GPU_QUOTA |
 | Unity·Android | BLOCKED_EXTERNAL_ENVIRONMENT |
