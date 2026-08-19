@@ -138,6 +138,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertFalse(record["actualInference"])
         self.assertEqual(record["sourceTreeCheck"], "PASS")
         self.assertEqual(record["unityHandoffValidation"], "PASS")
+        self.assertEqual(record["runtimePreflight"]["stableFast3D"], "BLOCKED_GPU_UNAVAILABLE")
+        self.assertEqual(record["runtimePreflight"]["tripoApi"], "READY_NO_GPU_REQUIRED_DRY_RUN_ONLY")
         self.assertEqual(record["steps"]["unitTests"]["count"], 16)
         self.assertEqual(record["steps"]["tripoMultiviewPayload"], "PASS_DRY_RUN")
         self.assertFalse(record["gate"]["unityInputAllowed"])

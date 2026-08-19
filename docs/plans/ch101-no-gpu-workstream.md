@@ -51,6 +51,10 @@ python scripts/run_no_gpu_workstream.py --skip-reference
 - 실제 FBX/GLB export와 Unity Import
 - Android build·실기기 성능 측정
 
+Tripo API는 GPU가 없어도 호출 준비는 가능하지만 선택적 유료·비밀키 경로이므로
+무료 Provider workstream에서는 사용하지 않는다. 키와 비용 승인이 별도로 없으면
+계속 payload dry-run만 수행한다.
+
 ## 단계 상태
 
 | 단계 | 상태 |

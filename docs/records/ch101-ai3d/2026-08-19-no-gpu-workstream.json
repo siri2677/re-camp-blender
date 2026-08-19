@@ -8,6 +8,12 @@
   "artRootAvailable": true,
   "sourceTreeCheck": "PASS",
   "unityHandoffValidation": "PASS",
+  "runtimePreflight": {
+    "stableFast3D": "BLOCKED_GPU_UNAVAILABLE",
+    "instantMesh": "BLOCKED_GPU_UNAVAILABLE",
+    "tripoSR": "BLOCKED_GPU_UNAVAILABLE",
+    "tripoApi": "READY_NO_GPU_REQUIRED_DRY_RUN_ONLY"
+  },
   "steps": {
     "colabPackageValidation": "PASS",
     "freeAi3dPackageValidation": "PASS",
