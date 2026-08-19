@@ -122,7 +122,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("foreground_ratios", notebook)
         self.assertIn("reference_views", notebook)
         self.assertIn("huggingface-hub==0.25.2", notebook)
-        self.assertIn("huggingface-hub>=0.26.0", notebook)
+        self.assertIn("huggingface-hub>=0.26.0,<1.0", notebook)
         self.assertIn("split_torch_state_dict_into_shards", notebook)
         self.assertIn("SF3D model access may be gated", notebook)
         self.assertIn("git+https://github.com/tatsy/torchmcubes.git", notebook)

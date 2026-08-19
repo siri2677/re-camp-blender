@@ -248,3 +248,9 @@ InstantMesh의 `huggingface-hub>=0.26.0` 설치·import smoke test이며, SF3D�
 Hugging Face 접근 약관을 승인하고 `HF_TOKEN`을 Colab Secret으로 제공할 때만
 재시도한다. 토큰은 출력·저장하지 않는다. 상세 JSON은
 `docs/records/ch101-ai3d/2026-08-19-colab-t4-provider-diagnostics.json`에 남긴다.
+
+`0fa542b`의 첫 호환성 보정 실행에서는 import smoke test는 통과했지만 최신
+`huggingface_hub==1.28.0`이 InstantMesh의 요구 범위 `<1.0`을 벗어나 provider
+실행 단계에서 거부되었다. 따라서 Notebook의 범위를 `huggingface-hub>=0.26.0,<1.0`
+으로 다시 고정했다. 이번 재실행은 실제 후보 생성이 아니라 이 의존성 보정과
+fallback gate를 검증하는 목적이며, 결과는 별도 compatibility 기록에 남긴다.
