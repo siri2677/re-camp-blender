@@ -238,3 +238,13 @@ Stable Fast 3D와 InstantMesh는 provider 실행 단계에서 실패했고 Tripo
 시도는 단일 시점 TripoSR 반복보다 다중 시점 또는 reference-conditioned provider를
 우선 검증한다. 이번 실행 기록은
 `docs/records/ch101-ai3d/2026-08-19-colab-t4-automatic-run.json`에 남긴다.
+
+진단 로깅을 추가한 `30b2263` 기준으로 Colab T4 재실행도 완료했다. SF3D는
+`stabilityai/stable-fast-3d` gated 모델의 `401 Unauthorized`로 3회 실패했고,
+InstantMesh는 `huggingface_hub`에 `split_torch_state_dict_into_shards`가 없어 3회
+실패했다. TripoSR fallback은 기존 후보 manifest를 재사용해 GPU 재생성을 피했고,
+최고 overall `0.463577`로 다시 `REGENERATE_REQUIRED`가 되었다. 다음 코드 보정은
+InstantMesh의 `huggingface-hub>=0.26.0` 설치·import smoke test이며, SF3D는 사용자가
+Hugging Face 접근 약관을 승인하고 `HF_TOKEN`을 Colab Secret으로 제공할 때만
+재시도한다. 토큰은 출력·저장하지 않는다. 상세 JSON은
+`docs/records/ch101-ai3d/2026-08-19-colab-t4-provider-diagnostics.json`에 남긴다.
