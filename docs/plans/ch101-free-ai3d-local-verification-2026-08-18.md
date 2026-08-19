@@ -173,5 +173,33 @@ Production Mesh 또는 Unity 입력 승인 결과가 아니다.
 - 얼굴 상태: `BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER`
 - Socket 상태: `AUTO_ESTIMATED_NOT_APPROVED`
 - 반복 한도: `MAX_ATTEMPTS = 3`
-- 실제 새 보정 루프 T4 실행: 최신 로컬 Notebook이 아직 GitHub에 push되지 않았고,
-  이전 Colab runtime도 유휴 종료되어 `PENDING_EXTERNAL_COLAB_RUN`으로 유지
+- 실제 새 보정 루프 T4 실행: 도구 commit `296495f`로 실행 PASS
+
+## 최신 T4 후보 보정·평가 실행 결과
+
+2026-08-19에 최신 원격 branch `feature/ch101-free-ai3d-autobuild`를 T4 runtime에서
+실행했다. 실행 중 발견된 Blender 인자 처리 누락과 `sys` import 누락은 각각
+`78e45b2`, `296495f`로 수정·push한 뒤 같은 runtime에서 보정·평가 셀을 재실행했다.
+
+- 참조 준비: PASS (`REFERENCE_VIEWS_READY`), art commit
+  `b6c9b3128358e061eee6184230929413eba84101`
+- Stable Fast 3D: gated model 접근 실패로 fallback
+- TripoSR: 3회 생성 PASS (`attempts/01`~`03`), API credit 소비 0
+- Blender 후보 보정: 3개 모두 PASS (`refinement-report.json`, refined GLB,
+  normalized `.blend` 생성)
+- Blender 평가·렌더: 3개 모두 PASS (`evaluation-report.json`, 5방향 PNG 생성)
+- 점수 리포트: 3개 모두 PASS
+- 각 후보 점수: overall `0.455933`, silhouette `0.415698`, appearance `0.342917`,
+  color `0.153408`, face detail `0.382290`, technical `1.0`
+- 자동 판정: 3개 모두 `REGENERATE_REQUIRED`; 최고 후보도 overall 최소 기준 `0.5`
+  미달
+- Review Asset: 선택 후보가 없어 생성하지 않음
+- archive: `/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip` (약 26 MB)
+- 최종 Gate: `sourceStatus=AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
+  `gateB=PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
+  `productionPromotionAllowed=false`
+
+이번 실행은 무료 AI 후보 생성·Blender 보정·평가 파이프라인이 실제 T4에서
+끝까지 동작한다는 것을 확인했지만, 시각 품질 기준을 통과한 Alpha Review 후보를
+확보한 것은 아니다. 다음 단계는 새 무료 후보 생성 또는 참조·Provider 개선이며,
+Gate B와 Unity 연결은 계속 차단한다.

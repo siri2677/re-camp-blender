@@ -73,7 +73,7 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 ### Phase C — Blender 자동 평가
 
-상태: `IMPLEMENTED / LOCAL SMOKE PASS / REAL CANDIDATE REQUIRED`
+상태: `IMPLEMENTED / REAL COLAB PASS / REGENERATE_REQUIRED`
 
 1. GLB/FBX/OBJ를 headless Blender로 연다.
 2. 키를 1.68m로 맞추고 바닥·중심을 정규화한다.
@@ -86,7 +86,7 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 ### Phase C-1 — Blender 후보 자동 보정
 
-상태: `IMPLEMENTED / REAL COLAB RUN PENDING`
+상태: `IMPLEMENTED / REAL COLAB PASS / REGENERATE_REQUIRED`
 
 선정 전 후보마다 별도 review 산출물을 만든다.
 
@@ -101,7 +101,7 @@ crop helper 자체가 Gate A 승인을 대신하지 않으며, 모든 결과는 
 
 ### Phase D — Blender Review Asset 자동 구성
 
-상태: `IMPLEMENTED / LOCAL SMOKE PASS / SELECTED REFINED CANDIDATE REQUIRED`
+상태: `IMPLEMENTED / BLOCKED UNTIL ELIGIBLE REFINED CANDIDATE`
 
 선택 후보에 다음 항목을 적용한다.
 
@@ -190,6 +190,7 @@ LOD·22본 Rig·Socket Review Asset 생성, Production validator 역검증까지
 [ch101-free-ai3d-local-verification-2026-08-18.md](ch101-free-ai3d-local-verification-2026-08-18.md)에
 기록한다.
 
-마지막 항목의 실제 AI 후보 생성만 Colab GPU와 모델 접근 권한이 준비되기 전까지
-`Blocked`다. Tripo API는 무료 경로의 필수 조건이 아니다. 모든 저장소 변경은 별도
-지시 전까지 로컬에만 유지하며 commit/push하지 않는다.
+실제 T4 실행에서는 Stable Fast 3D가 gated model 접근에서 실패했고 TripoSR fallback이
+후보 3개를 생성했다. 세 후보 모두 자동 점수 기준 미달로 `REGENERATE_REQUIRED`가
+되었으므로 Review `.blend`, Gate B, Unity 입력은 아직 차단되어 있다. Tripo API는
+무료 경로의 필수 조건이 아니다.
