@@ -80,6 +80,19 @@
     "stableFast3D": "BLOCKED_HUGGING_FACE_GATED_MODEL_ACCESS",
     "instantMesh": "BLOCKED_COLAB_NVDIFFRAST_BUILD"
   },
+  "runtimeVerification": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "actualInference": true,
+    "runtimeToolCommit": "dc0034e",
+    "repositoryFixCommit": "63d83c9",
+    "tripoSRDependencyFix": "git+https://github.com/tatsy/torchmcubes.git",
+    "generatedAttempts": [1, 2, 3],
+    "blenderRefinementAndScoring": "PASS",
+    "rankingManifest": "/content/re-camp-ai3d/CH101/ranking-manifest-t4-2026-08-19.json",
+    "archive": "/content/re-camp-CH101-ai3d-t4-run-NOT-PRODUCTION.zip",
+    "notes": "The notebook cell stopped at InstantMesh before TripoSR; the same T4 runtime then ran the corrected TripoSR dependency and completed all three attempts manually."
+  },
   "gate": {
     "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
     "gateB": "PENDING_HUMAN_REVIEW",
