@@ -74,6 +74,9 @@ remains `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`, and
 The detailed zero-cost plan, expected quality, license constraints, commands,
 and stopping rules are documented in
 [docs/plans/ch101-free-ai3d-autobuild-plan.md](docs/plans/ch101-free-ai3d-autobuild-plan.md).
+When Colab GPU access is unavailable, run the GPU-independent workstream from
+[docs/plans/ch101-no-gpu-workstream.md](docs/plans/ch101-no-gpu-workstream.md)
+with `python scripts/run_no_gpu_workstream.py`.
 The local dry-run and Blender negative-gate evidence is recorded in
 [docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md](docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md).
 The durable, secret-free CH101 run metadata is tracked in

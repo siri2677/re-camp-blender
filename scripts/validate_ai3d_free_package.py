@@ -20,6 +20,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "tripo_api.py",
     ROOT / "scripts" / "ai3d" / "run_open_source_provider.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
+    ROOT / "scripts" / "run_no_gpu_workstream.py",
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",
     ROOT / "scripts" / "ai3d" / "rank_candidates.py",
     ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py",

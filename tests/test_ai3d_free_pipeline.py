@@ -120,6 +120,13 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('"unityInputAllowed": False', source)
         self.assertNotIn("TRIPO_API_KEY", source)
 
+    def test_no_gpu_workstream_is_inference_free_and_gate_locked(self):
+        source = Path("scripts/run_no_gpu_workstream.py").read_text(encoding="utf-8")
+        self.assertIn('"workstream": "NO_GPU"', source)
+        self.assertIn('"unityInputAllowed": False', source)
+        self.assertIn("--skip-reference", source)
+        self.assertNotIn("--execute", source)
+
     def test_refinement_script_preserves_locked_gate(self):
         source = Path("scripts/blender/refine_ai3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("import sys", source)
