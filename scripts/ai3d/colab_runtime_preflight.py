@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any
 
 
-GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr"}
+GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D"}
 
 
 def parse_args() -> argparse.Namespace:

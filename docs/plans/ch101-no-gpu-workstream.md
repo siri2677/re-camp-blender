@@ -20,7 +20,7 @@ productionPromotionAllowed: false
 3. handoff 병합·Unity manifest의 음성 테스트
 4. 승인 art commit 기준 front/right/back reference crop 및 SHA256 dry-run
 5. Tripo multiview payload dry-run
-6. Stable Fast 3D·InstantMesh·TripoSR provider 명령과 fallback 정적 검증
+6. Stable Fast 3D·InstantMesh·TripoSR·Wonder3D provider 명령과 fallback 정적 검증
 7. Colab runtime preflight와 후보 manifest 재사용 로직 검증
 8. README·실행 계획·실행 기록·CI 동기화
 
@@ -45,6 +45,7 @@ python scripts/run_no_gpu_workstream.py --skip-reference
 ## GPU가 다시 연결될 때까지 보류하는 작업
 
 - Stable Fast 3D, InstantMesh, TripoSR 실제 inference
+- Wonder3D multiview inference와 NeuS mesh extraction
 - 새 후보의 Blender 렌더·점수 산정
 - Alpha Review 후보 생성
 - Gate B 사람 승인
@@ -79,6 +80,8 @@ AI3D 패키지, Python compile, 전체 22개 unittest, front/right/back referenc
 상세 기록: `docs/records/ch101-ai3d/2026-08-19-no-gpu-workstream.json`
 최신 art 연결 실행: `docs/records/ch101-ai3d/2026-08-20-no-gpu-workstream-v001.json`
 최신 CI 모드 실행: `docs/records/ch101-ai3d/2026-08-20-no-gpu-ci-mode-v001.json`
+최신 Provider preflight와 Wonder3D pinned-command dry-run:
+`docs/records/ch101-ai3d/2026-08-20-no-gpu-preflight-wonder3d-dry-run-v001.json`
 
 ## 재개 규칙
 

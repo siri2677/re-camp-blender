@@ -11,6 +11,7 @@ from scripts.ai3d.common import (
     EXPECTED_SOURCE_STATUS,
     load_contract,
 )
+from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
@@ -239,8 +240,16 @@ class AI3DFreePipelineTests(unittest.TestCase):
         source = Path("scripts/ai3d/colab_runtime_preflight.py").read_text(encoding="utf-8")
         self.assertIn("BLOCKED_GPU_UNAVAILABLE", source)
         self.assertIn("READY_NO_GPU_REQUIRED", source)
+        self.assertIn('"wonder3D"', source)
         self.assertIn('"unityInputAllowed": False', source)
         self.assertNotIn("TRIPO_API_KEY", source)
+
+    def test_wonder3d_runtime_preflight_requires_gpu_and_stays_locked(self):
+        report = build_report("wonder3D")
+        self.assertTrue(report["requiresGpu"])
+        self.assertIn(report["status"], {"READY_GPU_VISIBLE", "BLOCKED_GPU_UNAVAILABLE"})
+        self.assertFalse(report["unityInputAllowed"])
+        self.assertFalse(report["productionPromotionAllowed"])
 
     def test_no_gpu_workstream_is_inference_free_and_gate_locked(self):
         source = Path("scripts/run_no_gpu_workstream.py").read_text(encoding="utf-8")
