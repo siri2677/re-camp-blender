@@ -319,3 +319,9 @@ InstantMesh 경로의 뒷면 불일치 문제를 검증할 수 있다. 공식 �
 도달했지만 Colab 사용량 제한으로 GPU 백엔드가 할당되지 않았다. Provider 설치·추론은
 시작하지 않았으며, 이 결과는 `BLOCKED_GPU_QUOTA`로 기록했다. 사용량 제한이 풀리면
 동일한 pinned Notebook을 재실행하고, CPU로 우회하거나 Unity 입력을 활성화하지 않는다.
+
+Wonder3D 재개 경로는 기존 6-view 출력의 `generationStatus`, provider commit,
+reference manifest SHA256, 생성 파일 존재 여부와 Gate 잠금을 먼저 검증한다. 모두
+통과하면 `REUSED`로 표시하고 inference를 반복하지 않으며, 하나라도 실패하면
+기존 파일을 보존한 채 신규 실행 여부를 GPU preflight로 판단한다. 강제 재생성은
+`RE_CAMP_REUSE_WONDER3D=0`으로만 요청한다.

@@ -1,22 +1,30 @@
 from __future__ import annotations
 
-import tempfile
 import json
+import os
+import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from scripts.ai3d.common import (
     DEFAULT_CONTRACT_PATH,
     EXPECTED_GATE,
     EXPECTED_SOURCE_STATUS,
     load_contract,
+    sha256_file,
 )
 from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
-from scripts.ai3d.run_wonder3d_multiview import build_generation_command
+from scripts.ai3d.run_wonder3d_multiview import (
+    build_generation_command,
+    inspect_reusable_generation,
+    mark_generation_reused,
+    parse_args,
+)
 from scripts.ai3d.tripo_api import build_multiview_payload
 from scripts.run_no_gpu_workstream import run_runtime_preflight
 
@@ -60,6 +68,9 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "register_wonder3d_candidate.py",
             "test_mvdiffusion_seq.py",
             "NeuS",
+            "REUSE_WONDER3D",
+            "--reuse-existing",
+            "REUSED",
             "unityInputAllowed",
         ):
             self.assertIn(marker, source)
@@ -116,6 +127,95 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(manifest["unityInputAllowed"])
             self.assertFalse(manifest["productionPromotionAllowed"])
             self.assertEqual(len(manifest["candidates"][0]["sha256"]), 64)
+
+    def test_wonder3d_reuses_complete_six_view_report_and_keeps_gate_locked(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output_dir = root / "multiview"
+            views_dir = output_dir / "views"
+            views_dir.mkdir(parents=True)
+            reference_manifest = root / "reference-views-manifest.json"
+            reference_manifest.write_text('{"artCommit": "reference"}\n', encoding="utf-8")
+            generated_files = []
+            for index in range(6):
+                view = views_dir / f"view_{index:02d}.png"
+                view.write_bytes(f"view-{index}".encode("utf-8"))
+                generated_files.append(str(view.relative_to(output_dir)))
+            report_path = output_dir / "wonder3d-generation-report.json"
+            report_path.write_text(
+                json.dumps(
+                    {
+                        "provider": "wonder3D",
+                        "providerCommit": self.contract["experimentalProviders"]["wonder3D"]["commit"],
+                        "providerRepoHead": self.contract["experimentalProviders"]["wonder3D"]["commit"],
+                        "referenceManifestSha256": sha256_file(reference_manifest),
+                        "generatedViewCount": 6,
+                        "generatedAzimuths": [0, 45, 90, 180, -90, -45],
+                        "generationStatus": "MULTIVIEW_GENERATED",
+                        "status": "MULTIVIEW_GENERATED",
+                        "generatedFiles": generated_files,
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            validation = inspect_reusable_generation(self.contract, reference_manifest, report_path)
+            self.assertTrue(validation["reusable"], validation["reasons"])
+            reused = mark_generation_reused(self.contract, report_path, validation)
+            self.assertEqual(reused["status"], "REUSED")
+            self.assertEqual(reused["generationStatus"], "MULTIVIEW_GENERATED")
+            self.assertFalse(reused["actualInference"])
+            self.assertFalse(reused["unityInputAllowed"])
+            self.assertFalse(reused["productionPromotionAllowed"])
+
+    def test_wonder3d_reuse_rejects_hash_commit_and_missing_file_mismatches(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output_dir = root / "multiview"
+            output_dir.mkdir(parents=True)
+            reference_manifest = root / "reference-views-manifest.json"
+            reference_manifest.write_text('{"artCommit": "reference"}\n', encoding="utf-8")
+            report_path = output_dir / "wonder3d-generation-report.json"
+            report_path.write_text(
+                json.dumps(
+                    {
+                        "provider": "wonder3D",
+                        "providerCommit": "wrong-commit",
+                        "providerRepoHead": "wrong-commit",
+                        "referenceManifestSha256": "0" * 64,
+                        "generatedViewCount": 6,
+                        "generatedAzimuths": [0, 45, 90, 180, -90, -45],
+                        "generationStatus": "MULTIVIEW_GENERATED",
+                        "generatedFiles": ["missing.png"] * 6,
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            validation = inspect_reusable_generation(self.contract, reference_manifest, report_path)
+            self.assertFalse(validation["reusable"])
+            self.assertIn("PROVIDER_COMMIT_MISMATCH", validation["reasons"])
+            self.assertIn("REFERENCE_MANIFEST_SHA256_MISMATCH", validation["reasons"])
+            self.assertIn("GENERATED_FILE_MISSING:missing.png", validation["reasons"])
+
+    def test_wonder3d_reuse_environment_flag_can_force_regeneration(self):
+        with patch.dict(os.environ, {"RE_CAMP_REUSE_WONDER3D": "0"}, clear=False):
+            with patch(
+                "sys.argv",
+                [
+                    "run_wonder3d_multiview.py",
+                    "--provider-repo",
+                    "provider",
+                    "--reference-manifest",
+                    "reference.json",
+                    "--output-dir",
+                    "output",
+                ],
+            ):
+                args = parse_args()
+        self.assertFalse(args.reuse_existing)
 
     def test_tripo_multiview_payload_uses_three_named_views_and_seed(self):
         tokens = {"front": "front-token", "right": "right-token", "back": "back-token"}

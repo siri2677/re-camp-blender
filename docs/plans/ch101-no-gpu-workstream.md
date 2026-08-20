@@ -23,7 +23,8 @@ productionPromotionAllowed: false
 6. Stable Fast 3D·InstantMesh·TripoSR·Wonder3D provider 명령과 fallback 정적 검증
 7. Colab runtime preflight와 후보 manifest 재사용 로직 검증
 8. Wonder3D Notebook은 GPU preflight를 Blender·CUDA 의존성 설치보다 먼저 수행
-9. README·실행 계획·실행 기록·CI 동기화
+9. 검증된 Wonder3D 6-view 출력은 GPU preflight 전에 재사용하고, 불일치하면 신규 실행으로 전환
+10. README·실행 계획·실행 기록·CI 동기화
 
 로컬에 art 저장소가 있으면 runner가 `RE_CAMP_SOURCE_DIR`를 자동으로 연결해
 source lock의 커밋과 권위 CH101 원본 파일까지 확인한다. art 저장소가 없는 CI나
@@ -104,6 +105,12 @@ Wonder3D Notebook은 이 규칙을 실행 순서로도 보장한다. GPU가 보�
 `BLOCKED_GPU_UNAVAILABLE`을 출력하고 즉시 중단하므로 Blender·CUDA·tiny-cuda-nn
 설치를 시작하지 않는다. 따라서 GPU quota가 막힌 세션에서는 설치 시간과 세션
 디스크를 소비하지 않고, quota가 복구된 뒤 같은 Notebook을 재실행하면 된다.
+
+기존 Wonder3D report가 pinned provider commit, reference manifest SHA256, 6개 view
+파일, Gate 잠금 조건을 모두 만족하면 `REUSED`로 표시하고 inference를 생략한다.
+`RE_CAMP_REUSE_WONDER3D=0`이면 이 재사용을 비활성화하고 GPU preflight부터 다시
+수행한다. hash·파일·commit 중 하나라도 어긋나면 기존 파일은 삭제하지 않고
+`NOT_REUSABLE` 사유를 기록한 뒤 신규 실행 경로로 전환한다.
 
 No-GPU runner 결과는 실행 환경별 정보이므로 기본적으로 Git에 저장하지 않는다.
 중요한 판정·SHA256·Gate 결과만 `docs/records/`에 별도 기록한다.
