@@ -502,7 +502,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("RE_CAMP_GIT_CLONE_DEPTH", notebook)
         self.assertIn("--depth', GIT_CLONE_DEPTH", notebook)
         self.assertIn("flush=True", notebook)
-        self.assertIn("urllib.request.urlopen", notebook)
+        self.assertIn("'curl'", notebook)
         self.assertIn("NUMPY_WHEEL_NAME", notebook)
         self.assertIn("NUMPY_WHEEL_URL", notebook)
         self.assertIn("NUMPY_WHEEL_SHA256", notebook)
