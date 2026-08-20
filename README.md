@@ -5,7 +5,7 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 ## What this repository contains
 
 - Colab notebooks for Drive and no-Drive execution
-- Blender Python scripts for the CH101 documentation blockout
+- Blender Python scripts for CH101 blockout, AI3D review, and CH101-CH105 intake contracts
 - Asset structure validation and package checks
 - Workflow documentation
 
@@ -57,14 +57,15 @@ decision is recorded.
 
 ## Free AI 3D candidate path
 
-`notebooks/05_ch101_ai3d_free_autobuild.ipynb` prepares the locked CH101
+`notebooks/05_ch101_ai3d_free_autobuild.ipynb` defaults to CH101 and also
+supports CH102-CH105 through `RE_CAMP_CHARACTER_CODE`. It prepares locked
 front/right/back references, plans or runs a free-tier candidate provider,
-renders four cardinal Blender views, scores silhouettes, and builds a
-non-production review scene from the best eligible candidate.
+renders cardinal and 3/4 Blender views, applies score and geometry Hard Gates,
+and only builds a non-production review scene when a candidate remains eligible.
 
-The preferred free-only order is Stable Fast 3D in Colab followed by TripoSR.
-The Notebook automatically switches to TripoSR when Stable Fast 3D cannot access its
-model or fails during execution.
+The preferred free-only order is Stable Fast 3D, InstantMesh, then TripoSR.
+Wonder3D is pinned as a research-only consistent-multiview experiment and is not
+silently inserted into the normal fallback order.
 Tripo API remains an optional multiview path when its credits and terms are
 acceptable. Secrets are read from Colab Secrets or environment variables and
 are never stored in Git. Every generated result
@@ -88,10 +89,25 @@ The notebook caps free candidate generation at three attempts and runs
 `scripts/blender/refine_ai3d_candidate.py` before scoring. Refinement produces a
 review-only artifact; it does not create a Production Mesh or unlock Unity.
 
+The completed CH101 local evaluation contains six candidates and 30 renders.
+Two TripoSR candidates passed the automated score and geometry gates, but all
+technically relevant candidates were rejected by assisted visual QA for face,
+hair, outfit, equipment, and hand quality. The final manifest therefore has
+`selectedCandidate: null` and status
+`REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW`. See the
+[final machine record](docs/records/ch101-ai3d/2026-08-20-final-hard-gated-candidate-evaluation-v002.json)
+and [Gate B comparison sheet](docs/records/ch101-ai3d/assets/CH101_GateB_ContactSheet_NOT_APPROVED_v001.png).
+
+The current roster GPU/No-GPU execution order and remaining external blockers
+are documented in
+[docs/plans/current-roster-ai3d-pre-unity-plan.md](docs/plans/current-roster-ai3d-pre-unity-plan.md).
+
 ## Local checks
 
 ```text
 python scripts/validate_colab_package.py
+python scripts/validate_ai3d_free_package.py
+python -m unittest discover -s tests
 ```
 
 When a sibling `re-camp` checkout exists (or `RE_CAMP_SOURCE_DIR` is set),

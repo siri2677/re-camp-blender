@@ -325,3 +325,30 @@ reference manifest SHA256, 생성 파일 존재 여부와 Gate 잠금을 먼저 
 통과하면 `REUSED`로 표시하고 inference를 반복하지 않으며, 하나라도 실패하면
 기존 파일을 보존한 채 신규 실행 여부를 GPU preflight로 판단한다. 강제 재생성은
 `RE_CAMP_REUSE_WONDER3D=0`으로만 요청한다.
+
+### 2026-08-20 최종 Hard Gate와 시각 판정
+
+다운로드된 TripoSR·InstantMesh 후보 6개를 Blender 5.2에서 다시 렌더하고 pre-export
+`.blend` topology를 기준으로 connected component를 검사했다. GLB 재import는 UV와
+normal 경계에서 vertex가 분리될 수 있으므로 topology Hard Gate의 신뢰 원본으로
+사용하지 않는다.
+
+- TripoSR 03: overall `0.518753`, largest component `0.99865341`, Hard Gate PASS
+- TripoSR 01: overall `0.510901`, largest component `0.99665384`, Hard Gate PASS
+- InstantMesh 01: overall `0.500494`, largest component `0.89426024`, Hard Gate FAIL
+- InstantMesh 03: overall `0.495826`, largest component `0.83534316`, score/Hard Gate FAIL
+- InstantMesh 02: overall `0.482142`, Hard Gate PASS, score FAIL
+- TripoSR 02: overall `0.473087`, Hard Gate PASS, score FAIL
+
+자동 기준을 통과한 두 후보를 포함한 상위 3개는 얼굴 식별성, 포니테일 구조, 의상과
+색상 블록, 세이버·리본·파우치, 손가락 품질이 승인 시트에 미달했다. 거절·보류만 가능한
+보조 시각 검토를 적용한 결과 최종 상태는
+`REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW`, `selectedCandidate: null`이다.
+따라서 이전 자동 선택으로 만든 Review `.blend`는 최종 v004 패키지에서 제외하며,
+Production Mesh·Gate B·Unity 입력으로 승격하지 않는다.
+
+CH101에서 확정한 계약은 `current_roster_ai3d_pipeline_v001.json`으로 CH102~CH105까지
+일반화했다. 다섯 캐릭터의 15개 reference view와 SHA256을 준비했고, CH102·CH105
+No-GPU adaptive 실행 및 CH105 Blender Socket alias 스모크를 통과했다. 실제 GPU
+후보 생성은 CH101의 다음 후보 절차가 검증된 뒤 캐릭터별로 진행한다. 전체 순서는
+`current-roster-ai3d-pre-unity-plan.md`를 따른다.

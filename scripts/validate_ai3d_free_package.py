@@ -35,6 +35,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",
     ROOT / "scripts" / "ai3d" / "rank_candidates.py",
     ROOT / "scripts" / "ai3d" / "build_gate_b_review_package.py",
+    ROOT / "scripts" / "ai3d" / "build_final_evaluation_archive.py",
     ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
@@ -205,6 +206,7 @@ def validate_review_records(errors: list[str]) -> None:
     review_path = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-20-assisted-visual-review-v001.json"
     package_path = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-20-gate-b-review-package-v001.json"
     roster_record_path = ROOT / "docs" / "records" / "current-roster-ai3d" / "2026-08-20-reference-view-preflight-v001.json"
+    final_record_path = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-20-final-hard-gated-candidate-evaluation-v002.json"
     for path in (review_path, package_path, roster_record_path):
         if not path.is_file():
             fail(errors, f"missing AI 3D review record: {path.relative_to(ROOT)}")
@@ -229,6 +231,43 @@ def validate_review_records(errors: list[str]) -> None:
         roster_record = json.loads(roster_record_path.read_text(encoding="utf-8"))
         if roster_record.get("contactSheetSha256") != sha256_file(contact_sheets[1]):
             fail(errors, "current roster reference contact sheet SHA256 mismatch")
+    if not final_record_path.is_file():
+        fail(errors, f"missing final hard-gated record: {final_record_path.relative_to(ROOT)}")
+    else:
+        try:
+            final_record = json.loads(final_record_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            fail(errors, f"invalid final hard-gated record JSON: {exc}")
+        else:
+            if final_record.get("status") != "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW":
+                fail(errors, "final hard-gated record status mismatch")
+            evaluation = final_record.get("evaluation", {})
+            if evaluation.get("candidateCount") != 6:
+                fail(errors, "final hard-gated record must contain six candidates")
+            if evaluation.get("selectedCandidate") is not None:
+                fail(errors, "final hard-gated record must not select a candidate")
+            gate = final_record.get("gate", {})
+            if gate.get("unityInputAllowed") is not False:
+                fail(errors, "final hard-gated record enables Unity")
+            if gate.get("productionPromotionAllowed") is not False:
+                fail(errors, "final hard-gated record enables production")
+            package = final_record.get("package", {})
+            if package.get("reviewAssetIncluded") is not False:
+                fail(errors, "final hard-gated package cannot include a rejected Review asset")
+            if package.get("trackedInGit") is not False:
+                fail(errors, "large final hard-gated package cannot be tracked in normal Git history")
+            artifact_name = package.get("fileName")
+            if isinstance(artifact_name, str):
+                local_artifact = ROOT / "artifacts" / artifact_name
+                if local_artifact.is_file():
+                    if package.get("bytes") != local_artifact.stat().st_size:
+                        fail(errors, "local final hard-gated package size mismatch")
+                    if package.get("sha256") != sha256_file(local_artifact):
+                        fail(errors, "local final hard-gated package SHA256 mismatch")
+            if contact_sheets[0].is_file():
+                recorded_hash = final_record.get("visualEvidence", {}).get("contactSheetSha256")
+                if recorded_hash != sha256_file(contact_sheets[0]):
+                    fail(errors, "final hard-gated contact sheet SHA256 mismatch")
 
 
 def main() -> int:

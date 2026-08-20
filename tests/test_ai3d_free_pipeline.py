@@ -6,6 +6,7 @@ import tempfile
 from pathlib import Path
 import unittest
 from unittest.mock import patch
+import zipfile
 
 from scripts.ai3d.common import (
     DEFAULT_CONTRACT_PATH,
@@ -19,6 +20,7 @@ from scripts.ai3d.common import (
     sha256_file,
 )
 from scripts.ai3d.colab_runtime_preflight import build_report
+from scripts.ai3d.build_final_evaluation_archive import build_archive
 from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.prepare_roster_reference_views import prepare_roster
 from scripts.ai3d.rank_candidates import rank_reports
@@ -809,6 +811,64 @@ class AI3DFreePipelineTests(unittest.TestCase):
         review["candidateReviews"][0]["disposition"] = "APPROVE"
         with self.assertRaisesRegex(ValueError, "cannot approve"):
             rank_reports(self.contract, [(Path("high.json"), base)], review)
+
+    def test_final_evaluation_archive_is_deterministic_and_excludes_review_asset(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            evaluation_root = root / "evaluation"
+            references = evaluation_root / "reference-views"
+            candidate = evaluation_root / "evaluation-corrected" / "candidate"
+            references.mkdir(parents=True)
+            candidate.mkdir(parents=True)
+            (references / "front.png").write_bytes(b"front")
+            (candidate / "candidate_refined.glb").write_bytes(b"mesh")
+            (candidate / "candidate_refined_NOT_PRODUCTION.blend").write_bytes(
+                b"blend"
+            )
+            (candidate / "candidate_normalized_NOT_PRODUCTION.blend").write_bytes(
+                b"excluded-normalized"
+            )
+            (evaluation_root / "ranking-manifest-hard-gated.json").write_text(
+                json.dumps({"unityInputAllowed": False}), encoding="utf-8"
+            )
+            (evaluation_root / "ranking-manifest-final-reviewed.json").write_text(
+                json.dumps(
+                    {
+                        "character": "CH101",
+                        "artCommit": "art-commit",
+                        "status": "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW",
+                        "selectedCandidate": None,
+                        "assistedVisualReview": {"rejectedCandidateCount": 3},
+                        "gateB": "PENDING_HUMAN_REVIEW",
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            evidence = root / "review.json"
+            evidence.write_text("{}\n", encoding="utf-8")
+            first = root / "first.zip"
+            second = root / "second.zip"
+            first_summary = build_archive(
+                evaluation_root, first, "tools-commit", [evidence]
+            )
+            second_summary = build_archive(
+                evaluation_root, second, "tools-commit", [evidence]
+            )
+            self.assertEqual(first_summary["sha256"], second_summary["sha256"])
+            self.assertFalse(first_summary["reviewAssetIncluded"])
+            self.assertEqual(first_summary["verification"]["status"], "PASS")
+            with zipfile.ZipFile(first) as archive:
+                names = archive.namelist()
+                self.assertIn("PACKAGE-MANIFEST.json", names)
+                self.assertFalse(any("review-corrected" in name for name in names))
+                self.assertFalse(
+                    any("_normalized_NOT_PRODUCTION.blend" in name for name in names)
+                )
+                manifest = json.loads(archive.read("PACKAGE-MANIFEST.json"))
+                self.assertIsNone(manifest["selectedCandidate"])
+                self.assertFalse(manifest["unityInputAllowed"])
 
 
 if __name__ == "__main__":

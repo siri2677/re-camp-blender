@@ -1,0 +1,150 @@
+{
+  "recordVersion": "ch101-final-hard-gated-candidate-evaluation-v002",
+  "recordedAt": "2026-08-20",
+  "implementationCommit": "5e6b6d0",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "character": "CH101",
+  "status": "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW",
+  "evaluation": {
+    "candidateCount": 6,
+    "renderCount": 30,
+    "geometryHardGateMinimumLargestComponentVertexRatio": 0.9,
+    "automatedEligibleCountAfterHardGate": 2,
+    "assistedReviewedCount": 3,
+    "assistedRejectedCount": 3,
+    "selectedCandidate": null,
+    "automatedSelectedBeforeVisualReview": "03-CH101-TRIPOSR-001",
+    "rankingManifestHardGatedSha256": "631a8aaf92c18a9edc3ca975128da6d1b7f2f35027dbc00cbb0d331fd1c27b2f",
+    "rankingManifestFinalReviewedSha256": "f78fecdfc0ac0554869eb5d0169235255ca31a2e009884aaf93527620cd21e35",
+    "candidates": [
+      {
+        "candidateId": "03-CH101-TRIPOSR-001",
+        "candidateSha256": "97b7f0997256081cb2b9b65f6ef7204235c9c1f85ec5bfdbf8432dbb1287b472",
+        "overallScore": 0.518753,
+        "geometryHardGate": "PASS",
+        "largestComponentVertexRatio": 0.99865341,
+        "eligibleForAutomatedAlphaReview": true,
+        "assistedVisualDisposition": "REJECT"
+      },
+      {
+        "candidateId": "01-CH101-TRIPOSR-001",
+        "candidateSha256": "6fe8c05412dfe55d4975f3dd1789ed27739acb80ec27bc0d651376c1fa5145d8",
+        "overallScore": 0.510901,
+        "geometryHardGate": "PASS",
+        "largestComponentVertexRatio": 0.99665384,
+        "eligibleForAutomatedAlphaReview": true,
+        "assistedVisualDisposition": "REJECT"
+      },
+      {
+        "candidateId": "01-CH101-INSTANTMESH-001",
+        "candidateSha256": "80c55417f06f7359ba7fa7e470f14f382c08d12e761f878d741159bc29184b1d",
+        "overallScore": 0.500494,
+        "geometryHardGate": "FAIL",
+        "largestComponentVertexRatio": 0.89426024,
+        "eligibleForAutomatedAlphaReview": false,
+        "failureReasons": [
+          "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"
+        ],
+        "assistedVisualDisposition": "REJECT"
+      },
+      {
+        "candidateId": "03-CH101-INSTANTMESH-001",
+        "candidateSha256": "9b8cfbac3a7c1ad221f25059bd9e04c2249e6fc818095b15a836316d0902c12b",
+        "overallScore": 0.495826,
+        "geometryHardGate": "FAIL",
+        "largestComponentVertexRatio": 0.83534316,
+        "eligibleForAutomatedAlphaReview": false,
+        "failureReasons": [
+          "OVERALL_SCORE_BELOW_MINIMUM",
+          "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"
+        ]
+      },
+      {
+        "candidateId": "02-CH101-INSTANTMESH-001",
+        "candidateSha256": "4c6e23febee070c8dbdcebc72d32c2d2d20b8a5fc201c8050697a0a60ff2ea88",
+        "overallScore": 0.482142,
+        "geometryHardGate": "PASS",
+        "largestComponentVertexRatio": 0.99410692,
+        "eligibleForAutomatedAlphaReview": false,
+        "failureReasons": [
+          "OVERALL_SCORE_BELOW_MINIMUM"
+        ]
+      },
+      {
+        "candidateId": "02-CH101-TRIPOSR-001",
+        "candidateSha256": "a3e7a85f25f1b675c04207c509446678d0135da3922166cd3e0360c53ac77b12",
+        "overallScore": 0.473087,
+        "geometryHardGate": "PASS",
+        "largestComponentVertexRatio": 0.99244591,
+        "eligibleForAutomatedAlphaReview": false,
+        "failureReasons": [
+          "OVERALL_SCORE_BELOW_MINIMUM"
+        ]
+      }
+    ]
+  },
+  "visualEvidence": {
+    "assistedVisualReview": "docs/records/ch101-ai3d/2026-08-20-assisted-visual-review-v001.json",
+    "assistedVisualReviewSha256": "086d64331776bd04457a51b9255493cad61f36297c3ea41c3af543aed248dd3c",
+    "gateBReviewPackage": "docs/records/ch101-ai3d/2026-08-20-gate-b-review-package-v001.json",
+    "gateBReviewPackageSha256": "68c6ce3dcbe12483ed8e4f329f225841b2458bf3a63ec59be47d886dd9d8ecc3",
+    "contactSheet": "docs/records/ch101-ai3d/assets/CH101_GateB_ContactSheet_NOT_APPROVED_v001.png",
+    "contactSheetSha256": "75ffd84a1e0ff097200317f288cc75dcb16ec4fc1a6a9ce0c9fb322f53db79f0",
+    "decision": "REJECT_AND_REGENERATE_OR_MANUALLY_REMODEL",
+    "humanGateBDecision": "PENDING_HUMAN_REVIEW"
+  },
+  "package": {
+    "packageVersion": "ch101-ai3d-final-hard-gated-v004",
+    "fileName": "re-camp-CH101-ai3d-final-hard-gated-NOT-PRODUCTION-v004.zip",
+    "bytes": 39772937,
+    "sha256": "8b39dd58bb8062eeca7ec8b2490ad2da98752e7a7f29e37d4791ef2798d540dd",
+    "entryCount": 86,
+    "payloadEntryCount": 84,
+    "manifestSha256": "a045f9f7d23691ef2cf0c10ff9f50ab5243620b8d0cc9723345f8b9109590562",
+    "verification": "PASS",
+    "reviewAssetIncluded": false,
+    "trackedInGit": false,
+    "retention": "LOCAL_ARTIFACT_PENDING_GITHUB_RELEASE_UPLOAD"
+  },
+  "rosterReadiness": {
+    "contract": "contracts/current_roster_ai3d_pipeline_v001.json",
+    "referenceViewCharacters": [
+      "CH101",
+      "CH102",
+      "CH103",
+      "CH104",
+      "CH105"
+    ],
+    "referenceViewPreflight": "PASS_NO_GPU",
+    "adaptiveNoGpuSmoke": [
+      "CH102_PASS",
+      "CH105_PASS"
+    ],
+    "blenderSocketSmoke": "CH105_PASS_NOT_PRODUCTION",
+    "actualInferenceForCH102ToCH105": false
+  },
+  "validation": {
+    "unitTests": 58,
+    "unitTestStatus": "PASS",
+    "ai3dPackageValidator": "PASS",
+    "colabPackageValidator": "PASS",
+    "blenderVersion": "5.2.0 LTS",
+    "archivePayloadHashVerification": "PASS"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "unityPackageCreated": false,
+    "androidValidationStarted": false
+  },
+  "remainingExternalBlockers": {
+    "newGpuInference": "BLOCKED_GPU_QUOTA_OR_GPU_RUNTIME_REQUIRED",
+    "acceptableCH101Candidate": "BLOCKED_ALL_CURRENT_CANDIDATES_REJECTED",
+    "productionMesh": "BLOCKED_NO_APPROVED_HIGH_QUALITY_MESH",
+    "humanGateB": "BLOCKED_NO_ACCEPTABLE_CANDIDATE_FOR_APPROVAL",
+    "unity": "BLOCKED_GATE_B_NOT_APPROVED",
+    "android": "BLOCKED_UNITY_AND_DEVICE_ENVIRONMENT_REQUIRED"
+  }
+}
