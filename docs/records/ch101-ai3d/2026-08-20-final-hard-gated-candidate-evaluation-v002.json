@@ -104,7 +104,21 @@
     "verification": "PASS",
     "reviewAssetIncluded": false,
     "trackedInGit": false,
-    "retention": "LOCAL_ARTIFACT_PENDING_GITHUB_RELEASE_UPLOAD"
+    "retention": "GITHUB_RELEASE"
+  },
+  "release": {
+    "provider": "github",
+    "repository": "siri2677/re-camp-blender",
+    "tag": "ch101-ai3d-final-hard-gated-v004",
+    "url": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-ai3d-final-hard-gated-v004",
+    "assetName": "re-camp-CH101-ai3d-final-hard-gated-NOT-PRODUCTION-v004.zip",
+    "assetBytes": 39772937,
+    "assetSha256": "8b39dd58bb8062eeca7ec8b2490ad2da98752e7a7f29e37d4791ef2798d540dd",
+    "assetState": "uploaded",
+    "prerelease": true,
+    "draft": false,
+    "targetBranch": "feature/ch101-free-ai3d-autobuild",
+    "targetCommit": "fa68dc8a84f36d2c9d492c5ede821cc685ff2d06"
   },
   "rosterReadiness": {
     "contract": "contracts/current_roster_ai3d_pipeline_v001.json",
