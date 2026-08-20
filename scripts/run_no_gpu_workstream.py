@@ -20,6 +20,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RUNTIME_PREFLIGHT_PROVIDERS = ("sf3d", "instantmesh", "triposr", "wonder3D", "tripo")
 
 
 def is_git_tree(path: Path) -> bool:
@@ -110,6 +111,67 @@ def run_unity_handoff_validation(art_root: Path) -> dict[str, Any]:
     )
 
 
+def run_runtime_preflight() -> dict[str, Any]:
+    """Run the secret-free provider probes and classify GPU absence as expected."""
+
+    preflight_script = ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py"
+    providers: dict[str, Any] = {}
+    unexpected_failures: list[str] = []
+    with tempfile.TemporaryDirectory(prefix="re-camp-preflight-") as temporary:
+        output_root = Path(temporary)
+        for provider in RUNTIME_PREFLIGHT_PROVIDERS:
+            output_path = output_root / f"{provider}.json"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(preflight_script),
+                    "--provider",
+                    provider,
+                    "--output",
+                    str(output_path),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            report: dict[str, Any]
+            if output_path.is_file():
+                report = json.loads(output_path.read_text(encoding="utf-8"))
+            else:
+                report = {
+                    "provider": provider,
+                    "status": "PREFLIGHT_FAILED_NO_REPORT",
+                    "unityInputAllowed": False,
+                    "productionPromotionAllowed": False,
+                }
+            report["returnCode"] = result.returncode
+            report["stdoutTail"] = result.stdout[-800:]
+            report["stderrTail"] = result.stderr[-800:]
+            providers[provider] = report
+            if result.returncode not in (0, 2) or report["status"] not in {
+                "READY_GPU_VISIBLE",
+                "BLOCKED_GPU_UNAVAILABLE",
+                "READY_NO_GPU_REQUIRED",
+            }:
+                unexpected_failures.append(provider)
+
+    blocked = [
+        provider
+        for provider, report in providers.items()
+        if report.get("status") == "BLOCKED_GPU_UNAVAILABLE"
+    ]
+    return {
+        "name": "provider-runtime-preflight",
+        "status": "FAIL" if unexpected_failures else ("PASS_WITH_BLOCKED_PROVIDERS" if blocked else "PASS"),
+        "providers": providers,
+        "blockedProviders": blocked,
+        "unexpectedFailures": unexpected_failures,
+        "unityInputAllowed": False,
+        "productionPromotionAllowed": False,
+    }
+
+
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
     art_root = args.art_root.resolve()
     source_env = None
@@ -125,6 +187,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         run_step("free-ai3d-package-validation", [sys.executable, "scripts/validate_ai3d_free_package.py"]),
         run_step("python-compile", [sys.executable, "-m", "compileall", "-q", "scripts", "tests"]),
         run_step("unittest", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"]),
+        run_runtime_preflight(),
     ]
     if args.skip_reference:
         steps.append({"name": "reference-and-provider-dry-run", "status": "SKIPPED", "reason": "--skip-reference"})

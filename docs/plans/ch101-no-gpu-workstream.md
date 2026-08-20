@@ -43,6 +43,10 @@ art 저장소가 준비되지 않은 CI에서는 reference dry-run만 건너뛴�
 python scripts/run_no_gpu_workstream.py --skip-reference
 ```
 
+이 runner는 위 명령에 포함된 `provider-runtime-preflight` 단계에서 다섯 Provider를
+동시에 확인한다. GPU Provider의 `BLOCKED_GPU_UNAVAILABLE`은 예상된 외부 차단으로
+분류하고, 예기치 않은 preflight 오류만 runner 실패로 처리한다.
+
 ## GPU가 다시 연결될 때까지 보류하는 작업
 
 - Stable Fast 3D, InstantMesh, TripoSR 실제 inference
@@ -73,7 +77,8 @@ Tripo API는 GPU가 없어도 호출 준비는 가능하지만 선택적 유료�
 
 2026-08-20 기준으로 No-GPU runner를 art 저장소 연결 모드와 CI 모드에서 모두
 실행했다. Colab 패키지(7개 Notebook/7개 Blender script/12개 유틸리티), 무료
-AI3D 패키지, Python compile, 전체 22개 unittest, front/right/back reference
+AI3D 패키지, Python compile, 전체 25개 unittest, 다섯 Provider runtime preflight,
+front/right/back reference
 준비, Tripo multiview payload dry-run, CH101~CH105 Unity handoff 정적 검증이
 통과했다. Wonder3D 실행 Notebook과 PLY 후보 등록 경로도 정적 검증에 포함된다.
 실제 Provider 추론은 실행하지 않았고, Gate와 Unity 입력 잠금은 유지했다.
@@ -83,6 +88,8 @@ AI3D 패키지, Python compile, 전체 22개 unittest, front/right/back referenc
 최신 CI 모드 실행: `docs/records/ch101-ai3d/2026-08-20-no-gpu-ci-mode-v001.json`
 최신 Provider preflight와 Wonder3D pinned-command dry-run:
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-preflight-wonder3d-dry-run-v001.json`
+최신 runner 통합 Provider preflight 실행:
+`docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-provider-preflight-v001.json`
 
 ## 재개 규칙
 

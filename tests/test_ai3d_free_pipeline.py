@@ -18,6 +18,7 @@ from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
 from scripts.ai3d.run_wonder3d_multiview import build_generation_command
 from scripts.ai3d.tripo_api import build_multiview_payload
+from scripts.run_no_gpu_workstream import run_runtime_preflight
 
 
 class AI3DFreePipelineTests(unittest.TestCase):
@@ -271,6 +272,15 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('RE_CAMP_SOURCE_DIR', source)
         self.assertIn("validate_unity_character_handoff.py", source)
         self.assertNotIn("--execute", source)
+
+    def test_no_gpu_runner_records_provider_preflight_without_treating_gpu_block_as_failure(self):
+        result = run_runtime_preflight()
+        self.assertIn(result["status"], {"PASS", "PASS_WITH_BLOCKED_PROVIDERS"})
+        self.assertEqual(set(result["providers"]), {"sf3d", "instantmesh", "triposr", "wonder3D", "tripo"})
+        self.assertEqual(result["providers"]["tripo"]["status"], "READY_NO_GPU_REQUIRED")
+        for report in result["providers"].values():
+            self.assertFalse(report["unityInputAllowed"])
+            self.assertFalse(report["productionPromotionAllowed"])
 
     def test_no_gpu_execution_record_is_gate_locked_and_inference_free(self):
         record = json.loads(
