@@ -102,6 +102,30 @@ def _validate_character_contract(
         if view.get("providerKey") != view_name:
             raise ValueError(f"{view_name} providerKey must equal the view name")
 
+    auxiliary_references = contract.get("auxiliaryReferences", [])
+    if not isinstance(auxiliary_references, list):
+        raise ValueError("auxiliaryReferences must be a list")
+    for reference in auxiliary_references:
+        if not isinstance(reference, dict):
+            raise ValueError("auxiliaryReferences entries must be objects")
+        _require_string(reference, "path")
+        _require_string(reference, "role")
+
+    generation_strategy = contract.get("generationStrategy")
+    if generation_strategy is not None:
+        if not isinstance(generation_strategy, dict):
+            raise ValueError("generationStrategy must be an object")
+        _require_string(generation_strategy, "profile")
+        sequence = generation_strategy.get("singleViewReferenceSequence")
+        if (
+            not isinstance(sequence, list)
+            or not sequence
+            or not all(view in VIEW_ORDER for view in sequence)
+        ):
+            raise ValueError(
+                "generationStrategy.singleViewReferenceSequence must contain reference views"
+            )
+
     status_policy = contract.get("statusPolicy")
     if not isinstance(status_policy, dict):
         raise ValueError("statusPolicy must be an object")
@@ -179,8 +203,11 @@ def load_contract(
         "authoritativeSource",
         "generationSource",
         "referenceViews",
+        "auxiliaryReferences",
+        "generationStrategy",
     ):
-        materialized[key] = copy.deepcopy(character_entry[key])
+        if key in character_entry:
+            materialized[key] = copy.deepcopy(character_entry[key])
     materialized["contractVersion"] = EXPECTED_ROSTER_CONTRACT_VERSION
     materialized["baseContractVersion"] = EXPECTED_CONTRACT_VERSION
     materialized["rosterContractVersion"] = EXPECTED_ROSTER_CONTRACT_VERSION
@@ -222,6 +249,36 @@ def require_reference_manifest(path: Path, contract: dict[str, Any]) -> dict[str
         if sha256_file(resolved_path) != entry["sha256"]:
             raise ValueError(f"reference view SHA256 mismatch: {view_name}: {resolved_path}")
         entry["path"] = str(resolved_path)
+
+    expected_auxiliary = contract.get("auxiliaryReferences", [])
+    if expected_auxiliary:
+        recorded_auxiliary = manifest.get("auxiliaryReferences")
+        if not isinstance(recorded_auxiliary, list) or len(recorded_auxiliary) != len(expected_auxiliary):
+            raise ValueError("reference manifest auxiliary reference count mismatch")
+        for expected in expected_auxiliary:
+            matching = next(
+                (
+                    item
+                    for item in recorded_auxiliary
+                    if isinstance(item, dict)
+                    and str(item.get("path", "")).replace("\\", "/").endswith(expected["path"])
+                ),
+                None,
+            )
+            if matching is None or matching.get("role") != expected["role"]:
+                raise ValueError(
+                    f"reference manifest missing auxiliary reference: {expected['path']}"
+                )
+            auxiliary_path = Path(matching["path"])
+            if not auxiliary_path.is_file():
+                raise FileNotFoundError(f"auxiliary reference is missing: {auxiliary_path}")
+            if sha256_file(auxiliary_path) != matching.get("sha256"):
+                raise ValueError(
+                    f"auxiliary reference SHA256 mismatch: {expected['path']}"
+                )
+            matching["path"] = str(auxiliary_path.resolve())
+        if manifest.get("generationStrategy", {}) != contract.get("generationStrategy", {}):
+            raise ValueError("reference manifest generation strategy mismatch")
     if manifest.get("unityInputAllowed") is not False:
         raise ValueError("reference manifest cannot enable Unity input")
     return manifest

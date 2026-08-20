@@ -75,6 +75,16 @@ class AI3DFreePipelineTests(unittest.TestCase):
             )
             sources.add(contract["authoritativeSource"])
         self.assertEqual(len(sources), 5)
+        ch101 = load_contract(ROSTER_CONTRACT_PATH, "CH101")
+        self.assertEqual(
+            ch101["generationStrategy"]["profile"],
+            "CH101_V005_IDENTITY_RECOVERY",
+        )
+        self.assertEqual(
+            ch101["generationStrategy"]["singleViewReferenceSequence"],
+            ["front", "front", "front"],
+        )
+        self.assertEqual(len(ch101["auxiliaryReferences"]), 3)
 
     def test_current_roster_reference_preflight_is_no_gpu_and_gate_locked(self):
         roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
@@ -90,6 +100,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
                 generation = art_root / entry["generationSource"]["path"]
                 generation.parent.mkdir(parents=True, exist_ok=True)
                 generation.write_bytes(entry["character"].encode("utf-8"))
+                for reference in entry.get("auxiliaryReferences", []):
+                    auxiliary = art_root / reference["path"]
+                    auxiliary.parent.mkdir(parents=True, exist_ok=True)
+                    auxiliary.write_bytes(entry["character"].encode("utf-8"))
             report = prepare_roster(
                 art_root=art_root,
                 output_root=output_root,
@@ -103,6 +117,18 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(report["gpuRequired"])
             self.assertFalse(report["actualInference"])
             self.assertFalse(report["unityInputAllowed"])
+            ch101_manifest = prepare_views(
+                art_root=art_root,
+                output_dir=output_root / "CH101" / "reference-views",
+                contract_path=ROSTER_CONTRACT_PATH,
+                character="CH101",
+                dry_run=True,
+            )
+            self.assertEqual(len(ch101_manifest["auxiliaryReferences"]), 3)
+            self.assertEqual(
+                ch101_manifest["generationStrategy"]["profile"],
+                "CH101_V005_IDENTITY_RECOVERY",
+            )
 
     def test_no_gpu_reference_preflight_materializes_views_before_provider_dry_run(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -474,6 +500,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("provider_attempts = [PROVIDER, 'instantmesh', 'triposr'] if PROVIDER == 'sf3d' else [PROVIDER]", notebook)
         self.assertIn("foreground_ratios", notebook)
         self.assertIn("reference_views", notebook)
+        self.assertIn("generation_strategy", notebook)
+        self.assertIn("singleViewReferenceSequence", notebook)
         self.assertIn("huggingface-hub==0.25.2", notebook)
         self.assertIn("huggingface-hub>=0.26.0,<1.0", notebook)
         self.assertIn("split_torch_state_dict_into_shards", notebook)

@@ -43,6 +43,41 @@
             936
           ]
         }
+      },
+      "auxiliaryReferences": [
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+          "role": "IDENTITY_AND_SILHOUETTE_ANCHOR"
+        },
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_ExpressionSheet_REVIEW_v001.png",
+          "role": "FACE_IDENTITY_AUXILIARY"
+        },
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+          "role": "EQUIPMENT_AUXILIARY"
+        }
+      ],
+      "generationStrategy": {
+        "profile": "CH101_V005_IDENTITY_RECOVERY",
+        "singleViewReferenceSequence": [
+          "front",
+          "front",
+          "front"
+        ],
+        "foregroundRatios": [
+          0.8,
+          0.9,
+          0.98
+        ],
+        "reasonCodes": [
+          "FACE_IDENTITY_NOT_RECOGNIZABLE",
+          "HAIR_AND_PONYTAIL_STRUCTURE_MISMATCH",
+          "OUTFIT_STRUCTURE_AND_COLOR_BLOCKING_MISMATCH",
+          "EQUIPMENT_GEOMETRY_MISSING_OR_UNIDENTIFIABLE",
+          "HANDS_AND_FINGERS_MALFORMED"
+        ],
+        "note": "Keep provider input as a single neutral full-body front view; auxiliary references are recorded for traceability and human review, not silently merged into the model input."
       }
     },
     {

@@ -52,6 +52,19 @@ def prepare_views(
         if not source.is_file():
             raise FileNotFoundError(f"missing locked art source: {source}")
 
+    auxiliary_references = []
+    for reference in contract.get("auxiliaryReferences", []):
+        auxiliary_path = art_root / reference["path"]
+        if not auxiliary_path.is_file():
+            raise FileNotFoundError(f"missing locked auxiliary art source: {auxiliary_path}")
+        auxiliary_references.append(
+            {
+                **reference,
+                "path": str(auxiliary_path),
+                "sha256": sha256_file(auxiliary_path),
+            }
+        )
+
     manifest: dict[str, object] = {
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
@@ -63,6 +76,8 @@ def prepare_views(
         "generationSource": str(generation_path),
         "generationSourceRole": contract["generationSource"]["role"],
         "generationSourceSha256": sha256_file(generation_path),
+        "auxiliaryReferences": auxiliary_references,
+        "generationStrategy": contract.get("generationStrategy", {}),
         "views": {},
         **candidate_gate_fields(contract),
     }
