@@ -42,6 +42,21 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def classify_provider_failure(stdout: str, stderr: str) -> str:
+    """Return a stable, secret-free failure category for runtime triage."""
+
+    combined = f"{stdout}\n{stderr}".lower()
+    if "gatedrepoerror" in combined or "401 client error" in combined:
+        return "HF_GATED_MODEL_AUTH_REQUIRED"
+    if "no kernel image is available for execution on the device" in combined:
+        return "CUDA_KERNEL_NOT_COMPILED_FOR_DEVICE"
+    if "cuda error: 209" in combined or "nvdiffrast" in combined:
+        return "CUDA_EXTENSION_INCOMPATIBLE_WITH_DEVICE"
+    if "out of memory" in combined or "cuda out of memory" in combined:
+        return "CUDA_OUT_OF_MEMORY"
+    return "PROVIDER_EXECUTION_FAILED"
+
+
 def repo_head(repo_dir: Path) -> str:
     result = subprocess.run(
         ["git", "-C", str(repo_dir), "rev-parse", "HEAD"],
@@ -145,6 +160,7 @@ def run_provider_command(
                 "command": command,
                 "returnCode": getattr(error, "returncode", None),
                 "errorType": type(error).__name__,
+                "failureReason": classify_provider_failure(stdout, stderr),
                 "stdoutLog": str(stdout_path),
                 "stderrLog": str(stderr_path),
                 "status": "FAILED_PROVIDER_EXECUTION",

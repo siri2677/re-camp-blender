@@ -25,7 +25,11 @@ from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.prepare_roster_reference_views import prepare_roster
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
-from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
+from scripts.ai3d.run_open_source_provider import (
+    build_command,
+    classify_provider_failure,
+    run_provider_command,
+)
 from scripts.ai3d.score_candidate_renders import (
     assess_vertical_polarity,
     evaluate_quality_hard_gates,
@@ -493,6 +497,20 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(failure["unityInputAllowed"])
             self.assertIn("stdout-diagnostic", (output_dir / "provider-stdout.log").read_text(encoding="utf-8"))
             self.assertIn("stderr-diagnostic", (output_dir / "provider-stderr.log").read_text(encoding="utf-8"))
+
+    def test_provider_failure_classification_is_secret_free_and_actionable(self):
+        self.assertEqual(
+            classify_provider_failure("", "401 Client Error: Unauthorized; GatedRepoError"),
+            "HF_GATED_MODEL_AUTH_REQUIRED",
+        )
+        self.assertEqual(
+            classify_provider_failure("", "CUDA error: 209 nvdiffrast"),
+            "CUDA_EXTENSION_INCOMPATIBLE_WITH_DEVICE",
+        )
+        self.assertEqual(
+            classify_provider_failure("", "no kernel image is available for execution on the device"),
+            "CUDA_KERNEL_NOT_COMPILED_FOR_DEVICE",
+        )
 
     def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
         notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")

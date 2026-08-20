@@ -59,12 +59,35 @@ def torch_status() -> dict[str, Any]:
     try:
         import torch  # type: ignore
     except ImportError:
-        return {"available": False, "cudaAvailable": None, "version": ""}
+        return {
+            "available": False,
+            "cudaAvailable": None,
+            "version": "",
+            "deviceCapability": None,
+            "torchKernelSupportsDevice": False,
+        }
+    capability = None
+    device_name = ""
+    arch_list: list[str] = []
+    cuda_available = bool(torch.cuda.is_available())
+    if cuda_available:
+        try:
+            major, minor = torch.cuda.get_device_capability(0)
+            capability = {"major": int(major), "minor": int(minor), "label": f"{major}.{minor}"}
+            device_name = str(torch.cuda.get_device_name(0))
+            arch_list = [str(value) for value in torch.cuda.get_arch_list()]
+        except Exception:
+            capability = None
+    target_arch = f"sm_{capability['major']}{capability['minor']}" if capability else ""
     return {
         "available": True,
-        "cudaAvailable": bool(torch.cuda.is_available()),
+        "cudaAvailable": cuda_available,
         "version": str(getattr(torch, "__version__", "")),
         "cudaVersion": str(getattr(getattr(torch, "version", None), "cuda", "") or ""),
+        "deviceName": device_name,
+        "deviceCapability": capability,
+        "torchArchList": arch_list,
+        "torchKernelSupportsDevice": bool(target_arch and target_arch in arch_list),
     }
 
 
