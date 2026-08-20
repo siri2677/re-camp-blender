@@ -1,0 +1,64 @@
+{
+  "recordVersion": "ch101-ai3d-free-multiview-provider-feasibility-v001",
+  "recordedAt": "2026-08-20T09:27:00+09:00",
+  "character": "CH101",
+  "decision": "SELECT_WONDER3D_FOR_RESEARCH_ONLY_T4_TRIAL",
+  "currentGate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "selectedCandidate": {
+    "provider": "wonder3D",
+    "repository": "https://github.com/xxlong0/Wonder3D.git",
+    "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "license": "MIT",
+    "model": "flamehaze1115/wonder3d-v1.0",
+    "input": "CH101_front.png",
+    "generatedViews": 6,
+    "generatedAzimuths": [0, 45, 90, 180, -90, -45],
+    "generatedResolution": 256,
+    "outputs": ["rgb", "normal"],
+    "meshExtraction": "NeuS",
+    "fallbackEnabled": false,
+    "status": "RESEARCH_ONLY"
+  },
+  "whySelected": [
+    "The current InstantMesh path independently generates front/right/back candidates, so their geometry is not a single multi-view-consistent reconstruction.",
+    "Wonder3D explicitly generates consistent multi-view normal and color images before mesh fusion.",
+    "The official repository describes a free MIT-licensed codebase and an inference path using one GPU."
+  ],
+  "constraints": [
+    "Official inference resizes inputs to 256x256 and supports six generated views.",
+    "The official setup requires the Wonder3D dependencies and NVlabs tiny-cuda-nn.",
+    "Exact Tesla T4 memory behavior is not verified; no Colab generation was run in this preparation step.",
+    "Checkpoint terms must be checked separately before commercial redistribution.",
+    "Face landmarks, equipment sockets, rigging, and production topology remain blocked even if the candidate scores higher."
+  ],
+  "plannedCommands": {
+    "multiviewGeneration": "accelerate launch --config_file 1gpu.yaml test_mvdiffusion_seq.py --config configs/mvdiffusion-joint-ortho-6views.yaml validation_dataset.root_dir={reference_dir} validation_dataset.filepaths=['CH101_front.png'] save_dir={wonder3d_output}",
+    "meshExtractionPreferred": "cd instant-nsr-pl && python launch.py --config configs/neuralangelo-ortho-wmask.yaml --gpu 0 --train dataset.root_dir=../{wonder3d_output}/cropsize-192-cfg1.0/ dataset.scene=CH101_front",
+    "meshExtractionFallback": "cd NeuS && bash run.sh {wonder3d_output} CH101_front"
+  },
+  "evaluationPlan": [
+    "Verify provider checkout commit and reference front SHA256.",
+    "Generate six RGB/normal views without changing the production gates.",
+    "Extract one mesh with NeuS if Instant-NSR dependency or memory is unsuitable.",
+    "Convert or copy the extracted mesh into the generic candidate intake format.",
+    "Run Blender refinement, evaluation, score, and ranking with unityInputAllowed=false.",
+    "Record all dependency, CUDA, output, SHA256, and score results even on failure."
+  ],
+  "sources": [
+    "https://github.com/xxlong0/Wonder3D",
+    "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1",
+    "https://github.com/microsoft/TRELLIS",
+    "https://github.com/pwilkin/trellis.cpp"
+  ],
+  "alternativesNotSelected": {
+    "hunyuan3d2_1": "Official repository reports 10 GB VRAM for shape, 21 GB for texture, and 29 GB combined; it is not a safe T4 textured path and remains excluded by the South Korea workflow policy.",
+    "trellis": "Official TRELLIS is image-to-3D but is not a true multi-view input path for this contract; its full CUDA setup will be evaluated only if Wonder3D is unsuitable.",
+    "trellisCpp": "Native C++ can reduce Python dependency friction, but it is still a separate TRELLIS.2 single-image path and requires a supported local GPU/runtime; it is not the immediate multi-view experiment."
+  },
+  "nextAction": "Run one Wonder3D T4 experiment only when a fresh Colab GPU runtime is available; do not connect the result to Unity automatically."
+}

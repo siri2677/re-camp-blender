@@ -30,6 +30,16 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertFalse(policy["productionPromotionAllowed"])
         self.assertIn("hunyuan3d2", self.contract["excludedProviders"])
 
+    def test_wonder3d_is_pinned_as_research_only_multiview_provider(self):
+        wonder3d = self.contract["experimentalProviders"]["wonder3D"]
+        self.assertEqual(len(wonder3d["commit"]), 40)
+        self.assertEqual(wonder3d["generatedViewCount"], 6)
+        self.assertEqual(wonder3d["generatedAzimuths"], [0, 45, 90, 180, -90, -45])
+        self.assertEqual(wonder3d["meshExtraction"], "NeuS")
+        self.assertFalse(wonder3d["fallbackEnabled"])
+        self.assertFalse(wonder3d["unityInputAllowed"])
+        self.assertNotIn("wonder3D", self.contract["providerPolicy"]["freeFallbackOrder"])
+
     def test_tripo_multiview_payload_uses_three_named_views_and_seed(self):
         tokens = {"front": "front-token", "right": "right-token", "back": "back-token"}
         payload = build_multiview_payload(self.contract, tokens, 101003)

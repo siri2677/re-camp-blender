@@ -33,6 +33,9 @@ T4-safe base 프로파일과 4-view 설정으로 InstantMesh가 OOM 없이 front
 세 후보를 생성했지만, 시도 번호 보존 결함을 수정한 재평가에서도 최고 점수
 `0.461022`로 기준 미달한 결과와 원본 OBJ·manifest SHA256은
 `2026-08-19-colab-t4-instantmesh-base-rerun-v001.json`에 보관한다.
+현재 품질 병목을 해결하기 위한 무료 연구 후보 Wonder3D의 멀티뷰 구조·라이선스·
+T4 실행 전제와 다음 검증 명령은
+`2026-08-20-free-multiview-provider-feasibility-v001.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의

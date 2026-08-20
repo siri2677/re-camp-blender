@@ -117,6 +117,14 @@ def validate_contract(errors: list[str]) -> None:
         commit = providers[key].get("commit", "")
         if not isinstance(commit, str) or len(commit) != 40:
             fail(errors, f"{key} must pin a 40-character commit")
+    experimental = contract.get("experimentalProviders", {})
+    wonder3d = experimental.get("wonder3D", {})
+    if len(wonder3d.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.wonder3D must pin a 40-character commit")
+    if wonder3d.get("fallbackEnabled") is not False:
+        fail(errors, "Wonder3D must remain disabled as an automatic fallback until T4 validation")
+    if wonder3d.get("unityInputAllowed") is not False or wonder3d.get("productionPromotionAllowed") is not False:
+        fail(errors, "Wonder3D research candidate must keep Unity and production gates locked")
     if "hunyuan3d2" not in contract.get("excludedProviders", {}):
         fail(errors, "Hunyuan3D-2 must remain explicitly excluded for the South Korea workflow")
     thresholds = contract["candidateAcceptance"]

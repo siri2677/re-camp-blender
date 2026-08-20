@@ -124,6 +124,38 @@
       ]
     }
   },
+  "experimentalProviders": {
+    "wonder3D": {
+      "mode": "OPEN_SOURCE_CONSISTENT_MULTIVIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/xxlong0/Wonder3D.git",
+      "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+      "model": "flamehaze1115/wonder3d-v1.0",
+      "customPipeline": "flamehaze1115/wonder3d-pipeline",
+      "license": "MIT",
+      "licenseNote": "Verify checkpoint terms separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 6,
+      "generatedAzimuths": [
+        0,
+        45,
+        90,
+        180,
+        -90,
+        -45
+      ],
+      "generatedResolution": 256,
+      "outputs": [
+        "rgb",
+        "normal"
+      ],
+      "meshExtraction": "NeuS",
+      "requiresGpu": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    }
+  },
   "candidateAcceptance": {
     "minimumOverallScore": 0.5,
     "minimumSilhouetteScore": 0.35,

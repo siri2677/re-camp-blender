@@ -293,3 +293,19 @@ InstantMesh manifest의 `attempts/<n>` 경로를 숫자로 인식하지 못해 �
 않는다. 상세 해시와 결과는
 `docs/records/ch101-ai3d/2026-08-19-colab-t4-instantmesh-base-rerun-v001.json`에
 기록한다.
+
+2026-08-20 조사에서는 Wonder3D를 다음 무료 후보로 고정했다. Wonder3D는 단일
+front 입력에서 일관된 6개 RGB·normal 뷰를 생성한 뒤 NeuS 또는 Instant-NSR로
+메시를 추출하는 구조라, 현재처럼 front/right/back을 서로 독립적으로 생성하는
+InstantMesh 경로의 뒷면 불일치 문제를 검증할 수 있다. 공식 저장소는 MIT 라이선스와
+256 해상도·6-view 제약, `tiny-cuda-nn` 의존성, T4에서 아직 검증되지 않은 GPU
+실행 단계를 명시한다. 따라서 `experimentalProviders.wonder3D`에 commit을 고정했지만
+기존 `freeFallbackOrder`에는 넣지 않았고, `RESEARCH_ONLY`, `fallbackEnabled: false`,
+`unityInputAllowed: false`를 유지한다. 실행 전 feasibility 기록은
+`docs/records/ch101-ai3d/2026-08-20-free-multiview-provider-feasibility-v001.json`에
+보관한다.
+
+다음 Colab 작업은 Wonder3D RGB·normal 6-view 생성 → NeuS mesh extraction → 기존
+`refine_ai3d_candidate.py`·`evaluate_ai3d_candidate.py`·`rank_candidates.py`를
+통과시키는 1회 검증이다. T4에서 설치·메모리·mesh extraction 중 하나라도 실패하면
+기존 InstantMesh/TripoSR 결과를 대체하지 않고 실패 진단만 기록한다.
