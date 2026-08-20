@@ -48,6 +48,7 @@ UTILITY_SCRIPTS = (
     "scripts/run_no_gpu_workstream.py",
     "scripts/ai3d/score_candidate_renders.py",
     "scripts/ai3d/rank_candidates.py",
+    "scripts/validate_unity_input_package.py",
 )
 REQUIRED_MARKERS = {
     "notebooks/00_colab_blender_setup.ipynb": (

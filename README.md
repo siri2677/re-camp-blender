@@ -125,3 +125,8 @@ New shared branches use one prefix convention:
 branches are preserved for traceability, but new Colab links, commits, and draft
 PRs should use the `feature/` convention when they contain implementation work.
 The execution checklist for production mesh intake is in [docs/plans/ch101-production-mesh-intake-checklist.md](docs/plans/ch101-production-mesh-intake-checklist.md).
+
+Before Unity is available, validate the future roster input manifest with
+[docs/plans/unity-input-package-preflight.md](docs/plans/unity-input-package-preflight.md).
+The preflight checks the five-character socket contract, source/tool commits,
+blend hashes, Gate lock, and—after approval—the final Unity package SHA256.
