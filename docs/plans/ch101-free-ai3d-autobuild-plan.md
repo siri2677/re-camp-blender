@@ -314,3 +314,8 @@ InstantMesh 경로의 뒷면 불일치 문제를 검증할 수 있다. 공식 �
 `scripts/ai3d/register_wonder3d_candidate.py`를 추가했다. PLY/OBJ/GLB/GLTF를
 후처리 입력으로 허용하지만, 등록 manifest의 sourceStatus와 Unity/Production gate는
 기존과 동일하게 잠긴다.
+
+2026-08-20 첫 Wonder3D Colab 실행 시도는 Notebook을 열고 GPU 런타임 연결 단계까지
+도달했지만 Colab 사용량 제한으로 GPU 백엔드가 할당되지 않았다. Provider 설치·추론은
+시작하지 않았으며, 이 결과는 `BLOCKED_GPU_QUOTA`로 기록했다. 사용량 제한이 풀리면
+동일한 pinned Notebook을 재실행하고, CPU로 우회하거나 Unity 입력을 활성화하지 않는다.

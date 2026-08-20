@@ -57,6 +57,15 @@
     "unityInputAllowed": false,
     "productionPromotionAllowed": false
   },
+  "colabRuntimeAttempt": {
+    "attemptedAt": "2026-08-20T09:36:06+09:00",
+    "notebook": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "status": "BLOCKED_GPU_QUOTA",
+    "message": "Colab reported that the GPU backend could not be connected because the current usage limit was reached.",
+    "providerExecutionStarted": false,
+    "apiCreditUsed": 0,
+    "nextAction": "Retry the same pinned notebook after the Colab GPU usage limit resets; do not switch to CPU for model inference."
+  },
   "sources": [
     "https://github.com/xxlong0/Wonder3D",
     "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1",
