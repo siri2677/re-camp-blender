@@ -20,6 +20,11 @@ Colab의 모델·계약·Gate 규칙을 바꾸지 않고 런타임 경로와 Sec
 작업 루트를 고정할 수 있다. `TRIPO_API_KEY`와 `HF_TOKEN`은 기록하지 않으며,
 무료 Provider 경로에서는 Tripo API를 호출하지 않는다.
 
+Kaggle 첫 실행의 대기 시간을 줄이기 위해 tools/art 저장소는 기본적으로
+`--depth 1`로 clone하고, `RE_CAMP_GIT_CLONE_DEPTH`로 조정할 수 있다. 각 외부
+명령은 즉시 `RUN:`을 출력하므로 clone·preflight·Blender 설치 중 어느 단계가
+지연되는지 확인할 수 있다.
+
 ## Kaggle 실행 전제
 
 Kaggle 공식 문서 기준 Notebook에는 무료 NVIDIA GPU accelerator를 붙일 수
