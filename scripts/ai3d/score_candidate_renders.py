@@ -39,13 +39,20 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _normalize_view(path: Path, candidate: bool, size: int = 256) -> dict[str, Any]:
+def _normalize_view(
+    path: Path,
+    candidate: bool,
+    size: int = 256,
+    vertical_flip: bool = False,
+) -> dict[str, Any]:
     try:
         from PIL import Image, ImageChops, ImageFilter, ImageOps
     except ImportError as exc:
         raise RuntimeError("Pillow is required: python -m pip install pillow") from exc
     with Image.open(path) as source:
         rgba = source.convert("RGBA")
+    if vertical_flip:
+        rgba = ImageOps.flip(rgba)
     if candidate:
         mask = rgba.getchannel("A").point(lambda value: 255 if value > 16 else 0)
     else:
@@ -204,6 +211,52 @@ def score_orientation(
     return max(attempts, key=lambda item: item["orientationScore"]), attempts
 
 
+def assess_vertical_polarity(
+    selected: dict[str, Any],
+    vertically_flipped: dict[str, Any],
+    minimum_improvement: float,
+) -> dict[str, Any]:
+    normal_score = float(selected["orientationScore"])
+    flipped_score = float(vertically_flipped["orientationScore"])
+    improvement = flipped_score - normal_score
+    correction_required = improvement >= minimum_improvement
+    return {
+        "status": "UPSIDE_DOWN_DETECTED" if correction_required else "UPRIGHT_CONFIRMED",
+        "correctionRequired": correction_required,
+        "minimumImprovement": round(minimum_improvement, 6),
+        "normalOrientationScore": round(normal_score, 6),
+        "verticallyFlippedOrientationScore": round(flipped_score, 6),
+        "scoreImprovement": round(improvement, 6),
+    }
+
+
+def _acceptance_result(
+    selected: dict[str, Any],
+    technical_score: float,
+    triangle_count: int,
+    thresholds: dict[str, Any],
+) -> tuple[float, bool, list[str]]:
+    silhouette_score = float(selected["silhouetteScore"])
+    appearance_score = float(selected["appearanceScore"])
+    color_score = float(selected["colorScore"])
+    face_detail_score = float(selected["faceDetailScore"])
+    overall_score = 0.65 * silhouette_score + 0.25 * appearance_score + 0.1 * technical_score
+    failures = []
+    checks = (
+        (silhouette_score, thresholds["minimumSilhouetteScore"], "SILHOUETTE_SCORE_BELOW_MINIMUM"),
+        (appearance_score, thresholds["minimumAppearanceScore"], "APPEARANCE_SCORE_BELOW_MINIMUM"),
+        (color_score, thresholds["minimumColorScore"], "COLOR_SCORE_BELOW_MINIMUM"),
+        (face_detail_score, thresholds["minimumFaceDetailScore"], "FACE_DETAIL_SCORE_BELOW_MINIMUM"),
+        (overall_score, thresholds["minimumOverallScore"], "OVERALL_SCORE_BELOW_MINIMUM"),
+    )
+    for actual, minimum, reason in checks:
+        if actual < minimum:
+            failures.append(reason)
+    if triangle_count > thresholds["maximumSourceTriangles"]:
+        failures.append("SOURCE_TRIANGLE_COUNT_ABOVE_MAXIMUM")
+    return overall_score, not failures, failures
+
+
 def build_score_report(
     contract: dict[str, Any],
     references: dict[str, Any],
@@ -217,27 +270,59 @@ def build_score_report(
         name: _normalize_view(Path(references["views"][name]["path"]), candidate=False)
         for name in ("front", "right", "back")
     }
-    candidate_views = {
-        name: _normalize_view(Path(evaluation["renders"][name]), candidate=True)
+    candidate_render_paths = {
+        name: Path(evaluation["renders"][name])
         for name in CARDINAL_CYCLE
     }
+    candidate_views = {
+        name: _normalize_view(path, candidate=True)
+        for name, path in candidate_render_paths.items()
+    }
+    vertically_flipped_views = {
+        name: _normalize_view(path, candidate=True, vertical_flip=True)
+        for name, path in candidate_render_paths.items()
+    }
     selected, attempts = score_orientation(reference_views, candidate_views)
+    vertically_flipped_selected, vertically_flipped_attempts = score_orientation(
+        reference_views, vertically_flipped_views
+    )
+    thresholds = contract["candidateAcceptance"]
+    polarity = assess_vertical_polarity(
+        selected,
+        vertically_flipped_selected,
+        float(thresholds.get("minimumVerticalPolarityImprovement", 0.02)),
+    )
     technical_score = float(evaluation.get("metrics", {}).get("technicalScore", 0.0))
+    triangle_count = int(evaluation.get("metrics", {}).get("triangleCount", 0))
     silhouette_score = float(selected["silhouetteScore"])
     appearance_score = float(selected["appearanceScore"])
     color_score = float(selected["colorScore"])
     face_detail_score = float(selected["faceDetailScore"])
-    overall_score = 0.65 * silhouette_score + 0.25 * appearance_score + 0.1 * technical_score
-    thresholds = contract["candidateAcceptance"]
-    eligible = (
-        silhouette_score >= thresholds["minimumSilhouetteScore"]
-        and appearance_score >= thresholds["minimumAppearanceScore"]
-        and color_score >= thresholds["minimumColorScore"]
-        and face_detail_score >= thresholds["minimumFaceDetailScore"]
-        and overall_score >= thresholds["minimumOverallScore"]
-        and int(evaluation.get("metrics", {}).get("triangleCount", 0))
-        <= thresholds["maximumSourceTriangles"]
+    overall_score, scores_eligible, failure_reasons = _acceptance_result(
+        selected, technical_score, triangle_count, thresholds
     )
+    if polarity["correctionRequired"]:
+        failure_reasons.insert(0, "UPSIDE_DOWN_ORIENTATION")
+    eligible = scores_eligible and not polarity["correctionRequired"]
+    corrected_overall, corrected_scores_eligible, corrected_failures = _acceptance_result(
+        vertically_flipped_selected, technical_score, triangle_count, thresholds
+    )
+    polarity["verticalFlipPreview"] = {
+        "status": (
+            "CORRECTION_PREVIEW_REQUIRES_RERENDER"
+            if polarity["correctionRequired"]
+            else "CONTROL_VERTICAL_FLIP_REJECTED"
+        ),
+        "overallScore": round(corrected_overall, 6),
+        "silhouetteScore": vertically_flipped_selected["silhouetteScore"],
+        "appearanceScore": vertically_flipped_selected["appearanceScore"],
+        "colorScore": vertically_flipped_selected["colorScore"],
+        "faceDetailScore": vertically_flipped_selected["faceDetailScore"],
+        "scoresMeetThresholds": corrected_scores_eligible,
+        "failureReasons": corrected_failures,
+        "selectedOrientation": vertically_flipped_selected,
+        "orientationAttempts": vertically_flipped_attempts,
+    }
     return {
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
@@ -252,8 +337,14 @@ def build_score_report(
         "colorScore": round(color_score, 6),
         "faceDetailScore": round(face_detail_score, 6),
         "technicalScore": round(technical_score, 6),
+        "failureReasons": failure_reasons,
         "selectedOrientation": selected,
         "orientationAttempts": attempts,
+        "orientationValidation": polarity,
+        "metricLimitations": {
+            "faceDetailScore": "UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY",
+            "automaticAcceptance": "ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL",
+        },
         "thresholds": thresholds,
         "artCommit": contract["artLock"]["commit"],
         "evaluationReport": evaluation,

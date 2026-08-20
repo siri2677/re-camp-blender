@@ -244,18 +244,130 @@ def build_humanoid_rig(meshes: list[bpy.types.Object]) -> bpy.types.Object:
     return armature
 
 
-def auto_weight(meshes: list[bpy.types.Object], armature: bpy.types.Object) -> tuple[str, str]:
+def audit_weights(
+    meshes: list[bpy.types.Object], armature: bpy.types.Object
+) -> dict[str, object]:
+    bone_names = {bone.name for bone in armature.data.bones}
+    object_reports = []
+    total_vertices = 0
+    weighted_vertices = 0
+    for obj in meshes:
+        deform_group_indices = {
+            group.index for group in obj.vertex_groups if group.name in bone_names
+        }
+        object_weighted = sum(
+            1
+            for vertex in obj.data.vertices
+            if any(
+                membership.group in deform_group_indices and membership.weight > 1e-6
+                for membership in vertex.groups
+            )
+        )
+        armature_modifiers = [
+            modifier
+            for modifier in obj.modifiers
+            if modifier.type == "ARMATURE" and modifier.object == armature
+        ]
+        object_vertices = len(obj.data.vertices)
+        total_vertices += object_vertices
+        weighted_vertices += object_weighted
+        object_reports.append(
+            {
+                "object": obj.name,
+                "vertexCount": object_vertices,
+                "weightedVertexCount": object_weighted,
+                "unweightedVertexCount": object_vertices - object_weighted,
+                "deformGroupCount": len(deform_group_indices),
+                "armatureModifierCount": len(armature_modifiers),
+            }
+        )
+    return {
+        "status": (
+            "PASS"
+            if total_vertices > 0
+            and weighted_vertices == total_vertices
+            and all(report["armatureModifierCount"] > 0 for report in object_reports)
+            else "FAIL"
+        ),
+        "totalVertexCount": total_vertices,
+        "weightedVertexCount": weighted_vertices,
+        "unweightedVertexCount": total_vertices - weighted_vertices,
+        "objects": object_reports,
+    }
+
+
+def point_segment_distance_squared(point: Vector, head: Vector, tail: Vector) -> float:
+    segment = tail - head
+    length_squared = segment.length_squared
+    if length_squared <= 1e-12:
+        return (point - head).length_squared
+    amount = max(0.0, min(1.0, (point - head).dot(segment) / length_squared))
+    return (point - (head + segment * amount)).length_squared
+
+
+def apply_nearest_bone_fallback(
+    meshes: list[bpy.types.Object], armature: bpy.types.Object
+) -> None:
+    bones = [bone for bone in armature.data.bones if bone.name != "Root"]
+    bone_segments = {
+        bone.name: (
+            armature.matrix_world @ bone.head_local,
+            armature.matrix_world @ bone.tail_local,
+        )
+        for bone in bones
+    }
+    for obj in meshes:
+        for group in list(obj.vertex_groups):
+            obj.vertex_groups.remove(group)
+        groups = {bone.name: obj.vertex_groups.new(name=bone.name) for bone in bones}
+        assignments: dict[str, list[int]] = {bone.name: [] for bone in bones}
+        for vertex in obj.data.vertices:
+            world_point = obj.matrix_world @ vertex.co
+            nearest_name = min(
+                bone_segments,
+                key=lambda name: point_segment_distance_squared(
+                    world_point, *bone_segments[name]
+                ),
+            )
+            assignments[nearest_name].append(vertex.index)
+        for name, indices in assignments.items():
+            if indices:
+                groups[name].add(indices, 1.0, "REPLACE")
+        modifier = next(
+            (modifier for modifier in obj.modifiers if modifier.type == "ARMATURE"),
+            None,
+        )
+        if modifier is None:
+            modifier = obj.modifiers.new(name="CH101_AI_AutoRig", type="ARMATURE")
+        modifier.object = armature
+        obj.parent = armature
+
+
+def auto_weight(
+    meshes: list[bpy.types.Object], armature: bpy.types.Object
+) -> tuple[str, str, dict[str, object]]:
     bpy.ops.object.select_all(action="DESELECT")
     for obj in meshes:
         obj.hide_set(False)
         obj.select_set(True)
     armature.select_set(True)
     bpy.context.view_layer.objects.active = armature
+    operator_error = ""
     try:
         bpy.ops.object.parent_set(type="ARMATURE_AUTO")
-        return "AUTO_WEIGHTED_FOR_REVIEW", ""
     except RuntimeError as exc:
-        return "AUTO_WEIGHT_FAILED", str(exc)
+        operator_error = str(exc)
+    audit = audit_weights(meshes, armature)
+    if audit["status"] == "PASS":
+        return "AUTO_WEIGHTED_FOR_REVIEW", operator_error, audit
+    fallback_reason = operator_error or (
+        "Blender bone heat operator returned without assigning every LOD0 vertex."
+    )
+    apply_nearest_bone_fallback(meshes, armature)
+    fallback_audit = audit_weights(meshes, armature)
+    if fallback_audit["status"] != "PASS":
+        return "AUTO_WEIGHT_FAILED", fallback_reason, fallback_audit
+    return "FALLBACK_NEAREST_BONE_WEIGHTED_FOR_REVIEW", fallback_reason, fallback_audit
 
 
 def bone_tail_world(armature: bpy.types.Object, bone_name: str) -> Vector:
@@ -364,7 +476,7 @@ def main() -> int:
     normalize_import(imported, front_view)
     lods, triangle_counts = build_lods(source_meshes)
     armature = build_humanoid_rig(lods["LOD0"])
-    weight_status, weight_error = auto_weight(lods["LOD0"], armature)
+    weight_status, weight_error, weight_audit = auto_weight(lods["LOD0"], armature)
     socket_report = build_sockets(armature, socket_contract)
 
     scene = bpy.context.scene
@@ -399,6 +511,7 @@ def main() -> int:
             "boneCount": len(armature.data.bones),
             "weightStatus": weight_status,
             "weightError": weight_error,
+            "weightAudit": weight_audit,
         },
         "sockets": socket_report,
         "faceDriver": {
@@ -416,6 +529,7 @@ def main() -> int:
         },
         "warnings": [
             "Heuristic bone positions and automatic weights require deformation review.",
+            "Bone heat weighting is audited; deterministic nearest-bone weights are used only as a review fallback.",
             "Sockets are estimated from body proportions, not detected equipment geometry.",
             "No FBX/GLB Unity package is exported before human Gate B approval.",
         ],

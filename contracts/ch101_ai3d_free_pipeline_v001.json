@@ -162,6 +162,7 @@
     "minimumAppearanceScore": 0.25,
     "minimumColorScore": 0.2,
     "minimumFaceDetailScore": 0.12,
+    "minimumVerticalPolarityImprovement": 0.02,
     "maximumSourceTriangles": 300000,
     "reviewRenderSize": 512
   },

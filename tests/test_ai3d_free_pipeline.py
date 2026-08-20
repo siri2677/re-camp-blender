@@ -12,6 +12,7 @@ from scripts.ai3d.common import (
     EXPECTED_GATE,
     EXPECTED_SOURCE_STATUS,
     load_contract,
+    require_reference_manifest,
     sha256_file,
 )
 from scripts.ai3d.colab_runtime_preflight import build_report
@@ -19,6 +20,7 @@ from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
+from scripts.ai3d.score_candidate_renders import assess_vertical_polarity
 from scripts.ai3d.run_wonder3d_multiview import (
     build_generation_command,
     inspect_reusable_generation,
@@ -252,6 +254,34 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(manifest["unityInputAllowed"])
             self.assertEqual(set(manifest["views"]), {"front", "right", "back"})
 
+    def test_downloaded_reference_manifest_resolves_archived_view_files(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            views = {}
+            for name in ("front", "right", "back"):
+                view_path = root / f"CH101_{name}.png"
+                view_path.write_bytes(name.encode("utf-8"))
+                views[name] = {
+                    "path": f"/content/re-camp-ai3d/CH101/reference-views/{view_path.name}",
+                    "sha256": sha256_file(view_path),
+                }
+            manifest_path = root / "reference-views-manifest.json"
+            manifest_path.write_text(
+                json.dumps(
+                    {
+                        "contractVersion": self.contract["contractVersion"],
+                        "character": "CH101",
+                        "artCommit": self.contract["artLock"]["commit"],
+                        "views": views,
+                        "unityInputAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            resolved = require_reference_manifest(manifest_path, self.contract)
+            for name in views:
+                self.assertEqual(Path(resolved["views"][name]["path"]).parent, root.resolve())
+
     def test_open_source_commands_are_pinned_provider_commands(self):
         front = Path("front.png")
         output = Path("provider-output")
@@ -413,7 +443,41 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('choices=("neutral", "preserve")', source)
         self.assertIn('"materialMode": args.material_mode', source)
         self.assertIn("apply_palette_review_materials", source)
+        self.assertIn("has_reviewable_imported_material", source)
+        self.assertIn("GENERIC_IMPORTED_MATERIAL_NAMES", source)
+        self.assertIn('hasattr(bpy.ops.wm, "obj_import")', source)
+        self.assertIn('hasattr(bpy.ops.wm, "ply_import")', source)
         self.assertIn('"paletteFallbackUsed": palette_fallback_used', source)
+        self.assertIn('"--invert-up-axis"', source)
+        self.assertIn('"verticalPolarityCorrectionApplied"', source)
+
+    def test_vertical_polarity_detection_requires_rerender_before_review(self):
+        upright = {"orientationScore": 0.39}
+        vertically_flipped = {"orientationScore": 0.46}
+        result = assess_vertical_polarity(upright, vertically_flipped, 0.02)
+        self.assertEqual(result["status"], "UPSIDE_DOWN_DETECTED")
+        self.assertTrue(result["correctionRequired"])
+        self.assertAlmostEqual(result["scoreImprovement"], 0.07)
+        self.assertEqual(
+            self.contract["candidateAcceptance"]["minimumVerticalPolarityImprovement"],
+            0.02,
+        )
+
+    def test_score_report_labels_face_metric_as_non_semantic(self):
+        source = Path("scripts/ai3d/score_candidate_renders.py").read_text(encoding="utf-8")
+        self.assertIn("UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY", source)
+        self.assertIn("ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL", source)
+
+    def test_ai3d_notebooks_auto_correct_upside_down_candidates(self):
+        for notebook_name in (
+            "05_ch101_ai3d_free_autobuild.ipynb",
+            "06_ch101_wonder3d_multiview_experiment.ipynb",
+        ):
+            source = Path("notebooks", notebook_name).read_text(encoding="utf-8")
+            self.assertIn("orientationValidation", source)
+            self.assertIn("correctionRequired", source)
+            self.assertIn("--invert-up-axis", source)
+            self.assertIn("VERTICAL_POLARITY_CORRECTION_FAILED", source)
 
     def test_workbench_material_sync_prevents_false_gray_render(self):
         source = Path("scripts/blender/evaluate_ai3d_candidate.py").read_text(encoding="utf-8")
@@ -422,6 +486,13 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('"workbenchMaterialsSynced": workbench_materials_synced', source)
         self.assertIn('scene.render.engine = "BLENDER_EEVEE_NEXT"', source)
         self.assertIn('"renderEngine": bpy.context.scene.render.engine', source)
+
+    def test_review_asset_audits_and_repairs_failed_bone_heat_weights(self):
+        source = Path("scripts/blender/build_ai3d_review_asset.py").read_text(encoding="utf-8")
+        self.assertIn("audit_weights", source)
+        self.assertIn("apply_nearest_bone_fallback", source)
+        self.assertIn("FALLBACK_NEAREST_BONE_WEIGHTED_FOR_REVIEW", source)
+        self.assertIn('"weightAudit": weight_audit', source)
 
     def test_persisted_ch101_run_record_is_secret_free_and_gate_locked(self):
         record = json.loads(
@@ -471,6 +542,32 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertNotIn("API_KEY", serialized)
         self.assertNotIn("HF_TOKEN", serialized)
 
+    def test_complete_local_candidate_evaluation_is_persisted_and_gate_locked(self):
+        record = json.loads(
+            Path(
+                "docs/records/ch101-ai3d/2026-08-20-complete-local-candidate-evaluation-v001.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            record["evaluationCompleteness"],
+            "COMPLETE_FOR_ALL_SIX_AVAILABLE_CANDIDATES",
+        )
+        self.assertEqual(len(record["ranking"]), 6)
+        self.assertEqual(record["automatedDecision"]["eligibleCandidateCount"], 3)
+        self.assertEqual(
+            record["automatedDecision"]["selectedCandidate"],
+            "03-CH101-TRIPOSR-001",
+        )
+        self.assertEqual(record["visualReview"]["humanGateBDecision"], "PENDING_HUMAN_REVIEW")
+        self.assertTrue(record["visualReview"]["recommendation"].startswith("REJECT_GATE_B"))
+        self.assertEqual(record["reviewAsset"]["weightAudit"]["status"], "PASS")
+        self.assertEqual(record["reviewAsset"]["weightAudit"]["unweightedVertexCount"], 0)
+        self.assertFalse(record["gate"]["unityInputAllowed"])
+        self.assertFalse(record["gate"]["productionPromotionAllowed"])
+        serialized = json.dumps(record)
+        self.assertNotIn("API_KEY", serialized)
+        self.assertNotIn("HF_TOKEN", serialized)
+
     def test_ranking_selects_only_eligible_candidate_without_unlocking_unity(self):
         base = {
             "contractVersion": self.contract["contractVersion"],
@@ -480,7 +577,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "candidateSha256": "a" * 64,
             "silhouetteScore": 0.6,
             "technicalScore": 0.8,
+            "sourceStatus": EXPECTED_SOURCE_STATUS,
+            "gateB": EXPECTED_GATE,
             "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
             "selectedOrientation": {"front": "neg_y", "back": "pos_y", "right": "pos_x"},
         }
         low = dict(base, candidateId="CH101-LOW", overallScore=0.45, eligibleForHumanReview=False)
@@ -492,6 +592,20 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertEqual(result["selectedCandidate"]["candidateId"], "CH101-HIGH")
         self.assertFalse(result["unityInputAllowed"])
         self.assertEqual(result["gateB"], EXPECTED_GATE)
+
+    def test_ranking_rejects_any_production_promotion_flag(self):
+        report = {
+            "contractVersion": self.contract["contractVersion"],
+            "character": "CH101",
+            "artCommit": self.contract["artLock"]["commit"],
+            "candidateId": "CH101-ILLEGAL",
+            "sourceStatus": EXPECTED_SOURCE_STATUS,
+            "gateB": EXPECTED_GATE,
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": True,
+        }
+        with self.assertRaisesRegex(ValueError, "production promotion"):
+            rank_reports(self.contract, [(Path("illegal.json"), report)])
 
 
 if __name__ == "__main__":

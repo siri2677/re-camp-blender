@@ -138,6 +138,14 @@ def require_reference_manifest(path: Path, contract: dict[str, Any]) -> dict[str
         entry = views[view_name]
         if not isinstance(entry, dict) or not entry.get("path") or not entry.get("sha256"):
             raise ValueError(f"reference manifest has invalid {view_name} entry")
+        recorded_path = Path(entry["path"])
+        candidates = (recorded_path, path.parent / recorded_path.name)
+        resolved_path = next((candidate.resolve() for candidate in candidates if candidate.is_file()), None)
+        if resolved_path is None:
+            raise FileNotFoundError(f"reference view is missing: {view_name}: {recorded_path}")
+        if sha256_file(resolved_path) != entry["sha256"]:
+            raise ValueError(f"reference view SHA256 mismatch: {view_name}: {resolved_path}")
+        entry["path"] = str(resolved_path)
     if manifest.get("unityInputAllowed") is not False:
         raise ValueError("reference manifest cannot enable Unity input")
     return manifest

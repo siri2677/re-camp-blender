@@ -48,8 +48,14 @@ def rank_reports(
             raise ValueError(f"score character mismatch: {path}")
         if report.get("artCommit") != contract["artLock"]["commit"]:
             raise ValueError(f"score art commit mismatch: {path}")
+        if report.get("sourceStatus") != contract["statusPolicy"]["sourceStatus"]:
+            raise ValueError(f"score source status mismatch: {path}")
+        if report.get("gateB") != contract["statusPolicy"]["gateB"]:
+            raise ValueError(f"score Gate B mismatch: {path}")
         if report.get("unityInputAllowed") is not False:
             raise ValueError(f"score report illegally enables Unity: {path}")
+        if report.get("productionPromotionAllowed") is not False:
+            raise ValueError(f"score report illegally enables production promotion: {path}")
         candidate_id = report.get("candidateId")
         if not isinstance(candidate_id, str) or not candidate_id:
             raise ValueError(f"score report has no candidateId: {path}")
@@ -69,7 +75,10 @@ def rank_reports(
                 "faceDetailScore": float(report.get("faceDetailScore", 0.0)),
                 "technicalScore": float(report.get("technicalScore", 0.0)),
                 "eligibleForHumanReview": report.get("eligibleForHumanReview") is True,
+                "failureReasons": report.get("failureReasons", []),
                 "selectedOrientation": report.get("selectedOrientation", {}),
+                "orientationValidation": report.get("orientationValidation", {}),
+                "metricLimitations": report.get("metricLimitations", {}),
             }
         )
     entries.sort(key=lambda item: (item["overallScore"], item["silhouetteScore"]), reverse=True)

@@ -51,6 +51,9 @@ Wonder3D 6-view 재사용 gate, 강제 재생성 flag, hash/commit/file 검증�
 결과는 `2026-08-20-wonder3d-reuse-gate-validation-v001.json`에 보관한다.
 최신 Colab GPU 연결 재시도에서 확인한 사용량 제한 차단과 CPU fallback 미선택 결과는
 `2026-08-20-wonder3d-colab-gpu-retry-v001.json`에 보관한다.
+다운로드된 전체 후보 6개의 상하 반전 원인 수정, Blender 5.2 재보정·30개 렌더 평가,
+최종 순위, Review 전용 Blend의 LOD·Rig·Socket·가중치 감사, 시각 거절 권고는
+`2026-08-20-complete-local-candidate-evaluation-v001.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의

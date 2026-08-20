@@ -31,6 +31,11 @@ PALETTE_MATERIALS = {
     "skin": (0.957, 0.957, 0.933, 1.0),
     "hair": (0.008, 0.008, 0.012, 1.0),
 }
+GENERIC_IMPORTED_MATERIAL_NAMES = {
+    "defaultmaterial",
+    "default material",
+    "material",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -48,6 +53,11 @@ def parse_args() -> argparse.Namespace:
         choices=("neutral", "preserve"),
         default="neutral",
         help="Use a neutral review material or preserve imported material slots/colors.",
+    )
+    parser.add_argument(
+        "--invert-up-axis",
+        action="store_true",
+        help="Invert the normalized vertical polarity after an upside-down review detection.",
     )
     return parser.parse_args(raw)
 
@@ -74,9 +84,15 @@ def import_candidate(path: Path) -> list[bpy.types.Object]:
     if suffix in {".glb", ".gltf"}:
         bpy.ops.import_scene.gltf(filepath=str(path))
     elif suffix == ".obj":
-        bpy.ops.import_scene.obj(filepath=str(path))
+        if hasattr(bpy.ops.wm, "obj_import"):
+            bpy.ops.wm.obj_import(filepath=str(path))
+        else:
+            bpy.ops.import_scene.obj(filepath=str(path))
     elif suffix == ".ply":
-        bpy.ops.import_mesh.ply(filepath=str(path))
+        if hasattr(bpy.ops.wm, "ply_import"):
+            bpy.ops.wm.ply_import(filepath=str(path))
+        else:
+            bpy.ops.import_mesh.ply(filepath=str(path))
     else:
         raise ValueError(f"unsupported candidate format: {suffix}")
     meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
@@ -97,7 +113,11 @@ def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector]:
     )
 
 
-def transform_candidate(objects: list[bpy.types.Object], target_height: float = 1.68) -> dict[str, object]:
+def transform_candidate(
+    objects: list[bpy.types.Object],
+    target_height: float = 1.68,
+    invert_up_axis: bool = False,
+) -> dict[str, object]:
     minimum, maximum = world_bounds(objects)
     dimensions = maximum - minimum
     source_axis_index = max(range(3), key=lambda axis: dimensions[axis])
@@ -110,6 +130,9 @@ def transform_candidate(objects: list[bpy.types.Object], target_height: float = 
         orientation_fix = "X_TO_Z"
     else:
         rotation = Matrix.Identity(4)
+    if invert_up_axis:
+        rotation = Matrix.Rotation(math.radians(180.0), 4, "X") @ rotation
+        orientation_fix = f"{orientation_fix}_INVERTED_UP_POLARITY"
 
     for obj in objects:
         obj.matrix_world = rotation @ obj.matrix_world
@@ -130,6 +153,8 @@ def transform_candidate(objects: list[bpy.types.Object], target_height: float = 
     return {
         "sourceUpAxis": "XYZ"[source_axis_index],
         "orientationFix": orientation_fix,
+        "upAxisPolarity": "INVERTED" if invert_up_axis else "AS_IMPORTED",
+        "verticalPolarityCorrectionApplied": invert_up_axis,
         "targetHeight": target_height,
         "dimensions": [round(value, 6) for value in (maximum - minimum)],
     }
@@ -171,8 +196,22 @@ def clean_mesh(obj: bpy.types.Object) -> dict[str, object]:
     }
 
 
+def has_reviewable_imported_material(obj: bpy.types.Object) -> bool:
+    for material in obj.data.materials:
+        if material is None:
+            continue
+        if material.node_tree and any(
+            node.type == "TEX_IMAGE" and getattr(node, "image", None) is not None
+            for node in material.node_tree.nodes
+        ):
+            return True
+        if material.name.strip().casefold() not in GENERIC_IMPORTED_MATERIAL_NAMES:
+            return True
+    return False
+
+
 def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[str]:
-    if material_mode == "preserve" and len(obj.data.materials) > 0:
+    if material_mode == "preserve" and has_reviewable_imported_material(obj):
         return [material.name for material in obj.data.materials if material is not None]
 
     if material_mode == "preserve":
@@ -255,13 +294,9 @@ def main() -> int:
 
     clear_scene()
     imported = import_candidate(candidate)
-    transform = transform_candidate(imported)
+    transform = transform_candidate(imported, invert_up_axis=args.invert_up_axis)
     cleanup = [clean_mesh(obj) for obj in imported]
-    had_imported_materials = any(
-        material is not None
-        for obj in imported
-        for material in obj.data.materials
-    )
+    had_imported_materials = any(has_reviewable_imported_material(obj) for obj in imported)
     material_names = sorted(
         {
             material_name
@@ -297,6 +332,10 @@ def main() -> int:
     if palette_fallback_used:
         warnings.append(
             "No imported material was present; CH101 palette was assigned by coarse geometry bands for review only."
+        )
+    if args.invert_up_axis:
+        warnings.append(
+            "Vertical polarity was inverted after automated upside-down render detection."
         )
     warnings.extend([
         "The refined candidate is not a Production Mesh.",
