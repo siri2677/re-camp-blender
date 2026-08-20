@@ -49,6 +49,14 @@
     "Run Blender refinement, evaluation, score, and ranking with unityInputAllowed=false.",
     "Record all dependency, CUDA, output, SHA256, and score results even on failure."
   ],
+  "repositoryAutomation": {
+    "notebook": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "multiviewRunner": "scripts/ai3d/run_wonder3d_multiview.py",
+    "candidateRegistrar": "scripts/ai3d/register_wonder3d_candidate.py",
+    "supportedMeshInputs": ["PLY", "OBJ", "GLB", "GLTF"],
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
   "sources": [
     "https://github.com/xxlong0/Wonder3D",
     "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1",

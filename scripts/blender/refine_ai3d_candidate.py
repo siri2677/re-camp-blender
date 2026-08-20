@@ -75,6 +75,8 @@ def import_candidate(path: Path) -> list[bpy.types.Object]:
         bpy.ops.import_scene.gltf(filepath=str(path))
     elif suffix == ".obj":
         bpy.ops.import_scene.obj(filepath=str(path))
+    elif suffix == ".ply":
+        bpy.ops.import_mesh.ply(filepath=str(path))
     else:
         raise ValueError(f"unsupported candidate format: {suffix}")
     meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]

@@ -19,6 +19,8 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "prepare_reference_views.py",
     ROOT / "scripts" / "ai3d" / "tripo_api.py",
     ROOT / "scripts" / "ai3d" / "run_open_source_provider.py",
+    ROOT / "scripts" / "ai3d" / "run_wonder3d_multiview.py",
+    ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
     ROOT / "scripts" / "run_no_gpu_workstream.py",
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",

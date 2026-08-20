@@ -309,3 +309,8 @@ InstantMesh 경로의 뒷면 불일치 문제를 검증할 수 있다. 공식 �
 `refine_ai3d_candidate.py`·`evaluate_ai3d_candidate.py`·`rank_candidates.py`를
 통과시키는 1회 검증이다. T4에서 설치·메모리·mesh extraction 중 하나라도 실패하면
 기존 InstantMesh/TripoSR 결과를 대체하지 않고 실패 진단만 기록한다.
+이를 위해 `notebooks/06_ch101_wonder3d_multiview_experiment.ipynb`와
+`scripts/ai3d/run_wonder3d_multiview.py`,
+`scripts/ai3d/register_wonder3d_candidate.py`를 추가했다. PLY/OBJ/GLB/GLTF를
+후처리 입력으로 허용하지만, 등록 manifest의 sourceStatus와 Unity/Production gate는
+기존과 동일하게 잠긴다.

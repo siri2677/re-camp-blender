@@ -36,6 +36,8 @@ T4-safe base 프로파일과 4-view 설정으로 InstantMesh가 OOM 없이 front
 현재 품질 병목을 해결하기 위한 무료 연구 후보 Wonder3D의 멀티뷰 구조·라이선스·
 T4 실행 전제와 다음 검증 명령은
 `2026-08-20-free-multiview-provider-feasibility-v001.json`에 보관한다.
+실행 가능한 Colab Notebook과 Wonder3D 후보 등록/후처리 래퍼도 같은 기록의
+`repositoryAutomation` 항목으로 고정한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의

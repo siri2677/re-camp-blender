@@ -13,7 +13,9 @@ from scripts.ai3d.common import (
 )
 from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.rank_candidates import rank_reports
+from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
+from scripts.ai3d.run_wonder3d_multiview import build_generation_command
 from scripts.ai3d.tripo_api import build_multiview_payload
 
 
@@ -39,6 +41,67 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertFalse(wonder3d["fallbackEnabled"])
         self.assertFalse(wonder3d["unityInputAllowed"])
         self.assertNotIn("wonder3D", self.contract["providerPolicy"]["freeFallbackOrder"])
+
+    def test_wonder3d_notebook_and_mesh_registration_keep_gate_locked(self):
+        notebook = json.loads(
+            (Path(__file__).parents[1] / "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
+                encoding="utf-8"
+            )
+        )
+        source = "\n".join(
+            "".join(cell.get("source", []))
+            for cell in notebook.get("cells", [])
+            if cell.get("cell_type") == "code"
+        )
+        for marker in (
+            "run_wonder3d_multiview.py",
+            "register_wonder3d_candidate.py",
+            "test_mvdiffusion_seq.py",
+            "NeuS",
+            "unityInputAllowed",
+        ):
+            self.assertIn(marker, source)
+        registration_source = Path("scripts/ai3d/register_wonder3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("WONDER3D_MULTIVIEW_NEUS_MESH", registration_source)
+        self.assertIn("candidate_gate_fields", registration_source)
+
+    def test_wonder3d_command_uses_pinned_six_view_pipeline(self):
+        provider = self.contract["experimentalProviders"]["wonder3D"]
+        command = build_generation_command(
+            provider,
+            Path("wonder3d-repo"),
+            Path("references"),
+            "CH101_front.png",
+            Path("wonder3d-output"),
+        )
+        serialized = " ".join(command)
+        self.assertIn("1gpu.yaml", serialized)
+        self.assertIn("test_mvdiffusion_seq.py", serialized)
+        self.assertIn("mvdiffusion-joint-ortho-6views.yaml", serialized)
+        self.assertIn("CH101_front.png", serialized)
+        self.assertEqual(provider["generatedViewCount"], 6)
+
+    def test_wonder3d_candidate_registration_preserves_hash_and_gate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            reference_manifest = root / "reference-views-manifest.json"
+            mesh = root / "mesh.ply"
+            destination = root / "candidate" / "mesh.ply"
+            reference_manifest.write_text("{\"reference\": true}\n", encoding="utf-8")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            mesh.write_bytes(b"ply\n")
+            destination.write_bytes(mesh.read_bytes())
+            manifest = build_candidate_manifest(
+                self.contract,
+                reference_manifest,
+                mesh,
+                destination,
+            )
+            self.assertEqual(manifest["sourceStage"], "WONDER3D_MULTIVIEW_NEUS_MESH")
+            self.assertEqual(manifest["candidates"][0]["modelPath"], str(destination.resolve()))
+            self.assertFalse(manifest["unityInputAllowed"])
+            self.assertFalse(manifest["productionPromotionAllowed"])
+            self.assertEqual(len(manifest["candidates"][0]["sha256"]), 64)
 
     def test_tripo_multiview_payload_uses_three_named_views_and_seed(self):
         tokens = {"front": "front-token", "right": "right-token", "back": "back-token"}
