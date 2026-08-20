@@ -1,0 +1,54 @@
+{
+  "recordVersion": "ch101-ai3d-wonder3d-reuse-gate-validation-v001",
+  "recordedAt": "2026-08-20T11:11:20+09:00",
+  "workstream": "CH101_WONDER3D_RESUME",
+  "character": "CH101",
+  "toolsCommit": "792c3c7083d06e7ec10963c236de1cd687637c22",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "implementation": {
+    "reuseValidator": "PASS",
+    "checks": [
+      "generationStatus=MULTIVIEW_GENERATED",
+      "providerCommit and providerRepoHead match pinned Wonder3D commit",
+      "reference manifest SHA256 matches",
+      "six generated view files exist under output directory",
+      "unityInputAllowed=false",
+      "productionPromotionAllowed=false"
+    ],
+    "reuseStatus": "REUSED",
+    "forceRegeneration": "RE_CAMP_REUSE_WONDER3D=0",
+    "invalidOutputPolicy": "PRESERVE_EXISTING_AND_FALL_BACK_TO_GPU_PREFLIGHT"
+  },
+  "validation": {
+    "notebookJson": "PASS",
+    "colabPackage": "PASS",
+    "ai3dPackage": "PASS",
+    "pythonCompile": "PASS",
+    "unitTests": {
+      "status": "PASS",
+      "count": 28
+    },
+    "noGpuRunner": "PASS_WITH_BLOCKED_OR_SKIPPED_EXTERNAL_STEPS",
+    "gpuProviderPreflight": {
+      "sf3d": "BLOCKED_GPU_UNAVAILABLE",
+      "instantmesh": "BLOCKED_GPU_UNAVAILABLE",
+      "triposr": "BLOCKED_GPU_UNAVAILABLE",
+      "wonder3D": "BLOCKED_GPU_UNAVAILABLE",
+      "tripo": "READY_NO_GPU_REQUIRED"
+    }
+  },
+  "runtime": {
+    "actualInference": false,
+    "candidateManifestCreated": false,
+    "reviewBlendCreated": false,
+    "apiCreditUsed": 0,
+    "gpuCount": 0
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Run Notebook 06 only after provider preflight returns READY_GPU_VISIBLE; reuse valid six-view output when available."
+}

@@ -93,6 +93,8 @@ front/right/back reference
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-provider-preflight-v001.json`
 최신 art 연결 전체 runner 실행(reference crop·Tripo dry-run·Unity handoff 포함):
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-art-connected-v001.json`
+Wonder3D 재사용 gate와 28개 테스트 검증 결과:
+`docs/records/ch101-ai3d/2026-08-20-wonder3d-reuse-gate-validation-v001.json`
 
 ## 재개 규칙
 
