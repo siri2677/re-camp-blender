@@ -18,6 +18,12 @@ python scripts/run_adaptive_workstream.py \
 | `BLOCKED_GPU_UNAVAILABLE` | `NO_GPU` | compile, unittest, 계약·CI·reference dry-run, Unity handoff 정적 검증 |
 | Tripo 선택 | `NON_GPU_PROVIDER` | API key가 있으면 API 경로, 없으면 zero-credit dry-run |
 
+Colab GPU quota가 차단된 경우에는 Kaggle Notebook을 대체 GPU 런타임으로 사용할
+수 있다. `notebooks/05_ch101_ai3d_free_autobuild.ipynb`가 Kaggle의
+`/kaggle/working` 경로와 `kaggle_secrets`를 자동 감지한다. Kaggle 실행 전에는
+Notebook Internet과 GPU accelerator를 켜야 하며, 상세 절차는
+`docs/plans/ch101-kaggle-gpu-workstream.md`에 기록한다.
+
 자동 실행기는 AI 추론을 직접 시작하지 않는다. GPU가 보이는 경우에만 호출한
 Notebook이 다음 셀의 실제 Provider 추론을 계속할 수 있도록 허용한다. GPU가
 없으면 무거운 CUDA·Blender Provider 설치 전에 `run_no_gpu_workstream.py`를
