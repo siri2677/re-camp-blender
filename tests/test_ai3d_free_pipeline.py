@@ -82,6 +82,18 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("CH101_front.png", serialized)
         self.assertEqual(provider["generatedViewCount"], 6)
 
+    def test_wonder3d_notebook_preflights_gpu_before_heavy_setup(self):
+        notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("detect_visible_gpu_count", notebook)
+        self.assertIn("BLOCKED_GPU_UNAVAILABLE", notebook)
+        self.assertIn("GPU_PREFLIGHT", notebook)
+        self.assertLess(
+            notebook.index("BLOCKED_GPU_UNAVAILABLE"),
+            notebook.index("pip', 'install', '-q', 'pillow'"),
+        )
+
     def test_wonder3d_candidate_registration_preserves_hash_and_gate(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
