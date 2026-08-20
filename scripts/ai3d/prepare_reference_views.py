@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Crop clean CH101 generation views while retaining the approved source lock."""
+"""Crop locked roster generation views while retaining the approved source lock."""
 
 from __future__ import annotations
 
@@ -31,6 +31,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--art-root", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -39,9 +40,10 @@ def prepare_views(
     art_root: Path,
     output_dir: Path,
     contract_path: Path = DEFAULT_CONTRACT_PATH,
+    character: str | None = None,
     dry_run: bool = False,
 ) -> dict[str, object]:
-    contract = load_contract(contract_path)
+    contract = load_contract(contract_path, character)
     art_root = art_root.resolve()
     output_dir = output_dir.resolve()
     approved_path = art_root / contract["authoritativeSource"]
@@ -120,6 +122,7 @@ def main() -> int:
         art_root=args.art_root,
         output_dir=args.output_dir,
         contract_path=args.contract,
+        character=args.character,
         dry_run=args.dry_run,
     )
     manifest_path = args.output_dir.resolve() / "reference-views-manifest.json"

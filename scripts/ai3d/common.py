@@ -5,14 +5,18 @@ from __future__ import annotations
 
 import hashlib
 import json
+import copy
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT_PATH = ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json"
+ROSTER_CONTRACT_PATH = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
 EXPECTED_CONTRACT_VERSION = "ch101-ai3d-free-pipeline-v001"
+EXPECTED_ROSTER_CONTRACT_VERSION = "current-roster-ai3d-pipeline-v001"
 EXPECTED_CHARACTER = "CH101"
+EXPECTED_ROSTER_CHARACTERS = ("CH101", "CH102", "CH103", "CH104", "CH105")
 EXPECTED_SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
 EXPECTED_GATE = "PENDING_HUMAN_REVIEW"
 VIEW_ORDER = ("front", "right", "back")
@@ -45,13 +49,16 @@ def _require_string(data: dict[str, Any], key: str) -> str:
     return value
 
 
-def load_contract(path: Path | None = None) -> dict[str, Any]:
-    contract_path = (path or DEFAULT_CONTRACT_PATH).resolve()
-    contract = read_json(contract_path)
-    if contract.get("contractVersion") != EXPECTED_CONTRACT_VERSION:
-        raise ValueError(f"contractVersion must be {EXPECTED_CONTRACT_VERSION!r}")
-    if contract.get("character") != EXPECTED_CHARACTER:
-        raise ValueError(f"character must be {EXPECTED_CHARACTER!r}")
+def _validate_character_contract(
+    contract: dict[str, Any], expected_version: str
+) -> dict[str, Any]:
+    if contract.get("contractVersion") != expected_version:
+        raise ValueError(f"contractVersion must be {expected_version!r}")
+    if contract.get("character") not in EXPECTED_ROSTER_CHARACTERS:
+        raise ValueError(
+            f"character must be one of {EXPECTED_ROSTER_CHARACTERS!r}"
+        )
+    _require_string(contract, "subject")
     _require_string(contract, "authoritativeSource")
 
     art_lock = contract.get("artLock")
@@ -111,6 +118,75 @@ def load_contract(path: Path | None = None) -> dict[str, Any]:
     if "SK-" in serialized or "BEARER " in serialized:
         raise ValueError("contract appears to contain an API secret")
     return contract
+
+
+def load_roster_contract_index(path: Path | None = None) -> dict[str, Any]:
+    contract_path = (path or ROSTER_CONTRACT_PATH).resolve()
+    roster = read_json(contract_path)
+    if roster.get("contractVersion") != EXPECTED_ROSTER_CONTRACT_VERSION:
+        raise ValueError(
+            f"roster contractVersion must be {EXPECTED_ROSTER_CONTRACT_VERSION!r}"
+        )
+    base_contract = roster.get("baseContract")
+    if not isinstance(base_contract, str) or not base_contract:
+        raise ValueError("roster baseContract must be a non-empty string")
+    base_path = (contract_path.parent / base_contract).resolve()
+    if base_path.parent != contract_path.parent or not base_path.is_file():
+        raise ValueError("roster baseContract must resolve inside contracts/")
+    characters = roster.get("characters")
+    if not isinstance(characters, list):
+        raise ValueError("roster characters must be a list")
+    codes = [entry.get("character") for entry in characters if isinstance(entry, dict)]
+    if tuple(codes) != EXPECTED_ROSTER_CHARACTERS:
+        raise ValueError(
+            f"roster character order must be {EXPECTED_ROSTER_CHARACTERS!r}"
+        )
+    if len(codes) != len(set(codes)):
+        raise ValueError("roster character codes must be unique")
+    return roster
+
+
+def load_contract(
+    path: Path | None = None, character: str | None = None
+) -> dict[str, Any]:
+    contract_path = (path or DEFAULT_CONTRACT_PATH).resolve()
+    raw = read_json(contract_path)
+    version = raw.get("contractVersion")
+    if version == EXPECTED_CONTRACT_VERSION:
+        if character is not None and character != EXPECTED_CHARACTER:
+            raise ValueError("the legacy CH101 contract cannot select another character")
+        return _validate_character_contract(raw, EXPECTED_CONTRACT_VERSION)
+    if version != EXPECTED_ROSTER_CONTRACT_VERSION:
+        raise ValueError(
+            "contractVersion must be either "
+            f"{EXPECTED_CONTRACT_VERSION!r} or {EXPECTED_ROSTER_CONTRACT_VERSION!r}"
+        )
+    if character not in EXPECTED_ROSTER_CHARACTERS:
+        raise ValueError(
+            "a roster contract requires --character with one of "
+            f"{EXPECTED_ROSTER_CHARACTERS!r}"
+        )
+    roster = load_roster_contract_index(contract_path)
+    base_path = (contract_path.parent / roster["baseContract"]).resolve()
+    base = _validate_character_contract(read_json(base_path), EXPECTED_CONTRACT_VERSION)
+    character_entry = next(
+        entry for entry in roster["characters"] if entry["character"] == character
+    )
+    materialized = copy.deepcopy(base)
+    for key in (
+        "character",
+        "subject",
+        "authoritativeSource",
+        "generationSource",
+        "referenceViews",
+    ):
+        materialized[key] = copy.deepcopy(character_entry[key])
+    materialized["contractVersion"] = EXPECTED_ROSTER_CONTRACT_VERSION
+    materialized["baseContractVersion"] = EXPECTED_CONTRACT_VERSION
+    materialized["rosterContractVersion"] = EXPECTED_ROSTER_CONTRACT_VERSION
+    return _validate_character_contract(
+        materialized, EXPECTED_ROSTER_CONTRACT_VERSION
+    )
 
 
 def candidate_gate_fields(contract: dict[str, Any]) -> dict[str, Any]:

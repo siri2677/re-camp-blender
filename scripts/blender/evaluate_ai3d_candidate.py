@@ -33,10 +33,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True, type=Path)
     parser.add_argument("--candidate-id", required=True)
+    parser.add_argument("--character", default="CH101")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--render-size", type=int, default=512)
     parser.add_argument("--normalized-blend", type=Path)
+    parser.add_argument(
+        "--integrity-blend",
+        type=Path,
+        help="Optional pre-export refined .blend used as the trusted topology audit source.",
+    )
     return parser.parse_args(raw)
 
 
@@ -102,12 +108,16 @@ def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector]:
     return minimum, maximum
 
 
-def normalize_candidate(imported: list[bpy.types.Object], target_height: float = 1.68) -> bpy.types.Object:
+def normalize_candidate(
+    imported: list[bpy.types.Object],
+    character: str,
+    target_height: float = 1.68,
+) -> bpy.types.Object:
     meshes = [obj for obj in imported if obj.type == "MESH"]
     minimum, maximum = world_bounds(meshes)
     dimensions = maximum - minimum
     source_up_axis = max(range(3), key=lambda axis: dimensions[axis])
-    root = bpy.data.objects.new("CH101_AI_Candidate_Root", None)
+    root = bpy.data.objects.new(f"{character}_AI_Candidate_Root", None)
     bpy.context.scene.collection.objects.link(root)
     for obj in imported:
         if obj.parent is None:
@@ -253,7 +263,115 @@ def render_views(camera: bpy.types.Object, output_dir: Path) -> dict[str, str]:
     return renders
 
 
-def collect_metrics(meshes: list[bpy.types.Object]) -> dict[str, object]:
+def _mesh_topology_metrics(obj: bpy.types.Object) -> dict[str, object]:
+    """Collect deterministic topology facts without modifying the candidate.
+
+    AI-generated humanoids can look plausible in a coarse silhouette while
+    containing detached limbs, loose vertices, or invalid edge fans.  These
+    facts are intentionally reported separately from the visual score so the
+    scorer can apply contract-owned hard gates.
+    """
+    mesh = obj.data
+    vertex_count = len(mesh.vertices)
+    adjacency: list[list[int]] = [[] for _ in range(vertex_count)]
+    edge_face_counts: dict[tuple[int, int], int] = {}
+    for edge in mesh.edges:
+        left, right = (int(edge.vertices[0]), int(edge.vertices[1]))
+        adjacency[left].append(right)
+        adjacency[right].append(left)
+        edge_face_counts[tuple(sorted((left, right)))] = 0
+    for polygon in mesh.polygons:
+        for edge_key in polygon.edge_keys:
+            key = tuple(sorted((int(edge_key[0]), int(edge_key[1]))))
+            edge_face_counts[key] = edge_face_counts.get(key, 0) + 1
+
+    component_sizes = []
+    visited = [False] * vertex_count
+    for start in range(vertex_count):
+        if visited[start]:
+            continue
+        stack = [start]
+        visited[start] = True
+        size = 0
+        while stack:
+            current = stack.pop()
+            size += 1
+            for neighbor in adjacency[current]:
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    stack.append(neighbor)
+        component_sizes.append(size)
+
+    mesh.calc_loop_triangles()
+    degenerate_triangles = sum(1 for triangle in mesh.loop_triangles if triangle.area <= 1e-12)
+    loose_vertices = sum(1 for neighbors in adjacency if not neighbors)
+    boundary_edges = sum(1 for count in edge_face_counts.values() if count == 1)
+    non_manifold_edges = sum(1 for count in edge_face_counts.values() if count > 2)
+    return {
+        "object": obj.name,
+        "vertexCount": vertex_count,
+        "edgeCount": len(mesh.edges),
+        "triangleCount": len(mesh.loop_triangles),
+        "componentSizes": sorted(component_sizes, reverse=True),
+        "connectedComponentCount": len(component_sizes),
+        "looseVertexCount": loose_vertices,
+        "boundaryEdgeCount": boundary_edges,
+        "nonManifoldEdgeCount": non_manifold_edges,
+        "degenerateTriangleCount": degenerate_triangles,
+    }
+
+
+def collect_geometry_integrity(meshes: list[bpy.types.Object]) -> dict[str, object]:
+    object_metrics = [_mesh_topology_metrics(obj) for obj in meshes]
+    total_vertices = sum(int(item["vertexCount"]) for item in object_metrics)
+    total_edges = sum(int(item["edgeCount"]) for item in object_metrics)
+    total_triangles = sum(int(item["triangleCount"]) for item in object_metrics)
+    component_sizes = sorted(
+        (
+            int(size)
+            for item in object_metrics
+            for size in item["componentSizes"]
+        ),
+        reverse=True,
+    )
+    for item in object_metrics:
+        item["componentSizes"] = item["componentSizes"][:32]
+    significant_minimum = max(32, math.ceil(total_vertices * 0.0025))
+    significant_components = [size for size in component_sizes if size >= significant_minimum]
+    loose_vertices = sum(int(item["looseVertexCount"]) for item in object_metrics)
+    boundary_edges = sum(int(item["boundaryEdgeCount"]) for item in object_metrics)
+    non_manifold_edges = sum(int(item["nonManifoldEdgeCount"]) for item in object_metrics)
+    degenerate_triangles = sum(int(item["degenerateTriangleCount"]) for item in object_metrics)
+
+    def ratio(value: int, total: int) -> float:
+        return round(value / total, 8) if total else 0.0
+
+    largest_component = component_sizes[0] if component_sizes else 0
+    return {
+        "status": "GEOMETRY_INTEGRITY_COLLECTED",
+        "connectedComponentCount": len(component_sizes),
+        "significantComponentCount": len(significant_components),
+        "significantComponentMinimumVertices": significant_minimum,
+        "largestComponentVertexCount": largest_component,
+        "largestComponentVertexRatio": ratio(largest_component, total_vertices),
+        "detachedVertexRatio": ratio(total_vertices - largest_component, total_vertices),
+        "looseVertexCount": loose_vertices,
+        "looseVertexRatio": ratio(loose_vertices, total_vertices),
+        "boundaryEdgeCount": boundary_edges,
+        "boundaryEdgeRatio": ratio(boundary_edges, total_edges),
+        "nonManifoldEdgeCount": non_manifold_edges,
+        "nonManifoldEdgeRatio": ratio(non_manifold_edges, total_edges),
+        "degenerateTriangleCount": degenerate_triangles,
+        "degenerateTriangleRatio": ratio(degenerate_triangles, total_triangles),
+        "componentSizes": component_sizes[:32],
+        "objectMetrics": object_metrics,
+    }
+
+
+def collect_metrics(
+    meshes: list[bpy.types.Object],
+    trusted_geometry_integrity: dict[str, object] | None = None,
+) -> dict[str, object]:
     triangle_count = 0
     vertex_count = 0
     material_names = set()
@@ -275,6 +393,9 @@ def collect_metrics(meshes: list[bpy.types.Object]) -> dict[str, object]:
     technical_score += 0.15 if material_names else 0.0
     technical_score += 0.2 if 1.2 <= aspect <= 4.5 else 0.05
     technical_score += 0.2 if 500 <= triangle_count <= 300000 else 0.05
+    transport_geometry_integrity = collect_geometry_integrity(meshes)
+    transport_geometry_integrity["basis"] = "IMPORTED_REVIEW_TRANSPORT_FILE"
+    geometry_integrity = trusted_geometry_integrity or transport_geometry_integrity
     return {
         "meshCount": len(meshes),
         "vertexCount": vertex_count,
@@ -287,6 +408,8 @@ def collect_metrics(meshes: list[bpy.types.Object]) -> dict[str, object]:
         "dimensions": list(dimensions),
         "heightToWidthAspect": round(aspect, 6),
         "technicalScore": round(min(technical_score, 1.0), 6),
+        "geometryIntegrity": geometry_integrity,
+        "transportGeometryIntegrity": transport_geometry_integrity,
     }
 
 
@@ -297,14 +420,29 @@ def main() -> int:
         raise FileNotFoundError(candidate)
     output_dir = args.output_dir.resolve()
     report_path = args.report.resolve()
+    trusted_geometry_integrity = None
+    integrity_blend_sha256 = ""
+    if args.integrity_blend:
+        integrity_blend = args.integrity_blend.resolve()
+        if not integrity_blend.is_file() or integrity_blend.suffix.lower() != ".blend":
+            raise FileNotFoundError(f"invalid integrity blend: {integrity_blend}")
+        bpy.ops.wm.open_mainfile(filepath=str(integrity_blend))
+        integrity_meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
+        if not integrity_meshes:
+            raise ValueError("integrity blend contains no mesh objects")
+        trusted_geometry_integrity = collect_geometry_integrity(integrity_meshes)
+        trusted_geometry_integrity["basis"] = "PRE_EXPORT_REFINED_BLEND"
+        trusted_geometry_integrity["sourcePath"] = str(integrity_blend)
+        integrity_blend_sha256 = sha256_file(integrity_blend)
+        trusted_geometry_integrity["sourceSha256"] = integrity_blend_sha256
     clear_scene()
     imported = import_candidate(candidate)
     meshes = [obj for obj in imported if obj.type == "MESH"]
     if not meshes:
         raise ValueError("candidate contains no mesh objects")
-    root = normalize_candidate(imported)
+    root = normalize_candidate(imported, args.character)
     bpy.context.view_layer.update()
-    metrics = collect_metrics(meshes)
+    metrics = collect_metrics(meshes, trusted_geometry_integrity)
     render_color_mode = detect_render_color_mode(meshes)
     workbench_materials_synced = sync_workbench_material_colors(meshes)
     camera = configure_render(max(256, args.render_size), render_color_mode)
@@ -320,7 +458,7 @@ def main() -> int:
     else:
         normalized_blend = None
     report = {
-        "character": "CH101",
+        "character": args.character,
         "candidateId": args.candidate_id,
         "candidatePath": str(candidate),
         "candidateSha256": sha256_file(candidate),
@@ -338,6 +476,7 @@ def main() -> int:
         "normalizedBlend": str(normalized_blend) if normalized_blend else "",
         "sourceUpAxis": root.get("source_up_axis", "Z"),
         "orientationFix": root.get("orientation_fix", "NONE"),
+        "integrityBlendSha256": integrity_blend_sha256,
         "warnings": [
             "Orientation is selected by silhouette scoring after rendering.",
             "This normalized scene is an AI review candidate, not a production mesh.",

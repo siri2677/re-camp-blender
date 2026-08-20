@@ -23,13 +23,47 @@ from mathutils import Matrix, Vector
 SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
 GATE_B = "PENDING_HUMAN_REVIEW"
 REVIEW_MATERIAL_NAME = "AI_REVIEW_NEUTRAL_AUTO"
-PALETTE_MATERIALS = {
-    "white": (0.957, 0.957, 0.933, 1.0),
-    "graphite": (0.008, 0.008, 0.012, 1.0),
-    "gold": (0.668, 0.391, 0.063, 1.0),
-    "cyan": (0.0, 0.455, 0.672, 1.0),
-    "skin": (0.957, 0.957, 0.933, 1.0),
-    "hair": (0.008, 0.008, 0.012, 1.0),
+PALETTE_MATERIALS_BY_CHARACTER = {
+    "CH101": {
+        "white": (0.957, 0.957, 0.933, 1.0),
+        "graphite": (0.008, 0.008, 0.012, 1.0),
+        "gold": (0.668, 0.391, 0.063, 1.0),
+        "cyan": (0.0, 0.455, 0.672, 1.0),
+        "skin": (0.957, 0.957, 0.933, 1.0),
+        "hair": (0.008, 0.008, 0.012, 1.0),
+    },
+    "CH102": {
+        "white": (0.40, 0.24, 0.68, 1.0),
+        "graphite": (0.015, 0.012, 0.025, 1.0),
+        "gold": (0.54, 0.37, 0.12, 1.0),
+        "cyan": (0.32, 0.18, 0.62, 1.0),
+        "skin": (0.95, 0.78, 0.72, 1.0),
+        "hair": (0.63, 0.58, 0.76, 1.0),
+    },
+    "CH103": {
+        "white": (0.95, 0.94, 0.90, 1.0),
+        "graphite": (0.07, 0.06, 0.07, 1.0),
+        "gold": (0.90, 0.33, 0.22, 1.0),
+        "cyan": (0.02, 0.56, 0.62, 1.0),
+        "skin": (0.96, 0.80, 0.73, 1.0),
+        "hair": (0.86, 0.37, 0.29, 1.0),
+    },
+    "CH104": {
+        "white": (0.90, 0.90, 0.88, 1.0),
+        "graphite": (0.015, 0.04, 0.12, 1.0),
+        "gold": (0.63, 0.45, 0.20, 1.0),
+        "cyan": (0.30, 0.10, 0.42, 1.0),
+        "skin": (0.95, 0.78, 0.72, 1.0),
+        "hair": (0.01, 0.04, 0.12, 1.0),
+    },
+    "CH105": {
+        "white": (0.03, 0.16, 0.15, 1.0),
+        "graphite": (0.012, 0.014, 0.015, 1.0),
+        "gold": (0.56, 0.36, 0.13, 1.0),
+        "cyan": (0.0, 0.32, 0.30, 1.0),
+        "skin": (0.92, 0.73, 0.65, 1.0),
+        "hair": (0.01, 0.04, 0.04, 1.0),
+    },
 }
 GENERIC_IMPORTED_MATERIAL_NAMES = {
     "defaultmaterial",
@@ -42,6 +76,7 @@ def parse_args() -> argparse.Namespace:
     raw = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True, type=Path)
+    parser.add_argument("--character", default="CH101")
     parser.add_argument("--output-glb", required=True, type=Path)
     parser.add_argument("--output-blend", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
@@ -210,12 +245,14 @@ def has_reviewable_imported_material(obj: bpy.types.Object) -> bool:
     return False
 
 
-def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[str]:
+def ensure_review_material(
+    obj: bpy.types.Object, material_mode: str, character: str
+) -> list[str]:
     if material_mode == "preserve" and has_reviewable_imported_material(obj):
         return [material.name for material in obj.data.materials if material is not None]
 
     if material_mode == "preserve":
-        return apply_palette_review_materials(obj)
+        return apply_palette_review_materials(obj, character)
 
     material = bpy.data.materials.get(REVIEW_MATERIAL_NAME)
     if material is None:
@@ -233,16 +270,21 @@ def ensure_review_material(obj: bpy.types.Object, material_mode: str) -> list[st
     return [material.name]
 
 
-def apply_palette_review_materials(obj: bpy.types.Object) -> list[str]:
-    """Apply a conservative CH101 palette approximation when textures are absent.
+def apply_palette_review_materials(
+    obj: bpy.types.Object, character: str
+) -> list[str]:
+    """Apply a conservative roster palette approximation when textures are absent.
 
     This is a review aid for untextured AI meshes, not texture generation. The
     bands are deliberately coarse and the report labels the result as an
     approximation so it cannot be mistaken for final art.
     """
+    palette = PALETTE_MATERIALS_BY_CHARACTER.get(
+        character, PALETTE_MATERIALS_BY_CHARACTER["CH101"]
+    )
     materials = {}
-    for key, rgba in PALETTE_MATERIALS.items():
-        name = f"AI_REVIEW_PALETTE_{key.upper()}"
+    for key, rgba in palette.items():
+        name = f"{character}_AI_REVIEW_PALETTE_{key.upper()}"
         material = bpy.data.materials.get(name) or bpy.data.materials.new(name)
         material.use_nodes = True
         material.diffuse_color = rgba
@@ -301,7 +343,9 @@ def main() -> int:
         {
             material_name
             for obj in imported
-            for material_name in ensure_review_material(obj, args.material_mode)
+            for material_name in ensure_review_material(
+                obj, args.material_mode, args.character
+            )
         }
     )
     palette_fallback_used = args.material_mode == "preserve" and not had_imported_materials
@@ -331,7 +375,7 @@ def main() -> int:
     ]
     if palette_fallback_used:
         warnings.append(
-            "No imported material was present; CH101 palette was assigned by coarse geometry bands for review only."
+            f"No imported material was present; {args.character} palette was assigned by coarse geometry bands for review only."
         )
     if args.invert_up_axis:
         warnings.append(
@@ -343,7 +387,7 @@ def main() -> int:
     ])
 
     report = {
-        "character": "CH101",
+        "character": args.character,
         "candidatePath": str(candidate),
         "candidateSha256": sha256_file(candidate),
         "refinedGlb": str(args.output_glb.resolve()),

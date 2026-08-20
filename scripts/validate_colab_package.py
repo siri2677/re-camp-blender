@@ -40,6 +40,7 @@ UTILITY_SCRIPTS = (
     "scripts/validate_ai3d_free_package.py",
     "scripts/ai3d/common.py",
     "scripts/ai3d/prepare_reference_views.py",
+    "scripts/ai3d/prepare_roster_reference_views.py",
     "scripts/ai3d/tripo_api.py",
     "scripts/ai3d/run_open_source_provider.py",
     "scripts/ai3d/run_wonder3d_multiview.py",
@@ -48,6 +49,7 @@ UTILITY_SCRIPTS = (
     "scripts/run_no_gpu_workstream.py",
     "scripts/ai3d/score_candidate_renders.py",
     "scripts/ai3d/rank_candidates.py",
+    "scripts/ai3d/build_gate_b_review_package.py",
     "scripts/validate_unity_input_package.py",
     "scripts/run_adaptive_workstream.py",
 )
@@ -128,6 +130,8 @@ REQUIRED_MARKERS = {
     "notebooks/05_ch101_ai3d_free_autobuild.ipynb": (
         "CHARACTER_CODE",
         "CH101",
+        "RE_CAMP_CHARACTER_CODE",
+        "current_roster_ai3d_pipeline_v001.json",
         "TOOLS_REPO_URL",
         "TOOLS_COMMIT",
         "ART_COMMIT",
@@ -143,6 +147,7 @@ REQUIRED_MARKERS = {
         "trimesh>=4.4.0",
         "onnxruntime-gpu",
         "evaluate_ai3d_candidate.py",
+        "--integrity-blend",
         "refine_ai3d_candidate.py",
         "REFINED_REVIEW_CANDIDATE",
         "face_driver_status",

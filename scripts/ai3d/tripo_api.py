@@ -172,6 +172,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--reference-manifest", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     parser.add_argument("--candidate-count", type=int, default=4)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--poll-seconds", type=float, default=3.0)
@@ -219,7 +220,7 @@ def _load_or_initialize_manifest(
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.contract)
+    contract = load_contract(args.contract, args.character)
     reference_manifest_path = args.reference_manifest.resolve()
     references = require_reference_manifest(reference_manifest_path, contract)
     provider = contract["providers"]["tripoApi"]

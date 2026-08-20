@@ -10,17 +10,24 @@ from unittest.mock import patch
 from scripts.ai3d.common import (
     DEFAULT_CONTRACT_PATH,
     EXPECTED_GATE,
+    EXPECTED_ROSTER_CHARACTERS,
     EXPECTED_SOURCE_STATUS,
+    ROSTER_CONTRACT_PATH,
     load_contract,
+    load_roster_contract_index,
     require_reference_manifest,
     sha256_file,
 )
 from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.prepare_reference_views import prepare_views
+from scripts.ai3d.prepare_roster_reference_views import prepare_roster
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import build_command, run_provider_command
-from scripts.ai3d.score_candidate_renders import assess_vertical_polarity
+from scripts.ai3d.score_candidate_renders import (
+    assess_vertical_polarity,
+    evaluate_quality_hard_gates,
+)
 from scripts.ai3d.run_wonder3d_multiview import (
     build_generation_command,
     inspect_reusable_generation,
@@ -28,7 +35,7 @@ from scripts.ai3d.run_wonder3d_multiview import (
     parse_args,
 )
 from scripts.ai3d.tripo_api import build_multiview_payload
-from scripts.run_no_gpu_workstream import run_runtime_preflight
+from scripts.run_no_gpu_workstream import run_reference_dry_run, run_runtime_preflight
 
 
 class AI3DFreePipelineTests(unittest.TestCase):
@@ -43,6 +50,101 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertFalse(policy["unityInputAllowed"])
         self.assertFalse(policy["productionPromotionAllowed"])
         self.assertIn("hunyuan3d2", self.contract["excludedProviders"])
+
+    def test_current_roster_contract_materializes_all_five_characters(self):
+        roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
+        self.assertEqual(
+            [entry["character"] for entry in roster["characters"]],
+            list(EXPECTED_ROSTER_CHARACTERS),
+        )
+        sources = set()
+        for character in EXPECTED_ROSTER_CHARACTERS:
+            contract = load_contract(ROSTER_CONTRACT_PATH, character)
+            self.assertEqual(contract["character"], character)
+            self.assertEqual(
+                contract["contractVersion"], "current-roster-ai3d-pipeline-v001"
+            )
+            self.assertFalse(contract["statusPolicy"]["unityInputAllowed"])
+            self.assertGreaterEqual(
+                contract["candidateAcceptance"]["geometryHardGates"][
+                    "minimumLargestComponentVertexRatio"
+                ],
+                0.9,
+            )
+            sources.add(contract["authoritativeSource"])
+        self.assertEqual(len(sources), 5)
+
+    def test_current_roster_reference_preflight_is_no_gpu_and_gate_locked(self):
+        roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            art_root = root / "art"
+            output_root = root / "output"
+            for entry in roster["characters"]:
+                for key in ("authoritativeSource",):
+                    path = art_root / entry[key]
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(entry["character"].encode("utf-8"))
+                generation = art_root / entry["generationSource"]["path"]
+                generation.parent.mkdir(parents=True, exist_ok=True)
+                generation.write_bytes(entry["character"].encode("utf-8"))
+            report = prepare_roster(
+                art_root=art_root,
+                output_root=output_root,
+                contract_path=ROSTER_CONTRACT_PATH,
+                dry_run=True,
+            )
+            self.assertEqual(
+                report["status"], "CURRENT_ROSTER_REFERENCE_VIEW_PLAN"
+            )
+            self.assertEqual(len(report["characters"]), 5)
+            self.assertFalse(report["gpuRequired"])
+            self.assertFalse(report["actualInference"])
+            self.assertFalse(report["unityInputAllowed"])
+
+    def test_no_gpu_reference_preflight_materializes_views_before_provider_dry_run(self):
+        from PIL import Image
+
+        roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
+        with tempfile.TemporaryDirectory() as temporary:
+            art_root = Path(temporary) / "art"
+            for entry in roster["characters"]:
+                approved_path = art_root / entry["authoritativeSource"]
+                approved_path.parent.mkdir(parents=True, exist_ok=True)
+                approved_path.write_bytes(entry["character"].encode("utf-8"))
+                generation_path = art_root / entry["generationSource"]["path"]
+                generation_path.parent.mkdir(parents=True, exist_ok=True)
+                expected_size = tuple(entry["generationSource"]["expectedSize"])
+                Image.new("RGB", expected_size, (240, 240, 240)).save(generation_path)
+
+            steps = run_reference_dry_run(art_root, "CH105")
+            self.assertEqual(
+                [step["status"] for step in steps], ["PASS", "PASS"], steps
+            )
+            self.assertIn(
+                "CURRENT_ROSTER_REFERENCE_VIEWS_READY",
+                steps[0]["stdoutTail"],
+            )
+            self.assertIn("tripo-dry-run-plan.json", steps[1]["stdoutTail"])
+
+    def test_ai3d_notebook_uses_roster_character_switch(self):
+        source = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("RE_CAMP_CHARACTER_CODE", source)
+        self.assertIn("current_roster_ai3d_pipeline_v001.json", source)
+        self.assertIn("--character", source)
+        self.assertIn("--integrity-blend", source)
+
+    def test_review_asset_uses_character_specific_socket_contract(self):
+        source = Path("scripts/blender/build_ai3d_review_asset.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("character_code = ranking.get", source)
+        self.assertIn("socket_locations", source)
+        for character in EXPECTED_ROSTER_CHARACTERS:
+            self.assertIn(f'"{character}"', source)
+        self.assertNotIn('entry["code"] == "CH101"', source)
 
     def test_wonder3d_is_pinned_as_research_only_multiview_provider(self):
         wonder3d = self.contract["experimentalProviders"]["wonder3D"]
@@ -468,6 +570,56 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY", source)
         self.assertIn("ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL", source)
 
+    def test_geometry_hard_gate_rejects_detached_primary_mesh(self):
+        policy = self.contract["candidateAcceptance"]
+        evaluation = {
+            "metrics": {
+                "geometryIntegrity": {
+                    "status": "GEOMETRY_INTEGRITY_COLLECTED",
+                    "largestComponentVertexRatio": 0.84,
+                    "significantComponentCount": 4,
+                    "looseVertexRatio": 0.0,
+                    "nonManifoldEdgeRatio": 0.0,
+                    "degenerateTriangleRatio": 0.0,
+                }
+            }
+        }
+        render_integrity = {
+            "minimumLargestComponentAreaRatio": 0.95,
+            "maximumSignificantComponentCount": 2,
+        }
+        passed, failures, audit = evaluate_quality_hard_gates(
+            evaluation, render_integrity, policy
+        )
+        self.assertFalse(passed)
+        self.assertEqual(audit["status"], "FAIL")
+        self.assertIn("LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM", failures)
+
+    def test_geometry_hard_gate_requires_pre_export_integrity_report(self):
+        passed, failures, _ = evaluate_quality_hard_gates(
+            {"metrics": {}},
+            {
+                "minimumLargestComponentAreaRatio": 1.0,
+                "maximumSignificantComponentCount": 1,
+            },
+            self.contract["candidateAcceptance"],
+        )
+        self.assertFalse(passed)
+        self.assertIn("GEOMETRY_INTEGRITY_REPORT_MISSING", failures)
+
+    def test_notebooks_use_pre_export_blend_for_topology_hard_gate(self):
+        evaluator = Path("scripts/blender/evaluate_ai3d_candidate.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"--integrity-blend"', evaluator)
+        self.assertIn('"PRE_EXPORT_REFINED_BLEND"', evaluator)
+        for notebook_name in (
+            "05_ch101_ai3d_free_autobuild.ipynb",
+            "06_ch101_wonder3d_multiview_experiment.ipynb",
+        ):
+            source = Path("notebooks", notebook_name).read_text(encoding="utf-8")
+            self.assertIn("--integrity-blend", source)
+
     def test_ai3d_notebooks_auto_correct_upside_down_candidates(self):
         for notebook_name in (
             "05_ch101_ai3d_free_autobuild.ipynb",
@@ -606,6 +758,57 @@ class AI3DFreePipelineTests(unittest.TestCase):
         }
         with self.assertRaisesRegex(ValueError, "production promotion"):
             rank_reports(self.contract, [(Path("illegal.json"), report)])
+
+    def test_assisted_visual_review_can_reject_but_never_approve_gate_b(self):
+        base = {
+            "contractVersion": self.contract["contractVersion"],
+            "character": "CH101",
+            "artCommit": self.contract["artLock"]["commit"],
+            "candidateId": "CH101-HIGH",
+            "candidatePath": "candidate.glb",
+            "candidateSha256": "a" * 64,
+            "overallScore": 0.7,
+            "silhouetteScore": 0.6,
+            "technicalScore": 0.8,
+            "eligibleForHumanReview": True,
+            "sourceStatus": EXPECTED_SOURCE_STATUS,
+            "gateB": EXPECTED_GATE,
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
+        }
+        review = {
+            "reviewVersion": "test-review-v001",
+            "character": "CH101",
+            "artCommit": self.contract["artLock"]["commit"],
+            "reviewerClass": "ASSISTED_VISUAL_QA_NOT_HUMAN_GATE_B",
+            "humanGateBDecision": "PENDING_HUMAN_REVIEW",
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
+            "candidateReviews": [
+                {
+                    "candidateId": "CH101-HIGH",
+                    "candidateSha256": "a" * 64,
+                    "disposition": "REJECT",
+                    "reasonCodes": ["FACE_IDENTITY_NOT_RECOGNIZABLE"],
+                }
+            ],
+        }
+        result = rank_reports(
+            self.contract, [(Path("high.json"), base)], review
+        )
+        self.assertIsNone(result["selectedCandidate"])
+        self.assertEqual(
+            result["status"],
+            "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW",
+        )
+        self.assertEqual(
+            result["automatedSelectedCandidate"]["candidateId"], "CH101-HIGH"
+        )
+        self.assertFalse(result["unityInputAllowed"])
+
+        review["candidateReviews"][0]["disposition"] = "APPROVE"
+        with self.assertRaisesRegex(ValueError, "cannot approve"):
+            rank_reports(self.contract, [(Path("high.json"), base)], review)
 
 
 if __name__ == "__main__":

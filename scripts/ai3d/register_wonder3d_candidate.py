@@ -73,12 +73,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--reference-manifest", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.contract)
+    contract = load_contract(args.contract, args.character)
     require_reference_manifest(args.reference_manifest.resolve(), contract)
     mesh = args.mesh.resolve()
     if not mesh.is_file() or mesh.suffix.lower() not in SUPPORTED_MESH_SUFFIXES:

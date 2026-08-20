@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a non-production Blender review scene from the ranked AI candidate.
 
-The result contains heuristic LODs, a humanoid review rig, and estimated CH101
+The result contains heuristic LODs, a humanoid review rig, and estimated roster
 sockets. It intentionally omits production collection names and export steps,
 so the production intake validator cannot mistake this scene for final work.
 """
@@ -87,11 +87,14 @@ def mesh_bounds(meshes: list[bpy.types.Object]) -> tuple[Vector, Vector]:
 
 
 def normalize_import(
-    imported: list[bpy.types.Object], front_view: str, target_height: float = 1.68
+    imported: list[bpy.types.Object],
+    front_view: str,
+    character: str,
+    target_height: float = 1.68,
 ) -> bpy.types.Object:
     if front_view not in ROTATION_BY_FRONT_VIEW:
         raise ValueError(f"unsupported selected front orientation: {front_view}")
-    root = bpy.data.objects.new("CH101_AI_Review_Root", None)
+    root = bpy.data.objects.new(f"{character}_AI_Review_Root", None)
     bpy.context.scene.collection.objects.link(root)
     for obj in imported:
         if obj.parent is None:
@@ -189,7 +192,9 @@ def build_lods(source_meshes: list[bpy.types.Object]) -> tuple[dict[str, list[bp
     return lod_objects, counts
 
 
-def build_humanoid_rig(meshes: list[bpy.types.Object]) -> bpy.types.Object:
+def build_humanoid_rig(
+    meshes: list[bpy.types.Object], character: str
+) -> bpy.types.Object:
     minimum, maximum = mesh_bounds(meshes)
     height = maximum.z - minimum.z
     width = maximum.x - minimum.x
@@ -223,8 +228,8 @@ def build_humanoid_rig(meshes: list[bpy.types.Object]) -> bpy.types.Object:
         "RightFoot": (point(0.09, 0, 0.09), point(0.09, -0.08, 0.03), "RightLowerLeg"),
         "RightToes": (point(0.09, -0.08, 0.03), point(0.09, -0.14, 0.025), "RightFoot"),
     }
-    armature_data = bpy.data.armatures.new("CH101_AI_AutoRig_Armature")
-    armature = bpy.data.objects.new("CH101_AI_AutoRig_Armature", armature_data)
+    armature_data = bpy.data.armatures.new(f"{character}_AI_AutoRig_Armature")
+    armature = bpy.data.objects.new(f"{character}_AI_AutoRig_Armature", armature_data)
     ensure_collection("AI_REVIEW_RIG_NOT_PRODUCTION").objects.link(armature)
     armature["rig_status"] = "HEURISTIC_AUTO_RIG_NOT_PRODUCTION"
     bpy.context.view_layer.objects.active = armature
@@ -306,7 +311,7 @@ def point_segment_distance_squared(point: Vector, head: Vector, tail: Vector) ->
 
 
 def apply_nearest_bone_fallback(
-    meshes: list[bpy.types.Object], armature: bpy.types.Object
+    meshes: list[bpy.types.Object], armature: bpy.types.Object, character: str
 ) -> None:
     bones = [bone for bone in armature.data.bones if bone.name != "Root"]
     bone_segments = {
@@ -338,13 +343,13 @@ def apply_nearest_bone_fallback(
             None,
         )
         if modifier is None:
-            modifier = obj.modifiers.new(name="CH101_AI_AutoRig", type="ARMATURE")
+            modifier = obj.modifiers.new(name=f"{character}_AI_AutoRig", type="ARMATURE")
         modifier.object = armature
         obj.parent = armature
 
 
 def auto_weight(
-    meshes: list[bpy.types.Object], armature: bpy.types.Object
+    meshes: list[bpy.types.Object], armature: bpy.types.Object, character: str
 ) -> tuple[str, str, dict[str, object]]:
     bpy.ops.object.select_all(action="DESELECT")
     for obj in meshes:
@@ -363,7 +368,7 @@ def auto_weight(
     fallback_reason = operator_error or (
         "Blender bone heat operator returned without assigning every LOD0 vertex."
     )
-    apply_nearest_bone_fallback(meshes, armature)
+    apply_nearest_bone_fallback(meshes, armature, character)
     fallback_audit = audit_weights(meshes, armature)
     if fallback_audit["status"] != "PASS":
         return "AUTO_WEIGHT_FAILED", fallback_reason, fallback_audit
@@ -399,31 +404,103 @@ def create_socket(
     return socket
 
 
+def socket_locations(
+    armature: bpy.types.Object, character_code: str
+) -> dict[str, tuple[str, Vector]]:
+    left_hand = bone_tail_world(armature, "LeftHand")
+    right_hand = bone_tail_world(armature, "RightHand")
+    hips = bone_tail_world(armature, "Hips")
+    head = bone_tail_world(armature, "Head")
+    left_shoulder = bone_tail_world(armature, "LeftShoulder")
+    right_shoulder = bone_tail_world(armature, "RightShoulder")
+    locations: dict[str, tuple[str, Vector]] = {
+        "Socket_Equipment_Primary": ("RightHand", right_hand),
+        "Socket_VFXCenter": ("Hips", hips),
+        "Socket_CameraFocus": ("Head", head),
+    }
+    character_locations = {
+        "CH101": {
+            "Socket_Weapon_R": ("RightHand", right_hand),
+            "Socket_BladeTip": ("RightHand", right_hand + Vector((0.0, -0.55, -0.2))),
+            "Socket_Ribbon_L": ("Hips", hips + Vector((-0.12, 0.0, 0.0))),
+            "Socket_Ribbon_R": ("Hips", hips + Vector((0.12, 0.0, 0.0))),
+        },
+        "CH102": {
+            "Socket_Weapon_R": ("RightHand", right_hand),
+            "Socket_BowRoot": ("RightHand", right_hand),
+            "Socket_BowGrip_L": ("LeftHand", left_hand),
+            "Socket_BowGrip_R": ("RightHand", right_hand),
+        },
+        "CH103": {
+            "Socket_Equipment_R": ("RightHand", right_hand),
+            "Socket_BatonGrip": ("RightHand", right_hand),
+            "Socket_BatonOrb": ("RightHand", right_hand + Vector((0.0, -0.45, -0.12))),
+            "Socket_VeilRoot_L": ("LeftShoulder", left_shoulder),
+            "Socket_VeilRoot_R": ("RightShoulder", right_shoulder),
+            "Socket_VeilWaist_L": ("Hips", hips + Vector((-0.15, 0.0, -0.08))),
+            "Socket_VeilWaist_R": ("Hips", hips + Vector((0.15, 0.0, -0.08))),
+        },
+        "CH104": {
+            "Socket_FanGrip": ("RightHand", right_hand),
+            "Socket_FanPivot": ("RightHand", right_hand + Vector((0.0, -0.08, 0.0))),
+            "Socket_FanBeam": ("RightHand", right_hand + Vector((0.0, -0.42, 0.0))),
+            "Socket_MapRing_Carry": ("Hips", hips + Vector((-0.18, 0.0, -0.12))),
+            "Socket_MapRingCore": ("RightHand", right_hand + Vector((0.0, -0.22, 0.0))),
+        },
+        "CH105": {
+            "Socket_Gauntlet_L_Wrist": ("LeftHand", left_hand),
+            "Socket_Gauntlet_R_Wrist": ("RightHand", right_hand),
+            "Socket_Gauntlet_L_Knuckle": ("LeftHand", left_hand + Vector((0.0, -0.08, 0.0))),
+            "Socket_Gauntlet_R_Knuckle": ("RightHand", right_hand + Vector((0.0, -0.08, 0.0))),
+            "Socket_AnchorRing_Carry": ("Hips", hips + Vector((0.18, 0.0, -0.12))),
+            "Socket_AnchorRing_Active": ("RightHand", right_hand + Vector((0.0, -0.30, 0.0))),
+            "Socket_AnchorRing_CableAttach": ("RightHand", right_hand + Vector((0.0, -0.36, -0.04))),
+        },
+    }
+    if character_code not in character_locations:
+        raise ValueError(f"unsupported socket character: {character_code}")
+    locations.update(character_locations[character_code])
+    return locations
+
+
 def build_sockets(
-    armature: bpy.types.Object, socket_contract: dict[str, object]
+    armature: bpy.types.Object,
+    socket_contract: dict[str, object],
+    character_code: str,
 ) -> dict[str, object]:
-    character = next(entry for entry in socket_contract["characters"] if entry["code"] == "CH101")
+    character = next(
+        entry
+        for entry in socket_contract["characters"]
+        if entry["code"] == character_code
+    )
     detail_names = character["detailSockets"]
     runtime_map = character["runtimeSocketMap"]
-    locations = {
-        "Socket_Weapon_R": ("RightHand", bone_tail_world(armature, "RightHand")),
-        "Socket_BladeTip": (
-            "RightHand",
-            bone_tail_world(armature, "RightHand") + Vector((0.0, -0.55, -0.2)),
-        ),
-        "Socket_Ribbon_L": ("Hips", bone_tail_world(armature, "Hips") + Vector((-0.12, 0, 0))),
-        "Socket_Ribbon_R": ("Hips", bone_tail_world(armature, "Hips") + Vector((0.12, 0, 0))),
-        "Socket_VFXCenter": ("Hips", bone_tail_world(armature, "Hips")),
-        "Socket_CameraFocus": ("Head", bone_tail_world(armature, "Head")),
-    }
+    locations = socket_locations(armature, character_code)
     sockets = {}
     for name in detail_names:
+        if name not in locations:
+            raise ValueError(f"no estimated socket location for {character_code}: {name}")
         bone_name, location = locations[name]
         sockets[name] = create_socket(name, armature, bone_name, location)
-    for runtime_name in socket_contract["commonRuntimeSockets"]:
-        source_name = runtime_map[runtime_name]
-        if source_name in sockets:
-            source = sockets[source_name]
+    effective_runtime_map = {
+        name: runtime_map.get(name, name)
+        for name in socket_contract["commonRuntimeSockets"]
+    }
+    effective_runtime_map.update(runtime_map)
+    for runtime_name, source_name in effective_runtime_map.items():
+        if source_name not in sockets:
+            if source_name not in locations:
+                raise ValueError(
+                    f"no estimated socket location for {character_code}: {source_name}"
+                )
+            bone_name, location = locations[source_name]
+            sockets[source_name] = create_socket(
+                source_name, armature, bone_name, location
+            )
+        if runtime_name == source_name:
+            continue
+        source = sockets[source_name]
+        if runtime_name not in sockets:
             alias = create_socket(
                 runtime_name,
                 armature,
@@ -432,11 +509,8 @@ def build_sockets(
             )
             alias.matrix_world = source.matrix_world.copy()
             sockets[runtime_name] = alias
-        else:
-            bone_name, location = locations[runtime_name]
-            sockets[runtime_name] = create_socket(runtime_name, armature, bone_name, location)
     bpy.context.view_layer.update()
-    for runtime_name, source_name in runtime_map.items():
+    for runtime_name, source_name in effective_runtime_map.items():
         if runtime_name == source_name:
             continue
         alias = sockets[runtime_name]
@@ -446,7 +520,7 @@ def build_sockets(
     bpy.context.view_layer.update()
     return {
         "socketNames": sorted(sockets),
-        "runtimeSocketMap": runtime_map,
+        "runtimeSocketMap": effective_runtime_map,
         "status": "AUTO_ESTIMATED_NOT_APPROVED",
     }
 
@@ -466,6 +540,9 @@ def main() -> int:
     if selected.get("candidateSha256") != sha256_file(candidate):
         raise ValueError("selected candidate hash mismatch")
     front_view = selected.get("selectedOrientation", {}).get("front")
+    character_code = ranking.get("character")
+    if not isinstance(character_code, str) or not character_code:
+        raise ValueError("ranking manifest has no character code")
 
     socket_contract = json.loads(args.socket_contract.resolve().read_text(encoding="utf-8"))
     clear_scene()
@@ -473,11 +550,13 @@ def main() -> int:
     source_meshes = [obj for obj in imported if obj.type == "MESH"]
     if not source_meshes:
         raise ValueError("selected candidate contains no mesh")
-    normalize_import(imported, front_view)
+    normalize_import(imported, front_view, character_code)
     lods, triangle_counts = build_lods(source_meshes)
-    armature = build_humanoid_rig(lods["LOD0"])
-    weight_status, weight_error, weight_audit = auto_weight(lods["LOD0"], armature)
-    socket_report = build_sockets(armature, socket_contract)
+    armature = build_humanoid_rig(lods["LOD0"], character_code)
+    weight_status, weight_error, weight_audit = auto_weight(
+        lods["LOD0"], armature, character_code
+    )
+    socket_report = build_sockets(armature, socket_contract, character_code)
 
     scene = bpy.context.scene
     scene["re_camp_status"] = SOURCE_STATUS
@@ -494,7 +573,7 @@ def main() -> int:
     output_blend.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(output_blend))
     report = {
-        "character": "CH101",
+        "character": character_code,
         "candidateId": selected["candidateId"],
         "candidatePath": str(candidate),
         "candidateSha256": selected["candidateSha256"],

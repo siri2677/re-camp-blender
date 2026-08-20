@@ -2,8 +2,8 @@
 """Run the GPU-independent Re:Camp Blender workstream.
 
 This runner deliberately performs no model inference and never enables Unity
-input. It keeps contracts, notebooks, tests, and reference/provider dry-runs
-healthy while Colab GPU allocation is unavailable.
+input. It keeps contracts, notebooks, tests, CPU-only reference preprocessing,
+and provider dry-runs healthy while Colab GPU allocation is unavailable.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ROSTER_CONTRACT = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
 RUNTIME_PREFLIGHT_PROVIDERS = ("sf3d", "instantmesh", "triposr", "wonder3D", "tripo")
 
 
@@ -30,6 +31,11 @@ def is_git_tree(path: Path) -> bool:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--art-root", type=Path, default=ROOT.parent / "re-camp-art")
+    parser.add_argument(
+        "--character",
+        choices=("CH101", "CH102", "CH103", "CH104", "CH105"),
+        default="CH101",
+    )
     parser.add_argument("--skip-reference", action="store_true")
     parser.add_argument("--output", type=Path)
     return parser.parse_args()
@@ -59,33 +65,44 @@ def run_step(
     }
 
 
-def run_reference_dry_run(art_root: Path) -> list[dict[str, Any]]:
+def run_reference_dry_run(
+    art_root: Path, character: str = "CH101"
+) -> list[dict[str, Any]]:
     if not art_root.is_dir():
         return [{"name": "reference-and-provider-dry-run", "status": "BLOCKED", "reason": f"missing art root: {art_root}"}]
     with tempfile.TemporaryDirectory(prefix="re-camp-no-gpu-") as temporary:
-        output_dir = Path(temporary) / "reference-views"
+        output_root = Path(temporary) / "current-roster-reference-views"
         prepare = run_step(
-            "prepare-reference-views",
+            "prepare-current-roster-reference-views",
             [
                 sys.executable,
-                str(ROOT / "scripts/ai3d/prepare_reference_views.py"),
+                str(ROOT / "scripts/ai3d/prepare_roster_reference_views.py"),
                 "--art-root",
                 str(art_root),
-                "--output-dir",
-                str(output_dir),
+                "--output-root",
+                str(output_root),
+                "--contract",
+                str(ROSTER_CONTRACT),
             ],
         )
         if prepare["status"] != "PASS":
             return [prepare]
+        reference_manifest = (
+            output_root / character / "reference-views" / "reference-views-manifest.json"
+        )
         dry_run = run_step(
             "tripo-multiview-dry-run",
             [
                 sys.executable,
                 str(ROOT / "scripts/ai3d/tripo_api.py"),
                 "--reference-manifest",
-                str(output_dir / "reference-views-manifest.json"),
+                str(reference_manifest),
                 "--output-dir",
                 str(Path(temporary) / "tripo-dry-run"),
+                "--contract",
+                str(ROSTER_CONTRACT),
+                "--character",
+                character,
                 "--candidate-count",
                 "1",
             ],
@@ -174,6 +191,7 @@ def run_runtime_preflight() -> dict[str, Any]:
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
     art_root = args.art_root.resolve()
+    character = getattr(args, "character", "CH101")
     source_env = None
     if is_git_tree(art_root):
         source_env = os.environ.copy()
@@ -192,7 +210,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     if args.skip_reference:
         steps.append({"name": "reference-and-provider-dry-run", "status": "SKIPPED", "reason": "--skip-reference"})
     else:
-        steps.extend(run_reference_dry_run(args.art_root.resolve()))
+        steps.extend(run_reference_dry_run(args.art_root.resolve(), character))
     if is_git_tree(args.art_root.resolve()):
         steps.append(run_unity_handoff_validation(args.art_root.resolve()))
     else:
@@ -208,6 +226,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "workstream": "NO_GPU",
         "recordedAt": datetime.now(timezone.utc).isoformat(),
         "gpuRequired": False,
+        "character": character,
         "steps": steps,
         "status": "FAIL" if failed else "PASS_WITH_BLOCKED_OR_SKIPPED_EXTERNAL_STEPS",
         "blockedGpuTasks": [

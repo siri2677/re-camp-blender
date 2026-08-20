@@ -44,6 +44,11 @@ def parse_args() -> argparse.Namespace:
         default="sf3d",
     )
     parser.add_argument("--art-root", type=Path, default=ROOT.parent / "re-camp-art")
+    parser.add_argument(
+        "--character",
+        choices=("CH101", "CH102", "CH103", "CH104", "CH105"),
+        default="CH101",
+    )
     parser.add_argument("--skip-reference", action="store_true")
     parser.add_argument("--output", type=Path)
     parser.add_argument(
@@ -80,11 +85,13 @@ def build_adaptive_report(
     no_gpu_builder: Callable[[argparse.Namespace], dict[str, Any]] = build_no_gpu_report,
 ) -> dict[str, Any]:
     preflight = runtime_preflight or build_runtime_report(args.provider)
+    character = getattr(args, "character", "CH101")
     selected = select_workstream(args.provider, preflight, args.force_mode)
     report: dict[str, Any] = {
         "workstream": "ADAPTIVE_GPU_NO_GPU",
         "recordedAt": datetime.now(timezone.utc).isoformat(),
         "provider": args.provider,
+        "character": character,
         "forceMode": args.force_mode,
         "runtimePreflight": preflight,
         "selectedWorkstream": selected,
@@ -131,6 +138,7 @@ def build_adaptive_report(
 
     no_gpu_args = argparse.Namespace(
         art_root=args.art_root,
+        character=character,
         skip_reference=args.skip_reference,
         output=None,
     )

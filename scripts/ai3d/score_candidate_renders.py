@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import math
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +37,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--evaluation-report", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     return parser.parse_args()
 
 
@@ -133,6 +135,146 @@ def _color_histogram(view: dict[str, Any]) -> list[float]:
 
 def _histogram_intersection(left: list[float], right: list[float]) -> float:
     return sum(min(a, b) for a, b in zip(left, right))
+
+
+def _mask_component_metrics(mask: Any) -> dict[str, Any]:
+    """Measure detached visible regions on the unfilled alpha/detail mask."""
+    binary = mask.convert("1")
+    width, height = binary.size
+    pixels = binary.load()
+    visited = bytearray(width * height)
+    component_areas: list[int] = []
+    for y in range(height):
+        for x in range(width):
+            index = y * width + x
+            if visited[index] or not pixels[x, y]:
+                continue
+            visited[index] = 1
+            stack = [(x, y)]
+            area = 0
+            while stack:
+                current_x, current_y = stack.pop()
+                area += 1
+                for next_x, next_y in (
+                    (current_x - 1, current_y),
+                    (current_x + 1, current_y),
+                    (current_x, current_y - 1),
+                    (current_x, current_y + 1),
+                ):
+                    if not (0 <= next_x < width and 0 <= next_y < height):
+                        continue
+                    next_index = next_y * width + next_x
+                    if visited[next_index] or not pixels[next_x, next_y]:
+                        continue
+                    visited[next_index] = 1
+                    stack.append((next_x, next_y))
+            component_areas.append(area)
+    component_areas.sort(reverse=True)
+    total_area = sum(component_areas)
+    largest = component_areas[0] if component_areas else 0
+    significant_minimum = max(8, math.ceil(total_area * 0.005))
+    return {
+        "visiblePixelCount": total_area,
+        "connectedComponentCount": len(component_areas),
+        "significantComponentCount": sum(
+            1 for area in component_areas if area >= significant_minimum
+        ),
+        "significantComponentMinimumPixels": significant_minimum,
+        "largestComponentPixelCount": largest,
+        "largestComponentAreaRatio": round(largest / total_area, 8) if total_area else 0.0,
+        "detachedAreaRatio": round((total_area - largest) / total_area, 8) if total_area else 0.0,
+        "componentAreas": component_areas[:32],
+    }
+
+
+def build_render_integrity(
+    selected: dict[str, Any], candidate_views: dict[str, Any]
+) -> dict[str, Any]:
+    selected_names = {
+        "front": selected["front"],
+        "right": selected["right"],
+        "back": selected["back"],
+    }
+    views = {
+        role: {
+            "renderView": render_name,
+            **_mask_component_metrics(candidate_views[render_name]["detailMask"]),
+        }
+        for role, render_name in selected_names.items()
+    }
+    ratios = [float(item["largestComponentAreaRatio"]) for item in views.values()]
+    significant_counts = [int(item["significantComponentCount"]) for item in views.values()]
+    return {
+        "status": "RENDER_INTEGRITY_COLLECTED",
+        "views": views,
+        "minimumLargestComponentAreaRatio": round(min(ratios), 8),
+        "maximumSignificantComponentCount": max(significant_counts),
+    }
+
+
+def evaluate_quality_hard_gates(
+    evaluation: dict[str, Any],
+    render_integrity: dict[str, Any],
+    thresholds: dict[str, Any],
+) -> tuple[bool, list[str], dict[str, Any]]:
+    policy = thresholds.get("geometryHardGates")
+    failures: list[str] = []
+    geometry = evaluation.get("metrics", {}).get("geometryIntegrity")
+    if not isinstance(policy, dict):
+        failures.append("GEOMETRY_HARD_GATE_POLICY_MISSING")
+        policy = {}
+    if not isinstance(geometry, dict) or geometry.get("status") != "GEOMETRY_INTEGRITY_COLLECTED":
+        failures.append("GEOMETRY_INTEGRITY_REPORT_MISSING")
+        geometry = {}
+
+    checks = (
+        (
+            float(geometry.get("largestComponentVertexRatio", 0.0))
+            >= float(policy.get("minimumLargestComponentVertexRatio", 1.0)),
+            "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM",
+        ),
+        (
+            int(geometry.get("significantComponentCount", 10**9))
+            <= int(policy.get("maximumSignificantComponentCount", 0)),
+            "SIGNIFICANT_COMPONENT_COUNT_ABOVE_MAXIMUM",
+        ),
+        (
+            float(geometry.get("looseVertexRatio", 1.0))
+            <= float(policy.get("maximumLooseVertexRatio", 0.0)),
+            "LOOSE_VERTEX_RATIO_ABOVE_MAXIMUM",
+        ),
+        (
+            float(geometry.get("nonManifoldEdgeRatio", 1.0))
+            <= float(policy.get("maximumNonManifoldEdgeRatio", 0.0)),
+            "NON_MANIFOLD_EDGE_RATIO_ABOVE_MAXIMUM",
+        ),
+        (
+            float(geometry.get("degenerateTriangleRatio", 1.0))
+            <= float(policy.get("maximumDegenerateTriangleRatio", 0.0)),
+            "DEGENERATE_TRIANGLE_RATIO_ABOVE_MAXIMUM",
+        ),
+        (
+            float(render_integrity.get("minimumLargestComponentAreaRatio", 0.0))
+            >= float(policy.get("minimumVisiblePrimaryComponentAreaRatio", 1.0)),
+            "VISIBLE_PRIMARY_COMPONENT_RATIO_BELOW_MINIMUM",
+        ),
+        (
+            int(render_integrity.get("maximumSignificantComponentCount", 10**9))
+            <= int(policy.get("maximumVisibleSignificantComponentCount", 0)),
+            "VISIBLE_SIGNIFICANT_COMPONENT_COUNT_ABOVE_MAXIMUM",
+        ),
+    )
+    for passed, reason in checks:
+        if not passed and reason not in failures:
+            failures.append(reason)
+    audit = {
+        "status": "PASS" if not failures else "FAIL",
+        "policy": policy,
+        "geometryIntegrity": geometry,
+        "renderIntegrity": render_integrity,
+        "failureReasons": failures,
+    }
+    return not failures, failures, audit
 
 
 def _view_metrics(reference: dict[str, Any], candidate: dict[str, Any]) -> dict[str, float]:
@@ -262,6 +404,8 @@ def build_score_report(
     references: dict[str, Any],
     evaluation: dict[str, Any],
 ) -> dict[str, Any]:
+    if evaluation.get("character") != contract["character"]:
+        raise ValueError("evaluation report character mismatch")
     if evaluation.get("sourceStatus") != contract["statusPolicy"]["sourceStatus"]:
         raise ValueError("evaluation report source status mismatch")
     if evaluation.get("unityInputAllowed") is not False:
@@ -287,6 +431,10 @@ def build_score_report(
         reference_views, vertically_flipped_views
     )
     thresholds = contract["candidateAcceptance"]
+    render_integrity = build_render_integrity(selected, candidate_views)
+    hard_gates_passed, hard_gate_failures, quality_audit = evaluate_quality_hard_gates(
+        evaluation, render_integrity, thresholds
+    )
     polarity = assess_vertical_polarity(
         selected,
         vertically_flipped_selected,
@@ -303,7 +451,10 @@ def build_score_report(
     )
     if polarity["correctionRequired"]:
         failure_reasons.insert(0, "UPSIDE_DOWN_ORIENTATION")
-    eligible = scores_eligible and not polarity["correctionRequired"]
+    for reason in hard_gate_failures:
+        if reason not in failure_reasons:
+            failure_reasons.append(reason)
+    eligible = scores_eligible and not polarity["correctionRequired"] and hard_gates_passed
     corrected_overall, corrected_scores_eligible, corrected_failures = _acceptance_result(
         vertically_flipped_selected, technical_score, triangle_count, thresholds
     )
@@ -341,9 +492,11 @@ def build_score_report(
         "selectedOrientation": selected,
         "orientationAttempts": attempts,
         "orientationValidation": polarity,
+        "qualityHardGateAudit": quality_audit,
         "metricLimitations": {
             "faceDetailScore": "UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY",
             "automaticAcceptance": "ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL",
+            "geometryHardGates": "TOPOLOGY_AND_RENDER_FRAGMENTATION_ONLY_NOT_SEMANTIC_DESIGN_MATCH",
         },
         "thresholds": thresholds,
         "artCommit": contract["artLock"]["commit"],
@@ -354,7 +507,7 @@ def build_score_report(
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.contract)
+    contract = load_contract(args.contract, args.character)
     references = require_reference_manifest(args.reference_manifest.resolve(), contract)
     evaluation = read_json(args.evaluation_report.resolve())
     report = build_score_report(contract, references, evaluation)

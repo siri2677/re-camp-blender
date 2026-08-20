@@ -8,7 +8,14 @@ import os
 import sys
 from pathlib import Path
 
-from ai3d.common import DEFAULT_CONTRACT_PATH, load_contract
+from ai3d.common import (
+    DEFAULT_CONTRACT_PATH,
+    EXPECTED_ROSTER_CHARACTERS,
+    ROSTER_CONTRACT_PATH,
+    load_contract,
+    load_roster_contract_index,
+    sha256_file,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +24,7 @@ PLAN = ROOT / "docs" / "plans" / "ch101-free-ai3d-autobuild-plan.md"
 PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "common.py",
     ROOT / "scripts" / "ai3d" / "prepare_reference_views.py",
+    ROOT / "scripts" / "ai3d" / "prepare_roster_reference_views.py",
     ROOT / "scripts" / "ai3d" / "tripo_api.py",
     ROOT / "scripts" / "ai3d" / "run_open_source_provider.py",
     ROOT / "scripts" / "ai3d" / "run_wonder3d_multiview.py",
@@ -26,6 +34,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "run_adaptive_workstream.py",
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",
     ROOT / "scripts" / "ai3d" / "rank_candidates.py",
+    ROOT / "scripts" / "ai3d" / "build_gate_b_review_package.py",
     ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
@@ -144,13 +153,82 @@ def validate_contract(errors: list[str]) -> None:
         value = thresholds.get(key)
         if not isinstance(value, (int, float)) or not 0 < value < 1:
             fail(errors, f"candidateAcceptance.{key} must be between 0 and 1")
+    hard_gates = thresholds.get("geometryHardGates", {})
+    for key in (
+        "minimumLargestComponentVertexRatio",
+        "maximumLooseVertexRatio",
+        "maximumNonManifoldEdgeRatio",
+        "maximumDegenerateTriangleRatio",
+        "minimumVisiblePrimaryComponentAreaRatio",
+    ):
+        value = hard_gates.get(key)
+        if not isinstance(value, (int, float)) or not 0 <= value <= 1:
+            fail(errors, f"candidateAcceptance.geometryHardGates.{key} must be between 0 and 1")
+    if hard_gates.get("minimumLargestComponentVertexRatio", 0) < 0.9:
+        fail(errors, "geometry hard gate must reject candidates with more than 10% detached vertices")
+
+    try:
+        roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
+        roster_contracts = [
+            load_contract(ROSTER_CONTRACT_PATH, character)
+            for character in EXPECTED_ROSTER_CHARACTERS
+        ]
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        fail(errors, f"invalid current roster AI 3D contract: {exc}")
+        roster = {"characters": []}
+        roster_contracts = []
+    if [entry.get("character") for entry in roster.get("characters", [])] != list(
+        EXPECTED_ROSTER_CHARACTERS
+    ):
+        fail(errors, "current roster AI 3D contract must contain CH101 through CH105 in order")
+    for roster_contract in roster_contracts:
+        if roster_contract["statusPolicy"].get("unityInputAllowed") is not False:
+            fail(errors, f"{roster_contract['character']}: roster AI 3D contract enables Unity")
 
     source_root_value = os.environ.get("RE_CAMP_SOURCE_DIR", "")
     source_root = Path(source_root_value).resolve() if source_root_value else ROOT.parent / "re-camp-art"
     if source_root.is_dir():
-        for relative in (contract["authoritativeSource"], contract["generationSource"]["path"]):
+        source_paths = {
+            relative
+            for current in roster_contracts or [contract]
+            for relative in (
+                current["authoritativeSource"],
+                current["generationSource"]["path"],
+            )
+        }
+        for relative in sorted(source_paths):
             if not (source_root / relative).is_file():
                 fail(errors, f"locked AI 3D art source is missing: {relative}")
+
+
+def validate_review_records(errors: list[str]) -> None:
+    review_path = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-20-assisted-visual-review-v001.json"
+    package_path = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-20-gate-b-review-package-v001.json"
+    roster_record_path = ROOT / "docs" / "records" / "current-roster-ai3d" / "2026-08-20-reference-view-preflight-v001.json"
+    for path in (review_path, package_path, roster_record_path):
+        if not path.is_file():
+            fail(errors, f"missing AI 3D review record: {path.relative_to(ROOT)}")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            fail(errors, f"invalid review record JSON {path.relative_to(ROOT)}: {exc}")
+            continue
+        if data.get("unityInputAllowed") is not False:
+            fail(errors, f"review record enables Unity: {path.relative_to(ROOT)}")
+        if data.get("productionPromotionAllowed") is not False:
+            fail(errors, f"review record enables production: {path.relative_to(ROOT)}")
+    contact_sheets = (
+        ROOT / "docs" / "records" / "ch101-ai3d" / "assets" / "CH101_GateB_ContactSheet_NOT_APPROVED_v001.png",
+        ROOT / "docs" / "records" / "current-roster-ai3d" / "assets" / "CurrentRoster_ReferenceViews_NOT_PRODUCTION_v001.png",
+    )
+    for path in contact_sheets:
+        if not path.is_file() or path.stat().st_size == 0:
+            fail(errors, f"missing review contact sheet: {path.relative_to(ROOT)}")
+    if roster_record_path.is_file() and contact_sheets[1].is_file():
+        roster_record = json.loads(roster_record_path.read_text(encoding="utf-8"))
+        if roster_record.get("contactSheetSha256") != sha256_file(contact_sheets[1]):
+            fail(errors, "current roster reference contact sheet SHA256 mismatch")
 
 
 def main() -> int:
@@ -160,6 +238,7 @@ def main() -> int:
     validate_notebook(errors)
     validate_sources(errors)
     validate_contract(errors)
+    validate_review_records(errors)
     if errors:
         print("AI 3D free package validation failed:\n")
         for error in errors:

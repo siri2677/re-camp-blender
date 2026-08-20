@@ -170,6 +170,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--reference-view", choices=("front",), default="front")
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     parser.add_argument("--execute", action="store_true")
     parser.add_argument(
         "--reuse-existing",
@@ -182,7 +183,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.contract)
+    contract = load_contract(args.contract, args.character)
     provider = contract["experimentalProviders"]["wonder3D"]
     if provider.get("fallbackEnabled") is not False:
         raise ValueError("Wonder3D must remain research-only and disabled as a fallback")

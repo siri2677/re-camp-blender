@@ -181,13 +181,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--reference-view", choices=("front", "right", "back"), default="front")
     parser.add_argument("--foreground-ratio", type=float)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
+    parser.add_argument("--character")
     parser.add_argument("--execute", action="store_true")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.contract)
+    contract = load_contract(args.contract, args.character)
     references = require_reference_manifest(args.reference_manifest.resolve(), contract)
     provider_key = PROVIDER_KEYS[args.provider]
     provider = contract["providers"][provider_key]

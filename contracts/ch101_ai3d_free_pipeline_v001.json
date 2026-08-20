@@ -164,7 +164,16 @@
     "minimumFaceDetailScore": 0.12,
     "minimumVerticalPolarityImprovement": 0.02,
     "maximumSourceTriangles": 300000,
-    "reviewRenderSize": 512
+    "reviewRenderSize": 512,
+    "geometryHardGates": {
+      "minimumLargestComponentVertexRatio": 0.9,
+      "maximumSignificantComponentCount": 24,
+      "maximumLooseVertexRatio": 0.0005,
+      "maximumNonManifoldEdgeRatio": 0.01,
+      "maximumDegenerateTriangleRatio": 0.002,
+      "minimumVisiblePrimaryComponentAreaRatio": 0.7,
+      "maximumVisibleSignificantComponentCount": 8
+    }
   },
   "statusPolicy": {
     "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
