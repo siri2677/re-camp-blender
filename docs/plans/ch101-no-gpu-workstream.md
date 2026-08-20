@@ -90,6 +90,8 @@ front/right/back reference
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-preflight-wonder3d-dry-run-v001.json`
 최신 runner 통합 Provider preflight 실행:
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-provider-preflight-v001.json`
+최신 art 연결 전체 runner 실행(reference crop·Tripo dry-run·Unity handoff 포함):
+`docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-art-connected-v001.json`
 
 ## 재개 규칙
 

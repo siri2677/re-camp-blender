@@ -45,6 +45,8 @@ Provider별 GPU preflight와 Wonder3D repository/참조 해시/실행 명령 dry
 `2026-08-20-no-gpu-preflight-wonder3d-dry-run-v001.json`에 보관한다.
 No-GPU runner가 다섯 Provider preflight와 정적 검증을 통합 실행한 결과는
 `2026-08-20-no-gpu-runner-provider-preflight-v001.json`에 보관한다.
+art 저장소 연결 상태에서 reference crop, Tripo dry-run, Unity handoff까지 포함한
+최신 전체 실행 결과는 `2026-08-20-no-gpu-runner-art-connected-v001.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
