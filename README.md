@@ -77,6 +77,9 @@ and stopping rules are documented in
 When Colab GPU access is unavailable, run the GPU-independent workstream from
 [docs/plans/ch101-no-gpu-workstream.md](docs/plans/ch101-no-gpu-workstream.md)
 with `python scripts/run_no_gpu_workstream.py`.
+To detect the runtime and switch automatically, use
+[docs/plans/adaptive-gpu-workstream.md](docs/plans/adaptive-gpu-workstream.md)
+with `python scripts/run_adaptive_workstream.py --provider wonder3D`.
 The local dry-run and Blender negative-gate evidence is recorded in
 [docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md](docs/plans/ch101-free-ai3d-local-verification-2026-08-18.md).
 The durable, secret-free CH101 run metadata is tracked in

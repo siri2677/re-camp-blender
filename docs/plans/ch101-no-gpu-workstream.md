@@ -23,8 +23,9 @@ productionPromotionAllowed: false
 6. Stable Fast 3D·InstantMesh·TripoSR·Wonder3D provider 명령과 fallback 정적 검증
 7. Colab runtime preflight와 후보 manifest 재사용 로직 검증
 8. Wonder3D Notebook은 GPU preflight를 Blender·CUDA 의존성 설치보다 먼저 수행
-9. 검증된 Wonder3D 6-view 출력은 GPU preflight 전에 재사용하고, 불일치하면 신규 실행으로 전환
+9. Wonder3D 6-view 재사용 가능성을 먼저 검사하되 NeuS mesh extraction을 위해 GPU preflight 유지
 10. README·실행 계획·실행 기록·CI 동기화
+11. adaptive runner가 GPU 미할당을 감지하면 이 workstream을 자동 실행
 
 로컬에 art 저장소가 있으면 runner가 `RE_CAMP_SOURCE_DIR`를 자동으로 연결해
 source lock의 커밋과 권위 CH101 원본 파일까지 확인한다. art 저장소가 없는 CI나
@@ -43,6 +44,16 @@ art 저장소가 준비되지 않은 CI에서는 reference dry-run만 건너뛴�
 ```text
 python scripts/run_no_gpu_workstream.py --skip-reference
 ```
+
+GPU 상태를 직접 선택하지 않고 자동 전환하려면 다음 단일 명령을 사용한다.
+
+```text
+python scripts/run_adaptive_workstream.py --provider wonder3D
+```
+
+GPU가 보이면 해당 Provider Notebook을 계속 실행하고, 보이지 않으면 이 No-GPU
+runner를 즉시 실행한다. 상세 상태 전환은
+`docs/plans/adaptive-gpu-workstream.md`에 고정한다.
 
 이 runner는 위 명령에 포함된 `provider-runtime-preflight` 단계에서 다섯 Provider를
 동시에 확인한다. GPU Provider의 `BLOCKED_GPU_UNAVAILABLE`은 예상된 외부 차단으로
@@ -71,6 +82,7 @@ Tripo API는 GPU가 없어도 호출 준비는 가능하지만 선택적 유료�
 | reference·Tripo payload dry-run | IMPLEMENTED WHEN ART ROOT EXISTS |
 | Unity handoff 정적 검증 | IMPLEMENTED WHEN ART ROOT EXISTS |
 | GPU runtime preflight | IMPLEMENTED |
+| GPU/No-GPU 자동 선택 runner | IMPLEMENTED |
 | 실제 무료 Provider 후보 생성 | BLOCKED_COLAB_GPU_QUOTA |
 | Unity·Android | BLOCKED_EXTERNAL_ENVIRONMENT |
 
@@ -107,15 +119,17 @@ provider 셀을 실행한다. 기존 `candidate-manifest.json`과 모델 파일�
 `RE_CAMP_REUSE_CANDIDATES=0`으로 강제 재생성한다.
 
 Wonder3D Notebook은 이 규칙을 실행 순서로도 보장한다. GPU가 보이지 않으면
-`BLOCKED_GPU_UNAVAILABLE`을 출력하고 즉시 중단하므로 Blender·CUDA·tiny-cuda-nn
-설치를 시작하지 않는다. 따라서 GPU quota가 막힌 세션에서는 설치 시간과 세션
-디스크를 소비하지 않고, quota가 복구된 뒤 같은 Notebook을 재실행하면 된다.
+adaptive runner가 No-GPU 검증을 완료한 뒤 `ADAPTIVE_NO_GPU_COMPLETED`를 기록하고
+Blender·CUDA·tiny-cuda-nn 설치를 시작하지 않는다. 따라서 GPU quota가 막힌
+세션에서도 정적 작업을 끝내고, quota가 복구된 뒤 같은 Notebook을 재실행할 수 있다.
 
 기존 Wonder3D report가 pinned provider commit, reference manifest SHA256, 6개 view
 파일, Gate 잠금 조건을 모두 만족하면 `REUSED`로 표시하고 inference를 생략한다.
 `RE_CAMP_REUSE_WONDER3D=0`이면 이 재사용을 비활성화하고 GPU preflight부터 다시
 수행한다. hash·파일·commit 중 하나라도 어긋나면 기존 파일은 삭제하지 않고
 `NOT_REUSABLE` 사유를 기록한 뒤 신규 실행 경로로 전환한다.
+6-view를 재사용하더라도 NeuS mesh가 아직 없으면 mesh extraction용 GPU는 계속
+필요하며, 재사용 결과만으로 GPU 경로를 우회하지 않는다.
 
 No-GPU runner 결과는 실행 환경별 정보이므로 기본적으로 Git에 저장하지 않는다.
 중요한 판정·SHA256·Gate 결과만 `docs/records/`에 별도 기록한다.

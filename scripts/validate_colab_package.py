@@ -49,6 +49,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/score_candidate_renders.py",
     "scripts/ai3d/rank_candidates.py",
     "scripts/validate_unity_input_package.py",
+    "scripts/run_adaptive_workstream.py",
 )
 REQUIRED_MARKERS = {
     "notebooks/00_colab_blender_setup.ipynb": (
@@ -135,6 +136,9 @@ REQUIRED_MARKERS = {
         "prepare_reference_views.py",
         "tripo_api.py",
         "run_open_source_provider.py",
+        "run_adaptive_workstream.py",
+        "ADAPTIVE_NO_GPU_COMPLETED",
+        "GPU_WORK_ENABLED",
         "provider_attempts",
         "trimesh>=4.4.0",
         "onnxruntime-gpu",
@@ -157,6 +161,9 @@ REQUIRED_MARKERS = {
         "register_wonder3d_candidate.py",
         "test_mvdiffusion_seq.py",
         "generatedViewCount",
+        "run_adaptive_workstream.py",
+        "ADAPTIVE_NO_GPU_COMPLETED",
+        "GPU_WORK_ENABLED",
         "NeuS",
         "refine_ai3d_candidate.py",
         "evaluate_ai3d_candidate.py",
@@ -253,8 +260,9 @@ def validate_source_lock(errors: list[str]) -> None:
         print("Source tree check skipped: set RE_CAMP_SOURCE_DIR for local commit/file verification.")
         return
 
+    git_prefix = ["git", "-c", f"safe.directory={source_dir.resolve()}", "-C", str(source_dir)]
     commit_check = subprocess.run(
-        ["git", "-C", str(source_dir), "cat-file", "-e", f"{SOURCE_COMMIT}^{{commit}}"],
+        [*git_prefix, "cat-file", "-e", f"{SOURCE_COMMIT}^{{commit}}"],
         capture_output=True,
         text=True,
     )
@@ -264,9 +272,7 @@ def validate_source_lock(errors: list[str]) -> None:
 
     tree_check = subprocess.run(
         [
-            "git",
-            "-C",
-            str(source_dir),
+            *git_prefix,
             "ls-tree",
             "-r",
             "--name-only",

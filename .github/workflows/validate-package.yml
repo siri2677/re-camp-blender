@@ -47,5 +47,8 @@ jobs:
       - name: Run Unity input package preflight tests
         run: python -m unittest tests.test_unity_input_package
 
+      - name: Test adaptive GPU and No-GPU switching
+        run: python -m unittest tests.test_adaptive_workstream
+
       - name: Run GPU-independent workstream
         run: python scripts/run_no_gpu_workstream.py --skip-reference

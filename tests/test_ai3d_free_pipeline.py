@@ -98,12 +98,12 @@ class AI3DFreePipelineTests(unittest.TestCase):
         notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
             encoding="utf-8"
         )
-        self.assertIn("detect_visible_gpu_count", notebook)
-        self.assertIn("BLOCKED_GPU_UNAVAILABLE", notebook)
+        self.assertIn("run_adaptive_workstream.py", notebook)
+        self.assertIn("ADAPTIVE_NO_GPU_COMPLETED", notebook)
         self.assertIn("GPU_PREFLIGHT", notebook)
         self.assertLess(
-            notebook.index("BLOCKED_GPU_UNAVAILABLE"),
-            notebook.index("pip', 'install', '-q', 'pillow'"),
+            notebook.index("run_adaptive_workstream.py"),
+            notebook.index("tiny-cuda-nn"),
         )
 
     def test_wonder3d_candidate_registration_preserves_hash_and_gate(self):
