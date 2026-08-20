@@ -69,12 +69,16 @@ Tripo API는 GPU가 없어도 호출 준비는 가능하지만 선택적 유료�
 
 ## 최근 실행 기록
 
-2026-08-19 기준으로 No-GPU runner를 실행했다. Colab 패키지, 무료 AI3D
-패키지, Python compile, 16개 unittest, front/right/back reference 준비와
-Tripo multiview payload dry-run이 모두 통과했다. 실제 Provider 추론은 실행하지
-않았고, Gate와 Unity 입력 잠금은 유지했다.
+2026-08-20 기준으로 No-GPU runner를 art 저장소 연결 모드와 CI 모드에서 모두
+실행했다. Colab 패키지(7개 Notebook/7개 Blender script/12개 유틸리티), 무료
+AI3D 패키지, Python compile, 전체 22개 unittest, front/right/back reference
+준비, Tripo multiview payload dry-run, CH101~CH105 Unity handoff 정적 검증이
+통과했다. Wonder3D 실행 Notebook과 PLY 후보 등록 경로도 정적 검증에 포함된다.
+실제 Provider 추론은 실행하지 않았고, Gate와 Unity 입력 잠금은 유지했다.
 
 상세 기록: `docs/records/ch101-ai3d/2026-08-19-no-gpu-workstream.json`
+최신 art 연결 실행: `docs/records/ch101-ai3d/2026-08-20-no-gpu-workstream-v001.json`
+최신 CI 모드 실행: `docs/records/ch101-ai3d/2026-08-20-no-gpu-ci-mode-v001.json`
 
 ## 재개 규칙
 
