@@ -95,6 +95,9 @@ front/right/back reference
 `docs/records/ch101-ai3d/2026-08-20-no-gpu-runner-art-connected-v001.json`
 Wonder3D 재사용 gate와 28개 테스트 검증 결과:
 `docs/records/ch101-ai3d/2026-08-20-wonder3d-reuse-gate-validation-v001.json`
+최신 Colab GPU 연결 재시도 결과는 사용량 제한으로 `BLOCKED_GPU_QUOTA`였으며,
+CPU fallback은 선택하지 않았다:
+`docs/records/ch101-ai3d/2026-08-20-wonder3d-colab-gpu-retry-v001.json`
 
 ## 재개 규칙
 

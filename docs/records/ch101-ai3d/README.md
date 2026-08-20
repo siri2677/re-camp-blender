@@ -49,6 +49,8 @@ art 저장소 연결 상태에서 reference crop, Tripo dry-run, Unity handoff�
 최신 전체 실행 결과는 `2026-08-20-no-gpu-runner-art-connected-v001.json`에 보관한다.
 Wonder3D 6-view 재사용 gate, 강제 재생성 flag, hash/commit/file 검증과 28개 테스트
 결과는 `2026-08-20-wonder3d-reuse-gate-validation-v001.json`에 보관한다.
+최신 Colab GPU 연결 재시도에서 확인한 사용량 제한 차단과 CPU fallback 미선택 결과는
+`2026-08-20-wonder3d-colab-gpu-retry-v001.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
