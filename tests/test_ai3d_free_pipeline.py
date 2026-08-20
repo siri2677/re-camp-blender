@@ -105,21 +105,28 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(report["unityInputAllowed"])
 
     def test_no_gpu_reference_preflight_materializes_views_before_provider_dry_run(self):
-        from PIL import Image
-
-        roster = load_roster_contract_index(ROSTER_CONTRACT_PATH)
         with tempfile.TemporaryDirectory() as temporary:
             art_root = Path(temporary) / "art"
-            for entry in roster["characters"]:
-                approved_path = art_root / entry["authoritativeSource"]
-                approved_path.parent.mkdir(parents=True, exist_ok=True)
-                approved_path.write_bytes(entry["character"].encode("utf-8"))
-                generation_path = art_root / entry["generationSource"]["path"]
-                generation_path.parent.mkdir(parents=True, exist_ok=True)
-                expected_size = tuple(entry["generationSource"]["expectedSize"])
-                Image.new("RGB", expected_size, (240, 240, 240)).save(generation_path)
+            art_root.mkdir()
+            calls = []
 
-            steps = run_reference_dry_run(art_root, "CH105")
+            def record_step(name, command, env=None, cwd=None):
+                calls.append((name, command))
+                return {
+                    "name": name,
+                    "status": "PASS",
+                    "returnCode": 0,
+                    "command": command,
+                    "stdoutTail": (
+                        "CURRENT_ROSTER_REFERENCE_VIEWS_READY"
+                        if name == "prepare-current-roster-reference-views"
+                        else "tripo-dry-run-plan.json"
+                    ),
+                    "stderrTail": "",
+                }
+
+            with patch("scripts.run_no_gpu_workstream.run_step", side_effect=record_step):
+                steps = run_reference_dry_run(art_root, "CH105")
             self.assertEqual(
                 [step["status"] for step in steps], ["PASS", "PASS"], steps
             )
@@ -128,6 +135,12 @@ class AI3DFreePipelineTests(unittest.TestCase):
                 steps[0]["stdoutTail"],
             )
             self.assertIn("tripo-dry-run-plan.json", steps[1]["stdoutTail"])
+            prepare_command = calls[0][1]
+            self.assertIn("prepare_roster_reference_views.py", prepare_command[1])
+            self.assertNotIn("--dry-run", prepare_command)
+            provider_command = calls[1][1]
+            self.assertIn("--character", provider_command)
+            self.assertEqual(provider_command[provider_command.index("--character") + 1], "CH105")
 
     def test_ai3d_notebook_uses_roster_character_switch(self):
         source = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(
