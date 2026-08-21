@@ -120,7 +120,9 @@ def prepare_views(
             offset = ((canvas_size[0] - crop.width) // 2, (canvas_size[1] - crop.height) // 2)
             canvas.alpha_composite(crop, offset)
             output_path = output_dir / f"{contract['character']}_{view_name}.png"
-            canvas.convert("RGB").save(output_path, format="PNG", optimize=True)
+            # Wonder3D's pinned single-image dataset reads the alpha channel
+            # directly, so keep the contract canvas as RGBA at the boundary.
+            canvas.save(output_path, format="PNG", optimize=True)
             manifest["views"][view_name] = {
                 "path": str(output_path),
                 "crop": view_contract["crop"],
