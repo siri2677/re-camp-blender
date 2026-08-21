@@ -261,6 +261,12 @@ def main() -> int:
 
     stdout_path = output_dir / "provider-stdout.log"
     stderr_path = output_dir / "provider-stderr.log"
+    provider_environment = os.environ.copy()
+    compat_dir = Path(__file__).resolve().parent / "wonder3d_compat"
+    existing_pythonpath = provider_environment.get("PYTHONPATH")
+    provider_environment["PYTHONPATH"] = os.pathsep.join(
+        part for part in (str(compat_dir), existing_pythonpath) if part
+    )
     try:
         result = subprocess.run(
             command,
@@ -268,6 +274,7 @@ def main() -> int:
             check=True,
             capture_output=True,
             text=True,
+            env=provider_environment,
         )
     except (OSError, subprocess.CalledProcessError) as error:
         stdout_path.write_text(getattr(error, "stdout", None) or "", encoding="utf-8")
