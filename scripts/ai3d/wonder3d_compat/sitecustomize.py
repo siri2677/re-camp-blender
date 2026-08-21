@@ -19,9 +19,10 @@ if jax is not None and hasattr(jax, "random"):
             setattr(jax.random, _legacy_name, _jax_array_type)
 
 
-# The pinned Wonder3D script calls this optional optimization unconditionally.
-# On Kaggle P100/Python 3.12 there is no reliable xformers wheel, so leave the
-# model on standard PyTorch attention instead of changing the provider source.
+# The pinned Wonder3D script calls this optional optimization unconditionally
+# and separately checks that xformers is importable.  A minimal marker package
+# lives beside this file; the method below keeps the model on standard PyTorch
+# attention instead of changing the provider source.
 if os.environ.get("RE_CAMP_WONDER3D_DISABLE_XFORMERS", "1") != "0":
     try:
         from diffusers.models.modeling_utils import ModelMixin
