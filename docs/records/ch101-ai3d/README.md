@@ -66,6 +66,14 @@ EEVEE로 재평가해 overall `0.523413`으로 자동 기준을 통과시켰다.
 모든 Unity·Production gate false를 유지한다. 상세 실행 기록은
 `2026-08-21-kaggle-p100-triposr-eevee-gate-b-v015.json`에 보관한다.
 
+같은 날 Wonder3D P100 재시도에서는 최신 attention·RGBA·checkout 보정까지 반영하고 GPU도
+확인했지만, provider가 `/usr/local/bin/accelerate`에서 별도 Python 환경의
+`huggingface_hub`를 읽어 `split_torch_state_dict_into_shards` import 단계에서 중단됐다.
+6-view·mesh·Review 산출물은 만들지 않았으며, 실패 기록은
+`2026-08-21-kaggle-wonder3d-p100-blocked-v018.json`에 보관한다. 이후 provider 실행을
+Notebook의 동일 `sys.executable`로 고정한 `c5ea2ae`를 추가했으며, Kaggle 재실행 전까지
+상태는 `BLOCKED_PROVIDER_INFERENCE_FAILED`로 유지한다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
