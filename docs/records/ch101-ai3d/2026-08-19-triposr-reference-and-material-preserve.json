@@ -1,0 +1,135 @@
+{
+  "recordVersion": "ch101-ai3d-run-record-v001",
+  "recordedAt": "2026-08-19",
+  "character": "CH101",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101",
+    "authoritativeSource": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+    "referenceManifest": "reference-views/reference-views-manifest.json"
+  },
+  "tools": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "pipelineCommit": "5db8c9b",
+    "recordCommit": "2b2fe3e"
+  },
+  "providerRuns": [
+    {
+      "provider": "tripoSR",
+      "attempt": 1,
+      "referenceView": "front",
+      "foregroundRatio": 0.75,
+      "candidateSha256": "4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5",
+      "scores": {
+        "overall": 0.439426,
+        "silhouette": 0.389754,
+        "appearance": 0.344345,
+        "color": 0.153887,
+        "faceDetail": 0.397967,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "provider": "tripoSR",
+      "attempt": 2,
+      "referenceView": "right",
+      "foregroundRatio": 0.85,
+      "candidateSha256": "5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2",
+      "scores": {
+        "overall": 0.443631,
+        "silhouette": 0.390096,
+        "appearance": 0.360276,
+        "color": 0.151301,
+        "faceDetail": 0.473074,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "provider": "tripoSR",
+      "attempt": 3,
+      "referenceView": "back",
+      "foregroundRatio": 0.95,
+      "candidateSha256": "6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4",
+      "scores": {
+        "overall": 0.452043,
+        "silhouette": 0.413896,
+        "appearance": 0.332043,
+        "color": 0.146237,
+        "faceDetail": 0.391916,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    }
+  ],
+  "materialPreserveRecheck": {
+    "sourceAttempt": 3,
+    "materialMode": "preserve",
+    "importedMaterialNames": [],
+    "fallbackMaterial": "AI_REVIEW_NEUTRAL_AUTO",
+    "scoresUnchanged": true,
+    "overall": 0.452043,
+    "color": 0.146237,
+    "status": "REGENERATE_REQUIRED",
+    "colabArchive": "/content/re-camp-CH101-ai3d-material-preserve-NOT-PRODUCTION.zip"
+  },
+  "scoreDiagnosis": {
+    "primaryGeometryLimitation": "SINGLE_VIEW_PROVIDER_CANNOT_RECONSTRUCT_ALL_TURNAROUND_SIDES",
+    "primaryAppearanceLimitation": "GENERATED_GLB_HAS_NO_IMPORTED_MATERIAL_OR_TEXTURE",
+    "pipelineDisplayBug": "WORKBENCH_MATERIAL_MODE_DID_NOT_SYNC_PRINCIPLED_BASE_COLOR",
+    "implementedFixes": [
+      "SYNC_PRINCIPLED_BASE_COLOR_TO_WORKBENCH_DIFFUSE_COLOR",
+      "APPLY_CH101_PALETTE_GEOMETRIC_REVIEW_FALLBACK_WHEN_MATERIALS_ARE_ABSENT"
+    ],
+    "nextColabVerification": "PENDING",
+    "productionImpact": "NO_AUTO_PROMOTION"
+  },
+  "providerBlockers": {
+    "stableFast3D": "BLOCKED_HUGGING_FACE_GATED_MODEL_ACCESS",
+    "instantMesh": "BLOCKED_COLAB_NVDIFFRAST_BUILD_CONTINUES_TO_NEXT_FALLBACK"
+  },
+  "runtimeVerification": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "actualInference": true,
+    "runtimeToolCommit": "dc0034e",
+    "repositoryFixCommit": "63d83c9",
+    "fallbackResilienceCommit": "bdf21ae",
+    "tripoSRDependencyFix": "git+https://github.com/tatsy/torchmcubes.git",
+    "generatedAttempts": [1, 2, 3],
+    "blenderRefinementAndScoring": "PASS",
+    "rankingManifest": "/content/re-camp-ai3d/CH101/ranking-manifest-t4-2026-08-19.json",
+    "archive": "/content/re-camp-CH101-ai3d-t4-run-NOT-PRODUCTION.zip",
+    "fallbackResilienceVerification": {
+      "notebookJson": "PASS",
+      "pythonTests": "PASS",
+      "behavior": "InstantMesh setup failure is caught and the provider loop continues to TripoSR",
+      "actualAutomaticColabRerun": false
+    },
+    "notes": "The recorded T4 run manually recovered from the earlier InstantMesh stop and completed all three TripoSR attempts. Commit bdf21ae now catches that setup failure so a fresh notebook run can continue automatically; a fresh end-to-end automatic rerun is still pending."
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "selectedCandidate": null,
+    "reviewAssetCreated": false
+  },
+  "persistence": {
+    "trackedInGit": [
+      "docs/records/ch101-ai3d/README.md",
+      "docs/records/ch101-ai3d/2026-08-19-triposr-reference-and-material-preserve.json"
+    ],
+    "notTrackedInGit": [
+      ".blend",
+      ".glb",
+      ".png",
+      ".zip"
+    ],
+    "binaryRetention": "Use GitHub Release or Git LFS after recording final SHA256 here."
+  }
+}

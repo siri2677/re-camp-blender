@@ -1,0 +1,46 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-ch101-palette-variant-v017",
+  "recordedAt": "2026-08-21T14:47:56+09:00",
+  "workstream": "CH101_ALPHA_REVIEW_MATERIAL_VARIANT",
+  "character": "CH101",
+  "toolsCommit": "8084614",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "blenderVersion": "3.0.1",
+    "blenderNumpy": "1.23.5",
+    "apiCreditUsed": 0
+  },
+  "variant": {
+    "baseCandidate": "03-CH101-TRIPOSR-001",
+    "variantCandidate": "03-CH101-TRIPOSR-001-PALETTE",
+    "materialMode": "palette",
+    "sourceCandidateSha256": "3931418232b2147f54c86e3fb38f7eceb8431ba428a39d475daeb2bd8b234867",
+    "refinedCandidateSha256": "34d2a6c65662e1f79b43cc0b6c75a75d5647b83ffa6ef7e569fd2b864c280ad2",
+    "integrityBlendSha256": "ebd28c5bba29ce87ea600f80d3ca19000bb8dbb44b3d3cf5ffe5c5e80f2faed6"
+  },
+  "scores": {
+    "overallScore": 0.479638,
+    "silhouetteScore": 0.444888,
+    "appearanceScore": 0.361843,
+    "colorScore": 0.249017,
+    "faceDetailScore": 0.426975,
+    "technicalScore": 1.0,
+    "failureReasons": [
+      "UPSIDE_DOWN_ORIENTATION",
+      "OVERALL_SCORE_BELOW_MINIMUM"
+    ]
+  },
+  "decision": {
+    "status": "REJECTED_VARIANT_KEEP_PRESERVED_MATERIAL_CANDIDATE",
+    "selectedCandidateRemains": "03-CH101-TRIPOSR-001",
+    "reason": "The coarse geometry-band palette reduced appearance, face, and overall scores and did not improve the visual review candidate."
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}
