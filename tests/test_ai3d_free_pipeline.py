@@ -553,6 +553,11 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("'preserve'", notebook)
         self.assertIn("REFINED_REVIEW_CANDIDATE", notebook)
         self.assertIn("AUTO_ESTIMATED_NOT_APPROVED", notebook)
+        self.assertIn("DEFER_TO_HUMAN_REVIEW", notebook)
+        self.assertIn("--assisted-visual-review", notebook)
+        self.assertIn("build_gate_b_review_package.py", notebook)
+        self.assertIn("GATE_B_CONTACT_SHEET", notebook)
+        self.assertIn("GATE_B_PACKAGE_MANIFEST", notebook)
 
     def test_runtime_preflight_is_secret_free_and_gate_locked(self):
         source = Path("scripts/ai3d/colab_runtime_preflight.py").read_text(encoding="utf-8")
