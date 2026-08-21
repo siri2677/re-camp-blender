@@ -7,6 +7,7 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -46,8 +47,13 @@ def build_generation_command(
 ) -> list[str]:
     """Build the command documented by the pinned Wonder3D repository."""
 
+    # Use the interpreter that installed the provider dependencies.  Kaggle
+    # exposes a separate /usr/local/bin/accelerate entry point, which can
+    # otherwise load a different huggingface_hub environment than the
+    # notebook's /usr/bin/python3.
+    accelerate_launcher = [sys.executable, "-m", "accelerate.commands.accelerate_cli"]
     return [
-        "accelerate",
+        *accelerate_launcher,
         "launch",
         "--config_file",
         str(provider_repo / "1gpu.yaml"),
