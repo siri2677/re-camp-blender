@@ -620,7 +620,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('GATE_B = "PENDING_HUMAN_REVIEW"', source)
         self.assertIn('"unityInputAllowed": False', source)
         self.assertIn('"productionPromotionAllowed": False', source)
-        self.assertIn('choices=("neutral", "preserve")', source)
+        self.assertIn('choices=("neutral", "preserve", "palette")', source)
         self.assertIn('"materialMode": args.material_mode', source)
         self.assertIn("apply_palette_review_materials", source)
         self.assertIn("has_reviewable_imported_material", source)

@@ -85,9 +85,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--parent-sha256", default="")
     parser.add_argument(
         "--material-mode",
-        choices=("neutral", "preserve"),
+        choices=("neutral", "preserve", "palette"),
         default="neutral",
-        help="Use a neutral review material or preserve imported material slots/colors.",
+        help="Use neutral, preserved, or coarse roster-palette review materials.",
     )
     parser.add_argument(
         "--invert-up-axis",
@@ -339,16 +339,26 @@ def main() -> int:
     transform = transform_candidate(imported, invert_up_axis=args.invert_up_axis)
     cleanup = [clean_mesh(obj) for obj in imported]
     had_imported_materials = any(has_reviewable_imported_material(obj) for obj in imported)
-    material_names = sorted(
-        {
-            material_name
-            for obj in imported
-            for material_name in ensure_review_material(
-                obj, args.material_mode, args.character
-            )
-        }
-    )
+    if args.material_mode == "palette":
+        material_names = sorted(
+            {
+                material_name
+                for obj in imported
+                for material_name in apply_palette_review_materials(obj, args.character)
+            }
+        )
+    else:
+        material_names = sorted(
+            {
+                material_name
+                for obj in imported
+                for material_name in ensure_review_material(
+                    obj, args.material_mode, args.character
+                )
+            }
+        )
     palette_fallback_used = args.material_mode == "preserve" and not had_imported_materials
+    palette_review_used = args.material_mode == "palette"
     minimum, maximum = world_bounds(imported)
     triangle_count = sum(len(obj.data.loop_triangles) for obj in imported)
     uv_missing = [obj.name for obj in imported if not obj.data.uv_layers]
@@ -370,7 +380,11 @@ def main() -> int:
         (
             "Imported material slots and vertex colors were preserved for review scoring."
             if args.material_mode == "preserve"
-            else "Neutral review material is automatic and not a final art material."
+            else (
+                "Coarse roster palette materials were assigned by geometry bands for review only."
+                if args.material_mode == "palette"
+                else "Neutral review material is automatic and not a final art material."
+            )
         ),
     ]
     if palette_fallback_used:
@@ -420,6 +434,7 @@ def main() -> int:
         "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
         "materialMode": args.material_mode,
         "paletteFallbackUsed": palette_fallback_used,
+        "paletteReviewUsed": palette_review_used,
         "warnings": warnings,
     }
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
