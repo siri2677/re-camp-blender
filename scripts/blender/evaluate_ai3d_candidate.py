@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -195,15 +196,23 @@ def sync_workbench_material_colors(meshes: list[bpy.types.Object]) -> int:
 
 def configure_render(size: int, color_mode: str) -> bpy.types.Object:
     scene = bpy.context.scene
-    # Workbench is fast and useful for silhouette checks, but Blender's
-    # Workbench renderer can still flatten imported GLB material slots to a
-    # gray studio value in headless sessions.  Eevee keeps the review render
-    # deterministic while honoring the synchronized Principled colors and
-    # palette fallback used by the scoring pass.
-    try:
-        scene.render.engine = "BLENDER_EEVEE_NEXT"
-    except (TypeError, ValueError):
-        scene.render.engine = "BLENDER_EEVEE"
+    # Blender 3.x headless Eevee can stall on a later camera direction even
+    # after earlier renders complete. Workbench is deterministic for the
+    # silhouette/material review and uses the synchronized diffuse colors.
+    requested_engine = os.environ.get("RE_CAMP_REVIEW_RENDER_ENGINE", "WORKBENCH").strip().upper()
+    if requested_engine in {"EEVEE", "BLENDER_EEVEE", "BLENDER_EEVEE_NEXT"}:
+        try:
+            scene.render.engine = "BLENDER_EEVEE_NEXT"
+        except (TypeError, ValueError):
+            scene.render.engine = "BLENDER_EEVEE"
+    else:
+        scene.render.engine = "BLENDER_WORKBENCH"
+        shading = scene.display.shading
+        shading.light = "STUDIO"
+        shading.color_type = "MATERIAL"
+        shading.show_shadows = True
+        shading.show_cavity = True
+        shading.cavity_type = "BOTH"
     scene.render.resolution_x = size
     scene.render.resolution_y = size
     scene.render.resolution_percentage = 100
