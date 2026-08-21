@@ -60,6 +60,11 @@ geometry Hard Gate를 적용해 오래된 자동 선택을 다시 검증하고, 
 `REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW`이며 `selectedCandidate`는 `null`이다.
 비교 이미지는 `assets/CH101_GateB_ContactSheet_NOT_APPROVED_v001.png`에 보관하며,
 이는 사람 Gate B 승인서가 아니다.
+2026-08-21 Kaggle P100 재평가에서는 TripoSR 기존 후보 3개를 재사용하고, CH101 후보 03을
+EEVEE로 재평가해 overall `0.523413`으로 자동 기준을 통과시켰다. Gate B 검토 패키지와
+아카이브를 생성했지만 사람 승인 전이므로 `GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED`와
+모든 Unity·Production gate false를 유지한다. 상세 실행 기록은
+`2026-08-21-kaggle-p100-triposr-eevee-gate-b-v015.json`에 보관한다.
 
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
