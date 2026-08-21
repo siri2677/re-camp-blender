@@ -37,8 +37,9 @@ if os.environ.get("RE_CAMP_WONDER3D_DISABLE_XFORMERS", "1") != "0":
         _original_attention_forward = Attention.forward
 
         def _compat_attention_forward(self: object, *args: object, **kwargs: object) -> object:
-            # Wonder3D's custom MV processor predates this optional keyword.
+            # Wonder3D's custom MV processor predates these optional keywords.
             kwargs.pop("sparse_mv_attention", None)
+            kwargs.pop("mvcd_attention", None)
             return _original_attention_forward(self, *args, **kwargs)
 
         Attention.forward = _compat_attention_forward
