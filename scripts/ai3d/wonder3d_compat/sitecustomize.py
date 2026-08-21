@@ -26,11 +26,21 @@ if jax is not None and hasattr(jax, "random"):
 if os.environ.get("RE_CAMP_WONDER3D_DISABLE_XFORMERS", "1") != "0":
     try:
         from diffusers.models.modeling_utils import ModelMixin
+        from diffusers.models.attention_processor import Attention
 
         def _standard_attention_fallback(self: object, *args: object, **kwargs: object) -> None:
             del self, args, kwargs
             return None
 
         ModelMixin.enable_xformers_memory_efficient_attention = _standard_attention_fallback
+
+        _original_attention_forward = Attention.forward
+
+        def _compat_attention_forward(self: object, *args: object, **kwargs: object) -> object:
+            # Wonder3D's custom MV processor predates this optional keyword.
+            kwargs.pop("sparse_mv_attention", None)
+            return _original_attention_forward(self, *args, **kwargs)
+
+        Attention.forward = _compat_attention_forward
     except Exception:  # pragma: no cover - provider startup reports import failures
         pass
