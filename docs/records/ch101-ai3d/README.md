@@ -101,6 +101,11 @@ mesh 수집을 반영했다.
 Notebook은 `RE_CAMP_NEUS_END_ITER`, 저장/검증 주기 환경변수로 NeuS 재개 프로파일을
 재현할 수 있도록 보강했다.
 
+이전 `0.523413`과 현재 `0.496221`은 동일 후보의 하락이 아니다. 전자는 TripoSR 후보
+03이고 후자는 Wonder3D NeuS 후보이며, 참조 manifest SHA256·도구 커밋·렌더 환경·얼굴/
+재질 구성이 모두 다르다. 따라서 두 점수는 직접 비교하지 않고, 상세 provenance 비교는
+`2026-08-24-score-comparison-audit-v022.json`에 보관한다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
