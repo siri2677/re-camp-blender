@@ -89,6 +89,14 @@ The notebook caps free candidate generation at three attempts and runs
 `scripts/blender/refine_ai3d_candidate.py` before scoring. Refinement produces a
 review-only artifact; it does not create a Production Mesh or unlock Unity.
 
+After scoring, `scripts/ai3d/build_assisted_visual_review.py` applies a stricter
+identity/presentation policy to every candidate. It automatically rejects weak
+silhouette, appearance, color, face-evidence, technical, or overall results and
+records the reason codes. Candidates with no objective failure are deferred to
+human Gate B review; this pass can never approve Gate B or enable Unity input.
+The current EEVEE candidate (`0.529061`, color `0.300492`) is therefore judged
+`REJECT_GATE_B_AND_REGENERATE` by the strengthened policy.
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,

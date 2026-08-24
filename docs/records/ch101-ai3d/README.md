@@ -127,3 +127,12 @@ SHA256은 `2026-08-24-kaggle-t4-triposr-eevee-controlled-v024.json`에 보관한
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
 Hugging Face token, Colab secret을 저장하지 않는다.
+
+2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
+않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
+policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`, appearance
+`0.540615`, overall `0.529061`로 강화 기준을 충족하지 못하므로 자동 `REJECT`와
+`REGENERATE_REQUIRED`로 기록한다. 이 보조 판정은 Gate B 승인 권한을 갖지 않으며,
+기준을 통과한 후보도 `DEFER_TO_HUMAN_REVIEW`로만 남긴다.
+이 재판정의 메타데이터는 `2026-08-24-kaggle-t4-triposr-eevee-strict-review-v025.json`에
+보관한다.

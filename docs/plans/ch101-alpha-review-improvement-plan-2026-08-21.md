@@ -33,3 +33,16 @@ productionPromotionAllowed: false
 현재 3회 TripoSR 후보가 이미 생성되었으므로, 다음 품질 개선은 추가적인 단순 재실행보다
 참조 기반 보정 또는 다른 무료 멀티뷰 Provider 검토가 우선이다. 이 문서는 자동 생성 후보의
 개선 방향을 고정하는 기록이며, 시각 승인을 대신하지 않는다.
+
+## 강화된 자동 판정
+
+단순 overall 점수만으로는 어두운 회색의 일반형 메시가 기술 기준을 통과할 수 있으므로,
+`candidateAcceptance.visualReviewPolicy`를 별도로 적용한다. 현재 기준은 overall `0.60`,
+silhouette `0.50`, appearance `0.55`, color `0.38`, face evidence `0.25`, technical
+`0.90`이다. `scripts/ai3d/build_assisted_visual_review.py`가 이 기준으로 후보별
+reason code를 생성하며, 하나라도 미달하면 `REJECT`와 `REGENERATE_REQUIRED`로 판정한다.
+
+현재 EEVEE 후보는 overall `0.529061`, silhouette `0.452165`, appearance `0.540615`,
+color `0.300492`이므로 강화 기준에서 자동 거절된다. 이 판정은 사용자의 반복 확인을
+기다리지 않고 다음 후보 생성 여부를 결정하는 내부 QA 판정이며, 통과 후보도 사람 Gate B를
+자동 승인하지 않는다.

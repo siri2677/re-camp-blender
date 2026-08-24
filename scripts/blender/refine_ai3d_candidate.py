@@ -232,6 +232,15 @@ def clean_mesh(obj: bpy.types.Object) -> dict[str, object]:
 
 
 def has_reviewable_imported_material(obj: bpy.types.Object) -> bool:
+    """Return true only when imported appearance carries usable identity data.
+
+    TripoSR can export a non-generic material name while still assigning one
+    flat dark-gray material to the entire mesh. Treating that as meaningful
+    appearance allowed a generic gray candidate to bypass the CH101 palette
+    fallback. Textures always count; material-only inputs need visible color
+    diversity before they are preserved.
+    """
+    material_colors = []
     for material in obj.data.materials:
         if material is None:
             continue
@@ -240,9 +249,34 @@ def has_reviewable_imported_material(obj: bpy.types.Object) -> bool:
             for node in material.node_tree.nodes
         ):
             return True
-        if material.name.strip().casefold() not in GENERIC_IMPORTED_MATERIAL_NAMES:
+        if material.name.strip().casefold() in GENERIC_IMPORTED_MATERIAL_NAMES:
+            continue
+        if material.node_tree:
+            principled = material.node_tree.nodes.get("Principled BSDF")
+            base_color = principled.inputs.get("Base Color") if principled else None
+            value = getattr(base_color, "default_value", None)
+            if value is not None and len(value) >= 3:
+                material_colors.append(tuple(float(value[index]) for index in range(3)))
+        else:
+            diffuse = getattr(material, "diffuse_color", None)
+            if diffuse is not None and len(diffuse) >= 3:
+                material_colors.append(tuple(float(diffuse[index]) for index in range(3)))
+
+    if not material_colors:
+        return False
+    if len(material_colors) > 1:
+        channel_range = max(
+            max(color[channel] for color in material_colors)
+            - min(color[channel] for color in material_colors)
+            for channel in range(3)
+        )
+        if channel_range >= 0.15:
             return True
-    return False
+    return any(
+        max(color) >= 0.12
+        and (max(color) - min(color)) / max(max(color), 0.001) >= 0.12
+        for color in material_colors
+    )
 
 
 def ensure_review_material(
@@ -378,7 +412,11 @@ def main() -> int:
 
     warnings = [
         (
-            "Imported material slots and vertex colors were preserved for review scoring."
+            (
+                "Imported textures/material colors were preserved for review scoring."
+                if had_imported_materials
+                else "Imported appearance was neutral or non-identity; roster palette fallback was used for review scoring."
+            )
             if args.material_mode == "preserve"
             else (
                 "Coarse roster palette materials were assigned by geometry bands for review only."

@@ -35,6 +35,10 @@ from scripts.ai3d.score_candidate_renders import (
     assess_vertical_polarity,
     evaluate_quality_hard_gates,
 )
+from scripts.ai3d.build_assisted_visual_review import (
+    assess_score_report,
+    build_review,
+)
 from scripts.ai3d.run_wonder3d_multiview import (
     build_generation_command,
     inspect_reusable_generation,
@@ -685,6 +689,70 @@ class AI3DFreePipelineTests(unittest.TestCase):
         source = Path("scripts/ai3d/score_candidate_renders.py").read_text(encoding="utf-8")
         self.assertIn("UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY", source)
         self.assertIn("ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL", source)
+
+    def test_strict_visual_review_rejects_current_gray_generic_candidate(self):
+        report = {
+            "contractVersion": self.contract["contractVersion"],
+            "character": "CH101",
+            "artCommit": self.contract["artLock"]["commit"],
+            "candidateId": "CH101-CURRENT-GRAY-CANDIDATE",
+            "candidateSha256": "a" * 64,
+            "overallScore": 0.529061,
+            "silhouetteScore": 0.452165,
+            "appearanceScore": 0.540615,
+            "colorScore": 0.300492,
+            "faceDetailScore": 0.808445,
+            "technicalScore": 1.0,
+            "eligibleForHumanReview": True,
+            "qualityHardGateAudit": {"status": "PASS"},
+            "metricLimitations": {
+                "faceDetailScore": "UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY"
+            },
+            "sourceStatus": EXPECTED_SOURCE_STATUS,
+            "gateB": EXPECTED_GATE,
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
+        }
+        decision = assess_score_report(self.contract, report)
+        self.assertEqual(decision["disposition"], "REJECT")
+        self.assertIn("OUTFIT_COLOR_BLOCKING_WEAK", decision["reasonCodes"])
+        self.assertIn("SILHOUETTE_PROPORTION_MISMATCH", decision["reasonCodes"])
+        review = build_review(self.contract, [(Path("current-score.json"), report)])
+        self.assertEqual(review["recommendation"], "REJECT_GATE_B_AND_REGENERATE")
+        self.assertEqual(review["summary"]["rejectedCandidateCount"], 1)
+        self.assertEqual(review["humanGateBDecision"], EXPECTED_GATE)
+        self.assertFalse(review["unityInputAllowed"])
+        self.assertFalse(review["productionPromotionAllowed"])
+
+    def test_strict_visual_review_defers_strong_candidate_without_approving(self):
+        report = {
+            "contractVersion": self.contract["contractVersion"],
+            "character": "CH101",
+            "artCommit": self.contract["artLock"]["commit"],
+            "candidateId": "CH101-STRONG-CANDIDATE",
+            "candidateSha256": "b" * 64,
+            "overallScore": 0.65,
+            "silhouetteScore": 0.60,
+            "appearanceScore": 0.60,
+            "colorScore": 0.45,
+            "faceDetailScore": 0.35,
+            "technicalScore": 0.95,
+            "eligibleForHumanReview": True,
+            "qualityHardGateAudit": {"status": "PASS"},
+            "metricLimitations": {},
+            "sourceStatus": EXPECTED_SOURCE_STATUS,
+            "gateB": EXPECTED_GATE,
+            "unityInputAllowed": False,
+            "productionPromotionAllowed": False,
+        }
+        decision = assess_score_report(self.contract, report)
+        self.assertEqual(decision["disposition"], "DEFER_TO_HUMAN_REVIEW")
+        review = build_review(self.contract, [(Path("strong-score.json"), report)])
+        self.assertEqual(review["recommendation"], "DEFER_TO_HUMAN_GATE_B_REVIEW")
+        self.assertEqual(review["candidateReviews"][0]["disposition"], "DEFER_TO_HUMAN_REVIEW")
+        self.assertEqual(review["humanGateBDecision"], EXPECTED_GATE)
+        self.assertFalse(review["unityInputAllowed"])
+        self.assertFalse(review["productionPromotionAllowed"])
 
     def test_geometry_hard_gate_rejects_detached_primary_mesh(self):
         policy = self.contract["candidateAcceptance"]

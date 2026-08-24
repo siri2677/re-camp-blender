@@ -33,6 +33,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "run_no_gpu_workstream.py",
     ROOT / "scripts" / "run_adaptive_workstream.py",
     ROOT / "scripts" / "ai3d" / "score_candidate_renders.py",
+    ROOT / "scripts" / "ai3d" / "build_assisted_visual_review.py",
     ROOT / "scripts" / "ai3d" / "rank_candidates.py",
     ROOT / "scripts" / "ai3d" / "build_gate_b_review_package.py",
     ROOT / "scripts" / "ai3d" / "build_final_evaluation_archive.py",
@@ -58,6 +59,7 @@ NOTEBOOK_MARKERS = (
     "REFINED_REVIEW_CANDIDATE",
     "AUTO_ESTIMATED_NOT_APPROVED",
     "score_candidate_renders.py",
+    "build_assisted_visual_review.py",
     "rank_candidates.py",
     "build_ai3d_review_asset.py",
     "unityInputAllowed",
@@ -154,6 +156,23 @@ def validate_contract(errors: list[str]) -> None:
         value = thresholds.get(key)
         if not isinstance(value, (int, float)) or not 0 < value < 1:
             fail(errors, f"candidateAcceptance.{key} must be between 0 and 1")
+    visual_policy = thresholds.get("visualReviewPolicy", {})
+    if not isinstance(visual_policy, dict):
+        fail(errors, "candidateAcceptance.visualReviewPolicy must be an object")
+        visual_policy = {}
+    for key in (
+        "minimumAutoReviewOverallScore",
+        "minimumAutoReviewSilhouetteScore",
+        "minimumAutoReviewAppearanceScore",
+        "minimumAutoReviewColorScore",
+        "minimumAutoReviewFaceDetailScore",
+        "minimumAutoReviewTechnicalScore",
+    ):
+        value = visual_policy.get(key)
+        if not isinstance(value, (int, float)) or not 0 < value < 1:
+            fail(errors, f"visualReviewPolicy.{key} must be between 0 and 1")
+    if visual_policy.get("decisionMode") != "REJECTION_ONLY_AUTO_QA_DEFER_IF_NO_OBJECTIVE_FAILURE":
+        fail(errors, "visualReviewPolicy must remain rejection-only")
     hard_gates = thresholds.get("geometryHardGates", {})
     for key in (
         "minimumLargestComponentVertexRatio",

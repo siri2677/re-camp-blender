@@ -165,6 +165,16 @@
     "minimumVerticalPolarityImprovement": 0.02,
     "maximumSourceTriangles": 300000,
     "reviewRenderSize": 512,
+    "visualReviewPolicy": {
+      "minimumAutoReviewOverallScore": 0.6,
+      "minimumAutoReviewSilhouetteScore": 0.5,
+      "minimumAutoReviewAppearanceScore": 0.55,
+      "minimumAutoReviewColorScore": 0.38,
+      "minimumAutoReviewFaceDetailScore": 0.25,
+      "minimumAutoReviewTechnicalScore": 0.9,
+      "faceMetricRequiresHumanConfirmation": true,
+      "decisionMode": "REJECTION_ONLY_AUTO_QA_DEFER_IF_NO_OBJECTIVE_FAILURE"
+    },
     "geometryHardGates": {
       "minimumLargestComponentVertexRatio": 0.9,
       "maximumSignificantComponentCount": 24,
