@@ -136,3 +136,10 @@ policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`
 기준을 통과한 후보도 `DEFER_TO_HUMAN_REVIEW`로만 남긴다.
 이 재판정의 메타데이터는 `2026-08-24-kaggle-t4-triposr-eevee-strict-review-v025.json`에
 보관한다.
+
+같은 날 T4 x2에서 InstantMesh가 3회 후보를 생성했고, Blender 3.0.1의 OBJ importer
+호환성 보정 후 세 후보 모두 refine·evaluate·score를 완료했다. 세 후보 모두 overall
+`0.445080`, silhouette `0.402714`, appearance `0.333264`, color `0.179879`로
+strict 자동 QA에서 `REJECT_GATE_B_AND_REGENERATE` 판정을 받았으며, geometry hard gate도
+실패했다. 실행 도구 커밋과 후보/GLB SHA256은
+`2026-08-24-kaggle-t4-instantmesh-strict-review-v026.json`에 보관한다.
