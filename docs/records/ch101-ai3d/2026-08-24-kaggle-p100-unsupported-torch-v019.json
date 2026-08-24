@@ -27,7 +27,14 @@
     "selectedWorkstreamAfterFix": "NO_GPU",
     "heavyInstallStarted": false,
     "actualInference": false,
-    "nextAction": "RUN_NO_GPU_MAINTENANCE_AND_RETRY_WITH_COMPATIBLE_TORCH_RUNTIME"
+    "nextAction": "RUN_NO_GPU_MAINTENANCE_AND_RETRY_WITH_COMPATIBLE_TORCH_RUNTIME",
+    "verifiedInKaggle": {
+      "verifiedAt": "2026-08-24T11:25:32+09:00",
+      "verifiedCommit": "21a2572",
+      "adaptiveStatus": "ADAPTIVE_NO_GPU_COMPLETED",
+      "selectedWorkstream": "NO_GPU",
+      "providerSetupCellExecuted": false
+    }
   },
   "outputs": {
     "multiviewGenerated": false,
