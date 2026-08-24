@@ -115,6 +115,14 @@ importer 오류로 리포트가 생성되지 않아 점수에 반영하지 않�
 SHA256과 세부 점수는 `2026-08-24-kaggle-t4-triposr-current-reference-v023.json`에
 보관한다. 모든 Production·Gate B·Unity gate는 계속 잠금이다.
 
+이후 동일한 normalized Blend를 재사용해 EEVEE로 통제 재평가했다. 같은 후보의 Workbench
+점수 `0.516883`이 EEVEE에서 `0.529061`로 올라갔고, color `0.300492`와 appearance
+`0.540615`도 최소 기준을 통과했다. 따라서 현재 CH101은 자동 `AUTO_REVIEW_CANDIDATE`
+및 Gate B 검토 패키지 생성 단계까지 도달했지만, 이는 사람 승인이나 Production 승격이
+아니다. 검토 패키지의 상태는 `GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED`이며, 사람
+결정은 `PENDING_HUMAN_REVIEW`, Unity 입력은 false다. EEVEE 통제 결과·후보/패키지
+SHA256은 `2026-08-24-kaggle-t4-triposr-eevee-controlled-v024.json`에 보관한다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
