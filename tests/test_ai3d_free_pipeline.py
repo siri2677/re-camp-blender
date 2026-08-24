@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import tempfile
 from pathlib import Path
 import unittest
@@ -242,6 +243,20 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("mvdiffusion-joint-ortho-6views.yaml", serialized)
         self.assertIn("CH101_front.png", serialized)
         self.assertEqual(provider["generatedViewCount"], 6)
+
+    def test_wonder3d_command_uses_the_notebook_interpreter(self):
+        provider = self.contract["experimentalProviders"]["wonder3D"]
+        command = build_generation_command(
+            provider,
+            Path("wonder3d-repo"),
+            Path("references"),
+            "CH101_front.png",
+            Path("wonder3d-output"),
+        )
+        self.assertEqual(
+            command[:3],
+            [sys.executable, "-m", "accelerate.commands.accelerate_cli"],
+        )
 
     def test_wonder3d_notebook_preflights_gpu_before_heavy_setup(self):
         notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
