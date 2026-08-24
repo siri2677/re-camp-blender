@@ -728,6 +728,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn('"--integrity-blend"', evaluator)
+        self.assertIn('"--reuse-normalized-blend"', evaluator)
+        self.assertIn('"REUSED_NORMALIZED_BLEND"', evaluator)
         self.assertIn('"PRE_EXPORT_REFINED_BLEND"', evaluator)
         for notebook_name in (
             "05_ch101_ai3d_free_autobuild.ipynb",

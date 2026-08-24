@@ -44,6 +44,14 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional pre-export refined .blend used as the trusted topology audit source.",
     )
+    parser.add_argument(
+        "--reuse-normalized-blend",
+        type=Path,
+        help=(
+            "Reuse an existing normalized review .blend and rerender it with the selected "
+            "engine without importing the transport GLB again."
+        ),
+    )
     return parser.parse_args(raw)
 
 
@@ -68,6 +76,13 @@ def clear_scene() -> None:
         for block in list(data_collection):
             if block.users == 0:
                 data_collection.remove(block)
+
+
+def clear_render_objects() -> None:
+    """Remove saved review cameras/lights before configuring a new renderer."""
+    for obj in list(bpy.context.scene.objects):
+        if obj.type in {"CAMERA", "LIGHT"}:
+            bpy.data.objects.remove(obj, do_unlink=True)
 
 
 def import_candidate(path: Path) -> list[bpy.types.Object]:
@@ -444,12 +459,41 @@ def main() -> int:
         trusted_geometry_integrity["sourcePath"] = str(integrity_blend)
         integrity_blend_sha256 = sha256_file(integrity_blend)
         trusted_geometry_integrity["sourceSha256"] = integrity_blend_sha256
-    clear_scene()
-    imported = import_candidate(candidate)
-    meshes = [obj for obj in imported if obj.type == "MESH"]
-    if not meshes:
-        raise ValueError("candidate contains no mesh objects")
-    root = normalize_candidate(imported, args.character)
+
+    reused_normalized_blend = None
+    if args.reuse_normalized_blend:
+        reused_normalized_blend = args.reuse_normalized_blend.resolve()
+        if not reused_normalized_blend.is_file() or reused_normalized_blend.suffix.lower() != ".blend":
+            raise FileNotFoundError(f"invalid normalized review blend: {reused_normalized_blend}")
+        bpy.ops.wm.open_mainfile(filepath=str(reused_normalized_blend))
+        clear_render_objects()
+        meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
+        if not meshes:
+            raise ValueError("reused normalized blend contains no mesh objects")
+        root = next(
+            (
+                obj
+                for obj in bpy.context.scene.objects
+                if obj.type == "EMPTY" and obj.get("source_status") == SOURCE_STATUS
+            ),
+            None,
+        )
+        if root is None:
+            root = next(
+                (
+                    obj
+                    for obj in bpy.context.scene.objects
+                    if obj.type == "EMPTY" and obj.name.endswith("_AI_Candidate_Root")
+                ),
+                None,
+            )
+    else:
+        clear_scene()
+        imported = import_candidate(candidate)
+        meshes = [obj for obj in imported if obj.type == "MESH"]
+        if not meshes:
+            raise ValueError("candidate contains no mesh objects")
+        root = normalize_candidate(imported, args.character)
     bpy.context.view_layer.update()
     metrics = collect_metrics(meshes, trusted_geometry_integrity)
     render_color_mode = detect_render_color_mode(meshes)
@@ -483,12 +527,27 @@ def main() -> int:
         "renders": renders,
         "cardinalViewOrder": list(CARDINAL_VIEWS),
         "normalizedBlend": str(normalized_blend) if normalized_blend else "",
-        "sourceUpAxis": root.get("source_up_axis", "Z"),
-        "orientationFix": root.get("orientation_fix", "NONE"),
+        "sourceUpAxis": root.get("source_up_axis", "Z") if root else "Z",
+        "orientationFix": (
+            root.get("orientation_fix", "NONE")
+            if root
+            else "REUSED_NORMALIZED_BLEND"
+        ),
+        "reusedNormalizedBlend": str(reused_normalized_blend) if reused_normalized_blend else "",
+        "reusedNormalizedBlendSha256": (
+            sha256_file(reused_normalized_blend) if reused_normalized_blend else ""
+        ),
         "integrityBlendSha256": integrity_blend_sha256,
         "warnings": [
             "Orientation is selected by silhouette scoring after rendering.",
             "This normalized scene is an AI review candidate, not a production mesh.",
+            *(
+                [
+                    "The existing normalized review Blend was reused; the transport GLB was not re-imported.",
+                ]
+                if reused_normalized_blend
+                else []
+            ),
         ],
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
