@@ -749,6 +749,15 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertIn("--invert-up-axis", source)
             self.assertIn("VERTICAL_POLARITY_CORRECTION_FAILED", source)
 
+    def test_ai3d_notebooks_can_reuse_normalized_blend_for_renderer_reruns(self):
+        for notebook_name in (
+            "05_ch101_ai3d_free_autobuild.ipynb",
+            "06_ch101_wonder3d_multiview_experiment.ipynb",
+        ):
+            source = Path("notebooks", notebook_name).read_text(encoding="utf-8")
+            self.assertIn("RE_CAMP_REUSE_NORMALIZED_BLEND", source)
+            self.assertIn("--reuse-normalized-blend", source)
+
     def test_workbench_material_sync_prevents_false_gray_render(self):
         source = Path("scripts/blender/evaluate_ai3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("sync_workbench_material_colors", source)
