@@ -5,6 +5,16 @@ from __future__ import annotations
 import os
 
 try:
+    import huggingface_hub
+
+    # transformers 5.x expects this legacy helper while Wonder3D's pinned
+    # Hub version intentionally stays on the diffusers-compatible 0.23 line.
+    if not hasattr(huggingface_hub, "is_offline_mode"):
+        huggingface_hub.is_offline_mode = lambda: False
+except Exception:  # pragma: no cover - provider startup reports the original error
+    pass
+
+try:
     import jax
 except Exception:  # pragma: no cover - provider startup reports the original error
     jax = None

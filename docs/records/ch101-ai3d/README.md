@@ -80,6 +80,18 @@ Notebook의 동일 `sys.executable`로 고정한 `c5ea2ae`를 추가했으며, K
 작업으로 자동 전환하도록 보강했다. 해당 관찰과 산출물 없음은
 `2026-08-24-kaggle-p100-unsupported-torch-v019.json`에 보관한다.
 
+같은 날 Kaggle T4 x2 호환 런타임에서는 preflight와 Wonder3D 실제 6-view 추론이
+성공했다. `sm_75`, `torchKernelSupportsDevice=true`, reference SHA256 일치,
+6개 azimuth 생성까지 확인했지만, NeuS는 Python 3.12·입력 디렉터리·Hub/Transformers·
+onnxruntime·xformers 호환 문제를 단계적으로 통과한 뒤에도 학습/mesh validation이
+세션 시간 안에 끝나지 않아 `BLOCKED_NEUS_RUNTIME_TOO_SLOW`로 기록했다. mesh·candidate·
+Review Blend·Unity package는 생성하지 않았고 모든 gate는 false다. 상세 기록은
+`2026-08-24-kaggle-t4-wonder3d-multiview-v020.json`에 보관한다.
+
+재현을 위해 Notebook에는 T4 호환 dependency pin, Python 3.12 legacy Hub shim,
+PyTorch attention fallback, NeuS flat-input staging, worker 제한과 `exp/neus/<case>`
+mesh 수집을 반영했다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,

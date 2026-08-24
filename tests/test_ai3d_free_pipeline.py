@@ -270,6 +270,22 @@ class AI3DFreePipelineTests(unittest.TestCase):
             notebook.index("tiny-cuda-nn"),
         )
 
+    def test_wonder3d_t4_compatibility_and_neus_staging_are_recorded(self):
+        notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
+            encoding="utf-8"
+        )
+        for marker in (
+            "transformers==4.38.2",
+            "tokenizers==0.15.2",
+            "onnxruntime==1.20.1",
+            "NEUS_INPUT_ROOT",
+            "RE_CAMP_NEUS_WORKERS",
+            "NEUS_DIR / 'exp' / 'neus' / NEUS_CASE",
+        ):
+            self.assertIn(marker, notebook)
+        self.assertIn("is_offline_mode", Path("scripts/ai3d/wonder3d_compat/sitecustomize.py").read_text(encoding="utf-8"))
+        self.assertIn("torch.matmul", Path("scripts/ai3d/wonder3d_compat/xformers/ops.py").read_text(encoding="utf-8"))
+
     def test_wonder3d_candidate_registration_preserves_hash_and_gate(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
