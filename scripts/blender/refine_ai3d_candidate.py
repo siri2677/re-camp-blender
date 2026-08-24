@@ -120,7 +120,12 @@ def import_candidate(path: Path) -> list[bpy.types.Object]:
         bpy.ops.import_scene.gltf(filepath=str(path))
     elif suffix == ".obj":
         if hasattr(bpy.ops.wm, "obj_import"):
-            bpy.ops.wm.obj_import(filepath=str(path))
+            try:
+                bpy.ops.wm.obj_import(filepath=str(path))
+            except (AttributeError, RuntimeError):
+                # Blender 3.0 exposes the newer operator name but cannot call
+                # it; use the legacy importer available in Kaggle's package.
+                bpy.ops.import_scene.obj(filepath=str(path))
         else:
             bpy.ops.import_scene.obj(filepath=str(path))
     elif suffix == ".ply":
