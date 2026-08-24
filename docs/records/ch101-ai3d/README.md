@@ -92,6 +92,15 @@ Review Blend·Unity package는 생성하지 않았고 모든 gate는 false다. �
 PyTorch attention fallback, NeuS flat-input staging, worker 제한과 `exp/neus/<case>`
 mesh 수집을 반영했다.
 
+같은 T4 세션에서 NeuS를 짧은 검증 프로파일로 재개해 실제 GLB mesh와 후보 manifest를
+생성했다. Blender 정규화·4방향/3/4 평가 렌더·누락 `pos_y` 보정 렌더까지 완료했으며,
+최종 overall `0.496221`로 `0.50` 기준에 미달했다. Appearance `0.054322`, color
+`0.151526`, face detail `0.001466` 및 triangle budget 초과가 함께 확인되어 상태는
+`REGENERATE_REQUIRED`다. 사람 Gate B, Production, Unity 입력은 계속 잠금이며 상세
+기록은 `2026-08-24-kaggle-t4-wonder3d-neus-candidate-v021.json`에 보관한다.
+Notebook은 `RE_CAMP_NEUS_END_ITER`, 저장/검증 주기 환경변수로 NeuS 재개 프로파일을
+재현할 수 있도록 보강했다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,

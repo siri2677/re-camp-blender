@@ -221,6 +221,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "REUSE_WONDER3D",
             "--reuse-existing",
             "REUSED",
+            "RE_CAMP_NEUS_END_ITER",
+            "RE_CAMP_NEUS_SAVE_FREQ",
+            "RE_CAMP_NEUS_VAL_MESH_FREQ",
+            "val_mesh_freq",
             "unityInputAllowed",
         ):
             self.assertIn(marker, source)
