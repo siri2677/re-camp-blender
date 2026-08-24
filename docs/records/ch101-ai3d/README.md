@@ -74,6 +74,12 @@ EEVEE로 재평가해 overall `0.523413`으로 자동 기준을 통과시켰다.
 Notebook의 동일 `sys.executable`로 고정한 `c5ea2ae`를 추가했으며, Kaggle 재실행 전까지
 상태는 `BLOCKED_PROVIDER_INFERENCE_FAILED`로 유지한다.
 
+2026-08-24 새 Kaggle 세션에서는 P100이 보였지만 PyTorch `2.10.0+cu128`의 커널 목록이
+`sm_70` 이상이고 P100은 `sm_60`이라 실제 CUDA 커널을 실행할 수 없었다. 기존 preflight가
+이를 GPU 준비 상태로 잘못 허용한 것을 확인해 `BLOCKED_GPU_UNSUPPORTED`로 분류하고 No-GPU
+작업으로 자동 전환하도록 보강했다. 해당 관찰과 산출물 없음은
+`2026-08-24-kaggle-p100-unsupported-torch-v019.json`에 보관한다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,

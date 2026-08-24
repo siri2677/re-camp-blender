@@ -585,7 +585,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
     def test_wonder3d_runtime_preflight_requires_gpu_and_stays_locked(self):
         report = build_report("wonder3D")
         self.assertTrue(report["requiresGpu"])
-        self.assertIn(report["status"], {"READY_GPU_VISIBLE", "BLOCKED_GPU_UNAVAILABLE"})
+        self.assertIn(
+            report["status"],
+            {"READY_GPU_VISIBLE", "BLOCKED_GPU_UNAVAILABLE", "BLOCKED_GPU_UNSUPPORTED"},
+        )
         self.assertFalse(report["unityInputAllowed"])
         self.assertFalse(report["productionPromotionAllowed"])
 

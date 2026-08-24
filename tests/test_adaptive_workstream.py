@@ -77,6 +77,25 @@ class AdaptiveWorkstreamTests(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertFalse(report["gpuExecutionAllowed"])
 
+    def test_visible_but_unsupported_gpu_automatically_runs_no_gpu_workstream(self):
+        calls = []
+
+        def record_no_gpu(args):
+            calls.append(args)
+            return self.successful_no_gpu(args)
+
+        preflight = self.preflight("wonder3D", "READY_GPU_VISIBLE", 1)
+        preflight["torch"] = {"torchKernelSupportsDevice": False}
+        report = MODULE.build_adaptive_report(
+            self.make_args(),
+            runtime_preflight=preflight,
+            no_gpu_builder=record_no_gpu,
+        )
+        self.assertEqual(report["selectedWorkstream"], "NO_GPU")
+        self.assertEqual(report["status"], "ADAPTIVE_NO_GPU_COMPLETED")
+        self.assertEqual(len(calls), 1)
+        self.assertFalse(report["gpuExecutionAllowed"])
+
     def test_tripo_remains_available_without_gpu_but_never_unlocks_gate(self):
         report = MODULE.build_adaptive_report(
             self.make_args(provider="tripo"),

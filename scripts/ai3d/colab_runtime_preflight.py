@@ -97,10 +97,16 @@ def build_report(provider: str) -> dict[str, Any]:
     requires_gpu = provider in GPU_PROVIDERS
     if not requires_gpu:
         status = "READY_NO_GPU_REQUIRED"
-    elif gpus:
-        status = "READY_GPU_VISIBLE"
-    else:
+    elif not gpus:
         status = "BLOCKED_GPU_UNAVAILABLE"
+    elif not (
+        torch_info.get("available")
+        and torch_info.get("cudaAvailable")
+        and torch_info.get("torchKernelSupportsDevice")
+    ):
+        status = "BLOCKED_GPU_UNSUPPORTED"
+    else:
+        status = "READY_GPU_VISIBLE"
     return {
         "provider": provider,
         "requiresGpu": requires_gpu,

@@ -72,6 +72,9 @@ def select_workstream(
     if provider == "tripo":
         return "NON_GPU_PROVIDER"
     if runtime_preflight.get("status") == "READY_GPU_VISIBLE":
+        torch_info = runtime_preflight.get("torch")
+        if isinstance(torch_info, dict) and torch_info.get("torchKernelSupportsDevice") is False:
+            return "BLOCKED_FORCED_GPU" if force_mode == "gpu" else "NO_GPU"
         return "GPU"
     if force_mode == "gpu":
         return "BLOCKED_FORCED_GPU"
