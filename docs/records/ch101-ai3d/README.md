@@ -106,6 +106,15 @@ Notebook은 `RE_CAMP_NEUS_END_ITER`, 저장/검증 주기 환경변수로 NeuS �
 재질 구성이 모두 다르다. 따라서 두 점수는 직접 비교하지 않고, 상세 provenance 비교는
 `2026-08-24-score-comparison-audit-v022.json`에 보관한다.
 
+같은 날 현재 art reference로 TripoSR를 다시 3회 평가했다. foreground ratio `0.85`,
+`0.80`, `0.98`의 overall은 각각 `0.455933`, `0.493954`, `0.516883`이었고, 최고
+후보도 color `0.147429`가 최소 `0.20`에 미달해 `REGENERATE_REQUIRED`다. 이번 실행은
+T4·Blender Workbench였으며, 이전 `0.523413`은 P100·Blender EEVEE였으므로 단순한
+모델 품질 하락으로 해석하지 않는다. 최고 후보의 EEVEE 통제 재평가는 Blender glTF
+importer 오류로 리포트가 생성되지 않아 점수에 반영하지 않았다. 현재 참조·Provider·후보
+SHA256과 세부 점수는 `2026-08-24-kaggle-t4-triposr-current-reference-v023.json`에
+보관한다. 모든 Production·Gate B·Unity gate는 계속 잠금이다.
+
 `.blend`, `.glb`, 렌더 PNG, ZIP은 기본적으로 `.gitignore` 대상이다. 세션이 끝난 뒤에도
 바이너리를 보관해야 할 때는 GitHub Release 또는 Git LFS를 사용하고, 해당 파일의
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
