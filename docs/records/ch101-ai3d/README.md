@@ -166,3 +166,13 @@ Gate B 패키지는 세 후보 순위로 갱신했지만 `GATE_B_REVIEW_PACKAGE_
 `PENDING_HUMAN_REVIEW`, Unity 입력 false를 유지한다. 재발 방지를 위해 Notebook의
 기본 평가 범위를 `ALL`로 변경했다. 실행 상세와 SHA256은
 `2026-08-25-kaggle-t4-triposr-foreground-normalized-v028.json`에 보관한다.
+
+같은 T4 세션에서 upside-down 자동 감지 후 수직 polarity 보정을 적용해 세 후보를
+재평가했다. 보정 후 overall은 `0.497417`, `0.496654`, `0.519884`로 상승했고, 03번은
+overall `0.50`을 넘었지만 color `0.136379`가 최소 `0.20`에 미달했다. 따라서 방향 문제는
+해결됐으나 색상·재질 일치가 현재 병목이며 자동 QA는 3개 모두
+`REJECT_GATE_B_AND_REGENERATE`로 남았다. Gate B 패키지는 `03 → 01 → 02` 순서로
+갱신되었지만 `GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED`, `PENDING_HUMAN_REVIEW`,
+Unity 입력 false를 유지한다. 다음 실행부터 수직 보정을 기본 적용하도록 Notebook을
+변경했으며 상세 점수·보정 GLB SHA256은
+`2026-08-25-kaggle-t4-triposr-vertical-correction-v029.json`에 보관한다.
