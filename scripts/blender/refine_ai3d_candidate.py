@@ -72,6 +72,8 @@ GENERIC_IMPORTED_MATERIAL_NAMES = {
     "default material",
     "material",
 }
+PALETTE_ORDER = ("white", "graphite", "gold", "cyan", "skin", "hair")
+PALETTE_REGION_ALGORITHM = "CH101_REVIEW_BLOCKING_XZ_FRONT_V002"
 
 
 def parse_args() -> argparse.Namespace:
@@ -287,13 +289,19 @@ def has_reviewable_imported_material(obj: bpy.types.Object) -> bool:
 
 
 def ensure_review_material(
-    obj: bpy.types.Object, material_mode: str, character: str
+    obj: bpy.types.Object,
+    material_mode: str,
+    character: str,
+    global_minimum: Vector | None = None,
+    global_maximum: Vector | None = None,
 ) -> list[str]:
     if material_mode == "preserve" and has_reviewable_imported_material(obj):
         return [material.name for material in obj.data.materials if material is not None]
 
     if material_mode == "preserve":
-        return apply_palette_review_materials(obj, character)
+        return apply_palette_review_materials(
+            obj, character, global_minimum, global_maximum
+        )
 
     material = bpy.data.materials.get(REVIEW_MATERIAL_NAME)
     if material is None:
@@ -312,13 +320,17 @@ def ensure_review_material(
 
 
 def apply_palette_review_materials(
-    obj: bpy.types.Object, character: str
+    obj: bpy.types.Object,
+    character: str,
+    global_minimum: Vector | None = None,
+    global_maximum: Vector | None = None,
 ) -> list[str]:
     """Apply a conservative roster palette approximation when textures are absent.
 
-    This is a review aid for untextured AI meshes, not texture generation. The
-    bands are deliberately coarse and the report labels the result as an
-    approximation so it cannot be mistaken for final art.
+    This is a review aid for untextured AI meshes, not texture generation. CH101
+    uses a deterministic coarse blocking profile based on global normalized
+    height, horizontal position, and front-facing normals. The report labels
+    the result as an approximation so it cannot be mistaken for final art.
     """
     palette = PALETTE_MATERIALS_BY_CHARACTER.get(
         character, PALETTE_MATERIALS_BY_CHARACTER["CH101"]
@@ -336,33 +348,95 @@ def apply_palette_review_materials(
         materials[key] = material
 
     obj.data.materials.clear()
-    ordered = [materials[key] for key in ("white", "graphite", "gold", "cyan", "skin", "hair")]
+    ordered = [materials[key] for key in PALETTE_ORDER]
     for material in ordered:
         obj.data.materials.append(material)
-    height = max(obj.dimensions.z, 1e-6)
+
+    if global_minimum is None or global_maximum is None:
+        global_minimum, global_maximum = world_bounds([obj])
+    global_height = max(global_maximum.z - global_minimum.z, 1e-6)
+    global_center_x = (global_minimum.x + global_maximum.x) * 0.5
+    global_half_width = max((global_maximum.x - global_minimum.x) * 0.5, 1e-6)
+    assignment_counts = {key: 0 for key in PALETTE_ORDER}
     for polygon in obj.data.polygons:
         world_center = obj.matrix_world @ polygon.center
-        normalized_z = max(0.0, min(1.0, (world_center.z - 0.0) / height))
+        normalized_z = max(
+            0.0,
+            min(1.0, (world_center.z - global_minimum.z) / global_height),
+        )
+        normalized_x = max(
+            -1.0,
+            min(1.0, (world_center.x - global_center_x) / global_half_width),
+        )
         world_normal = obj.matrix_world.to_3x3() @ polygon.normal
         front_facing = world_normal.y < -0.2
-        if normalized_z < 0.16:
-            key = "white" if front_facing else "graphite"
-        elif normalized_z < 0.56:
-            key = "skin"
-        elif normalized_z < 0.69:
-            key = "graphite"
-        elif normalized_z < 0.84:
-            key = "white" if front_facing else "graphite"
-        elif normalized_z < 0.92:
-            key = "skin" if front_facing else "hair"
+        if character == "CH101":
+            # CH101's approved sheet is dominated by black hair/outfit,
+            # white jacket/boots, warm skin, and sparse cyan/gold accents.
+            # These regions are intentionally only a visual review heuristic.
+            if normalized_z < 0.15:
+                key = "white" if front_facing else "graphite"
+            elif normalized_z < 0.47:
+                key = "skin"
+            elif normalized_z < 0.62:
+                key = "graphite"
+            elif normalized_z < 0.80:
+                key = "white" if abs(normalized_x) > 0.34 else "graphite"
+            elif normalized_z < 0.90:
+                key = (
+                    "skin"
+                    if front_facing and abs(normalized_x) < 0.26
+                    else "hair"
+                )
+            else:
+                key = "hair"
+
+            # Add broad, low-frequency accent regions instead of random
+            # single-triangle speckling. This keeps cyan/gold visible without
+            # fabricating a texture or claiming semantic landmark transfer.
+            if (
+                normalized_z < 0.15
+                and abs(normalized_x) > 0.38
+                and polygon.index % 5 == 0
+            ):
+                key = "cyan"
+            elif 0.62 <= normalized_z < 0.86 and front_facing:
+                if (
+                    0.36 < abs(normalized_x) < 0.70
+                    and polygon.index % 7 == 0
+                ):
+                    key = "gold"
+                elif abs(normalized_x) > 0.62 and polygon.index % 11 == 0:
+                    key = "cyan"
         else:
-            key = "hair"
-        # Keep small cyan/gold accents sparse and deterministic for review.
-        if polygon.index % 37 == 0 and normalized_z > 0.20:
-            key = "cyan"
-        elif polygon.index % 53 == 0 and normalized_z > 0.30:
-            key = "gold"
-        polygon.material_index = ("white", "graphite", "gold", "cyan", "skin", "hair").index(key)
+            # Keep the existing conservative roster fallback for characters
+            # whose visual profile has not yet received a calibrated review.
+            if normalized_z < 0.16:
+                key = "white" if front_facing else "graphite"
+            elif normalized_z < 0.56:
+                key = "skin"
+            elif normalized_z < 0.69:
+                key = "graphite"
+            elif normalized_z < 0.84:
+                key = "white" if front_facing else "graphite"
+            elif normalized_z < 0.92:
+                key = "skin" if front_facing else "hair"
+            else:
+                key = "hair"
+            if polygon.index % 37 == 0 and normalized_z > 0.20:
+                key = "cyan"
+            elif polygon.index % 53 == 0 and normalized_z > 0.30:
+                key = "gold"
+        assignment_counts[key] += 1
+        polygon.material_index = PALETTE_ORDER.index(key)
+    obj["review_palette_algorithm"] = (
+        PALETTE_REGION_ALGORITHM
+        if character == "CH101"
+        else "LEGACY_HEIGHT_BANDS_V001"
+    )
+    obj["review_palette_assignment_counts"] = json.dumps(
+        assignment_counts, sort_keys=True
+    )
     return [material.name for material in ordered]
 
 
@@ -380,12 +454,18 @@ def main() -> int:
     transform = transform_candidate(imported, invert_up_axis=args.invert_up_axis)
     cleanup = [clean_mesh(obj) for obj in imported]
     had_imported_materials = any(has_reviewable_imported_material(obj) for obj in imported)
+    global_minimum, global_maximum = world_bounds(imported)
     if args.material_mode == "palette":
         material_names = sorted(
             {
                 material_name
                 for obj in imported
-                for material_name in apply_palette_review_materials(obj, args.character)
+                for material_name in apply_palette_review_materials(
+                    obj,
+                    args.character,
+                    global_minimum,
+                    global_maximum,
+                )
             }
         )
     else:
@@ -394,13 +474,17 @@ def main() -> int:
                 material_name
                 for obj in imported
                 for material_name in ensure_review_material(
-                    obj, args.material_mode, args.character
+                    obj,
+                    args.material_mode,
+                    args.character,
+                    global_minimum,
+                    global_maximum,
                 )
             }
         )
     palette_fallback_used = args.material_mode == "preserve" and not had_imported_materials
     palette_review_used = args.material_mode == "palette"
-    minimum, maximum = world_bounds(imported)
+    minimum, maximum = global_minimum, global_maximum
     triangle_count = sum(len(obj.data.loop_triangles) for obj in imported)
     uv_missing = [obj.name for obj in imported if not obj.data.uv_layers]
 
@@ -426,7 +510,9 @@ def main() -> int:
             )
             if args.material_mode == "preserve"
             else (
-                "Coarse roster palette materials were assigned by geometry bands for review only."
+                "Coarse roster palette materials were assigned by "
+                f"{PALETTE_REGION_ALGORITHM if args.character == 'CH101' else 'legacy height bands'} "
+                "for review only."
                 if args.material_mode == "palette"
                 else "Neutral review material is automatic and not a final art material."
             )
@@ -480,6 +566,18 @@ def main() -> int:
         "materialMode": args.material_mode,
         "paletteFallbackUsed": palette_fallback_used,
         "paletteReviewUsed": palette_review_used,
+        "paletteAlgorithm": (
+            PALETTE_REGION_ALGORITHM
+            if args.material_mode == "palette" and args.character == "CH101"
+            else "LEGACY_HEIGHT_BANDS_V001"
+            if args.material_mode == "palette"
+            else None
+        ),
+        "paletteAssignmentCounts": {
+            obj.name: json.loads(obj.get("review_palette_assignment_counts", "{}"))
+            for obj in imported
+            if obj.get("review_palette_assignment_counts")
+        },
         "warnings": warnings,
     }
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
