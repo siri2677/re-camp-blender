@@ -192,3 +192,12 @@ preflight와 pinned checkout까지 통과했지만 six-view inference subprocess
 생성하지 않았다. 실행 해시와 상세 provenance는
 `2026-08-25-kaggle-t4-triposr-palette-v030.json`에 보관한다. 모든 Production·Gate B·
 Unity gate는 계속 잠금이다.
+
+v030에서 피부색 단일 변경만으로 color score가 움직이지 않은 원인을 보강하기 위해,
+CH101 리뷰 팔레트를 전역 bounds·좌우 위치·전면 법선 기반의 색상 블로킹으로 변경했다.
+검은 상·하의/헤어, 흰 재킷·부츠, 피부 영역, 제한된 청록·금색 포인트를 분리하고
+객체별 재질 배정 통계를 리포트에 기록한다. 이는 텍스처 생성이나 의미론적 얼굴·의상
+분할이 아니며, 평가 기준과 Gate는 변경하지 않았다. 로컬 정적 검증은 통과했지만 실제
+점수는 아직 T4에서 재측정하지 않았으므로 현재 판정은 계속
+`REGENERATE_REQUIRED_UNTIL_T4_REMEASUREMENT`이며 상세 구현 기록은
+`2026-08-25-ch101-palette-blocking-v031.json`에 보관한다.
