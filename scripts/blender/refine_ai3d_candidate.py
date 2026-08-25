@@ -29,7 +29,9 @@ PALETTE_MATERIALS_BY_CHARACTER = {
         "graphite": (0.008, 0.008, 0.012, 1.0),
         "gold": (0.668, 0.391, 0.063, 1.0),
         "cyan": (0.0, 0.455, 0.672, 1.0),
-        "skin": (0.957, 0.957, 0.933, 1.0),
+        # Warm soft-matte skin sampled from the approved CH101 reference sheet;
+        # this is review palette calibration, not final texture authoring.
+        "skin": (0.974, 0.891, 0.814, 1.0),
         "hair": (0.008, 0.008, 0.012, 1.0),
     },
     "CH102": {

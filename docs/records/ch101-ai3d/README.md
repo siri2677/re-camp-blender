@@ -176,3 +176,7 @@ overall `0.50`을 넘었지만 color `0.136379`가 최소 `0.20`에 미달했다
 Unity 입력 false를 유지한다. 다음 실행부터 수직 보정을 기본 적용하도록 Notebook을
 변경했으며 상세 점수·보정 GLB SHA256은
 `2026-08-25-kaggle-t4-triposr-vertical-correction-v029.json`에 보관한다.
+
+다음 색상 보정 단계에서는 CH101 승인 시트의 피부 톤과 맞지 않던 기존 흰색 skin
+review palette를 따뜻한 soft-matte 톤으로 교체했다. 이는 최종 텍스처가 아니라 색상
+히스토그램 개선을 위한 검토용 보정이며, 다음 T4 실행에서 color score 변화를 측정한다.

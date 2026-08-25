@@ -691,6 +691,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("apply_palette_review_materials", source)
         self.assertIn("has_reviewable_imported_material", source)
         self.assertIn("GENERIC_IMPORTED_MATERIAL_NAMES", source)
+        self.assertIn('"skin": (0.974, 0.891, 0.814, 1.0)', source)
         self.assertIn('hasattr(bpy.ops.wm, "obj_import")', source)
         self.assertIn('hasattr(bpy.ops.wm, "ply_import")', source)
         self.assertIn('"paletteFallbackUsed": palette_fallback_used', source)
