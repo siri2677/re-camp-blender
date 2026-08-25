@@ -201,3 +201,11 @@ CH101 리뷰 팔레트를 전역 bounds·좌우 위치·전면 법선 기반의 
 점수는 아직 T4에서 재측정하지 않았으므로 현재 판정은 계속
 `REGENERATE_REQUIRED_UNTIL_T4_REMEASUREMENT`이며 상세 구현 기록은
 `2026-08-25-ch101-palette-blocking-v031.json`에 보관한다.
+
+같은 날 최신 v031을 T4에서 재측정하려 했으나, Kaggle 작업공간이 재연결되며 이전
+TripoSR 후보 파일이 사라진 상태였다. T4·PyTorch `sm_75` 호환성은 PASS였고 tools/art/
+Provider 재clone과 참조 준비까지는 완료했지만, 의존성 설치 중 세션 상태가 끊겨 실제
+TripoSR 추론·후보·점수는 생성되지 않았다. 따라서 v030 점수를 새 결과로 덮어쓰지 않고,
+실행 기록은 `2026-08-25-kaggle-t4-session-reset-v032.json`에 보관한다. 다음 실행은
+설치·참조·3회 후보 생성·평가를 별도 checkpoint 셀로 나누며, 후보 manifest 3개가
+확인되기 전에는 refine/score를 실행하지 않는다.
