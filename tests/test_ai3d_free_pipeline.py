@@ -576,6 +576,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
     def test_notebook_caps_free_candidate_attempts_and_keeps_fallback(self):
         notebook = Path("notebooks/05_ch101_ai3d_free_autobuild.ipynb").read_text(encoding="utf-8")
         self.assertIn("MAX_ATTEMPTS = 3", notebook)
+        self.assertIn("EVAL_ATTEMPT = os.environ.get('RE_CAMP_EVAL_ATTEMPT', 'ALL')", notebook)
         self.assertIn("KAGGLE_KERNEL_RUN_TYPE", notebook)
         self.assertIn("RE_CAMP_CONTENT_ROOT", notebook)
         self.assertIn("RE_CAMP_GIT_CLONE_DEPTH", notebook)

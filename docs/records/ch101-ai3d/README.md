@@ -154,3 +154,15 @@ InstantMesh provider command가 이를 무시했으며, 이제 시도별 파생 
 잠금이다.
 구현 상태와 정적 검증 결과는 `2026-08-25-instantmesh-input-normalization-v027.json`에
 보관한다.
+
+2026-08-25 Kaggle T4 x2 실행에서는 InstantMesh가 비정상 종료해 TripoSR fallback으로
+전환되었고, foreground ratio `0.80`, `0.90`, `0.98`의 세 후보가 생성되었다. 첫 평가가
+기본 `EVAL_ATTEMPT=01` 때문에 1번 후보만 처리한 것을 확인한 뒤 `EVAL_ATTEMPT=ALL`로
+재실행해 세 후보 모두 Blender refine·evaluate·score·rank에 포함했다. overall은 각각
+`0.454041`, `0.454932`, `0.480015`였고 최고 후보도 upside-down orientation, color
+minimum, overall `0.50` 기준을 충족하지 못했다. 기술 점수는 모두 `1.0`이지만 시각 품질
+기준은 모두 실패했으며, 자동 QA는 3개 모두 `REJECT_GATE_B_AND_REGENERATE`로 판정했다.
+Gate B 패키지는 세 후보 순위로 갱신했지만 `GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED`,
+`PENDING_HUMAN_REVIEW`, Unity 입력 false를 유지한다. 재발 방지를 위해 Notebook의
+기본 평가 범위를 `ALL`로 변경했다. 실행 상세와 SHA256은
+`2026-08-25-kaggle-t4-triposr-foreground-normalized-v028.json`에 보관한다.
