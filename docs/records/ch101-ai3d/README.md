@@ -143,3 +143,14 @@ policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`
 strict 자동 QA에서 `REJECT_GATE_B_AND_REGENERATE` 판정을 받았으며, geometry hard gate도
 실패했다. 실행 도구 커밋과 후보/GLB SHA256은
 `2026-08-24-kaggle-t4-instantmesh-strict-review-v026.json`에 보관한다.
+
+다음 재생성 전 로컬 보강으로 InstantMesh의 foreground ratio를 실제 단일 입력
+이미지 정규화에 적용하도록 수정했다. 이전에는 Notebook에서 ratio를 전달해도
+InstantMesh provider command가 이를 무시했으며, 이제 시도별 파생 입력 PNG와
+원본·파생 SHA256, foreground bbox, 보조 이미지 병합 여부를 `candidate-manifest.json`
+의 `providerInput`에 기록한다. 또한 Review Material 기본값을 CH101의 coarse palette
+보조 모드로 설정했지만 이는 색상 블로킹 확인용일 뿐 최종 텍스처가 아니다. 다음 T4/L4
+실행에서만 효과를 측정하며, strict visual QA·Gate B·Production·Unity 입력은 계속
+잠금이다.
+구현 상태와 정적 검증 결과는 `2026-08-25-instantmesh-input-normalization-v027.json`에
+보관한다.

@@ -29,6 +29,7 @@ from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.run_open_source_provider import (
     build_command,
     classify_provider_failure,
+    prepare_instantmesh_input,
     run_provider_command,
 )
 from scripts.ai3d.score_candidate_renders import (
@@ -495,6 +496,27 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--export_texmap", command)
         self.assertEqual(instantmesh["memoryProfile"], "T4_SAFE_BASE")
         self.assertEqual(instantmesh["view"], 4)
+
+    def test_instantmesh_foreground_input_is_derived_without_merging_auxiliary_art(self):
+        try:
+            from PIL import Image, ImageDraw
+        except ImportError:
+            self.skipTest("Pillow is unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "front.png"
+            image = Image.new("RGBA", (128, 128), (255, 255, 255, 255))
+            ImageDraw.Draw(image).rectangle((48, 16, 80, 112), fill=(20, 80, 160, 255))
+            image.save(source)
+            derived, metadata = prepare_instantmesh_input(source, root / "provider", 0.8)
+            self.assertTrue(derived.is_file())
+            self.assertEqual(metadata["mode"], "SINGLE_VIEW_FOREGROUND_SCALE")
+            self.assertEqual(metadata["foregroundRatio"], 0.8)
+            self.assertFalse(metadata["auxiliaryReferencesMerged"])
+            self.assertEqual(metadata["sourceImageSha256"], sha256_file(source))
+            with Image.open(derived) as normalized:
+                self.assertEqual(normalized.size, (128, 128))
+                self.assertEqual(normalized.getpixel((0, 0))[:3], (255, 255, 255))
 
     def test_notebook_keeps_numeric_attempt_label_for_all_providers(self):
         notebook = json.loads(

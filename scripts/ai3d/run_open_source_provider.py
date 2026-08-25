@@ -38,6 +38,86 @@ PROVIDER_KEYS = {
 }
 
 
+def prepare_instantmesh_input(
+    source_image: Path,
+    output_dir: Path,
+    foreground_ratio: float | None,
+) -> tuple[Path, dict[str, Any]]:
+    """Create an auditable foreground-scaled input for InstantMesh.
+
+    The locked reference manifest remains unchanged. InstantMesh does not
+    expose TripoSR's ``--foreground-ratio`` preprocessing flag, so passing the
+    ratio through the notebook previously had no effect for that provider.
+    This helper applies the same single-view, white-canvas normalization before
+    inference and records the derived image hash. It never combines auxiliary
+    character sheets into the provider input.
+    """
+
+    source_image = source_image.resolve()
+    output_dir = output_dir.resolve()
+    if foreground_ratio is None:
+        return source_image, {
+            "mode": "LOCKED_REFERENCE_DIRECT",
+            "sourceImage": str(source_image),
+            "sourceImageSha256": sha256_file(source_image),
+            "foregroundRatio": None,
+        }
+    if not 0.1 <= float(foreground_ratio) <= 1.0:
+        raise ValueError("foreground_ratio must be between 0.1 and 1.0")
+
+    try:
+        from PIL import Image, ImageChops, ImageFilter
+    except ImportError as exc:  # pragma: no cover - runtime dependency message
+        raise RuntimeError("Pillow is required for InstantMesh input normalization") from exc
+
+    with Image.open(source_image) as opened:
+        image = opened.convert("RGBA")
+        rgb = image.convert("RGB")
+        background = Image.new("RGB", rgb.size, "white")
+        difference = ImageChops.difference(rgb, background).convert("L")
+        mask = difference.point(lambda value: 255 if value > 12 else 0)
+        mask = mask.filter(ImageFilter.MaxFilter(5))
+        bbox = mask.getbbox()
+        if bbox is None:
+            raise ValueError(f"cannot find foreground in reference image: {source_image}")
+        foreground = image.crop(bbox)
+        available_width = max(1, int(image.width * float(foreground_ratio)))
+        available_height = max(1, int(image.height * float(foreground_ratio)))
+        scale = min(
+            available_width / max(1, foreground.width),
+            available_height / max(1, foreground.height),
+        )
+        resized = foreground.resize(
+            (
+                max(1, round(foreground.width * scale)),
+                max(1, round(foreground.height * scale)),
+            ),
+            Image.Resampling.LANCZOS,
+        )
+        canvas = Image.new("RGBA", image.size, (255, 255, 255, 255))
+        offset = (
+            (image.width - resized.width) // 2,
+            (image.height - resized.height) // 2,
+        )
+        canvas.alpha_composite(resized, offset)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    ratio_label = f"{float(foreground_ratio):.2f}".replace(".", "p")
+    output_path = output_dir / f"instantmesh-input-fg-{ratio_label}.png"
+    canvas.save(output_path, format="PNG", optimize=True)
+    return output_path, {
+        "mode": "SINGLE_VIEW_FOREGROUND_SCALE",
+        "sourceImage": str(source_image),
+        "sourceImageSha256": sha256_file(source_image),
+        "derivedImage": str(output_path),
+        "derivedImageSha256": sha256_file(output_path),
+        "foregroundRatio": float(foreground_ratio),
+        "sourceForegroundBbox": list(bbox),
+        "derivedCanvasSize": [image.width, image.height],
+        "auxiliaryReferencesMerged": False,
+    }
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -224,11 +304,24 @@ def main() -> int:
 
     output_dir = args.output_dir.resolve()
     working_output = output_dir / f".{args.provider}-work"
+    provider_input = {
+        "mode": "LOCKED_REFERENCE_DIRECT",
+        "sourceImage": str(input_image),
+        "sourceImageSha256": sha256_file(input_image),
+        "foregroundRatio": args.foreground_ratio,
+    }
+    provider_input_image = input_image
+    if args.provider == "instantmesh" and args.foreground_ratio is not None:
+        provider_input_image, provider_input = prepare_instantmesh_input(
+            input_image,
+            output_dir,
+            args.foreground_ratio,
+        )
     command = build_command(
         args.provider,
         provider,
         repo_dir,
-        input_image,
+        provider_input_image,
         working_output,
         foreground_ratio=args.foreground_ratio,
     )
@@ -247,6 +340,7 @@ def main() -> int:
             "referenceView": args.reference_view,
             "foregroundRatio": args.foreground_ratio,
         },
+        "providerInput": provider_input,
         **candidate_gate_fields(contract),
     }
     output_dir.mkdir(parents=True, exist_ok=True)
