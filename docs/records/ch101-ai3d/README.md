@@ -180,3 +180,15 @@ Unity 입력 false를 유지한다. 다음 실행부터 수직 보정을 기본 
 다음 색상 보정 단계에서는 CH101 승인 시트의 피부 톤과 맞지 않던 기존 흰색 skin
 review palette를 따뜻한 soft-matte 톤으로 교체했다. 이는 최종 텍스처가 아니라 색상
 히스토그램 개선을 위한 검토용 보정이며, 다음 T4 실행에서 color score 변화를 측정한다.
+
+2026-08-25 최신 `83f0438` 도구 커밋으로 Kaggle T4를 재실행했다. Wonder3D는 T4
+preflight와 pinned checkout까지 통과했지만 six-view inference subprocess가 exit code 1로
+종료되어 mesh를 만들지 못했고, TripoSR fallback이 foreground ratio `0.80`, `0.90`,
+`0.98` 세 후보를 생성했다. Blender 전용 NumPy 경로를 복구한 뒤 warm skin palette와
+수직 polarity correction을 적용해 세 후보를 모두 refine·evaluate·score·rank했다.
+점수는 각각 overall `0.497417`, `0.496654`, `0.519884`, color `0.137409`, `0.132872`,
+`0.136379`로 이전 v029와 동일했으며, palette 변경만으로 color 병목은 해결되지 않았다.
+보조 시각 판정은 세 후보 모두 `REJECT_GATE_B_AND_REGENERATE`였고, Gate B 패키지는
+생성하지 않았다. 실행 해시와 상세 provenance는
+`2026-08-25-kaggle-t4-triposr-palette-v030.json`에 보관한다. 모든 Production·Gate B·
+Unity gate는 계속 잠금이다.
