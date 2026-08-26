@@ -246,3 +246,14 @@ projection 계열은 중단하고, 다음 품질 상승은 다면 reference/prov
 완료된 TripoSR 후보는 overall `0.512628`이지만 color `0.170125`로 최소 `0.20`에
 미달해 `REGENERATE_REQUIRED`다. 상세 provenance와 Wonder3D 차단 상태는
 `2026-08-26-kaggle-t4-wonder3d-manual-loader-v055.json`에 보관한다.
+
+이후 같은 T4 세션에서 Wonder3D 6-view RGB/normal을 재생성하고, NeuS가 계속
+`BLOCKED_NEUS_RUNTIME_TOO_SLOW`인 경우를 위한 deterministic voxel-surface fallback을
+실행했다. 96-grid 표면은 10,063개 정점·20,136개 삼각형으로 생성되었고, Wonder3D
+RGB를 정면·후면·측면 review texture로 투영한 뒤 Subdivision level 1을 적용했다.
+최종 review-only 후보는 overall `0.758976`, silhouette `0.797221`, appearance
+`0.563129`, color `0.863743`, face `0.524969`, technical `1.0`으로 기본 후보 기준과
+strict visual identity policy를 모두 통과했다. Assisted visual QA는
+`DEFER_TO_HUMAN_GATE_B_REVIEW`로 판정했으며, 얼굴 metric은 의미론적 얼굴 일치 증명이
+아니므로 반드시 사람 검토가 필요하다. `2026-08-26-kaggle-t4-wonder3d-voxel-textured-alpha-review-v056.json`
+에 점수·해시·6개 view 해시를 기록한다. Gate B·Production·Unity 입력은 계속 잠금이다.

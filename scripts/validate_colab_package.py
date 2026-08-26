@@ -39,6 +39,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/stitch_nearest_review_component.py",
     "scripts/blender/bridge_nearest_review_components.py",
     "scripts/blender/apply_reference_projection_review.py",
+    "scripts/blender/apply_review_multiview_textures.py",
     "scripts/blender/build_ai3d_review_asset.py",
 )
 UTILITY_SCRIPTS = (
@@ -51,6 +52,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/run_open_source_provider.py",
     "scripts/ai3d/run_wonder3d_multiview.py",
     "scripts/ai3d/register_wonder3d_candidate.py",
+    "scripts/ai3d/build_wonder3d_voxel_surface.py",
     "scripts/ai3d/colab_runtime_preflight.py",
     "scripts/run_no_gpu_workstream.py",
     "scripts/ai3d/score_candidate_renders.py",

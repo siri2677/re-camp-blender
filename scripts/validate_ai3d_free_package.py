@@ -29,6 +29,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "run_open_source_provider.py",
     ROOT / "scripts" / "ai3d" / "run_wonder3d_multiview.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
+    ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
     ROOT / "scripts" / "run_no_gpu_workstream.py",
     ROOT / "scripts" / "run_adaptive_workstream.py",
@@ -46,6 +47,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "stitch_nearest_review_component.py",
     ROOT / "scripts" / "blender" / "bridge_nearest_review_components.py",
     ROOT / "scripts" / "blender" / "apply_reference_projection_review.py",
+    ROOT / "scripts" / "blender" / "apply_review_multiview_textures.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
 )
 NOTEBOOK_MARKERS = (

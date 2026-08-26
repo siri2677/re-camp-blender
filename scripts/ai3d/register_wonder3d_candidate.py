@@ -41,6 +41,7 @@ def build_candidate_manifest(
     reference_manifest_path: Path,
     mesh_path: Path,
     destination: Path,
+    asset_files: list[str] | None = None,
 ) -> dict[str, Any]:
     return {
         "contractVersion": contract["contractVersion"],
@@ -59,7 +60,7 @@ def build_candidate_manifest(
                 "modelPath": str(destination.resolve()),
                 "sha256": sha256_file(destination),
                 "bytes": destination.stat().st_size,
-                "assetFiles": [destination.name],
+                "assetFiles": asset_files or [destination.name],
                 **candidate_gate_fields(contract),
             }
         ],
@@ -89,11 +90,18 @@ def main() -> int:
     asset_dir.mkdir(parents=True, exist_ok=True)
     destination = asset_dir / mesh.name
     shutil.copy2(mesh, destination)
+    asset_files = [destination.name]
+    if mesh.suffix.lower() == ".obj":
+        sidecar = mesh.with_suffix(".mtl")
+        if sidecar.is_file():
+            shutil.copy2(sidecar, asset_dir / sidecar.name)
+            asset_files.append(sidecar.name)
     manifest = build_candidate_manifest(
         contract,
         args.reference_manifest.resolve(),
         mesh,
         destination,
+        asset_files,
     )
     manifest_path = output_dir / "candidate-manifest.json"
     write_json(manifest_path, manifest)
