@@ -220,3 +220,14 @@ color `0.385785`였지만 geometry hard gate의
 Hugging Face gated model 인증 요구로 후보를 만들지 못했다. 전체 비교·원본 SHA256·
 provider commit은 `2026-08-26-kaggle-t4-provider-comparison-v040.json`에 보관한다.
 Alpha Review, Gate B, Production Mesh, Unity 입력은 모두 잠금 상태다.
+
+2026-08-26 현재 렌더 조건으로 재기준선을 다시 맞춘 뒤 review-only 보정을 비교했다.
+v048 기준선은 overall `0.529923`, v049 coarse palette는 color `0.221981`, v050
+palette+surface bridge는 overall `0.535797`, appearance `0.401226`, color `0.221873`,
+technical `1.0`, triangle `28,728`, largest component ratio `0.97760467`로 기본
+candidate failure 없이 통과했다. 그러나 strict assisted visual QA의 overall `0.60`,
+appearance `0.55`, color `0.38` 기준에는 미달해 `REJECT_GATE_B_AND_REGENERATE`로
+판정했다. 전면 reference projection v051도 v050보다 낮아 선택하지 않았다. 따라서
+v050을 현재 기술상 최선의 review candidate로만 보관하고 Alpha Review·Gate B·Production·
+Unity 입력은 잠근다. 상세 SHA256과 비교 결과는
+`2026-08-26-kaggle-t4-review-remediation-v053.json`에 보관한다.
