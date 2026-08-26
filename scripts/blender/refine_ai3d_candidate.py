@@ -73,7 +73,10 @@ GENERIC_IMPORTED_MATERIAL_NAMES = {
     "material",
 }
 PALETTE_ORDER = ("white", "graphite", "gold", "cyan", "skin", "hair")
-PALETTE_REGION_ALGORITHM = "CH101_REVIEW_BLOCKING_XZ_FRONT_V002"
+# TripoSR's exported coordinate frame places the visually selected CH101 front
+# on +X (the evaluator consistently selects ``pos_x``).  Keep the orientation
+# choice explicit so the review-only material blocking follows the same frame.
+PALETTE_REGION_ALGORITHM = "CH101_REVIEW_BLOCKING_XZ_POSITIVE_X_FRONT_V003"
 
 
 def parse_args() -> argparse.Namespace:
@@ -369,7 +372,16 @@ def apply_palette_review_materials(
             min(1.0, (world_center.x - global_center_x) / global_half_width),
         )
         world_normal = obj.matrix_world.to_3x3() @ polygon.normal
-        front_facing = world_normal.y < -0.2
+        # The provider mesh is not guaranteed to use the same forward axis as
+        # the Blender scene.  For CH101, the evaluator's silhouette pass has
+        # selected +X as the front on the pinned TripoSR output, so use +X for
+        # this coarse review-only color blocking.  This is not semantic
+        # landmark transfer or final texture authoring.
+        front_facing = (
+            world_normal.x > 0.2
+            if character == "CH101"
+            else world_normal.y < -0.2
+        )
         if character == "CH101":
             # CH101's approved sheet is dominated by black hair/outfit,
             # white jacket/boots, warm skin, and sparse cyan/gold accents.
