@@ -1,0 +1,36 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-reference-projection-flip-v054",
+  "recordedAt": "2026-08-26",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "25f8a949acfe07cf39d2d173219f4246473b2cea",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceManifestSha256": "78600fb778f57018997208fd49c64cf13ec93a6ff0ff83381d81797e3535a796",
+  "candidateId": "INSTANTMESH-R098-SILFIT-PALETTE-BRIDGE-PROJ-FLIP-CH101-001",
+  "outputGlbSha256": "f4f6aa1cb073fe5898c5e80b4c35a9c5323ea4eb0918cfb4a414c37fbcf3ada4",
+  "projection": {
+    "algorithm": "CH101_REFERENCE_FRONT_PROJECTION_REVIEW_V001",
+    "frontAxis": "neg_x",
+    "flipLateral": true,
+    "sourceCandidate": "INSTANTMESH-R098-SILFIT-PALETTE-BRIDGE-CH101-001"
+  },
+  "score": {
+    "status": "AUTO_REVIEW_CANDIDATE",
+    "overallScore": 0.533393,
+    "silhouetteScore": 0.516139,
+    "appearanceScore": 0.39161,
+    "colorScore": 0.204233,
+    "faceDetailScore": 0.614615,
+    "technicalScore": 1.0,
+    "failureReasons": [],
+    "largestComponentVertexRatio": 0.97760467,
+    "triangleCount": 28728
+  },
+  "decision": "NOT_SELECTED_V050_REMAINS_BEST",
+  "finalDecision": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "note": "Mirroring the front projection produced the same score as the non-mirrored variant and did not approach strict visual QA thresholds. Projection experiments are stopped until a stronger multiview reference or provider result is available."
+}

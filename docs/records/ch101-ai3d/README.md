@@ -231,3 +231,9 @@ appearance `0.55`, color `0.38` 기준에는 미달해 `REJECT_GATE_B_AND_REGENE
 v050을 현재 기술상 최선의 review candidate로만 보관하고 Alpha Review·Gate B·Production·
 Unity 입력은 잠근다. 상세 SHA256과 비교 결과는
 `2026-08-26-kaggle-t4-review-remediation-v053.json`에 보관한다.
+
+같은 실행에서 전면 reference projection의 좌우 반전 변형도 측정했지만 v051과 동일한
+overall `0.533393`, appearance `0.39161`, color `0.204233`으로 개선되지 않았다.
+projection 계열은 중단하고, 다음 품질 상승은 다면 reference/provider 또는 실제 Blender
+조형 입력이 준비될 때 재개한다. 상세 결과는
+`2026-08-26-kaggle-t4-reference-projection-flip-v054.json`에 보관한다.
