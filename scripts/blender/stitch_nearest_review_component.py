@@ -142,7 +142,9 @@ def main() -> int:
         obj.data.vertices[vertex_index].co += delta_local
     bm = bmesh.new()
     bm.from_mesh(obj.data)
-    weld_result = bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=args.merge_distance)
+    vertices_before_weld = len(bm.verts)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=args.merge_distance)
+    merged_vertex_count = max(0, vertices_before_weld - len(bm.verts))
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     bm.to_mesh(obj.data)
     bm.free()
@@ -168,7 +170,7 @@ def main() -> int:
         "nearestDistance": round(nearest["distance"], 8),
         "translationWorld": [round(float(value), 8) for value in delta_world],
         "mergeDistance": args.merge_distance,
-        "mergedVertexCount": len(weld_result.get("targetmap", {})),
+        "mergedVertexCount": merged_vertex_count,
         "topologyBefore": before,
         "topologyAfter": after,
         "sourceStatus": SOURCE_STATUS,
