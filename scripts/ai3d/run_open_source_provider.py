@@ -154,6 +154,7 @@ def build_command(
     front_image: Path,
     working_output: Path,
     foreground_ratio: float | None = None,
+    no_rembg: bool = False,
 ) -> list[str]:
     if provider_name == "instantmesh":
         command = [
@@ -168,6 +169,8 @@ def build_command(
         ]
         if provider.get("exportTextureMap", True):
             command.append("--export_texmap")
+        if no_rembg:
+            command.append("--no_rembg")
         return command
 
     command = [
@@ -276,6 +279,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--reference-view", choices=("front", "right", "back"), default="front")
     parser.add_argument("--foreground-ratio", type=float)
+    parser.add_argument(
+        "--no-rembg",
+        action="store_true",
+        help="Use InstantMesh's explicit no_rembg fallback when rembg is unavailable.",
+    )
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--character")
     parser.add_argument("--execute", action="store_true")
@@ -324,6 +332,7 @@ def main() -> int:
         provider_input_image,
         working_output,
         foreground_ratio=args.foreground_ratio,
+        no_rembg=args.no_rembg,
     )
     plan = {
         "contractVersion": contract["contractVersion"],
@@ -339,6 +348,7 @@ def main() -> int:
         "providerParameters": {
             "referenceView": args.reference_view,
             "foregroundRatio": args.foreground_ratio,
+            "noRembg": args.no_rembg if args.provider == "instantmesh" else False,
         },
         "providerInput": provider_input,
         **candidate_gate_fields(contract),

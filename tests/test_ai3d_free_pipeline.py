@@ -494,6 +494,10 @@ class AI3DFreePipelineTests(unittest.TestCase):
         )
         self.assertIn("instant-mesh-base.yaml", " ".join(command))
         self.assertIn("--export_texmap", command)
+        no_rembg_command = build_command(
+            "instantmesh", instantmesh, Path("instantmesh-repo"), front, output, no_rembg=True
+        )
+        self.assertIn("--no_rembg", no_rembg_command)
         self.assertEqual(instantmesh["memoryProfile"], "T4_SAFE_BASE")
         self.assertEqual(instantmesh["view"], 4)
 
