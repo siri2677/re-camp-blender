@@ -57,6 +57,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/rank_candidates.py",
     "scripts/ai3d/build_gate_b_review_package.py",
     "scripts/ai3d/build_final_evaluation_archive.py",
+    "scripts/ai3d/run_review_remediation_chain.py",
     "scripts/validate_unity_input_package.py",
     "scripts/run_adaptive_workstream.py",
 )
