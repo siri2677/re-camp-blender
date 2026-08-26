@@ -40,6 +40,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "fit_review_silhouette.py",
+    ROOT / "scripts" / "blender" / "repair_review_components.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
 )
 NOTEBOOK_MARKERS = (
@@ -58,6 +59,8 @@ NOTEBOOK_MARKERS = (
     "refine_ai3d_candidate.py",
     "fit_review_silhouette.py",
     "RE_CAMP_FIT_REVIEW_SILHOUETTE",
+    "repair_review_components.py",
+    "RE_CAMP_REPAIR_REVIEW_COMPONENTS",
     "MAX_ATTEMPTS",
     "REFINED_REVIEW_CANDIDATE",
     "AUTO_ESTIMATED_NOT_APPROVED",
