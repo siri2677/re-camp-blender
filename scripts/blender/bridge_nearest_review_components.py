@@ -139,6 +139,7 @@ def main() -> int:
     basis_v = direction.cross(basis_u).normalized()
     bm = bmesh.new()
     bm.from_mesh(obj.data)
+    bm.verts.ensure_lookup_table()
     before = topology(obj)
     vertex_a = bm.verts[nearest["largestComponentVertexIndex"]]
     vertex_b = bm.verts[nearest["componentVertexIndex"]]
