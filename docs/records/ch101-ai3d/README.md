@@ -209,3 +209,14 @@ TripoSR 추론·후보·점수는 생성되지 않았다. 따라서 v030 점수�
 실행 기록은 `2026-08-25-kaggle-t4-session-reset-v032.json`에 보관한다. 다음 실행은
 설치·참조·3회 후보 생성·평가를 별도 checkpoint 셀로 나누며, 후보 manifest 3개가
 확인되기 전에는 refine/score를 실행하지 않는다.
+
+2026-08-26 T4 실행에서는 TripoSR 3개, Stable Fast 3D 1개 시도, InstantMesh 3개를
+비교했다. TripoSR 최고 후보는 색상 복원 후 overall `0.514884`, color `0.210645`까지
+올랐지만 strict visual identity policy의 overall `0.60`, silhouette `0.50`, appearance
+`0.55`, color `0.38`을 충족하지 못해 자동 시각 QA에서 거절됐다. InstantMesh의
+`0.98` 후보는 texture 보존 평가에서 overall `0.508256`, appearance `0.557187`,
+color `0.385785`였지만 geometry hard gate의
+`LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM`으로 거절됐다. Stable Fast 3D는
+Hugging Face gated model 인증 요구로 후보를 만들지 못했다. 전체 비교·원본 SHA256·
+provider commit은 `2026-08-26-kaggle-t4-provider-comparison-v040.json`에 보관한다.
+Alpha Review, Gate B, Production Mesh, Unity 입력은 모두 잠금 상태다.
