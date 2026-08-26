@@ -33,6 +33,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/validate_ch101_mesh_intake.py",
     "scripts/blender/evaluate_ai3d_candidate.py",
     "scripts/blender/refine_ai3d_candidate.py",
+    "scripts/blender/fit_review_silhouette.py",
     "scripts/blender/build_ai3d_review_asset.py",
 )
 UTILITY_SCRIPTS = (
@@ -150,6 +151,7 @@ REQUIRED_MARKERS = {
         "evaluate_ai3d_candidate.py",
         "--integrity-blend",
         "refine_ai3d_candidate.py",
+        "fit_review_silhouette.py",
         "REFINED_REVIEW_CANDIDATE",
         "face_driver_status",
         "AUTO_ESTIMATED_NOT_APPROVED",
