@@ -43,6 +43,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "repair_review_components.py",
     ROOT / "scripts" / "blender" / "analyze_review_components.py",
     ROOT / "scripts" / "blender" / "stitch_nearest_review_component.py",
+    ROOT / "scripts" / "blender" / "bridge_nearest_review_components.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
 )
 NOTEBOOK_MARKERS = (

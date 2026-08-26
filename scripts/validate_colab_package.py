@@ -37,6 +37,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/repair_review_components.py",
     "scripts/blender/analyze_review_components.py",
     "scripts/blender/stitch_nearest_review_component.py",
+    "scripts/blender/bridge_nearest_review_components.py",
     "scripts/blender/build_ai3d_review_asset.py",
 )
 UTILITY_SCRIPTS = (
