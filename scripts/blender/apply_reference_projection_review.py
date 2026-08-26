@@ -28,6 +28,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--mask-bounds", required=True, help="x0,y0,x1,y1 in reference pixels")
     parser.add_argument("--front-axis", choices=("neg_x", "pos_x"), default="neg_x")
+    parser.add_argument("--flip-lateral", action="store_true")
     return parser.parse_args(raw)
 
 
@@ -132,6 +133,8 @@ def main() -> int:
             vertex_index = obj.data.loops[loop_index].vertex_index
             world = obj.matrix_world @ obj.data.vertices[vertex_index].co
             normalized_lateral = max(0.0, min(1.0, (world.y - lateral_min) / lateral_range))
+            if args.flip_lateral:
+                normalized_lateral = 1.0 - normalized_lateral
             normalized_vertical = max(0.0, min(1.0, (world.z - minimum.z) / height))
             pixel_x = x0 + normalized_lateral * (x1 - x0)
             pixel_y = y1 - normalized_vertical * (y1 - y0)
@@ -154,6 +157,7 @@ def main() -> int:
         "outputGlb": str(output_glb),
         "outputGlbSha256": sha256_file(output_glb),
         "frontAxis": args.front_axis,
+        "flipLateral": args.flip_lateral,
         "maskBounds": mask_bounds,
         "projectedFaceCount": projected_faces,
         "untouchedFaceCount": untouched_faces,
