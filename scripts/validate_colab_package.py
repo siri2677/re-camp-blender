@@ -35,6 +35,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/refine_ai3d_candidate.py",
     "scripts/blender/fit_review_silhouette.py",
     "scripts/blender/repair_review_components.py",
+    "scripts/blender/analyze_review_components.py",
     "scripts/blender/build_ai3d_review_asset.py",
 )
 UTILITY_SCRIPTS = (

@@ -41,6 +41,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py",
     ROOT / "scripts" / "blender" / "fit_review_silhouette.py",
     ROOT / "scripts" / "blender" / "repair_review_components.py",
+    ROOT / "scripts" / "blender" / "analyze_review_components.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
 )
 NOTEBOOK_MARKERS = (
