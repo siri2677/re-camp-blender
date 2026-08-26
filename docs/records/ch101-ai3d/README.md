@@ -237,3 +237,12 @@ overall `0.533393`, appearance `0.39161`, color `0.204233`으로 개선되지 �
 projection 계열은 중단하고, 다음 품질 상승은 다면 reference/provider 또는 실제 Blender
 조형 입력이 준비될 때 재개한다. 상세 결과는
 `2026-08-26-kaggle-t4-reference-projection-flip-v054.json`에 보관한다.
+
+같은 T4 세션에서 최신 Diffusers가 Wonder3D checkpoint의 provider-local custom UNet을
+원격 코드로 찾지 못하는 원인을 확인하고, local UNet + checkpoint VAE/CLIP/scheduler를
+조립하는 manual loader로 실제 6-view RGB/normal 생성을 완료했다. 공식 NeuS mesh
+추출은 1000·200·20 iteration 최소 프로파일 모두 현재 Kaggle 런타임에서 완료되지 않아
+중단했으며, mesh·candidate manifest·Review Blend는 생성하지 않았다. 동일 세션의
+완료된 TripoSR 후보는 overall `0.512628`이지만 color `0.170125`로 최소 `0.20`에
+미달해 `REGENERATE_REQUIRED`다. 상세 provenance와 Wonder3D 차단 상태는
+`2026-08-26-kaggle-t4-wonder3d-manual-loader-v055.json`에 보관한다.

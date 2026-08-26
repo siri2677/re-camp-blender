@@ -63,6 +63,7 @@ def build_generation_command(
         f"validation_dataset.root_dir={reference_dir}",
         f"validation_dataset.filepaths=['{input_filename}']",
         f"save_dir={output_dir}",
+        "enable_xformers_memory_efficient_attention=false",
     ]
 
 
@@ -271,8 +272,11 @@ def main() -> int:
     compat_dir = Path(__file__).resolve().parent / "wonder3d_compat"
     existing_pythonpath = provider_environment.get("PYTHONPATH")
     provider_environment["PYTHONPATH"] = os.pathsep.join(
-        part for part in (str(compat_dir), existing_pythonpath) if part
+        part for part in (str(compat_dir), str(provider_repo), existing_pythonpath) if part
     )
+    provider_environment["RE_CAMP_WONDER3D_DISABLE_XFORMERS"] = "1"
+    provider_environment["RE_CAMP_WONDER3D_MANUAL_PIPELINE"] = "1"
+    provider_environment["RE_CAMP_WONDER3D_PROVIDER_REPO"] = str(provider_repo)
     try:
         result = subprocess.run(
             command,
