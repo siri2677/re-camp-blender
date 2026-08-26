@@ -148,6 +148,7 @@ REQUIRED_MARKERS = {
         "prepare_reference_views.py",
         "tripo_api.py",
         "run_open_source_provider.py",
+        "RE_CAMP_INSTANTMESH_NO_REMBG",
         "run_adaptive_workstream.py",
         "ADAPTIVE_NO_GPU_COMPLETED",
         "GPU_WORK_ENABLED",

@@ -60,6 +60,7 @@ NOTEBOOK_MARKERS = (
     "prepare_reference_views.py",
     "tripo_api.py",
     "run_open_source_provider.py",
+    "RE_CAMP_INSTANTMESH_NO_REMBG",
     "evaluate_ai3d_candidate.py",
     "refine_ai3d_candidate.py",
     "fit_review_silhouette.py",
