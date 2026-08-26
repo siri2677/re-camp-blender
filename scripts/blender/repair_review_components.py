@@ -88,11 +88,25 @@ def main() -> int:
     before = topology(meshes)
     if hasattr(primary.data, "remesh_voxel_size"):
         primary.data.remesh_voxel_size = args.voxel_size
-    bpy.ops.object.mode_set(mode="SCULPT")
+    remesh_backend = "SCULPT_VOXEL_REMESH"
+    # Blender 3.0 exposes the sculpt operator but does not register it in a
+    # background context.  Prefer it when available and fall back to the
+    # background-safe Remesh Modifier instead of silently producing no repair.
     try:
+        bpy.ops.object.mode_set(mode="SCULPT")
         if not hasattr(bpy.ops.sculpt, "voxel_remesh"):
             raise RuntimeError("BLENDER_VOXEL_REMESH_OPERATOR_UNAVAILABLE")
         bpy.ops.sculpt.voxel_remesh()
+    except (AttributeError, RuntimeError):
+        remesh_backend = "REMESH_MODIFIER_VOXEL"
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        modifier = primary.modifiers.new("ReviewVoxelRemesh", "REMESH")
+        modifier.mode = "VOXEL"
+        modifier.voxel_size = args.voxel_size
+        bpy.context.view_layer.objects.active = primary
+        primary.select_set(True)
+        bpy.ops.object.modifier_apply(modifier=modifier.name)
     finally:
         if bpy.context.object and bpy.context.object.mode != "OBJECT":
             bpy.ops.object.mode_set(mode="OBJECT")
@@ -121,6 +135,7 @@ def main() -> int:
         "outputGlb": str(output_glb),
         "outputGlbSha256": sha256_file(output_glb),
         "voxelSize": args.voxel_size,
+        "backend": remesh_backend,
         "topologyBefore": before,
         "topologyAfter": after,
         "sourceStatus": SOURCE_STATUS,
