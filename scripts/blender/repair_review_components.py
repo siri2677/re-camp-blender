@@ -17,6 +17,7 @@ from pathlib import Path
 
 import bmesh
 import bpy
+from mathutils import Vector
 
 
 SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
@@ -32,6 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-glb", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--voxel-size", type=float, default=0.008)
+    parser.add_argument("--character", default="CH101")
     return parser.parse_args(raw)
 
 
@@ -45,8 +47,20 @@ def sha256_file(path: Path) -> str:
 
 def topology(objects: list[bpy.types.Object]) -> dict[str, int]:
     vertices = sum(len(obj.data.vertices) for obj in objects)
+    for obj in objects:
+        obj.data.calc_loop_triangles()
     triangles = sum(len(obj.data.loop_triangles) for obj in objects)
     return {"objectCount": len(objects), "vertexCount": vertices, "triangleCount": triangles}
+
+
+def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector]:
+    points = [obj.matrix_world @ vertex.co for obj in objects for vertex in obj.data.vertices]
+    if not points:
+        raise ValueError("mesh objects contain no vertices")
+    return (
+        Vector(tuple(min(point[index] for point in points) for index in range(3))),
+        Vector(tuple(max(point[index] for point in points) for index in range(3))),
+    )
 
 
 def enforce_review_gate() -> None:
@@ -118,6 +132,16 @@ def main() -> int:
     bm.free()
     primary.data.update()
     primary.data.calc_loop_triangles()
+    # Remesh commonly collapses imported material slots.  Reapply the same
+    # deterministic CH101 review palette used by the normal refine stage so a
+    # topology experiment is not accidentally scored as a neutral gray asset.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import refine_ai3d_candidate as refine
+
+    palette_minimum, palette_maximum = world_bounds([primary])
+    material_names = refine.apply_palette_review_materials(
+        primary, args.character, palette_minimum, palette_maximum
+    )
     after = topology([primary])
     enforce_review_gate()
     bpy.ops.wm.save_as_mainfile(filepath=str(output_blend))
@@ -136,6 +160,9 @@ def main() -> int:
         "outputGlbSha256": sha256_file(output_glb),
         "voxelSize": args.voxel_size,
         "backend": remesh_backend,
+        "character": args.character,
+        "materialMode": "palette",
+        "materialNames": material_names,
         "topologyBefore": before,
         "topologyAfter": after,
         "sourceStatus": SOURCE_STATUS,
