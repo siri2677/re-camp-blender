@@ -28,6 +28,19 @@ CARDINAL_VIEWS = {
     "neg_x": Vector((-1.0, 0.0, 0.0)),
 }
 
+# The review-only palette is exported through GLB material names. Blender 3.x
+# can import the Principled node with a neutral default even when the GLB
+# material name still carries the palette identity, so restore the explicit
+# display color before Workbench renders.
+REVIEW_PALETTE_DISPLAY_COLORS = {
+    "white": (0.92, 0.92, 0.90, 1.0),
+    "graphite": (0.035, 0.045, 0.06, 1.0),
+    "gold": (0.86, 0.55, 0.12, 1.0),
+    "cyan": (0.02, 0.62, 0.74, 1.0),
+    "skin": (0.974, 0.891, 0.814, 1.0),
+    "hair": (0.018, 0.022, 0.032, 1.0),
+}
+
 
 def parse_args() -> argparse.Namespace:
     raw = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
@@ -201,7 +214,29 @@ def sync_workbench_material_colors(meshes: list[bpy.types.Object]) -> int:
     synced = 0
     for obj in meshes:
         for material in obj.data.materials:
-            if material is None or material.node_tree is None:
+            if material is None:
+                continue
+            material_name = material.name.casefold()
+            palette_key = next(
+                (
+                    key
+                    for key in REVIEW_PALETTE_DISPLAY_COLORS
+                    if f"_palette_{key}" in material_name
+                ),
+                None,
+            )
+            if palette_key is not None:
+                color = REVIEW_PALETTE_DISPLAY_COLORS[palette_key]
+                material.diffuse_color = color
+                if material.node_tree is not None:
+                    principled = material.node_tree.nodes.get("Principled BSDF")
+                    if principled is not None:
+                        base_color = principled.inputs.get("Base Color")
+                        if base_color is not None and hasattr(base_color, "default_value"):
+                            base_color.default_value = color
+                synced += 1
+                continue
+            if material.node_tree is None:
                 continue
             principled = material.node_tree.nodes.get("Principled BSDF")
             if principled is None:

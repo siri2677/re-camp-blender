@@ -723,6 +723,12 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY", source)
         self.assertIn("ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL", source)
 
+    def test_evaluation_restores_exported_review_palette_by_material_name(self):
+        source = Path("scripts/blender/evaluate_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("REVIEW_PALETTE_DISPLAY_COLORS", source)
+        self.assertIn('f"_palette_{key}" in material_name', source)
+        self.assertIn("base_color.default_value = color", source)
+
     def test_strict_visual_review_rejects_current_gray_generic_candidate(self):
         report = {
             "contractVersion": self.contract["contractVersion"],
