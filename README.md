@@ -122,6 +122,15 @@ It still failed the locked minimums, so the decision remains
 `REGENERATE_REQUIRED` with `selectedCandidate: null`. See the
 [partial NeuS run record](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-neus-partial-v067.json).
 
+The next T4 run tested an EEVEE authoritative-view texture projection as v071. It
+reached overall `0.612213` and color `0.805709`, but appearance was only
+`0.484794`, and the strict visual QA rejected the abstract surface for weak outfit,
+hair, equipment, and face boundaries. A 3,000-iteration NeuS v072 mesh was also
+written, but Blender 3.0.1 could not import that GLB, so it was not scored or
+accepted. See the [v071/v072 quality record](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-neus-quality-v071-v072.json).
+The next legitimate quality step is a stronger reconstruction provider or real
+semantic Blender reconstruction; Gate B, Production, Unity, and Android remain locked.
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,

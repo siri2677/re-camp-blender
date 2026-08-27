@@ -292,3 +292,16 @@ detail `0.412924`, technical `1.0`이었다. overall·appearance·color 기준 �
 `REGENERATE_REQUIRED`이며, `selectedCandidate`는 `null`이다. 실행 기록은
 `2026-08-27-kaggle-t4-wonder3d-neus-partial-v067.json`에 보관한다. 이 결과도
 review-only이고 Gate B·Production·Unity 입력은 잠금 상태다.
+
+이후 같은 6-view를 사용한 EEVEE review texture 보정 v071은 승인 reference의
+front/back/right를 모두 투영해 overall `0.612213`, silhouette `0.601561`, color
+`0.805709`, face `0.369580`, technical `1.0`까지 올렸지만 appearance가
+`0.484794`로 strict minimum `0.55`에 미달했다. 화면상 메시도 outfit·hair·equipment
+경계가 보존되지 않은 추상 표면이므로 assisted visual QA는
+`REJECT_GATE_B_AND_REGENERATE`로 판정했다. 이어서 3,000 iteration NeuS v072가
+GLB를 생성했으나 Blender 3.0.1 GLTF importer 오류로 refine 전에 중단되어 점수와
+후보로 인정하지 않았다. 두 시도의 provenance·점수·source mesh hash는
+`2026-08-27-kaggle-t4-wonder3d-neus-quality-v071-v072.json`에 보관한다. 품질 상승을
+위해서는 더 강한 reconstruction provider 또는 실제 Blender semantic reconstruction이
+필요하며, 임계값을 낮추거나 추상 표면을 Alpha Review로 승인하지 않는다. Gate B,
+Production, Unity 입력은 계속 잠금이다.

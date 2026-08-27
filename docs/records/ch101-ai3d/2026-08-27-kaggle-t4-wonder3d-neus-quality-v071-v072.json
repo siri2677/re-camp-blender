@@ -1,0 +1,83 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-neus-quality-v071-v072",
+  "recordedAt": "2026-08-27",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "fb1cc75d7c1b56bb10fe9618ff3fb44403d903c0",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "Wonder3D",
+  "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "status": "READY_GPU_VISIBLE",
+    "selectedWorkstream": "GPU",
+    "apiCreditUsed": 0,
+    "toolsRef": "feature/ch101-free-ai3d-autobuild"
+  },
+  "variants": [
+    {
+      "candidateId": "wonder3D-CH101-textured-authoritative-views-v071",
+      "source": "NeuS partial mesh with approved front/back/right reference texture projection",
+      "scores": {
+        "overallScore": 0.612213,
+        "silhouetteScore": 0.601561,
+        "appearanceScore": 0.484794,
+        "colorScore": 0.805709,
+        "faceDetailScore": 0.36958,
+        "technicalScore": 1.0,
+        "eligibleForHumanReview": true,
+        "failureReasons": []
+      },
+      "strictVisualQA": {
+        "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+        "disposition": "REJECT",
+        "reasonCode": "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+        "appearanceMinimum": 0.55
+      },
+      "contactSheet": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/v071-authoritative-views-eevee-contact-sheet.png",
+      "artifactHashes": "NOT_PERSISTED_KAGGLE_EPHEMERAL",
+      "note": "The EEVEE score clears the permissive objective gate but strict rejection-only visual QA rejects the candidate because the reconstructed surface does not preserve reliable outfit, hair, equipment, or facial boundaries."
+    },
+    {
+      "candidateId": "wonder3D-CH101-neus-long3000-v072",
+      "source": "NeuS 3000-iteration reconstruction from the same validated six-view input",
+      "meshExtraction": {
+        "status": "MESH_WRITTEN_BEFORE_PROCESS_CLEANUP",
+        "sourceMesh": "/kaggle/working/provider-wonder3D/NeuS/exp/neus/CH101_front_long3000/meshes/tmp.glb",
+        "sourceMeshSha256": "28b1a6922e796eb5616c43a23cdf1d2ceb69a8ed063c288f1ce06579f1e9227b",
+        "sourceMeshSizeBytes": 1944264
+      },
+      "refine": {
+        "status": "FAILED_BLENDER_GLTF_IMPORT",
+        "acceptedCandidate": false,
+        "reason": "Blender 3.0.1 could not import the 3000-iteration NeuS GLB, so no refined blend, score report, or review candidate was accepted."
+      },
+      "artifactHashes": "SOURCE_MESH_HASH_PERSISTED_ONLY_IN_THIS_RECORD",
+      "note": "The raw mesh was preserved before terminating the orphaned NeuS process; it was not promoted to a candidate or Unity input."
+    }
+  ],
+  "diagnosis": {
+    "bestStrictRelevantCandidate": "wonder3D-CH101-textured-authoritative-views-v071",
+    "qualityBlocker": "NeuS geometry is a single weakly segmented surface; texture projection improves color but cannot restore missing semantic outfit, hair, equipment, and facial geometry.",
+    "nextQualityStep": "Use a stronger reconstruction provider or perform real Blender/artist semantic reconstruction; do not lower thresholds or accept the abstract blob as Alpha Review quality.",
+    "humanReview": "Not requested because strict visual QA rejected the candidate."
+  },
+  "decision": {
+    "projectStatus": "REGENERATE_REQUIRED",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifactPersistence": {
+    "status": "KAGGLE_WORKING_EPHEMERAL",
+    "binaryAndRendersInGit": false,
+    "note": "Kaggle binary outputs and contact sheets were not copied into Git; only provenance, scores, and the source mesh hash are recorded."
+  }
+}
