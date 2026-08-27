@@ -284,6 +284,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("BLOCKED_FALLBACK_USED", source)
         self.assertIn("build_wonder3d_voxel_surface.py", source)
         self.assertIn("--mask-source", source)
+        self.assertIn("NEUS_MESH_PARTIAL_TIMEOUT", source)
+        self.assertIn("NEUS_RUN_STARTED_AT", source)
         self.assertIn("'unityInputAllowed': False", source)
 
     def test_wonder3d_neus_compat_patch_is_wired(self):
