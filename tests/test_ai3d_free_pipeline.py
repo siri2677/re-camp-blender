@@ -40,6 +40,7 @@ from scripts.ai3d.build_assisted_visual_review import (
     assess_score_report,
     build_review,
 )
+from scripts.ai3d.patch_wonder3d_neus_runtime import patch_neus
 from scripts.ai3d.run_wonder3d_multiview import (
     build_generation_command,
     inspect_reusable_generation,
@@ -284,6 +285,55 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("build_wonder3d_voxel_surface.py", source)
         self.assertIn("--mask-source", source)
         self.assertIn("'unityInputAllowed': False", source)
+
+    def test_wonder3d_neus_compat_patch_is_wired(self):
+        source = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
+            encoding="utf-8"
+        )
+        patcher = Path("scripts/ai3d/patch_wonder3d_neus_runtime.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("patch_wonder3d_neus_runtime.py", source)
+        self.assertIn("reshape(-1, 1)", patcher)
+        self.assertIn("mask_rgb = mask.expand_as(rgb_error)", patcher)
+        self.assertIn("providerCommitUnchanged", patcher)
+
+    def test_wonder3d_neus_compat_patch_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            neus_dir = Path(temp_dir)
+            (neus_dir / "models").mkdir()
+            (neus_dir / "models" / "dataset_mvdiff.py").write_text(
+                "mask = self.masks[img_idx][(pixels_y, pixels_x)]\n"
+                "cosines = self.cos(rays_v, normal)\n"
+                "mask = self.masks[img_idx][(pixels_y, pixels_x)]\n",
+                encoding="utf-8",
+            )
+            (neus_dir / "exp_runner.py").write_text(
+                "                    data[:, 13:],\n"
+                "                )\n"
+                "                psnr = 20.0 * torch.log10(1.0 / (((color_fine - true_rgb) ** 2 * mask).sum() / (mask_sum * 3.0)).sqrt())\n",
+                encoding="utf-8",
+            )
+
+            first = patch_neus(neus_dir)
+            second = patch_neus(neus_dir)
+
+            self.assertEqual(first["status"], "PATCHED")
+            self.assertTrue(first["dataset"]["changed"])
+            self.assertEqual(second["status"], "PATCHED")
+            self.assertFalse(second["dataset"]["changed"])
+            dataset_source = (neus_dir / "models" / "dataset_mvdiff.py").read_text(
+                encoding="utf-8"
+            )
+            runner_source = (neus_dir / "exp_runner.py").read_text(encoding="utf-8")
+            self.assertEqual(
+                dataset_source.count(
+                    "mask = self.masks[img_idx][(pixels_y, pixels_x)].reshape(-1, 1)"
+                ),
+                2,
+            )
+            self.assertIn("cosines = self.cos(rays_v, normal).reshape(-1, 1)", dataset_source)
+            self.assertIn("mask_rgb = mask.expand_as(rgb_error)", runner_source)
 
     def test_wonder3d_notebook_preflights_gpu_before_heavy_setup(self):
         notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
