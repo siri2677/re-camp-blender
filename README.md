@@ -113,6 +113,15 @@ was overall `0.432967` with `selectedCandidate: null`, so the current project
 decision remains `REGENERATE_REQUIRED`. See the
 [latest run record](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-notebook-fallback-v066.json).
 
+The latest retry used `2735aed`, reused the validated six-view output, and applied
+the Python 3.12 `imp` shim plus process-group timeout cleanup. NeuS produced a
+partial GLB before the 120-second limit; the pipeline retained that mesh instead
+of using the voxel fallback. The review-only candidate scored overall `0.474892`,
+appearance `0.235407`, color `0.194787`, face `0.412924`, and technical `1.0`.
+It still failed the locked minimums, so the decision remains
+`REGENERATE_REQUIRED` with `selectedCandidate: null`. See the
+[partial NeuS run record](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-neus-partial-v067.json).
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,

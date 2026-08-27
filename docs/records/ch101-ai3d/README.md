@@ -283,3 +283,12 @@ appearance `0.050563`, color `0.049172`, face `0.046689`, technical `0.85`로
 `REJECT_GATE_B_AND_REGENERATE`로 판단한다. 최신 Notebook 실행 결과와 해시는
 `2026-08-27-kaggle-t4-wonder3d-notebook-fallback-v066.json`에 기록한다. 이 결과도
 review-only이며 Gate B·Production·Unity 입력은 잠금 상태다.
+
+이후 `2735aed`에서 Python 3.12 `pyhocon/imp` shim, NeuS tensor shape 보정, timeout
+process-group 정리를 적용하고 기존 6-view를 재사용해 NeuS partial mesh를 평가했다.
+NeuS는 120초 내 전체 종료하지 않았지만 intermediate GLB를 보존했고, fallback 대신
+이를 평가한 결과 overall `0.474892`, appearance `0.235407`, color `0.194787`, face
+detail `0.412924`, technical `1.0`이었다. overall·appearance·color 기준 미달로
+`REGENERATE_REQUIRED`이며, `selectedCandidate`는 `null`이다. 실행 기록은
+`2026-08-27-kaggle-t4-wonder3d-neus-partial-v067.json`에 보관한다. 이 결과도
+review-only이고 Gate B·Production·Unity 입력은 잠금 상태다.
