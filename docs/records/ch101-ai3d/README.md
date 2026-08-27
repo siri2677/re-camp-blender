@@ -257,3 +257,18 @@ strict visual identity policy를 모두 통과했다. Assisted visual QA는
 `DEFER_TO_HUMAN_GATE_B_REVIEW`로 판정했으며, 얼굴 metric은 의미론적 얼굴 일치 증명이
 아니므로 반드시 사람 검토가 필요하다. `2026-08-26-kaggle-t4-wonder3d-voxel-textured-alpha-review-v056.json`
 에 점수·해시·6개 view 해시를 기록한다. Gate B·Production·Unity 입력은 계속 잠금이다.
+
+2026-08-27 Kaggle T4 재실행에서는 Wonder3D 실제 6-view 추론이 성공했지만, normal
+alpha가 front/front-right/back/front-left에서 crop-sized rectangle로 나온 원인을
+확인했다. RGB 전경 마스크를 사용하면 사람 형태 실루엣은 복구되지만, visual-hull
+fallback은 여전히 면이 거칠고 얼굴·헤어·의상·장비 디테일이 부족했다. EEVEE 기준
+최고 기본 점수는 v064 overall `0.533389`였으나 strict visual policy의 overall
+`0.60`, silhouette `0.50`, appearance `0.55`, color `0.38`을 충족하지 못해
+`REJECT_GATE_B_AND_REGENERATE`로 판정한다. normal-alpha를 사용한 v058/v065의 높은
+점수는 box-like geometry가 실루엣 지표를 부풀린 결과라 품질 개선으로 인정하지 않는다.
+`build_wonder3d_voxel_surface.py`에 `--mask-source rgb-foreground`를 추가했고,
+Notebook 06은 NeuS 실패/시간 초과 시 이 review-only fallback으로 전환하도록 연결했다.
+상세 provenance·점수·해시는
+`2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json`에 기록한다. 이 실행의 Kaggle
+binary와 render는 세션 임시 산출물이며 Git에 저장된 것으로 주장하지 않는다. Gate B,
+Production, Unity 입력은 계속 잠금이다.

@@ -97,6 +97,15 @@ human Gate B review; this pass can never approve Gate B or enable Unity input.
 The current EEVEE candidate (`0.529061`, color `0.300492`) is therefore judged
 `REJECT_GATE_B_AND_REGENERATE` by the strengthened policy.
 
+The 2026-08-27 Kaggle T4 run completed Wonder3D's six-view inference and found
+that normal-alpha masks were crop-sized rectangles for four views. The voxel
+fallback now supports `--mask-source rgb-foreground` and Notebook 06 uses it
+after a NeuS failure or timeout. The resulting v064 EEVEE candidate scored
+`0.533389` on the base gate but failed the stricter visual policy, so it remains
+`REGENERATE_REQUIRED`; no Gate B, Production Mesh, or Unity input was enabled.
+The run record is
+[docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json).
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,

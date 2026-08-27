@@ -267,6 +267,24 @@ class AI3DFreePipelineTests(unittest.TestCase):
             [sys.executable, "-m", "accelerate.commands.accelerate_cli"],
         )
 
+    def test_voxel_fallback_reports_explicit_mask_source_options(self):
+        source = Path("scripts/ai3d/build_wonder3d_voxel_surface.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"normal-alpha", "rgb-foreground"', source)
+        self.assertIn('"maskSourceOption": args.mask_source', source)
+        self.assertIn("RGB-derived foreground mask", source)
+
+    def test_wonder3d_notebook_has_review_only_neus_fallback(self):
+        source = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("NEUS_TIMEOUT_SECONDS", source)
+        self.assertIn("BLOCKED_FALLBACK_USED", source)
+        self.assertIn("build_wonder3d_voxel_surface.py", source)
+        self.assertIn("--mask-source", source)
+        self.assertIn("'unityInputAllowed': False", source)
+
     def test_wonder3d_notebook_preflights_gpu_before_heavy_setup(self):
         notebook = Path("notebooks/06_ch101_wonder3d_multiview_experiment.ipynb").read_text(
             encoding="utf-8"

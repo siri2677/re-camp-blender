@@ -29,6 +29,8 @@ except ImportError:
 
 VIEW_NAMES = ("front", "front_right", "right", "back", "left", "front_left")
 VIEW_AZIMUTHS = (0, 45, 90, 180, -90, -45)
+MASK_SOURCES = ("normal-alpha", "rgb-foreground")
+RGB_FOREGROUND_THRESHOLD = 14
 
 
 @dataclass
@@ -50,13 +52,45 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _load_view(rgb_dir: Path, normal_dir: Path, name: str, theta: int, dilation: int) -> View:
+def _rgb_foreground_mask(rgb_path: Path) -> np.ndarray:
+    """Recover a subject silhouette when Wonder3D normal alpha is rectangular.
+
+    Some Wonder3D checkpoints produce a useful RGB subject on black while
+    emitting a crop-sized alpha mask for the normal image.  A small closing
+    pass keeps dark clothing connected to its bright outline without changing
+    the source RGB pixels used for material sampling.
+    """
+    rgb = np.asarray(Image.open(rgb_path).convert("RGB"))
+    mask = Image.fromarray(
+        np.where(rgb.max(axis=2) > RGB_FOREGROUND_THRESHOLD, 255, 0).astype(np.uint8),
+        "L",
+    )
+    mask = (
+        mask.filter(ImageFilter.MaxFilter(9))
+        .filter(ImageFilter.MinFilter(5))
+        .filter(ImageFilter.MaxFilter(5))
+        .filter(ImageFilter.MinFilter(5))
+    )
+    return np.asarray(mask) > 128
+
+
+def _load_view(
+    rgb_dir: Path,
+    normal_dir: Path,
+    name: str,
+    theta: int,
+    dilation: int,
+    mask_source: str,
+) -> View:
     normal_path = normal_dir / f"normals_000_{name}.png"
     rgb_path = rgb_dir / f"rgb_000_{name}.png"
     if not normal_path.is_file() or not rgb_path.is_file():
         raise FileNotFoundError(f"Wonder3D view pair is incomplete: {normal_path} / {rgb_path}")
-    rgba = np.asarray(Image.open(normal_path).convert("RGBA"))
-    mask = rgba[:, :, 3] > 128
+    if mask_source == "rgb-foreground":
+        mask = _rgb_foreground_mask(rgb_path)
+    else:
+        rgba = np.asarray(Image.open(normal_path).convert("RGBA"))
+        mask = rgba[:, :, 3] > 128
     if dilation > 0:
         kernel = dilation * 2 + 1
         mask = np.asarray(
@@ -76,9 +110,16 @@ def _load_view(rgb_dir: Path, normal_dir: Path, name: str, theta: int, dilation:
     )
 
 
-def load_views(rgb_dir: Path, normal_dir: Path, dilation: int = 2) -> list[View]:
+def load_views(
+    rgb_dir: Path,
+    normal_dir: Path,
+    dilation: int = 2,
+    mask_source: str = "normal-alpha",
+) -> list[View]:
+    if mask_source not in MASK_SOURCES:
+        raise ValueError(f"unsupported mask source: {mask_source}")
     return [
-        _load_view(rgb_dir, normal_dir, name, theta, dilation)
+        _load_view(rgb_dir, normal_dir, name, theta, dilation, mask_source)
         for name, theta in zip(VIEW_NAMES, VIEW_AZIMUTHS)
     ]
 
@@ -201,6 +242,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--reference-manifest", type=Path)
     parser.add_argument("--resolution", type=int, default=96)
     parser.add_argument("--dilation", type=int, default=2)
+    parser.add_argument("--mask-source", choices=MASK_SOURCES, default="normal-alpha")
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--character", default="CH101")
     return parser.parse_args()
@@ -209,7 +251,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     contract = load_contract(args.contract, args.character)
-    views = load_views(args.rgb_dir.resolve(), args.normal_dir.resolve(), args.dilation)
+    views = load_views(
+        args.rgb_dir.resolve(),
+        args.normal_dir.resolve(),
+        args.dilation,
+        args.mask_source,
+    )
     occupancy, x_edges, y_edges, z_edges = build_occupancy(views, args.resolution)
     vertices, faces = _surface_faces(occupancy)
     world = np.asarray([(x_edges[x], y_edges[y], z_edges[z]) for x, y, z in vertices], dtype=np.float32)
@@ -234,7 +281,15 @@ def main() -> int:
         "viewCount": len(views),
         "viewNames": list(VIEW_NAMES),
         **metrics,
-        "maskSource": "Wonder3D normal alpha",
+        "maskSource": (
+            "Wonder3D RGB-derived foreground mask"
+            if args.mask_source == "rgb-foreground"
+            else "Wonder3D normal alpha"
+        ),
+        "maskSourceOption": args.mask_source,
+        "rgbForegroundThreshold": (
+            RGB_FOREGROUND_THRESHOLD if args.mask_source == "rgb-foreground" else None
+        ),
         "colorSource": "Wonder3D RGB multi-view projection",
         "unityInputAllowed": False,
         "productionPromotionAllowed": False,
