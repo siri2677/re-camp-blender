@@ -288,6 +288,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("NEUS_RUN_STARTED_AT", source)
         self.assertIn("start_new_session=True", source)
         self.assertIn("os.killpg", source)
+        self.assertIn("RE_CAMP_INSTALL_TINY_CUDA_NN", source)
+        self.assertIn("SKIPPED_OPTIONAL", source)
         self.assertIn("'unityInputAllowed': False", source)
 
     def test_wonder3d_neus_compat_patch_is_wired(self):
