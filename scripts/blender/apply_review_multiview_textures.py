@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import bpy
@@ -12,6 +13,7 @@ from mathutils import Vector
 
 
 def parse_args() -> argparse.Namespace:
+    raw = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     parser = argparse.ArgumentParser()
     parser.add_argument("--input-blend", required=True, type=Path)
     parser.add_argument("--front-image", required=True, type=Path)
@@ -21,7 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-glb", type=Path)
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--smooth-level", type=int, default=0)
-    return parser.parse_args()
+    return parser.parse_args(raw)
 
 
 def _texture_material(name: str, image_path: Path) -> bpy.types.Material:
