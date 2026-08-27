@@ -4,8 +4,10 @@
 The pinned NeuS code assumes that scalar masks and RGB tensors will always
 broadcast cleanly.  On the current Python 3.12/Torch runtime that assumption
 can surface as a ``size of tensor a (3) ... b (2)`` error during PSNR
-calculation.  This script patches only the ephemeral provider checkout used by
-the notebook; it never modifies the pinned Wonder3D commit in Git.
+calculation.  Its pinned ``pyhocon`` dependency also imports the removed
+standard-library ``imp`` module, so this script installs a tiny local shim in
+the ephemeral NeuS working directory.  It patches only the provider checkout
+used by the notebook; it never modifies the pinned Wonder3D commit in Git.
 """
 
 from __future__ import annotations
@@ -14,6 +16,29 @@ import argparse
 import json
 from pathlib import Path
 from typing import Any
+
+
+_IMP_SHIM = '''"""Python 3.12 compatibility shim for pyhocon 0.3.x."""
+
+from __future__ import annotations
+
+import importlib.util
+from pathlib import Path
+
+
+def find_module(name: str):
+    spec = importlib.util.find_spec(name)
+    if spec is None:
+        raise ImportError(f"No module named {name!r}")
+    locations = list(spec.submodule_search_locations or [])
+    if locations:
+        pathname = locations[0]
+    elif spec.origin:
+        pathname = str(Path(spec.origin).parent)
+    else:
+        pathname = ""
+    return None, pathname, (None, None, 5)
+'''
 
 
 def _patch_file(path: Path, replacements: list[tuple[str, str, str]]) -> dict[str, Any]:
@@ -82,6 +107,11 @@ def patch_neus(neus_dir: Path) -> dict[str, Any]:
             ),
         ],
     )
+    imp_shim_path = neus_dir / "imp.py"
+    imp_shim_source = imp_shim_path.read_text(encoding="utf-8") if imp_shim_path.is_file() else None
+    imp_shim_changed = imp_shim_source != _IMP_SHIM
+    if imp_shim_changed:
+        imp_shim_path.write_text(_IMP_SHIM, encoding="utf-8")
     missing = dataset["missing"] + runner["missing"]
     return {
         "status": "PATCHED" if not missing else "PATCH_PARTIAL",
@@ -89,6 +119,11 @@ def patch_neus(neus_dir: Path) -> dict[str, Any]:
         "neusDir": str(neus_dir),
         "dataset": dataset,
         "runner": runner,
+        "python312ImpShim": {
+            "path": str(imp_shim_path),
+            "changed": imp_shim_changed,
+            "status": "INSTALLED" if imp_shim_changed else "ALREADY_PRESENT",
+        },
         "missing": missing,
         "providerCommitUnchanged": True,
         "productionMesh": False,

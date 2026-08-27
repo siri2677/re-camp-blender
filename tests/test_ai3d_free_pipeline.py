@@ -296,6 +296,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("patch_wonder3d_neus_runtime.py", source)
         self.assertIn("reshape(-1, 1)", patcher)
         self.assertIn("mask_rgb = mask.expand_as(rgb_error)", patcher)
+        self.assertIn("python312ImpShim", patcher)
+        self.assertIn("importlib.util.find_spec", patcher)
         self.assertIn("providerCommitUnchanged", patcher)
 
     def test_wonder3d_neus_compat_patch_is_idempotent(self):
@@ -322,6 +324,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertTrue(first["dataset"]["changed"])
             self.assertEqual(second["status"], "PATCHED")
             self.assertFalse(second["dataset"]["changed"])
+            self.assertEqual(first["python312ImpShim"]["status"], "INSTALLED")
+            self.assertEqual(second["python312ImpShim"]["status"], "ALREADY_PRESENT")
             dataset_source = (neus_dir / "models" / "dataset_mvdiff.py").read_text(
                 encoding="utf-8"
             )
