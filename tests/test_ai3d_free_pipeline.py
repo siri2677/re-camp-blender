@@ -286,6 +286,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn("--mask-source", source)
         self.assertIn("NEUS_MESH_PARTIAL_TIMEOUT", source)
         self.assertIn("NEUS_RUN_STARTED_AT", source)
+        self.assertIn("start_new_session=True", source)
+        self.assertIn("os.killpg", source)
         self.assertIn("'unityInputAllowed': False", source)
 
     def test_wonder3d_neus_compat_patch_is_wired(self):
