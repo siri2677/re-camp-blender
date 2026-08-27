@@ -272,3 +272,14 @@ Notebook 06은 NeuS 실패/시간 초과 시 이 review-only fallback으로 전�
 `2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json`에 기록한다. 이 실행의 Kaggle
 binary와 render는 세션 임시 산출물이며 Git에 저장된 것으로 주장하지 않는다. Gate B,
 Production, Unity 입력은 계속 잠금이다.
+
+같은 Notebook 06을 최신 `e9486f2` 브랜치에서 재실행했다. 사전 검사 후 최신
+reference manifest의 SHA256이 이전 report와 달라 안전하게 6-view를 재생성했고,
+`READY_GPU_VISIBLE`·T4 2장·Wonder3D pinned commit을 확인했다. NeuS는 120초에서
+timeout되어 `BLOCKED_FALLBACK_USED`로 전환되었고, RGB foreground mask 기반 fallback은
+32,762개 정점·65,520개 삼각형을 만들었다. 그러나 최종 후보는 overall `0.432967`,
+appearance `0.050563`, color `0.049172`, face `0.046689`, technical `0.85`로
+`REGENERATE_REQUIRED`다. 따라서 `selectedCandidate`는 `null`이며,
+`REJECT_GATE_B_AND_REGENERATE`로 판단한다. 최신 Notebook 실행 결과와 해시는
+`2026-08-27-kaggle-t4-wonder3d-notebook-fallback-v066.json`에 기록한다. 이 결과도
+review-only이며 Gate B·Production·Unity 입력은 잠금 상태다.

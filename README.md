@@ -106,6 +106,13 @@ after a NeuS failure or timeout. The resulting v064 EEVEE candidate scored
 The run record is
 [docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-mask-recovery-v065.json).
 
+Notebook 06 was then executed from the pushed `e9486f2` branch. The current
+reference manifest forced a safe six-view regeneration, NeuS timed out after
+120 seconds, and the RGB-mask fallback produced a review mesh. Its final score
+was overall `0.432967` with `selectedCandidate: null`, so the current project
+decision remains `REGENERATE_REQUIRED`. See the
+[latest run record](docs/records/ch101-ai3d/2026-08-27-kaggle-t4-wonder3d-notebook-fallback-v066.json).
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,
