@@ -305,3 +305,12 @@ GLB를 생성했으나 Blender 3.0.1 GLTF importer 오류로 refine 전에 중�
 위해서는 더 강한 reconstruction provider 또는 실제 Blender semantic reconstruction이
 필요하며, 임계값을 낮추거나 추상 표면을 Alpha Review로 승인하지 않는다. Gate B,
 Production, Unity 입력은 계속 잠금이다.
+
+GLB importer 오류를 우회하기 위해 v072 메시를 순수 GLB parser로 OBJ로 변환한 뒤,
+OBJ 직접 평가 → 정규화 Blend → 승인 reference texture 투영을 실행한 v073도 확인했다.
+이 결과는 overall `0.622415`, appearance `0.519240`, color `0.888452`, face
+`0.416412`, technical `1.0`으로 직전보다 나아졌지만 appearance minimum `0.55`에
+미달했다. Contact sheet에서도 표면이 slab-like abstract shape로 남아 strict visual QA는
+동일하게 `REJECT_GATE_B_AND_REGENERATE`다. 따라서 이 후보도 Alpha Review·Gate B·Unity
+입력으로 승격하지 않으며, v071~v073 기록은
+`2026-08-27-kaggle-t4-wonder3d-neus-quality-v071-v072.json`에 갱신했다.

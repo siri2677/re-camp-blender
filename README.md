@@ -131,6 +131,12 @@ accepted. See the [v071/v072 quality record](docs/records/ch101-ai3d/2026-08-27-
 The next legitimate quality step is a stronger reconstruction provider or real
 semantic Blender reconstruction; Gate B, Production, Unity, and Android remain locked.
 
+The v072 GLB was also parsed to OBJ and evaluated through a normalized Blend in
+v073. The authoritative-view texture pass reached overall `0.622415` and
+appearance `0.519240`, but the visible result remains an abstract slab-like surface;
+strict visual QA therefore still returns `REJECT_GATE_B_AND_REGENERATE`. The OBJ
+candidate is not an Alpha Review or Unity asset.
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,
