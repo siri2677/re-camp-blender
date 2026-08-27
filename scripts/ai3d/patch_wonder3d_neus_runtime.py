@@ -90,6 +90,11 @@ def patch_neus(neus_dir: Path) -> dict[str, Any]:
                 "cosines = self.cos(rays_v, normal)",
                 "cosines = self.cos(rays_v, normal).reshape(-1, 1)",
             ),
+            (
+                "dataset.return_mask_cosine_columns",
+                "return torch.cat([rays_o.cpu(), rays_v.cpu(), color, mask[:, None], normal, cosines[:, None]], dim=-1)",
+                "return torch.cat([rays_o.cpu(), rays_v.cpu(), color, mask, normal, cosines], dim=-1)",
+            ),
         ],
     )
     runner = _patch_file(

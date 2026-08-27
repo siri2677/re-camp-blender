@@ -307,7 +307,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
             (neus_dir / "models" / "dataset_mvdiff.py").write_text(
                 "mask = self.masks[img_idx][(pixels_y, pixels_x)]\n"
                 "cosines = self.cos(rays_v, normal)\n"
-                "mask = self.masks[img_idx][(pixels_y, pixels_x)]\n",
+                "mask = self.masks[img_idx][(pixels_y, pixels_x)]\n"
+                "return torch.cat([rays_o.cpu(), rays_v.cpu(), color, mask[:, None], normal, cosines[:, None]], dim=-1)\n",
                 encoding="utf-8",
             )
             (neus_dir / "exp_runner.py").write_text(
@@ -337,6 +338,7 @@ class AI3DFreePipelineTests(unittest.TestCase):
                 2,
             )
             self.assertIn("cosines = self.cos(rays_v, normal).reshape(-1, 1)", dataset_source)
+            self.assertIn("color, mask, normal, cosines", dataset_source)
             self.assertIn("mask_rgb = mask.expand_as(rgb_error)", runner_source)
 
     def test_wonder3d_notebook_preflights_gpu_before_heavy_setup(self):
