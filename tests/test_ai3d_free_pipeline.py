@@ -29,6 +29,7 @@ from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.convert_glb_to_obj import convert_glb_to_obj
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
+from scripts.ai3d.prepare_semantic_reconstruction_handoff import prepare_handoff
 from scripts.ai3d.run_open_source_provider import (
     build_command,
     classify_provider_failure,
@@ -386,6 +387,23 @@ class AI3DFreePipelineTests(unittest.TestCase):
         )
         self.assertEqual(gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
         self.assertEqual(gate["sameStrategyRejectedCount"], 1)
+
+    def test_semantic_reconstruction_handoff_preflights_locked_inputs_and_stays_blocked(self):
+        art_root = Path(__file__).parents[1].parent / "re-camp-art"
+        if not (art_root / ".git").is_dir():
+            self.skipTest("sibling re-camp-art checkout is unavailable")
+        report = prepare_handoff(
+            art_root=art_root,
+            output=Path("unused-report.json"),
+        )
+        self.assertEqual(report["status"], "READY_INPUTS_BLOCKED_AUTHORING")
+        self.assertEqual(len(report["references"]), 4)
+        self.assertEqual(report["artCommitActual"], report["artCommitExpected"])
+        self.assertIn("MODEL_EQUIPMENT", report["collections"])
+        self.assertIn("Socket_BladeTip", report["detailSockets"])
+        self.assertIn("BLENDER_AUTHORING_ENVIRONMENT_REQUIRED", report["blockers"])
+        self.assertFalse(report["unityInputAllowed"])
+        self.assertFalse(report["productionPromotionAllowed"])
 
     def test_wonder3d_command_uses_pinned_six_view_pipeline(self):
         provider = self.contract["experimentalProviders"]["wonder3D"]

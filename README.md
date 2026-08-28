@@ -159,6 +159,11 @@ The next concrete workstream is documented in
 It defines the body/face, hair, outfit, equipment, face-landmark, and socket
 handoff needed to replace the slab-like AI surface. No visual-quality pass or
 production promotion is claimed until that work is actually completed.
+The input preflight can be regenerated with
+`python scripts/ai3d/prepare_semantic_reconstruction_handoff.py --art-root ../re-camp-art
+--output docs/records/ch101-ai3d/2026-08-28-semantic-reconstruction-inputs-v001.json`;
+it records reference hashes and remains authoring-blocked until Blender is
+available.
 
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only

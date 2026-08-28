@@ -11,6 +11,18 @@ not another identical Wonder3D retry.
 This document is a handoff checklist for Blender Desktop or a 3D contributor.
 It does not promote an asset, approve Gate B, or enable Unity input.
 
+Before opening Blender, prepare and inspect the secret-free input report:
+
+```text
+python scripts/ai3d/prepare_semantic_reconstruction_handoff.py \
+  --art-root ../re-camp-art \
+  --output docs/records/ch101-ai3d/2026-08-28-semantic-reconstruction-inputs-v001.json
+```
+
+The command verifies the pinned art commit, hashes the four locked reference
+images, and materializes the CH101 collections, sockets, face placeholders,
+and review evidence checklist. It does not generate a mesh.
+
 ## Locked references
 
 - `re-camp` art commit: `b6c9b3128358e061eee6184230929413eba84101`

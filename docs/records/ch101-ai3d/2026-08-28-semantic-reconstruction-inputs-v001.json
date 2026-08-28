@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "ch101-semantic-reconstruction-handoff-v001",
+  "character": "CH101",
+  "subject": "AmasawaRin",
+  "status": "READY_INPUTS_BLOCKED_AUTHORING",
+  "artCommitExpected": "b6c9b3128358e061eee6184230929413eba84101",
+  "artCommitActual": "b6c9b3128358e061eee6184230929413eba84101",
+  "contractVersion": "ch101-ai3d-free-pipeline-v001",
+  "references": [
+    {
+      "id": "authoritative",
+      "path": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "role": "IDENTITY_AND_SILHOUETTE_ANCHOR",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+      "sizeBytes": 3486329,
+      "pngDimensions": [
+        3000,
+        2400
+      ]
+    },
+    {
+      "id": "turnaround",
+      "path": "art_refs/characters/rin/concept/CH101_Rin_Turnaround_REVIEW_v001.png",
+      "role": "PROPORTION_AND_VIEW_REFERENCE",
+      "sha256": "87d7583cd28081b5bd109ea24e9b00a81e43f2decd621e48225ca3f151ad4b35",
+      "sizeBytes": 1475686,
+      "pngDimensions": [
+        1665,
+        944
+      ]
+    },
+    {
+      "id": "equipment",
+      "path": "art_refs/characters/rin/concept/CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "role": "EQUIPMENT_STRUCTURE_REFERENCE",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b",
+      "sizeBytes": 1460809,
+      "pngDimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "expression",
+      "path": "art_refs/characters/rin/concept/CH101_Rin_ExpressionSheet_REVIEW_v001.png",
+      "role": "FACE_LANDMARK_REFERENCE",
+      "sha256": "fd5988979bf7340dfeb8d1de128a49b2df97d5468354ec1449b0577384fb0048",
+      "sizeBytes": 2165016,
+      "pngDimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "missingReferences": [],
+  "invalidPngReferences": [],
+  "collections": [
+    "MODEL_HIGH_BODY",
+    "MODEL_CLOTH_OUTFIT",
+    "MODEL_HAIR",
+    "MODEL_EQUIPMENT"
+  ],
+  "componentPlan": [
+    {
+      "id": "body_face",
+      "objects": [
+        "body",
+        "head",
+        "jaw",
+        "eyes",
+        "nose",
+        "mouth",
+        "ears"
+      ],
+      "acceptance": [
+        "recognizable CH101 head and facial planes",
+        "clean A-pose deformation-ready topology",
+        "face landmarks remain explicit and reviewable"
+      ]
+    },
+    {
+      "id": "hair",
+      "objects": [
+        "main_hair_mass",
+        "hairline",
+        "ponytail"
+      ],
+      "acceptance": [
+        "hairline and ponytail are visible in front/right/back/3-4 views",
+        "hair is not fused into a featureless outer shell"
+      ]
+    },
+    {
+      "id": "outfit",
+      "objects": [
+        "jacket",
+        "shorts",
+        "straps",
+        "boots",
+        "major_seams"
+      ],
+      "acceptance": [
+        "outfit regions follow the approved sheet proportions",
+        "white, graphite, skin, cyan, and gold regions remain semantically separated"
+      ]
+    },
+    {
+      "id": "equipment",
+      "objects": [
+        "saber",
+        "sheath",
+        "ribbon_left",
+        "ribbon_right",
+        "pouch"
+      ],
+      "acceptance": [
+        "equipment is modeled as distinct objects",
+        "grip, blade tip, ribbon, and primary equipment attachment are explicit"
+      ]
+    }
+  ],
+  "facePlaceholders": [
+    "Blink_L",
+    "Blink_R",
+    "Face_Smile",
+    "Viseme_A",
+    "Viseme_E",
+    "Viseme_I",
+    "Viseme_O",
+    "Viseme_U"
+  ],
+  "commonRuntimeSockets": [
+    "Socket_Equipment_Primary",
+    "Socket_VFXCenter",
+    "Socket_CameraFocus"
+  ],
+  "detailSockets": [
+    "Socket_Weapon_R",
+    "Socket_BladeTip",
+    "Socket_Ribbon_L",
+    "Socket_Ribbon_R"
+  ],
+  "runtimeSocketMap": {
+    "Socket_Equipment_Primary": "Socket_Weapon_R",
+    "Socket_VFXCenter": "Socket_VFXCenter",
+    "Socket_CameraFocus": "Socket_CameraFocus"
+  },
+  "requiredReviewEvidence": [
+    "front_right_back_3-4_views",
+    "A-pose_deformation_check",
+    "face_closeup_and_hairline_check",
+    "outfit_region_and_equipment_attachment_check",
+    "socket_location_capture",
+    "Blender_validator_report_and_blend_sha256"
+  ],
+  "blockers": [
+    "BLENDER_AUTHORING_ENVIRONMENT_REQUIRED",
+    "SEMANTIC_3D_MODELING_REQUIRED"
+  ],
+  "nextAction": "OPEN_HANDOFF_IN_BLENDER_AND_BUILD_REVIEW_ONLY_MESH",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

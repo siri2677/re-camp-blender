@@ -150,6 +150,10 @@ overall `0.758976`·appearance `0.563129`였지만 v072/v073은 NeuS가 완료�
 `PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER`를 다음 작업으로 기록한다.
 명시적인 `RE_CAMP_ALLOW_SAME_STRATEGY_RETRY=1`은 진단 목적의 override일 뿐이며,
 어떤 경우에도 `unityInputAllowed`나 Production 승격을 허용하지 않는다.
+CH101 semantic reconstruction에 넘길 입력·해시·Socket·컬렉션 체크리스트는
+`2026-08-28-semantic-reconstruction-inputs-v001.json`에 기록한다. 이 파일은
+실제 Mesh가 아니라 Blender authoring 전용 preflight이며, 입력이 준비되어도
+Blender 작업과 사람 Gate B 없이는 다음 단계로 승격하지 않는다.
 
 2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
 않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
