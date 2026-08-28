@@ -4,9 +4,11 @@
   "branch": "feature/ch101-free-ai3d-autobuild",
   "baseToolsCommit": "1dbf4efada4f8c50e4a4cefc4d79c7db85eac8c0",
   "character": "CH101",
+  "strategyId": "WONDER3D_NEUS_VOXEL_COMPARE_V001",
   "evidence": [
     {
       "candidateId": "wonder3D-voxel-textured-v056",
+      "status": "AUTO_REVIEW_CANDIDATE",
       "overallScore": 0.758976,
       "appearanceScore": 0.563129,
       "strictDisposition": "DEFER_TO_HUMAN_REVIEW",
@@ -14,6 +16,7 @@
     },
     {
       "candidateId": "wonder3D-neus-long3000-objdirect-authoritative-v073",
+      "status": "REGENERATE_REQUIRED",
       "overallScore": 0.622415,
       "appearanceScore": 0.51924,
       "strictDisposition": "REJECT",

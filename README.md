@@ -145,6 +145,21 @@ separate labeled candidates, runs the same refine/evaluate/score path for both, 
 lets the locked ranking policy choose the higher-quality review result. A successful
 NeuS process alone is no longer treated as a quality pass.
 
+To prevent an unproductive retry loop, Notebook 06 now runs
+`scripts/ai3d/quality_progress_gate.py` before provider installation and
+inference. The recorded v074 rejection is tied to strategy
+`WONDER3D_NEUS_VOXEL_COMPARE_V001`; another run with that same strategy stops
+as `QUALITY_PLATEAU_SAME_STRATEGY` and directs the work to semantic Blender
+reconstruction or a genuinely different provider. The explicit
+`RE_CAMP_ALLOW_SAME_STRATEGY_RETRY=1` override is reserved for diagnostics and
+does not change any production or Unity gate.
+
+The next concrete workstream is documented in
+[docs/plans/ch101-semantic-reconstruction-handoff.md](docs/plans/ch101-semantic-reconstruction-handoff.md).
+It defines the body/face, hair, outfit, equipment, face-landmark, and socket
+handoff needed to replace the slab-like AI surface. No visual-quality pass or
+production promotion is claimed until that work is actually completed.
+
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only
 triangle-preserving OBJ transport copy, and records both hashes in a compatibility

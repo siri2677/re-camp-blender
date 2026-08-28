@@ -478,6 +478,7 @@ def build_score_report(
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
         "candidateId": evaluation["candidateId"],
+        "strategyId": evaluation.get("strategyId", ""),
         "candidatePath": evaluation["candidatePath"],
         "candidateSha256": evaluation["candidateSha256"],
         "status": "AUTO_REVIEW_CANDIDATE" if eligible else "REGENERATE_REQUIRED",

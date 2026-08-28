@@ -49,12 +49,17 @@ python scripts/run_adaptive_workstream.py --provider sf3d --character CH101 --ar
 3. NeuS가 완료되어도 품질 통과로 간주하지 않고, RGB foreground voxel fallback을 별도
    후보로 생성해 두 결과를 Blender refine → pre-export geometry audit → render
    evaluation → score 순서로 동일하게 비교한다.
-4. `build_assisted_visual_review.py`의 rejection-only 검토를 거친 뒤에만 rank한다.
+4. 실행 전에 `quality_progress_gate.py`가 이전 score/history를 확인한다. 동일한
+   `WONDER3D_NEUS_VOXEL_COMPARE_V001` 전략에서 이미 거절된 결과가 있으면 GPU 설치와
+   추론을 반복하지 않고 `QUALITY_PLATEAU_SAME_STRATEGY`로 중단한다.
+   다음 작업은 `PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER`이며, 동일 전략
+   재시도는 명시적인 진단용 override가 있을 때만 허용한다.
+5. `build_assisted_visual_review.py`의 rejection-only 검토를 거친 뒤에만 rank한다.
    점수 또는 Hard Gate 미달이면 `REGENERATE_REQUIRED`로 종료한다.
-5. 기술 기준 통과 후보도 비교 시트에서 시각 검토하고, 보조 검토는 거절·보류만 기록한다.
-6. 사람이 Gate B를 승인한 경우에만 Production Mesh 인테이크와 Unity handoff 준비로 이동한다.
-7. CH101 절차가 검증되면 같은 계약으로 CH102~CH105 후보 생성을 순서대로 실행한다.
-8. 실제 5인 Production Mesh handoff와 사람 승인 5개가 모인 뒤 통합 manifest를 만들고 Unity Import를 시작한다.
+6. 기술 기준 통과 후보도 비교 시트에서 시각 검토하고, 보조 검토는 거절·보류만 기록한다.
+7. 사람이 Gate B를 승인한 경우에만 Production Mesh 인테이크와 Unity handoff 준비로 이동한다.
+8. CH101 절차가 검증되면 같은 계약으로 CH102~CH105 후보 생성을 순서대로 실행한다.
+9. 실제 5인 Production Mesh handoff와 사람 승인 5개가 모인 뒤 통합 manifest를 만들고 Unity Import를 시작한다.
 
 ## 중단 조건
 
@@ -63,6 +68,7 @@ python scripts/run_adaptive_workstream.py --provider sf3d --character CH101 --ar
 - 후보 파일 누락 또는 SHA256 불일치
 - geometry Hard Gate 또는 점수 기준 미달
 - 얼굴·헤어·의상·장비·손의 시각 품질 거절
+- 동일 strategy ID의 거절 이력(`QUALITY_PLATEAU_SAME_STRATEGY`)
 - `unityInputAllowed=true` 또는 `productionPromotionAllowed=true` 입력 발견
 - 실제 Production Mesh, Unity Editor, Android 기기 부재
 

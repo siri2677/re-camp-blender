@@ -47,6 +47,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True, type=Path)
     parser.add_argument("--candidate-id", required=True)
+    parser.add_argument(
+        "--strategy-id",
+        default="",
+        help="Stable pipeline strategy identifier used by the quality plateau gate.",
+    )
     parser.add_argument("--character", default="CH101")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
@@ -553,6 +558,7 @@ def main() -> int:
     report = {
         "character": args.character,
         "candidateId": args.candidate_id,
+        "strategyId": args.strategy_id,
         "candidatePath": str(candidate),
         "candidateSha256": sha256_file(candidate),
         "status": "EVALUATION_RENDERED",

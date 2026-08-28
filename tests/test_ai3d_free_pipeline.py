@@ -28,6 +28,7 @@ from scripts.ai3d.prepare_roster_reference_views import prepare_roster
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
 from scripts.ai3d.convert_glb_to_obj import convert_glb_to_obj
+from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 from scripts.ai3d.run_open_source_provider import (
     build_command,
     classify_provider_failure,
@@ -242,6 +243,11 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "build_assisted_visual_review.py",
             "ASSISTED_VISUAL_REVIEW",
             "--assisted-visual-review",
+            "QUALITY_STRATEGY_ID",
+            "quality_progress_gate.py",
+            "QUALITY_PLATEAU_SAME_STRATEGY_PIVOT_REQUIRED",
+            "RE_CAMP_ALLOW_SAME_STRATEGY_RETRY",
+            "--strategy-id",
         ):
             self.assertIn(marker, source)
         self.assertIn(
@@ -330,6 +336,56 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertEqual(
                 output.read_text(encoding="utf-8").count("\nf "), 1
             )
+
+    def test_quality_progress_gate_requires_strategy_pivot_after_rejection(self):
+        history = [
+            {
+                "candidateId": "CH101-WONDER3D-NEUS",
+                "strategyId": "WONDER3D_NEUS_VOXEL_COMPARE_V001",
+                "overallScore": 0.62,
+                "appearanceScore": 0.51,
+                "status": "REGENERATE_REQUIRED",
+                "rejected": True,
+            }
+        ]
+        blocked = build_progress_gate(
+            provider="Wonder3D",
+            strategy_id="WONDER3D_NEUS_VOXEL_COMPARE_V001",
+            history=history,
+        )
+        self.assertEqual(blocked["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+        self.assertEqual(
+            blocked["nextAction"],
+            "PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER",
+        )
+        new_strategy = build_progress_gate(
+            provider="Wonder3D",
+            strategy_id="WONDER3D_SEMANTIC_PROXY_V001",
+            history=history,
+        )
+        self.assertEqual(new_strategy["status"], "READY_NEW_STRATEGY")
+        override = build_progress_gate(
+            provider="Wonder3D",
+            strategy_id="WONDER3D_NEUS_VOXEL_COMPARE_V001",
+            history=history,
+            allow_same_strategy_retry=True,
+        )
+        self.assertEqual(override["status"], "READY_NEW_STRATEGY")
+        self.assertTrue(override["allowSameStrategyRetry"])
+
+    def test_quality_progress_gate_reads_the_recorded_wonder3d_plateau(self):
+        record = Path(
+            "docs/records/ch101-ai3d/2026-08-28-wonder3d-selection-root-cause-v074.json"
+        )
+        history = collect_history(None, [record])
+        self.assertGreaterEqual(len(history), 2)
+        gate = build_progress_gate(
+            provider="Wonder3D",
+            strategy_id="WONDER3D_NEUS_VOXEL_COMPARE_V001",
+            history=history,
+        )
+        self.assertEqual(gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+        self.assertEqual(gate["sameStrategyRejectedCount"], 1)
 
     def test_wonder3d_command_uses_pinned_six_view_pipeline(self):
         provider = self.contract["experimentalProviders"]["wonder3D"]

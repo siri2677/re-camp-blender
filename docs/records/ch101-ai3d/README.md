@@ -143,6 +143,14 @@ overall `0.758976`·appearance `0.563129`였지만 v072/v073은 NeuS가 완료�
 비교한다. 다음 실행 결과가 나오기 전까지 이 변경은 해결 경로 준비 상태이며,
 사람 Gate B·Production·Unity gate는 계속 잠금이다.
 
+같은 전략을 반복 실행해도 얼굴·헤어·의상·장비 의미론이 새로 생기지 않는 문제를
+막기 위해 v075에서 `quality_progress_gate.py`를 추가했다. `WONDER3D_NEUS_VOXEL_COMPARE_V001`
+전략의 거절 score/history가 발견되면 Provider 설치·추론 전에
+`QUALITY_PLATEAU_SAME_STRATEGY`로 중단하고
+`PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER`를 다음 작업으로 기록한다.
+명시적인 `RE_CAMP_ALLOW_SAME_STRATEGY_RETRY=1`은 진단 목적의 override일 뿐이며,
+어떤 경우에도 `unityInputAllowed`나 Production 승격을 허용하지 않는다.
+
 2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
 않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
 policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`, appearance
