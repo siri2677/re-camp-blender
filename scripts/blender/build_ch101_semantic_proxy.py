@@ -270,7 +270,13 @@ def build_review_scene(output_dir: Path, materials: dict[str, bpy.types.Material
 
 
 def export_obj_compat(path: Path) -> None:
-    if hasattr(bpy.ops.wm, "obj_export"):
+    if tuple(bpy.app.version) < (4, 0, 0) and hasattr(bpy.ops.export_scene, "obj"):
+        bpy.ops.export_scene.obj(
+            filepath=str(path),
+            use_selection=True,
+            use_mesh_modifiers=True,
+        )
+    elif hasattr(bpy.ops.wm, "obj_export"):
         bpy.ops.wm.obj_export(
             filepath=str(path),
             export_selected_objects=True,
