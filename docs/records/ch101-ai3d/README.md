@@ -355,3 +355,15 @@ OBJ 직접 평가 → 정규화 Blend → 승인 reference texture 투영을 실
 동일하게 `REJECT_GATE_B_AND_REGENERATE`다. 따라서 이 후보도 Alpha Review·Gate B·Unity
 입력으로 승격하지 않으며, v071~v073 기록은
 `2026-08-27-kaggle-t4-wonder3d-neus-quality-v071-v072.json`에 갱신했다.
+
+이후 Kaggle hybrid Notebook에서 `TRELLIS_SINGLE_VIEW_V001`과
+`SEMANTIC_PROXY_REFERENCE_FITTED_V001`을 각각 한 번의 정책으로 처리했다. 현재 런타임은
+GPU가 노출되지 않아 TRELLIS는 `BLOCKED_PROVIDER_PREFLIGHT`로 기록됐고, CPU Blender
+semantic proxy는 OBJ transport까지 생성되어 refine·evaluate·score·strict visual QA를
+완주했다. 후보 점수는 overall `0.505845`, silhouette `0.484222`, appearance `0.364404`,
+color `0.201315`, face `0.449624`, technical `1.0`이며, strict 기준 미달과 함께
+연결 성분 60개·유의미 성분 35개·최대 성분 비율 `0.05831217`로 geometry hard gate도
+실패했다. 따라서 `REGENERATE_REQUIRED` 및 `REJECT_GATE_B_AND_REGENERATE`이며,
+동일 semantic 전략은 반복하지 않는다. 실행 아티팩트 해시와 Kaggle 경로는
+`2026-08-28-kaggle-hybrid-semantic-proxy-v077.json`에 보관한다. Gate B, Production,
+Unity 입력은 계속 잠금이다.
