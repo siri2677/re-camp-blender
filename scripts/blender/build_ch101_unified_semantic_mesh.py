@@ -12,6 +12,7 @@ all Unity/production gates stay false.
 from __future__ import annotations
 
 import argparse
+import bmesh
 import hashlib
 import json
 import sys
@@ -133,28 +134,51 @@ def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
 
     result: dict[str, Any] = {
         "status": "BLOCKED_REMESH_OPERATOR_UNAVAILABLE",
-        "method": "VOXEL_REMESH_MODIFIER",
+        "method": "SCULPT_VOXEL_REMESH_OR_MODIFIER_FALLBACK",
         "voxelSize": 0.035,
     }
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
-    modifier = obj.modifiers.new(name="UnifiedConnectivityVoxelRemesh", type="REMESH")
-    if not hasattr(modifier, "mode") or not hasattr(modifier, "voxel_size"):
-        obj.modifiers.remove(modifier)
-        return result
+    if hasattr(obj.data, "remesh_voxel_size"):
+        obj.data.remesh_voxel_size = result["voxelSize"]
     try:
-        modifier.mode = "VOXEL"
-        modifier.voxel_size = result["voxelSize"]
-        if hasattr(modifier, "use_smooth_shade"):
-            modifier.use_smooth_shade = True
-        bpy.ops.object.modifier_apply(modifier=modifier.name)
-    except (RuntimeError, TypeError, ValueError) as exc:
-        if modifier.name in obj.modifiers:
-            obj.modifiers.remove(modifier)
-        result["status"] = "REMESH_FAILED"
-        result["error"] = f"{type(exc).__name__}: {exc}"
-        return result
+        bpy.ops.object.mode_set(mode="SCULPT")
+        if not hasattr(bpy.ops.sculpt, "voxel_remesh"):
+            raise RuntimeError("BLENDER_VOXEL_REMESH_OPERATOR_UNAVAILABLE")
+        bpy.ops.sculpt.voxel_remesh()
+        result["method"] = "SCULPT_VOXEL_REMESH"
+    except (AttributeError, RuntimeError):
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        modifier = obj.modifiers.new(name="UnifiedConnectivityVoxelRemesh", type="REMESH")
+        try:
+            modifier.mode = "VOXEL"
+            modifier.voxel_size = result["voxelSize"]
+            bpy.context.view_layer.objects.active = obj
+            obj.select_set(True)
+            bpy.ops.object.modifier_apply(modifier=modifier.name)
+            result["method"] = "REMESH_MODIFIER_VOXEL"
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            if modifier.name in obj.modifiers:
+                obj.modifiers.remove(modifier)
+            result["status"] = "REMESH_FAILED"
+            result["error"] = f"{type(exc).__name__}: {exc}"
+            return result
+    finally:
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+    bm = bmesh.new()
+    try:
+        bm.from_mesh(obj.data)
+        bmesh.ops.remove_doubles(
+            bm, verts=bm.verts, dist=min(result["voxelSize"] * 0.2, 0.0015)
+        )
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bm.to_mesh(obj.data)
+    finally:
+        bm.free()
+    obj.data.update()
     result["status"] = "PASS"
     result["vertexCount"] = len(obj.data.vertices)
     result["triangleCount"] = review.triangle_count([obj])
