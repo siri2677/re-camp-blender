@@ -134,6 +134,94 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertFalse(manifest["unityInputAllowed"])
         self.assertFalse(manifest["productionPromotionAllowed"])
 
+    def test_unified_semantic_strategy_is_the_single_pivot_after_v001_rejection(self):
+        contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
+        self.assertEqual(
+            contract["qualityStrategies"]["UNIFIED_SEMANTIC_AUTHORING_V002"]["provider"],
+            "blenderSemanticAuthoring",
+        )
+        history = [
+            {
+                "candidateId": "CH101-SEMANTICPROXY-001",
+                "strategyId": "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+                "overallScore": 0.505845,
+                "status": "REGENERATE_REQUIRED",
+                "rejected": True,
+            }
+        ]
+        old_gate = build_progress_gate(
+            provider="semanticProxy",
+            strategy_id="SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+            history=history,
+        )
+        pivot_gate = build_progress_gate(
+            provider="blenderSemanticAuthoring",
+            strategy_id="UNIFIED_SEMANTIC_AUTHORING_V002",
+            history=history,
+        )
+        self.assertEqual(old_gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+        self.assertEqual(pivot_gate["status"], "READY_NEW_STRATEGY")
+        self.assertFalse(pivot_gate["unityInputAllowed"])
+
+    def test_unified_candidate_metadata_preserves_semantic_audit(self):
+        contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            reference_dir = root / "references"
+            reference_dir.mkdir()
+            views = {}
+            for name in ("front", "right", "back"):
+                path = reference_dir / f"{name}.png"
+                path.write_bytes(name.encode("ascii"))
+                views[name] = {"path": str(path), "sha256": sha256_file(path)}
+            reference_manifest = reference_dir / "reference-views-manifest.json"
+            reference_manifest.write_text(
+                json.dumps(
+                    {
+                        "contractVersion": contract["contractVersion"],
+                        "character": "CH101",
+                        "artCommit": contract["artLock"]["commit"],
+                        "views": views,
+                        "unityInputAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            mesh = root / "unified.obj"
+            mesh.write_text("v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n", encoding="utf-8")
+            destination = root / "unified-copy.obj"
+            destination.write_bytes(mesh.read_bytes())
+            manifest = build_candidate_manifest(
+                contract,
+                reference_manifest,
+                mesh,
+                destination,
+                provider="blenderSemanticAuthoring",
+                strategy_id="UNIFIED_SEMANTIC_AUTHORING_V002",
+                source_stage="UNIFIED_SEMANTIC_AUTHORING",
+                candidate_label="002",
+                metadata={
+                    "schemaVersion": "ch101-unified-semantic-authoring-report-v001",
+                    "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+                    "meshFormat": "OBJ",
+                    "semanticComponentAudit": {
+                        "status": "PASS",
+                        "partObjectCountsLOD0": {
+                            "body_face": 1,
+                            "hair": 1,
+                            "outfit": 1,
+                            "equipment": 1,
+                        },
+                        "slabGrayboxAccepted": False,
+                    },
+                },
+            )
+        candidate = manifest["candidates"][0]
+        self.assertEqual(candidate["provider"], "blenderSemanticAuthoring")
+        self.assertEqual(candidate["semanticComponentAudit"]["status"], "PASS")
+        self.assertFalse(candidate["unityInputAllowed"])
+        self.assertEqual(candidate["sourceMetadata"]["meshFormat"], "OBJ")
+
     def test_hybrid_notebook_and_semantic_builder_are_static_and_gate_locked(self):
         notebook_path = ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb"
         notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
@@ -145,6 +233,9 @@ class HybridQualityStrategyTests(unittest.TestCase):
         for marker in (
             "TRELLIS_SINGLE_VIEW_V001",
             "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+            "UNIFIED_SEMANTIC_AUTHORING_V002",
+            "build_ch101_unified_semantic_mesh.py",
+            "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
             "quality_progress_gate",
             "strict visual QA",
             "BLOCKED_PROVIDER_PREFLIGHT",
@@ -170,6 +261,20 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "meshFormat",
         ):
             self.assertIn(marker, builder)
+
+        unified_builder = (
+            ROOT / "scripts" / "blender" / "build_ch101_unified_semantic_mesh.py"
+        ).read_text(encoding="utf-8")
+        for marker in (
+            "UNIFIED_PRIMARY_SHELL_WITH_SEMANTIC_LABELS",
+            "apply_connectivity_remesh",
+            "AI_REVIEW_SEMANTIC_LABELS_NOT_PRODUCTION",
+            "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+            "AUTO_ESTIMATED_NOT_APPROVED",
+            "unityInputAllowed",
+            "productionPromotionAllowed",
+        ):
+            self.assertIn(marker, unified_builder)
 
         refinement = (ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("refinedTransportPath", refinement)

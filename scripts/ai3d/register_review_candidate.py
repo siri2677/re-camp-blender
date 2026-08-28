@@ -95,7 +95,8 @@ def build_candidate_manifest(
         )
     provider_token = _safe_token(provider, "PROVIDER")
     label = _safe_token(candidate_label, "001")
-    metadata = _provider_metadata(contract, provider, strategy_id)
+    provider_metadata = _provider_metadata(contract, provider, strategy_id)
+    source_metadata = metadata if isinstance(metadata, dict) else {}
     candidate = {
         "candidateId": f"{contract['character']}-{provider_token}-{label}",
         "status": "DOWNLOADED",
@@ -104,28 +105,45 @@ def build_candidate_manifest(
         "bytes": destination.stat().st_size,
         "assetFiles": asset_files or [destination.name],
         "provider": provider,
-        "providerCommit": metadata["providerCommit"],
+        "providerCommit": provider_metadata["providerCommit"],
         "artCommit": contract["artLock"]["commit"],
         "strategyId": strategy_id,
         **candidate_gate_fields(contract),
     }
-    if metadata:
-        semantic_counts = metadata.get("semanticPartObjectCountsLOD0")
+    if source_metadata:
+        semantic_counts = source_metadata.get("semanticPartObjectCountsLOD0")
+        semantic_audit = source_metadata.get("semanticComponentAudit")
+        if isinstance(semantic_audit, dict):
+            candidate["semanticComponentAudit"] = semantic_audit
         if isinstance(semantic_counts, dict):
             candidate["semanticComponentAudit"] = {
                 "status": "PASS" if all(int(value) > 0 for value in semantic_counts.values()) else "FAIL",
                 "partObjectCountsLOD0": semantic_counts,
-                "slabGrayboxAccepted": bool(metadata.get("qualityPolicy", {}).get("slabGrayboxAccepted", True)),
-                "faceStatus": metadata.get("face", {}).get("status", ""),
+                "slabGrayboxAccepted": bool(source_metadata.get("qualityPolicy", {}).get("slabGrayboxAccepted", True)),
+                "faceStatus": source_metadata.get("face", {}).get("status", ""),
             }
+        candidate["sourceMetadata"] = {
+            key: source_metadata[key]
+            for key in (
+                "schemaVersion",
+                "status",
+                "strategyId",
+                "meshFormat",
+                "blendSha256",
+                "meshSha256",
+                "semanticRepresentation",
+                "connectivityRemesh",
+            )
+            if key in source_metadata
+        }
     return {
         "schemaVersion": "review-candidate-manifest-v001",
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
         "provider": provider,
-        "providerMode": metadata["providerMode"],
-        "providerCommit": metadata["providerCommit"],
-        "providerRepository": metadata["providerRepository"],
+        "providerMode": provider_metadata["providerMode"],
+        "providerCommit": provider_metadata["providerCommit"],
+        "providerRepository": provider_metadata["providerRepository"],
         "sourceStage": source_stage,
         "strategyId": strategy_id,
         "status": "CANDIDATES_DOWNLOADED",

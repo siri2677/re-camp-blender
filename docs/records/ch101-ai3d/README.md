@@ -367,3 +367,15 @@ color `0.201315`, face `0.449624`, technical `1.0`이며, strict 기준 미달�
 동일 semantic 전략은 반복하지 않는다. 실행 아티팩트 해시와 Kaggle 경로는
 `2026-08-28-kaggle-hybrid-semantic-proxy-v077.json`에 보관한다. Gate B, Production,
 Unity 입력은 계속 잠금이다.
+
+2026-08-28 품질 정체 후속 구현에서는 `UNIFIED_SEMANTIC_AUTHORING_V002`를 추가했다.
+V001 거절 이력을 확인하면 이 새 전략만 선택하며, compatible GPU가 먼저 준비되면
+TRELLIS를 우선 실행하고 실제 mesh가 없을 때 남은 semantic 경로로 한 번만 fallback한다.
+V002 builder는 V001의 60개 분리 primitive 문제를 해결하기 위해 semantic authoring
+volume을 하나의 primary shell로 join한 뒤 voxel remesh로 실제 연결성을 확인한다.
+body/face·hair·outfit·equipment label, LOD, rig, Socket 및 face placeholder는
+리포트에 남기지만 자동 결과는 여전히 review-only다. Notebook, candidate metadata,
+quality-progress gate, strict QA 연결과 83개 unittest·Colab/AI3D validator 검증을
+완료했다. 실제 Blender/Kaggle 실행 결과가 나오기 전까지 점수나 Alpha Review 통과를
+주장하지 않으며, Gate B·Production·Unity 입력은 계속 잠금이다. 계획과 차단 조건은
+`docs/plans/ch101-quality-unity-android-plan-2026-08-28.md`에 고정한다.

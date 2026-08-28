@@ -36,6 +36,7 @@ except ImportError:
 
 TRELLIS_STRATEGY = "TRELLIS_SINGLE_VIEW_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
+UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
 
 
 def parse_args() -> argparse.Namespace:
@@ -82,6 +83,12 @@ def build_hybrid_report(
     trellis_preflight = build_runtime_report("trellis")
     trellis_gate = _gate("trellis", TRELLIS_STRATEGY, score_dir, history_records)
     semantic_gate = _gate("semanticProxy", SEMANTIC_STRATEGY, score_dir, history_records)
+    unified_gate = _gate(
+        "blenderSemanticAuthoring",
+        UNIFIED_SEMANTIC_STRATEGY,
+        score_dir,
+        history_records,
+    )
     handoff_path = output.parent / "semantic-reconstruction-inputs.json"
     semantic_handoff = prepare_handoff(
         art_root=art_root,
@@ -95,6 +102,11 @@ def build_hybrid_report(
     semantic_inputs_ready = semantic_handoff["status"] == "READY_INPUTS_BLOCKED_AUTHORING"
     semantic_ready = (
         semantic_gate["status"] == "READY_NEW_STRATEGY"
+        and semantic_inputs_ready
+        and bool(blender_path)
+    )
+    unified_ready = (
+        unified_gate["status"] == "READY_NEW_STRATEGY"
         and semantic_inputs_ready
         and bool(blender_path)
     )
@@ -122,15 +134,34 @@ def build_hybrid_report(
         semantic_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
     else:
         semantic_status = "BLOCKED_SEMANTIC_PREFLIGHT"
-    selected = []
-    if semantic_ready:
-        selected.append(SEMANTIC_STRATEGY)
+    if unified_ready:
+        unified_status = "READY_TO_RUN_ONCE"
+    elif unified_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY":
+        unified_status = "QUALITY_PLATEAU_SAME_STRATEGY"
+    elif not semantic_inputs_ready:
+        unified_status = "BLOCKED_REFERENCE_INPUTS"
+    elif not blender_path:
+        unified_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+    else:
+        unified_status = "BLOCKED_SEMANTIC_PREFLIGHT"
+
+    # One strategy is selected per run.  A compatible free GPU has priority;
+    # the connected semantic authoring strategy is the fallback after the
+    # original proxy has plateaued.  This prevents two expensive or mutually
+    # competing authoring paths from running in the same invocation.
     if trellis_ready:
-        selected.append(TRELLIS_STRATEGY)
+        selected = [TRELLIS_STRATEGY]
+    elif semantic_ready:
+        selected = [SEMANTIC_STRATEGY]
+    elif unified_ready:
+        selected = [UNIFIED_SEMANTIC_STRATEGY]
+    else:
+        selected = []
     if not selected:
         next_action = (
             "INSTALL_OR_SELECT_CPU_BLENDER_FOR_SEMANTIC_PROXY"
             if semantic_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+            or unified_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             else "RECONNECT_COMPATIBLE_GPU_OR_FIX_PROVIDER_PREFLIGHT"
         )
     else:
@@ -156,6 +187,18 @@ def build_hybrid_report(
                 "semanticHandoff": semantic_handoff,
                 "blenderExecutable": blender_path or "",
                 "runAllowed": semantic_ready,
+                "maxRuns": 1,
+            },
+            UNIFIED_SEMANTIC_STRATEGY: {
+                "provider": "blenderSemanticAuthoring",
+                "status": unified_status,
+                "qualityGate": unified_gate,
+                "semanticHandoff": semantic_handoff,
+                "blenderExecutable": blender_path or "",
+                # Keep V002 available as a one-shot fallback if TRELLIS later
+                # fails after preflight or its entrypoint produces no mesh.
+                "runAllowed": unified_ready and not semantic_ready,
+                "fallbackFor": [TRELLIS_STRATEGY, SEMANTIC_STRATEGY],
                 "maxRuns": 1,
             },
         },

@@ -170,12 +170,17 @@ The one-shot hybrid quality pivot is documented in
 Open
 `notebooks/07_ch101_hybrid_quality_strategies.ipynb` to run the new
 `TRELLIS_SINGLE_VIEW_V001` preflight and the CPU-capable
-`SEMANTIC_PROXY_REFERENCE_FITTED_V001` route. TRELLIS is installed only after
-the GPU/VRAM/CUDA/license checks pass; the semantic route creates separately
-tagged review geometry and uses the same strict refine/evaluate/score/rank path.
-Both strategies run at most once and do not create a Production Mesh or unlock
-Unity. If Blender is unavailable, the notebook records the blocked decision and
-does not create a fake candidate.
+`SEMANTIC_PROXY_REFERENCE_FITTED_V001` route. After the recorded V001 rejection,
+the notebook pivots once to `UNIFIED_SEMANTIC_AUTHORING_V002`, which voxel-remeshes
+the primary shell into an actual connected mesh while retaining semantic labels.
+TRELLIS is installed only after the GPU/VRAM/CUDA/license checks pass; a successful
+preflight with no verified mesh falls back to the remaining semantic strategy.
+Every candidate uses the same strict refine/evaluate/score/rank path. Each strategy
+runs at most once and no route creates a Production Mesh or unlocks Unity. The full
+CH101→CH105→Unity→Android gate sequence is documented in
+[docs/plans/ch101-quality-unity-android-plan-2026-08-28.md](docs/plans/ch101-quality-unity-android-plan-2026-08-28.md).
+If Blender is unavailable, the notebook records the blocked decision and does not
+create a fake candidate.
 
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only
