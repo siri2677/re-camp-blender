@@ -166,8 +166,14 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
             "AUTO_ESTIMATED_NOT_APPROVED",
             "SLAB_GRAYBOX_NOT_ACCEPTED",
+            "export_obj_compat",
+            "meshFormat",
         ):
             self.assertIn(marker, builder)
+
+        refinement = (ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("refinedTransportPath", refinement)
+        self.assertIn("OBJ transport fallback", refinement)
 
 
 if __name__ == "__main__":

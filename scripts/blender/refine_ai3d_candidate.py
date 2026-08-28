@@ -511,13 +511,42 @@ def main() -> int:
 
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output_blend))
     gltf_export_error = ""
+    transport_path = args.output_glb if args.output_glb.is_file() else None
+    transport_format = "GLB" if transport_path else ""
     try:
         bpy.ops.object.select_all(action="SELECT")
         bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
+        if args.output_glb.is_file():
+            transport_path = args.output_glb
+            transport_format = "GLB"
     except Exception as exc:
         gltf_export_error = f"{type(exc).__name__}: {exc}"
     if not args.output_glb.is_file() and not gltf_export_error:
         gltf_export_error = "GLB exporter returned without creating the requested file"
+    if gltf_export_error:
+        fallback_obj = args.output_glb.with_suffix(".obj")
+        try:
+            if hasattr(bpy.ops.wm, "obj_export"):
+                bpy.ops.wm.obj_export(
+                    filepath=str(fallback_obj),
+                    export_selected_objects=True,
+                    apply_modifiers=True,
+                )
+            elif hasattr(bpy.ops.export_scene, "obj"):
+                bpy.ops.export_scene.obj(
+                    filepath=str(fallback_obj),
+                    use_selection=True,
+                    use_mesh_modifiers=True,
+                )
+            if fallback_obj.is_file():
+                transport_path = fallback_obj
+                transport_format = "OBJ"
+        except Exception as exc:
+            fallback_warning = f"OBJ transport fallback failed: {type(exc).__name__}: {exc}"
+        else:
+            fallback_warning = ""
+    else:
+        fallback_warning = ""
 
     warnings = [
         (
@@ -536,6 +565,8 @@ def main() -> int:
             )
         ),
     ]
+    if fallback_warning:
+        warnings.append(fallback_warning)
     if palette_fallback_used:
         warnings.append(
             f"No imported material was present; {args.character} palette was assigned by coarse geometry bands for review only."
@@ -560,6 +591,9 @@ def main() -> int:
         "candidateSha256": sha256_file(candidate),
         "refinedGlb": str(args.output_glb.resolve()),
         "refinedGlbSha256": sha256_file(args.output_glb) if args.output_glb.is_file() else "",
+        "refinedTransportPath": str(transport_path.resolve()) if transport_path and transport_path.is_file() else "",
+        "refinedTransportFormat": transport_format,
+        "refinedTransportSha256": sha256_file(transport_path) if transport_path and transport_path.is_file() else "",
         "normalizedBlend": str(args.output_blend.resolve()),
         "provider": args.provider,
         "attempt": args.attempt,

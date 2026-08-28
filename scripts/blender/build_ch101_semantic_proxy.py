@@ -269,7 +269,28 @@ def build_review_scene(output_dir: Path, materials: dict[str, bpy.types.Material
     return renders
 
 
-def export_lod0(output_dir: Path, lod0: list[bpy.types.Object], armature: bpy.types.Object) -> Path:
+def export_obj_compat(path: Path) -> None:
+    if hasattr(bpy.ops.wm, "obj_export"):
+        bpy.ops.wm.obj_export(
+            filepath=str(path),
+            export_selected_objects=True,
+            apply_modifiers=True,
+        )
+    elif hasattr(bpy.ops.export_scene, "obj"):
+        bpy.ops.export_scene.obj(
+            filepath=str(path),
+            use_selection=True,
+            use_mesh_modifiers=True,
+        )
+    else:
+        raise RuntimeError("No compatible OBJ exporter is available")
+
+
+def export_lod0(
+    output_dir: Path,
+    lod0: list[bpy.types.Object],
+    armature: bpy.types.Object,
+) -> tuple[Path, str, str]:
     for obj in bpy.context.selected_objects:
         obj.select_set(False)
     for obj in lod0:
@@ -279,8 +300,22 @@ def export_lod0(output_dir: Path, lod0: list[bpy.types.Object], armature: bpy.ty
     armature.select_set(True)
     bpy.context.view_layer.objects.active = armature
     path = output_dir / "CH101_SEMANTIC_PROXY_REFERENCE_FITTED_NOT_PRODUCTION.glb"
-    bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", use_selection=True, export_apply=True)
-    return path
+    try:
+        bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", use_selection=True, export_apply=True)
+        if path.is_file():
+            return path, "GLB", ""
+    except Exception as exc:
+        gltf_error = f"{type(exc).__name__}: {exc}"
+    else:
+        gltf_error = "GLB exporter returned without creating the requested file"
+
+    if path.is_file():
+        path.unlink()
+    obj_path = path.with_suffix(".obj")
+    export_obj_compat(obj_path)
+    if not obj_path.is_file():
+        raise RuntimeError(f"OBJ fallback exporter returned without creating {obj_path}")
+    return obj_path, "OBJ", gltf_error
 
 
 def main() -> int:
@@ -350,7 +385,7 @@ def main() -> int:
     renders = build_review_scene(output_dir, materials, options.render)
     blend_path = output_dir / "CH101_SEMANTIC_PROXY_REFERENCE_FITTED_NOT_PRODUCTION.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
-    glb_path = export_lod0(output_dir, lods["LOD0"], armature)
+    mesh_path, mesh_format, mesh_export_diagnostic = export_lod0(output_dir, lods["LOD0"], armature)
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     report = {
         "schemaVersion": "ch101-semantic-proxy-report-v001",
@@ -375,8 +410,12 @@ def main() -> int:
         "triangleCounts": triangle_counts,
         "blend": str(blend_path),
         "blendSha256": sha256_file(blend_path),
-        "glb": str(glb_path),
-        "glbSha256": sha256_file(glb_path),
+        "mesh": str(mesh_path),
+        "meshFormat": mesh_format,
+        "meshSha256": sha256_file(mesh_path),
+        "glb": str(mesh_path) if mesh_format == "GLB" else "",
+        "glbSha256": sha256_file(mesh_path) if mesh_format == "GLB" else "",
+        "meshExportDiagnostic": mesh_export_diagnostic,
         "lods": ["LOD0", "LOD1", "LOD2"],
         "rig": {"status": weight_status, "error": weight_error, "audit": weight_audit},
         "sockets": {**socket_report, "status": SOCKET_STATUS},
