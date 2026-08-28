@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,6 +19,7 @@ try:
         sha256_file,
         write_json,
     )
+    from .convert_glb_to_obj import convert_glb_to_obj
 except ImportError:
     from common import (  # type: ignore
         DEFAULT_CONTRACT_PATH,
@@ -27,6 +29,7 @@ except ImportError:
         sha256_file,
         write_json,
     )
+    from convert_glb_to_obj import convert_glb_to_obj  # type: ignore
 
 
 SUPPORTED_MESH_SUFFIXES = {".obj", ".ply", ".glb", ".gltf"}
@@ -88,9 +91,24 @@ def main() -> int:
     output_dir = args.output_dir.resolve()
     asset_dir = output_dir / "CH101_wonder3D_cand_001"
     asset_dir.mkdir(parents=True, exist_ok=True)
-    destination = asset_dir / mesh.name
-    shutil.copy2(mesh, destination)
-    asset_files = [destination.name]
+    original_destination = asset_dir / mesh.name
+    shutil.copy2(mesh, original_destination)
+    destination = original_destination
+    asset_files = [original_destination.name]
+    transport_report = None
+    if mesh.suffix.lower() == ".glb":
+        # Blender 3.0's bundled glTF importer may reject a valid NeuS GLB. Keep
+        # the original transport file and register a deterministic OBJ copy as
+        # the downstream review input; this does not improve visual quality or
+        # unlock any production gate.
+        destination = asset_dir / f"{mesh.stem}_blender_compat.obj"
+        transport_report = asset_dir / f"{mesh.stem}_glb_to_obj_report.json"
+        report = convert_glb_to_obj(mesh, destination)
+        transport_report.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        asset_files.extend([destination.name, transport_report.name])
     if mesh.suffix.lower() == ".obj":
         sidecar = mesh.with_suffix(".mtl")
         if sidecar.is_file():
@@ -103,6 +121,15 @@ def main() -> int:
         destination,
         asset_files,
     )
+    if transport_report is not None:
+        manifest["transportCompatibility"] = {
+            "status": "GLB_TO_OBJ_CONVERTED",
+            "originalGlb": str(original_destination.resolve()),
+            "blenderReviewInput": str(destination.resolve()),
+            "report": str(transport_report.resolve()),
+            "materialsPreserved": False,
+            "texturesPreserved": False,
+        }
     manifest_path = output_dir / "candidate-manifest.json"
     write_json(manifest_path, manifest)
     print(manifest_path)

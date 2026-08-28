@@ -128,6 +128,13 @@ SHA256은 `2026-08-24-kaggle-t4-triposr-eevee-controlled-v024.json`에 보관한
 SHA256과 다운로드 위치를 이 디렉터리의 실행 기록에 추가한다. 기록 파일에는 API key,
 Hugging Face token, Colab secret을 저장하지 않는다.
 
+Blender 3.0.1이 NeuS가 생성한 유효한 GLB를 가져오지 못하는 경우를 위해
+`scripts/ai3d/convert_glb_to_obj.py`가 원본 GLB를 삭제하지 않고 삼각형 위치만
+보존한 OBJ transport copy를 만든다. Notebook 06은 GLB가 없거나 Blender GLB
+export가 실패해도 저장된 review Blend 또는 OBJ를 평가 입력으로 선택한다. 이
+경로는 포맷 호환성만 보완하며 material·texture·rig·socket·face 품질을 개선하지
+않고, `unityInputAllowed=false`와 `productionPromotionAllowed=false`를 유지한다.
+
 2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
 않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
 policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`, appearance

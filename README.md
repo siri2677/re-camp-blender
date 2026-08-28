@@ -137,6 +137,14 @@ appearance `0.519240`, but the visible result remains an abstract slab-like surf
 strict visual QA therefore still returns `REJECT_GATE_B_AND_REGENERATE`. The OBJ
 candidate is not an Alpha Review or Unity asset.
 
+To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
+the registration step now keeps the original NeuS GLB, writes a stdlib-only
+triangle-preserving OBJ transport copy, and records both hashes in a compatibility
+report. Notebook 06 evaluates that OBJ when Blender cannot import the GLB or when
+the GLB exporter fails after saving the normalized review Blend. This is only an
+I/O compatibility path: materials, textures, rig, sockets, and face drivers are
+not reconstructed, and all production and Unity gates remain locked.
+
 The completed CH101 local evaluation contains six candidates and 30 renders.
 Two TripoSR candidates passed the automated score and geometry gates, but all
 technically relevant candidates were rejected by assisted visual QA for face,

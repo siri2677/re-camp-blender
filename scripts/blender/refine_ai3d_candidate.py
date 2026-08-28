@@ -510,8 +510,14 @@ def main() -> int:
     scene["socket_status"] = "AUTO_ESTIMATED_NOT_APPROVED"
 
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output_blend))
-    bpy.ops.object.select_all(action="SELECT")
-    bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
+    gltf_export_error = ""
+    try:
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
+    except Exception as exc:
+        gltf_export_error = f"{type(exc).__name__}: {exc}"
+    if not args.output_glb.is_file() and not gltf_export_error:
+        gltf_export_error = "GLB exporter returned without creating the requested file"
 
     warnings = [
         (
@@ -542,18 +548,27 @@ def main() -> int:
         "The refined candidate is not a Production Mesh.",
         "Human Gate B review is required before any Unity input.",
     ])
+    if gltf_export_error:
+        warnings.append(
+            "GLB export was unavailable; the normalized .blend remains the review source and the transport input may be evaluated directly."
+        )
+        warnings.append(f"GLB export diagnostic: {gltf_export_error}")
 
     report = {
         "character": args.character,
         "candidatePath": str(candidate),
         "candidateSha256": sha256_file(candidate),
         "refinedGlb": str(args.output_glb.resolve()),
-        "refinedGlbSha256": sha256_file(args.output_glb),
+        "refinedGlbSha256": sha256_file(args.output_glb) if args.output_glb.is_file() else "",
         "normalizedBlend": str(args.output_blend.resolve()),
         "provider": args.provider,
         "attempt": args.attempt,
         "parentSha256": args.parent_sha256,
-        "status": "REFINED_REVIEW_CANDIDATE",
+        "status": (
+            "REFINED_REVIEW_CANDIDATE"
+            if not gltf_export_error
+            else "REFINED_REVIEW_CANDIDATE_GLTF_EXPORT_FAILED"
+        ),
         "sourceStatus": SOURCE_STATUS,
         "gateB": GATE_B,
         "unityInputAllowed": False,

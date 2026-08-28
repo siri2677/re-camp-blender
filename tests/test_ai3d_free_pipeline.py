@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import struct
 import sys
 import tempfile
 from pathlib import Path
@@ -26,6 +27,7 @@ from scripts.ai3d.prepare_reference_views import prepare_views
 from scripts.ai3d.prepare_roster_reference_views import prepare_roster
 from scripts.ai3d.rank_candidates import rank_reports
 from scripts.ai3d.register_wonder3d_candidate import build_candidate_manifest
+from scripts.ai3d.convert_glb_to_obj import convert_glb_to_obj
 from scripts.ai3d.run_open_source_provider import (
     build_command,
     classify_provider_failure,
@@ -234,9 +236,92 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "unityInputAllowed",
         ):
             self.assertIn(marker, source)
+        self.assertIn(
+            "evaluation_candidate = refined_glb if refined_glb.is_file() else Path(entry['modelPath'])",
+            source,
+        )
+        self.assertIn(
+            "reuse_refined_blend = refined_blend if not refined_glb.is_file() and refined_blend.is_file() else None",
+            source,
+        )
+        self.assertIn("build_evaluation_args(evaluation_candidate)", source)
         registration_source = Path("scripts/ai3d/register_wonder3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("WONDER3D_MULTIVIEW_NEUS_MESH", registration_source)
         self.assertIn("candidate_gate_fields", registration_source)
+        self.assertIn("convert_glb_to_obj", registration_source)
+
+    def test_glb_to_obj_transport_compatibility_conversion(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "mesh.glb"
+            output = root / "mesh.obj"
+            positions = struct.pack(
+                "<9f",
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+            )
+            indices = struct.pack("<3H", 0, 1, 2)
+            document = {
+                "asset": {"version": "2.0"},
+                "buffers": [{"byteLength": len(positions) + len(indices)}],
+                "bufferViews": [
+                    {"buffer": 0, "byteOffset": 0, "byteLength": len(positions)},
+                    {
+                        "buffer": 0,
+                        "byteOffset": len(positions),
+                        "byteLength": len(indices),
+                    },
+                ],
+                "accessors": [
+                    {
+                        "bufferView": 0,
+                        "componentType": 5126,
+                        "count": 3,
+                        "type": "VEC3",
+                    },
+                    {
+                        "bufferView": 1,
+                        "componentType": 5123,
+                        "count": 3,
+                        "type": "SCALAR",
+                    },
+                ],
+                "meshes": [
+                    {
+                        "primitives": [
+                            {"attributes": {"POSITION": 0}, "indices": 1}
+                        ]
+                    }
+                ],
+            }
+            json_chunk = json.dumps(document, separators=(",", ":")).encode("utf-8")
+            json_chunk += b" " * ((4 - len(json_chunk) % 4) % 4)
+            binary = positions + indices
+            binary += b"\x00" * ((4 - len(binary) % 4) % 4)
+            total_length = 12 + 8 + len(json_chunk) + 8 + len(binary)
+            source.write_bytes(
+                struct.pack("<III", 0x46546C67, 2, total_length)
+                + struct.pack("<II", len(json_chunk), 0x4E4F534A)
+                + json_chunk
+                + struct.pack("<II", len(binary), 0x004E4942)
+                + binary
+            )
+            report = convert_glb_to_obj(source, output)
+            self.assertEqual(report["status"], "GLB_TO_OBJ_CONVERTED")
+            self.assertEqual(report["vertexCount"], 3)
+            self.assertEqual(report["triangleCount"], 1)
+            self.assertFalse(report["materialsPreserved"])
+            self.assertFalse(report["unityInputAllowed"])
+            self.assertEqual(
+                output.read_text(encoding="utf-8").count("\nf "), 1
+            )
 
     def test_wonder3d_command_uses_pinned_six_view_pipeline(self):
         provider = self.contract["experimentalProviders"]["wonder3D"]
@@ -788,6 +873,8 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn('hasattr(bpy.ops.wm, "ply_import")', source)
         self.assertIn('"paletteFallbackUsed": palette_fallback_used', source)
         self.assertIn('"--invert-up-axis"', source)
+        self.assertIn('REFINED_REVIEW_CANDIDATE_GLTF_EXPORT_FAILED', source)
+        self.assertIn('GLB export was unavailable', source)
         self.assertIn('"verticalPolarityCorrectionApplied"', source)
 
     def test_vertical_polarity_detection_requires_rerender_before_review(self):
