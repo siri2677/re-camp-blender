@@ -46,8 +46,11 @@ python scripts/run_adaptive_workstream.py --provider sf3d --character CH101 --ar
 
 1. GPU가 복구되면 CH101 Wonder3D 6-view 재사용 검사를 먼저 실행한다.
 2. 재사용 가능한 결과가 없을 때만 pinned Wonder3D 설치·추론·NeuS mesh extraction을 실행한다.
-3. 새 후보를 Blender refine → pre-export geometry audit → render evaluation → score → rank 순서로 처리한다.
-4. 점수 또는 Hard Gate 미달이면 `REGENERATE_REQUIRED`로 종료한다.
+3. NeuS가 완료되어도 품질 통과로 간주하지 않고, RGB foreground voxel fallback을 별도
+   후보로 생성해 두 결과를 Blender refine → pre-export geometry audit → render
+   evaluation → score 순서로 동일하게 비교한다.
+4. `build_assisted_visual_review.py`의 rejection-only 검토를 거친 뒤에만 rank한다.
+   점수 또는 Hard Gate 미달이면 `REGENERATE_REQUIRED`로 종료한다.
 5. 기술 기준 통과 후보도 비교 시트에서 시각 검토하고, 보조 검토는 거절·보류만 기록한다.
 6. 사람이 Gate B를 승인한 경우에만 Production Mesh 인테이크와 Unity handoff 준비로 이동한다.
 7. CH101 절차가 검증되면 같은 계약으로 CH102~CH105 후보 생성을 순서대로 실행한다.

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,7 +46,11 @@ def build_candidate_manifest(
     mesh_path: Path,
     destination: Path,
     asset_files: list[str] | None = None,
+    candidate_label: str = "001",
 ) -> dict[str, Any]:
+    normalized_label = candidate_label.strip().upper()
+    if not re.fullmatch(r"[A-Z0-9][A-Z0-9_-]*", normalized_label):
+        raise ValueError(f"candidate label contains unsupported characters: {candidate_label!r}")
     return {
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
@@ -58,7 +63,7 @@ def build_candidate_manifest(
         "referenceManifestSha256": sha256_file(reference_manifest_path),
         "candidates": [
             {
-                "candidateId": f"{contract['character']}-WONDER3D-001",
+                "candidateId": f"{contract['character']}-WONDER3D-{normalized_label}",
                 "status": "DOWNLOADED",
                 "modelPath": str(destination.resolve()),
                 "sha256": sha256_file(destination),
@@ -78,6 +83,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--character")
+    parser.add_argument("--candidate-label", default="001")
     return parser.parse_args()
 
 
@@ -120,6 +126,7 @@ def main() -> int:
         mesh,
         destination,
         asset_files,
+        args.candidate_label,
     )
     if transport_report is not None:
         manifest["transportCompatibility"] = {

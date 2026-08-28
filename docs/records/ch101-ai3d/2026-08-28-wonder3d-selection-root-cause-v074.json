@@ -1,0 +1,48 @@
+{
+  "recordVersion": "ch101-ai3d-wonder3d-selection-root-cause-v074",
+  "recordedAt": "2026-08-28",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "baseToolsCommit": "1dbf4efada4f8c50e4a4cefc4d79c7db85eac8c0",
+  "character": "CH101",
+  "evidence": [
+    {
+      "candidateId": "wonder3D-voxel-textured-v056",
+      "overallScore": 0.758976,
+      "appearanceScore": 0.563129,
+      "strictDisposition": "DEFER_TO_HUMAN_REVIEW",
+      "note": "Historical RGB/normal voxel fallback was the strongest recorded metric result, but remained review-only and required visual inspection."
+    },
+    {
+      "candidateId": "wonder3D-neus-long3000-objdirect-authoritative-v073",
+      "overallScore": 0.622415,
+      "appearanceScore": 0.51924,
+      "strictDisposition": "REJECT",
+      "reasonCode": "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+      "note": "NeuS output was selected as the only candidate after successful extraction; the visible surface remained abstract and semantically under-segmented."
+    }
+  ],
+  "rootCause": {
+    "primary": "NOTEBOOK_TREATED_NEUS_EXTRACTION_SUCCESS_AS_QUALITY_SUCCESS",
+    "secondary": [
+      "NeuS and voxel fallback were not evaluated through the same downstream path.",
+      "Reference texture projection improved color but could not create missing face, hair, outfit, equipment, or ribbon geometry.",
+      "A numeric silhouette/color result can overstate quality for coarse or box-like surfaces."
+    ]
+  },
+  "repositoryFix": {
+    "status": "STATIC_IMPLEMENTED_PENDING_KAGGLE_EXECUTION",
+    "notebook": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "strategy": "COMPARE_NEUS_AND_VOXEL_REVIEW_CANDIDATES",
+    "candidateLabels": ["NEUS", "NEUS_PARTIAL", "VOXEL"],
+    "samePipeline": ["Blender refine", "render evaluation", "score", "rejection-only visual QA", "rank"],
+    "selectionRule": "Choose only among candidates that survive the locked ranking and assisted visual review policy; never unlock production gates."
+  },
+  "decision": {
+    "projectStatus": "REGENERATE_REQUIRED_PENDING_RETRY",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextVerification": "Run Notebook 06 on compatible Kaggle GPU and compare NEUS/VOXEL candidate reports and contact sheet."
+}

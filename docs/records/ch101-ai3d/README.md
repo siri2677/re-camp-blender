@@ -135,6 +135,14 @@ export가 실패해도 저장된 review Blend 또는 OBJ를 평가 입력으로 
 경로는 포맷 호환성만 보완하며 material·texture·rig·socket·face 품질을 개선하지
 않고, `unityInputAllowed=false`와 `productionPromotionAllowed=false`를 유지한다.
 
+v056와 v073의 차이를 비교한 결과, v056의 RGB foreground voxel fallback은
+overall `0.758976`·appearance `0.563129`였지만 v072/v073은 NeuS가 완료됐다는
+이유만으로 그 결과를 대체해 appearance `0.519240`에 머물렀다. 따라서 Notebook
+06은 이제 NeuS 완료 여부를 품질 통과로 간주하지 않고 NeuS와 voxel fallback을
+각각 `NEUS`·`VOXEL` 후보로 등록해 동일한 refine/evaluate/score/rank 경로에서
+비교한다. 다음 실행 결과가 나오기 전까지 이 변경은 해결 경로 준비 상태이며,
+사람 Gate B·Production·Unity gate는 계속 잠금이다.
+
 2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
 않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
 policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`, appearance

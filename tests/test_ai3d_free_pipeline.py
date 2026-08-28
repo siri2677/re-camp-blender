@@ -234,6 +234,14 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "RE_CAMP_NEUS_VAL_MESH_FREQ",
             "val_mesh_freq",
             "unityInputAllowed",
+            "COMPARE_VOXEL_FALLBACK",
+            "mesh_sources",
+            "CANDIDATE_MANIFESTS",
+            "--candidate-label",
+            "score_reports",
+            "build_assisted_visual_review.py",
+            "ASSISTED_VISUAL_REVIEW",
+            "--assisted-visual-review",
         ):
             self.assertIn(marker, source)
         self.assertIn(
@@ -481,6 +489,14 @@ class AI3DFreePipelineTests(unittest.TestCase):
             self.assertFalse(manifest["unityInputAllowed"])
             self.assertFalse(manifest["productionPromotionAllowed"])
             self.assertEqual(len(manifest["candidates"][0]["sha256"]), 64)
+            labeled = build_candidate_manifest(
+                self.contract,
+                reference_manifest,
+                mesh,
+                destination,
+                candidate_label="voxel",
+            )
+            self.assertEqual(labeled["candidates"][0]["candidateId"], "CH101-WONDER3D-VOXEL")
 
     def test_wonder3d_reuses_complete_six_view_report_and_keeps_gate_locked(self):
         with tempfile.TemporaryDirectory() as temporary:

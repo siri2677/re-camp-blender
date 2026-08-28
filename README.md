@@ -137,6 +137,14 @@ appearance `0.519240`, but the visible result remains an abstract slab-like surf
 strict visual QA therefore still returns `REJECT_GATE_B_AND_REGENERATE`. The OBJ
 candidate is not an Alpha Review or Unity asset.
 
+The score regression was traced to candidate selection, not to a newly lower
+threshold: v056's RGB-mask voxel fallback scored overall `0.758976` and appearance
+`0.563129`, while later runs treated any completed NeuS export as the sole candidate
+and never compared that fallback. Notebook 06 now keeps NeuS and voxel outputs as
+separate labeled candidates, runs the same refine/evaluate/score path for both, and
+lets the locked ranking policy choose the higher-quality review result. A successful
+NeuS process alone is no longer treated as a quality pass.
+
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only
 triangle-preserving OBJ transport copy, and records both hashes in a compatibility
