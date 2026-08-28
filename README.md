@@ -165,6 +165,18 @@ The input preflight can be regenerated with
 it records reference hashes and remains authoring-blocked until Blender is
 available.
 
+The one-shot hybrid quality pivot is documented in
+[docs/plans/ch101-hybrid-quality-improvement-plan-2026-08-28.md](docs/plans/ch101-hybrid-quality-improvement-plan-2026-08-28.md).
+Open
+`notebooks/07_ch101_hybrid_quality_strategies.ipynb` to run the new
+`TRELLIS_SINGLE_VIEW_V001` preflight and the CPU-capable
+`SEMANTIC_PROXY_REFERENCE_FITTED_V001` route. TRELLIS is installed only after
+the GPU/VRAM/CUDA/license checks pass; the semantic route creates separately
+tagged review geometry and uses the same strict refine/evaluate/score/rank path.
+Both strategies run at most once and do not create a Production Mesh or unlock
+Unity. If Blender is unavailable, the notebook records the blocked decision and
+does not create a fake candidate.
+
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only
 triangle-preserving OBJ transport copy, and records both hashes in a compatibility

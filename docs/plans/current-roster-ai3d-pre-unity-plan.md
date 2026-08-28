@@ -61,6 +61,24 @@ python scripts/run_adaptive_workstream.py --provider sf3d --character CH101 --ar
 8. CH101 절차가 검증되면 같은 계약으로 CH102~CH105 후보 생성을 순서대로 실행한다.
 9. 실제 5인 Production Mesh handoff와 사람 승인 5개가 모인 뒤 통합 manifest를 만들고 Unity Import를 시작한다.
 
+## 품질 정체 이후의 1회성 hybrid pivot
+
+Wonder3D `WONDER3D_NEUS_VOXEL_COMPARE_V001`의 거절 이력이 있으므로 같은 전략을
+반복하지 않는다. 새 Notebook
+`notebooks/07_ch101_hybrid_quality_strategies.ipynb`는 다음 두 전략을 각각 한
+번만 평가한다.
+
+1. `TRELLIS_SINGLE_VIEW_V001`: 24576 MB 이상 VRAM, CUDA kernel, 약관 확인을
+   포함한 provider preflight가 모두 PASS일 때만 실행한다.
+2. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`: CPU Blender에서도 실행 가능한
+   reference-fitted semantic proxy를 만들고 body/face, hair, outfit,
+   equipment를 별도 구조로 검사한다.
+
+두 후보는 동일한 Blender refine → evaluate → score → strict visual QA → rank
+경로를 사용한다. 기준 미달이면 `REGENERATE_REQUIRED`와 원인 코드를 남기며,
+재실행은 품질 Gate가 차단한다. 상세 계약과 중단 조건은
+`docs/plans/ch101-hybrid-quality-improvement-plan-2026-08-28.md`에 기록한다.
+
 ## 중단 조건
 
 - GPU quota 또는 CUDA/dependency/NeuS 실패

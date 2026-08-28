@@ -25,6 +25,7 @@ NOTEBOOKS = (
     "notebooks/04_current_roster_production_mesh_intake.ipynb",
     "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "notebooks/07_ch101_hybrid_quality_strategies.ipynb",
 )
 BLENDER_SCRIPTS = (
     "scripts/blender/build_blockout.py",
@@ -41,6 +42,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/apply_reference_projection_review.py",
     "scripts/blender/apply_review_multiview_textures.py",
     "scripts/blender/build_ai3d_review_asset.py",
+    "scripts/blender/build_ch101_semantic_proxy.py",
 )
 UTILITY_SCRIPTS = (
     "scripts/merge_current_roster_handoffs.py",
@@ -54,6 +56,9 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/convert_glb_to_obj.py",
     "scripts/ai3d/quality_progress_gate.py",
     "scripts/ai3d/prepare_semantic_reconstruction_handoff.py",
+    "scripts/ai3d/hybrid_quality_orchestrator.py",
+    "scripts/ai3d/register_review_candidate.py",
+    "scripts/ai3d/run_trellis_candidate.py",
     "scripts/ai3d/register_wonder3d_candidate.py",
     "scripts/ai3d/build_wonder3d_voxel_surface.py",
     "scripts/ai3d/colab_runtime_preflight.py",
@@ -190,6 +195,27 @@ REQUIRED_MARKERS = {
         "rank_candidates.py",
         "unityInputAllowed",
         "NOT_PRODUCTION",
+        "files.download",
+    ),
+    "notebooks/07_ch101_hybrid_quality_strategies.ipynb": (
+        "TRELLIS_SINGLE_VIEW_V001",
+        "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+        "TRELLIS_REPO_URL",
+        "TRELLIS_COMMIT",
+        "hybrid_quality_orchestrator.py",
+        "build_ch101_semantic_proxy.py",
+        "register_review_candidate.py",
+        "run_trellis_candidate.py",
+        "BLOCKED_PROVIDER_PREFLIGHT",
+        "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
+        "REGENERATE_REQUIRED",
+        "RE_CAMP_INSTALL_CPU_BLENDER",
+        "RE_CAMP_TRELLIS_COMMAND",
+        "strict visual QA",
+        "sourceStatus",
+        "gateB",
+        "unityInputAllowed",
+        "productionPromotionAllowed",
         "files.download",
     ),
 }

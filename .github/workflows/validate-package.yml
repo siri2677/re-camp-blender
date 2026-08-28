@@ -10,6 +10,7 @@ on:
       - "source_lock.json"
       - "tests/**"
       - "docs/plans/**"
+      - "docs/records/**"
   pull_request:
     paths:
       - ".github/workflows/validate-package.yml"
@@ -19,6 +20,7 @@ on:
       - "source_lock.json"
       - "tests/**"
       - "docs/plans/**"
+      - "docs/records/**"
 
 jobs:
   static-validation:
@@ -49,6 +51,9 @@ jobs:
 
       - name: Test adaptive GPU and No-GPU switching
         run: python -m unittest tests.test_adaptive_workstream
+
+      - name: Test hybrid quality strategy gates
+        run: python -m unittest tests.test_hybrid_quality_strategy
 
       - name: Run GPU-independent workstream
         run: python scripts/run_no_gpu_workstream.py --skip-reference

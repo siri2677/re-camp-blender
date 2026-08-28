@@ -20,6 +20,7 @@ from ai3d.common import (
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK = ROOT / "notebooks" / "05_ch101_ai3d_free_autobuild.ipynb"
+HYBRID_NOTEBOOK = ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb"
 PLAN = ROOT / "docs" / "plans" / "ch101-free-ai3d-autobuild-plan.md"
 PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "common.py",
@@ -31,6 +32,9 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "convert_glb_to_obj.py",
     ROOT / "scripts" / "ai3d" / "quality_progress_gate.py",
     ROOT / "scripts" / "ai3d" / "prepare_semantic_reconstruction_handoff.py",
+    ROOT / "scripts" / "ai3d" / "hybrid_quality_orchestrator.py",
+    ROOT / "scripts" / "ai3d" / "register_review_candidate.py",
+    ROOT / "scripts" / "ai3d" / "run_trellis_candidate.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
@@ -52,6 +56,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "apply_reference_projection_review.py",
     ROOT / "scripts" / "blender" / "apply_review_multiview_textures.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
+    ROOT / "scripts" / "blender" / "build_ch101_semantic_proxy.py",
 )
 NOTEBOOK_MARKERS = (
     "TRIPO_API_KEY",
@@ -118,6 +123,45 @@ def validate_notebook(errors: list[str]) -> None:
             fail(errors, f"AI 3D notebook code cell {index} has syntax error: {exc}")
 
 
+def validate_hybrid_notebook(errors: list[str]) -> None:
+    if not HYBRID_NOTEBOOK.is_file():
+        fail(errors, f"missing hybrid notebook: {HYBRID_NOTEBOOK.relative_to(ROOT)}")
+        return
+    try:
+        notebook = json.loads(HYBRID_NOTEBOOK.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(errors, f"invalid hybrid notebook JSON: {exc}")
+        return
+    cells = notebook.get("cells")
+    if notebook.get("nbformat") != 4 or not isinstance(cells, list) or not cells:
+        fail(errors, "hybrid notebook must be a non-empty nbformat 4 notebook")
+        return
+    text = "\n".join("".join(cell.get("source", [])) for cell in cells)
+    for marker in (
+        "TRELLIS_SINGLE_VIEW_V001",
+        "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+        "hybrid_quality_orchestrator.py",
+        "build_ch101_semantic_proxy.py",
+        "register_review_candidate.py",
+        "run_trellis_candidate.py",
+        "BLOCKED_PROVIDER_PREFLIGHT",
+        "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
+        "REGENERATE_REQUIRED",
+        "strict visual QA",
+        "unityInputAllowed",
+        "productionPromotionAllowed",
+    ):
+        if marker not in text:
+            fail(errors, f"hybrid notebook missing marker: {marker}")
+    for index, cell in enumerate(cells, start=1):
+        if cell.get("cell_type") != "code":
+            continue
+        try:
+            compile("".join(cell.get("source", [])), f"{HYBRID_NOTEBOOK.name}#cell-{index}", "exec")
+        except SyntaxError as exc:
+            fail(errors, f"hybrid notebook code cell {index} has syntax error: {exc}")
+
+
 def validate_sources(errors: list[str]) -> None:
     forbidden = ("TRIPO_API_KEY = 'sk-", 'TRIPO_API_KEY = "sk-', '"unityInputAllowed": true')
     for path in PYTHON_SOURCES:
@@ -162,6 +206,25 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, "Wonder3D must remain disabled as an automatic fallback until T4 validation")
     if wonder3d.get("unityInputAllowed") is not False or wonder3d.get("productionPromotionAllowed") is not False:
         fail(errors, "Wonder3D research candidate must keep Unity and production gates locked")
+    trellis = experimental.get("trellis", {})
+    if len(trellis.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.trellis must pin a 40-character commit")
+    if trellis.get("strategyId") != "TRELLIS_SINGLE_VIEW_V001":
+        fail(errors, "TRELLIS strategy ID must be TRELLIS_SINGLE_VIEW_V001")
+    if trellis.get("minimumVramMb", 0) < 24576:
+        fail(errors, "TRELLIS minimum VRAM must fail safe at 24576 MB or higher")
+    if trellis.get("fallbackEnabled") is not False:
+        fail(errors, "TRELLIS must remain disabled as an automatic fallback")
+    if trellis.get("unityInputAllowed") is not False or trellis.get("productionPromotionAllowed") is not False:
+        fail(errors, "TRELLIS research candidate must keep Unity and production gates locked")
+    strategies = contract.get("qualityStrategies", {})
+    for strategy_id, provider in (
+        ("TRELLIS_SINGLE_VIEW_V001", "trellis"),
+        ("SEMANTIC_PROXY_REFERENCE_FITTED_V001", "semanticProxy"),
+    ):
+        strategy = strategies.get(strategy_id, {})
+        if strategy.get("provider") != provider or strategy.get("maxRuns") != 1:
+            fail(errors, f"quality strategy {strategy_id} must be a one-shot strategy for {provider}")
     if "hunyuan3d2" not in contract.get("excludedProviders", {}):
         fail(errors, "Hunyuan3D-2 must remain explicitly excluded for the South Korea workflow")
     thresholds = contract["candidateAcceptance"]
@@ -313,6 +376,7 @@ def main() -> int:
     if not PLAN.is_file():
         fail(errors, f"missing plan: {PLAN.relative_to(ROOT)}")
     validate_notebook(errors)
+    validate_hybrid_notebook(errors)
     validate_sources(errors)
     validate_contract(errors)
     validate_review_records(errors)

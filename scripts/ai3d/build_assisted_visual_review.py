@@ -168,6 +168,31 @@ def assess_score_report(
             }
         )
 
+    semantic_audit = report.get("semanticComponentAudit")
+    if isinstance(semantic_audit, dict):
+        counts = semantic_audit.get("partObjectCountsLOD0")
+        required_parts = {"body_face", "hair", "outfit", "equipment"}
+        if semantic_audit.get("status") != "PASS" or not isinstance(counts, dict) or any(
+            part not in counts or int(counts.get(part, 0)) <= 0 for part in required_parts
+        ):
+            failures.append(
+                {
+                    "reasonCode": "SEMANTIC_COMPONENT_STRUCTURE_MISSING",
+                    "metric": "semanticComponentAudit",
+                    "actual": semantic_audit.get("status", "MISSING"),
+                    "minimum": "body_face/hair/outfit/equipment present",
+                }
+            )
+        if semantic_audit.get("slabGrayboxAccepted") is True:
+            failures.append(
+                {
+                    "reasonCode": "SLAB_OR_GRAYBOX_NOT_ACCEPTED",
+                    "metric": "semanticComponentAudit.slabGrayboxAccepted",
+                    "actual": True,
+                    "minimum": False,
+                }
+            )
+
     limitation = report.get("metricLimitations", {}).get("faceDetailScore", "")
     review_notes = []
     if policy.get("faceMetricRequiresHumanConfirmation"):
@@ -181,6 +206,7 @@ def assess_score_report(
     return {
         "candidateId": report["candidateId"],
         "candidateSha256": report["candidateSha256"],
+        "strategyId": report.get("strategyId", ""),
         "disposition": disposition,
         "reasonCodes": [item["reasonCode"] for item in failures],
         "thresholdFailures": failures,

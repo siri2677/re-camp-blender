@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -18,7 +19,13 @@ from pathlib import Path
 from typing import Any
 
 
-GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D"}
+GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D", "trellis"}
+
+# TRELLIS is deliberately conservative: a visible GPU is not enough to
+# authorize installation of its heavyweight stack.  The documented pipeline
+# needs a high-memory CUDA device and its upstream/checkpoint terms must be
+# acknowledged in the runtime without storing a secret.
+TRELLIS_MINIMUM_VRAM_MB = 24576
 
 
 def parse_args() -> argparse.Namespace:
@@ -95,7 +102,39 @@ def build_report(provider: str) -> dict[str, Any]:
     gpus = nvidia_gpus()
     torch_info = torch_status()
     requires_gpu = provider in GPU_PROVIDERS
-    if not requires_gpu:
+    provider_preflight: dict[str, Any] = {}
+    if provider == "trellis":
+        maximum_vram = max(
+            (gpu.get("memoryMb") or 0 for gpu in gpus),
+            default=0,
+        )
+        license_acknowledged = os.environ.get("RE_CAMP_TRELLIS_LICENSE_ACK", "0") == "1"
+        provider_preflight = {
+            "minimumVramMb": TRELLIS_MINIMUM_VRAM_MB,
+            "maximumVisibleVramMb": maximum_vram or None,
+            "vramSufficient": maximum_vram >= TRELLIS_MINIMUM_VRAM_MB,
+            "cudaRuntimeVisible": bool(torch_info.get("cudaAvailable")),
+            "torchKernelSupportsDevice": bool(
+                torch_info.get("torchKernelSupportsDevice")
+            ),
+            "licenseTermsAcknowledged": license_acknowledged,
+            "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS_LICENSE_ACK",
+            "heavyweightInstallAllowed": False,
+        }
+        trellis_ready = (
+            bool(gpus)
+            and torch_info.get("available")
+            and torch_info.get("cudaAvailable")
+            and torch_info.get("torchKernelSupportsDevice")
+            and provider_preflight["vramSufficient"]
+            and license_acknowledged
+        )
+        if trellis_ready:
+            status = "READY_GPU_VISIBLE"
+            provider_preflight["heavyweightInstallAllowed"] = True
+        else:
+            status = "BLOCKED_PROVIDER_PREFLIGHT"
+    elif not requires_gpu:
         status = "READY_NO_GPU_REQUIRED"
     elif not gpus:
         status = "BLOCKED_GPU_UNAVAILABLE"
@@ -116,6 +155,7 @@ def build_report(provider: str) -> dict[str, Any]:
         "gpuCount": len(gpus),
         "gpus": gpus,
         "torch": torch_info,
+        "providerPreflight": provider_preflight,
         "secretFree": True,
         "unityInputAllowed": False,
         "productionPromotionAllowed": False,
@@ -128,7 +168,11 @@ def main() -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    return 0 if report["status"] != "BLOCKED_GPU_UNAVAILABLE" else 2
+    return 0 if report["status"] not in {
+        "BLOCKED_GPU_UNAVAILABLE",
+        "BLOCKED_GPU_UNSUPPORTED",
+        "BLOCKED_PROVIDER_PREFLIGHT",
+    } else 2
 
 
 if __name__ == "__main__":

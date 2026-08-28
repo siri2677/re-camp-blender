@@ -155,6 +155,20 @@ CH101 semantic reconstruction에 넘길 입력·해시·Socket·컬렉션 체크
 실제 Mesh가 아니라 Blender authoring 전용 preflight이며, 입력이 준비되어도
 Blender 작업과 사람 Gate B 없이는 다음 단계로 승격하지 않는다.
 
+v076에서는 Wonder3D 반복을 중단하고 무료 hybrid pivot을 추가했다. 새로운
+`TRELLIS_SINGLE_VIEW_V001`은 24576 MB VRAM·CUDA kernel·약관 확인을 통과할 때만
+one-shot 실행되며, 조건이 부족하면 `BLOCKED_PROVIDER_PREFLIGHT`로 heavyweight
+설치 없이 종료한다. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`은 네 개의 승인 참조
+해시를 확인하고 CPU Blender에서 body/face, hair, outfit, equipment를 분리한
+review-only proxy를 만들 수 있다. 두 전략은 같은 refine/evaluate/score/strict
+visual QA/rank 경로를 사용하고, 동일 strategy 재실행은 품질 Gate가 막는다.
+구현과 고정 Gate는
+`2026-08-28-hybrid-quality-strategy-v076.json`과
+`docs/plans/ch101-hybrid-quality-improvement-plan-2026-08-28.md`에 기록한다.
+실제 Blender 실행·후보 점수·Gate B 승인은 아직 외부 환경과 사람 검토가 필요하므로
+모든 상태는 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`,
+Unity/Production false로 유지한다.
+
 2026-08-24 EEVEE 후보 재검토에서는 단순 자동 점수 통과가 시각적 승인 수준을 의미하지
 않는 문제가 확인됐다. 이후 `build_assisted_visual_review.py`가 strict visual identity
 policy를 적용한다. 현재 후보는 color `0.300492`, silhouette `0.452165`, appearance

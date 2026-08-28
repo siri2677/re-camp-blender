@@ -35,6 +35,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reference-manifest", required=True, type=Path)
     parser.add_argument("--evaluation-report", required=True, type=Path)
+    parser.add_argument(
+        "--candidate-manifest",
+        type=Path,
+        help="Optional provider manifest carrying semantic component evidence.",
+    )
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--character")
@@ -403,6 +408,7 @@ def build_score_report(
     contract: dict[str, Any],
     references: dict[str, Any],
     evaluation: dict[str, Any],
+    candidate_manifest: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if evaluation.get("character") != contract["character"]:
         raise ValueError("evaluation report character mismatch")
@@ -474,7 +480,7 @@ def build_score_report(
         "selectedOrientation": vertically_flipped_selected,
         "orientationAttempts": vertically_flipped_attempts,
     }
-    return {
+    report = {
         "contractVersion": contract["contractVersion"],
         "character": contract["character"],
         "candidateId": evaluation["candidateId"],
@@ -504,6 +510,21 @@ def build_score_report(
         "evaluationReport": evaluation,
         **candidate_gate_fields(contract),
     }
+    if isinstance(candidate_manifest, dict):
+        candidates = candidate_manifest.get("candidates", [])
+        if isinstance(candidates, list):
+            matching = next(
+                (
+                    entry
+                    for entry in candidates
+                    if isinstance(entry, dict)
+                    and entry.get("candidateId") == evaluation.get("candidateId")
+                ),
+                None,
+            )
+            if isinstance(matching, dict) and isinstance(matching.get("semanticComponentAudit"), dict):
+                report["semanticComponentAudit"] = matching["semanticComponentAudit"]
+    return report
 
 
 def main() -> int:
@@ -511,7 +532,10 @@ def main() -> int:
     contract = load_contract(args.contract, args.character)
     references = require_reference_manifest(args.reference_manifest.resolve(), contract)
     evaluation = read_json(args.evaluation_report.resolve())
-    report = build_score_report(contract, references, evaluation)
+    candidate_manifest = (
+        read_json(args.candidate_manifest.resolve()) if args.candidate_manifest else None
+    )
+    report = build_score_report(contract, references, evaluation, candidate_manifest)
     write_json(args.output.resolve(), report)
     print(args.output.resolve())
     return 0

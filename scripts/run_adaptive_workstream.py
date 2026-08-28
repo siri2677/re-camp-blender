@@ -24,13 +24,14 @@ from ai3d.colab_runtime_preflight import build_report as build_runtime_report
 from run_no_gpu_workstream import build_report as build_no_gpu_report
 
 
-GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D"}
+GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D", "trellis"}
 CONTINUATION_NOTEBOOKS = {
     "sf3d": "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "instantmesh": "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "triposr": "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "tripo": "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "wonder3D": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "trellis": "notebooks/07_ch101_hybrid_quality_strategies.ipynb",
 }
 
 

@@ -47,7 +47,9 @@ def _score_entries(
 ) -> Iterable[tuple[dict[str, Any], dict[str, Any]]]:
     if isinstance(payload, dict):
         if isinstance(payload.get("candidateId"), str) and (
-            "overallScore" in payload or isinstance(payload.get("scores"), dict)
+            "overallScore" in payload
+            or isinstance(payload.get("scores"), dict)
+            or "disposition" in payload
         ):
             yield payload, parent or {}
         for value in payload.values():
@@ -80,11 +82,13 @@ def _normalise_entry(
         or entry.get("strictDisposition")
         or ""
     )
+    disposition = str(entry.get("disposition") or parent.get("disposition") or "")
     overall = _number(entry.get("overallScore", scores.get("overallScore")))
     appearance = _number(entry.get("appearanceScore", scores.get("appearanceScore")))
     rejected = (
         status.startswith("REGENERATE")
         or recommendation.startswith("REJECT")
+        or disposition == "REJECT"
         or entry.get("eligibleForHumanReview") is False
     )
     return {
@@ -96,6 +100,7 @@ def _normalise_entry(
         "appearanceScore": appearance,
         "status": status,
         "recommendation": recommendation,
+        "disposition": disposition,
         "rejected": rejected,
     }
 
@@ -106,6 +111,7 @@ def collect_history(
     paths: list[Path] = []
     if score_dir and score_dir.is_dir():
         paths.extend(sorted(score_dir.glob("**/candidate-score.json")))
+        paths.extend(sorted(score_dir.glob("**/assisted-visual-review.json")))
     paths.extend(path for path in history_records if path.is_file())
     entries: list[dict[str, Any]] = []
     seen: set[Path] = set()

@@ -154,6 +154,40 @@
       "status": "RESEARCH_ONLY",
       "unityInputAllowed": false,
       "productionPromotionAllowed": false
+    },
+    "trellis": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.git",
+      "commit": "442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+      "model": "microsoft/TRELLIS-image-large",
+      "license": "VERIFY_UPSTREAM_TERMS",
+      "licenseNote": "Verify repository, checkpoint, and dependency terms before redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 24576,
+      "requiresGpu": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    }
+  },
+  "qualityStrategies": {
+    "TRELLIS_SINGLE_VIEW_V001": {
+      "provider": "trellis",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 24576,
+      "strategyScope": "TRELLIS_SINGLE_VIEW_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION"
+    },
+    "SEMANTIC_PROXY_REFERENCE_FITTED_V001": {
+      "provider": "semanticProxy",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "REFERENCE_FITTED_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION"
     }
   },
   "candidateAcceptance": {
