@@ -209,7 +209,19 @@ def build_semantic_lods(
 
 def build_review_scene(output_dir: Path, materials: dict[str, bpy.types.Material], render: bool) -> list[str]:
     scene = bpy.context.scene
-    scene.render.engine = "BLENDER_EEVEE_NEXT"
+    # Kaggle's distro Blender may expose the legacy EEVEE identifier while
+    # Blender 4+ exposes BLENDER_EEVEE_NEXT. Select the first available
+    # realtime engine so review rendering stays portable across runtimes.
+    engine_property = scene.render.bl_rna.properties.get("engine")
+    available_engines = {
+        item.identifier for item in engine_property.enum_items
+    } if engine_property is not None else set()
+    for engine in ("BLENDER_EEVEE_NEXT", "BLENDER_EEVEE", "BLENDER_WORKBENCH"):
+        if engine in available_engines:
+            scene.render.engine = engine
+            break
+    else:
+        raise RuntimeError(f"No supported review render engine is available: {sorted(available_engines)}")
     scene.render.resolution_x = 700
     scene.render.resolution_y = 900
     scene.render.resolution_percentage = 100
