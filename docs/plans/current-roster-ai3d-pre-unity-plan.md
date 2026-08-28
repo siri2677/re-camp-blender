@@ -44,35 +44,36 @@ python scripts/run_adaptive_workstream.py --provider sf3d --character CH101 --ar
 
 ## 다음 실행 순서
 
-1. GPU가 복구되면 CH101 Wonder3D 6-view 재사용 검사를 먼저 실행한다.
-2. 재사용 가능한 결과가 없을 때만 pinned Wonder3D 설치·추론·NeuS mesh extraction을 실행한다.
-3. NeuS가 완료되어도 품질 통과로 간주하지 않고, RGB foreground voxel fallback을 별도
-   후보로 생성해 두 결과를 Blender refine → pre-export geometry audit → render
-   evaluation → score 순서로 동일하게 비교한다.
-4. 실행 전에 `quality_progress_gate.py`가 이전 score/history를 확인한다. 동일한
-   `WONDER3D_NEUS_VOXEL_COMPARE_V001` 전략에서 이미 거절된 결과가 있으면 GPU 설치와
-   추론을 반복하지 않고 `QUALITY_PLATEAU_SAME_STRATEGY`로 중단한다.
-   다음 작업은 `PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER`이며, 동일 전략
-   재시도는 명시적인 진단용 override가 있을 때만 허용한다.
-5. `build_assisted_visual_review.py`의 rejection-only 검토를 거친 뒤에만 rank한다.
-   점수 또는 Hard Gate 미달이면 `REGENERATE_REQUIRED`로 종료한다.
-6. 기술 기준 통과 후보도 비교 시트에서 시각 검토하고, 보조 검토는 거절·보류만 기록한다.
-7. 사람이 Gate B를 승인한 경우에만 Production Mesh 인테이크와 Unity handoff 준비로 이동한다.
-8. CH101 절차가 검증되면 같은 계약으로 CH102~CH105 후보 생성을 순서대로 실행한다.
-9. 실제 5인 Production Mesh handoff와 사람 승인 5개가 모인 뒤 통합 manifest를 만들고 Unity Import를 시작한다.
+1. `notebooks/07_ch101_hybrid_quality_strategies.ipynb`를 최신
+   `feature/ch101-free-ai3d-autobuild` 브랜치에서 실행한다.
+2. 먼저 GPU 노출·CUDA kernel·VRAM 24 GB·TRELLIS 약관과 entrypoint를 확인한다.
+   조건이 맞지 않으면 heavyweight 설치 없이 `BLOCKED_PROVIDER_PREFLIGHT`를 남긴다.
+3. V001 거절 이력은 `quality_progress_gate.py`가 차단한다. Blender가 있으면
+   `UNIFIED_SEMANTIC_AUTHORING_V002`를 한 번 실행하고, primary shell voxel remesh와
+   semantic component audit를 기록한다.
+4. TRELLIS가 preflight를 통과해도 실제 mesh를 만들지 못하면 아직 실행하지 않은
+   V001 또는 V002 semantic fallback으로 한 번만 전환한다.
+5. 후보가 있으면 Blender refine → evaluate → score → geometry hard gate → strict
+   visual QA → rank를 수행한다. 점수·Hard Gate·semantic 구조 중 하나라도 미달이면
+   `REGENERATE_REQUIRED`로 종료하며 같은 strategy를 반복하지 않는다.
+6. 자동 기준을 통과한 후보도 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`과
+   `PENDING_HUMAN_REVIEW`를 유지한다. 사람이 Gate B를 승인한 경우에만 Production
+   Mesh 인테이크와 Unity handoff로 이동한다.
+7. CH101 기술 검증과 사람 Gate B가 모두 끝난 뒤 동일 계약으로 CH102~CH105를 순서대로
+   진행하고, 5개 승인 handoff가 모인 뒤 통합 manifest와 Unity Import을 시작한다.
 
 ## 품질 정체 이후의 1회성 hybrid pivot
 
-Wonder3D `WONDER3D_NEUS_VOXEL_COMPARE_V001`의 거절 이력이 있으므로 같은 전략을
-반복하지 않는다. 새 Notebook
-`notebooks/07_ch101_hybrid_quality_strategies.ipynb`는 다음 두 전략을 각각 한
-번만 평가한다.
+Wonder3D와 V001 semantic proxy의 거절 이력이 있으므로 해당 전략을 반복하지 않는다.
+새 Notebook `notebooks/07_ch101_hybrid_quality_strategies.ipynb`는 다음 경로를
+quality gate에 따라 각각 최대 한 번만 평가한다.
 
 1. `TRELLIS_SINGLE_VIEW_V001`: 24576 MB 이상 VRAM, CUDA kernel, 약관 확인을
    포함한 provider preflight가 모두 PASS일 때만 실행한다.
-2. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`: CPU Blender에서도 실행 가능한
-   reference-fitted semantic proxy를 만들고 body/face, hair, outfit,
-   equipment를 별도 구조로 검사한다.
+2. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`: 과거 경로로 기록만 유지하며 거절 이력이
+   있으면 재실행하지 않는다.
+3. `UNIFIED_SEMANTIC_AUTHORING_V002`: CPU Blender에서 연결형 primary shell,
+   semantic labels, LOD, rig, Socket placeholder를 만들고 remesh 결과를 검사한다.
 
 두 후보는 동일한 Blender refine → evaluate → score → strict visual QA → rank
 경로를 사용한다. 기준 미달이면 `REGENERATE_REQUIRED`와 원인 코드를 남기며,
@@ -92,7 +93,7 @@ Wonder3D `WONDER3D_NEUS_VOXEL_COMPARE_V001`의 거절 이력이 있으므로 같
 
 ## 완료 기준
 
-이 저장소에서 자동화 가능한 pre-Unity 준비는 완료됐다. 전체 프로젝트 완료는 다음 외부 결과가 모두 있을 때만 선언한다.
+이 저장소에서 자동화 가능한 pre-Unity 준비(V002 fallback 포함)는 완료됐다. 전체 프로젝트 완료는 다음 외부 결과가 모두 있을 때만 선언한다.
 
 - CH101~CH105 각각 승인 가능한 고품질 후보 또는 Production Mesh
 - 사람 Gate B 승인 기록 5개

@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.common import load_contract, sha256_file
+from scripts.ai3d import hybrid_quality_orchestrator
 from scripts.ai3d.register_review_candidate import build_candidate_manifest
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
@@ -162,6 +163,54 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertEqual(old_gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
         self.assertEqual(pivot_gate["status"], "READY_NEW_STRATEGY")
         self.assertFalse(pivot_gate["unityInputAllowed"])
+
+    def test_orchestrator_selects_v002_after_v001_plateau_without_gpu(self):
+        contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
+
+        def fake_gate(provider, strategy_id, score_dir, history_records):
+            return {
+                "status": (
+                    "QUALITY_PLATEAU_SAME_STRATEGY"
+                    if strategy_id == "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
+                    else "READY_NEW_STRATEGY"
+                ),
+                "provider": provider,
+                "strategyId": strategy_id,
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            }
+
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.build_runtime_report",
+            return_value={
+                "status": "BLOCKED_PROVIDER_PREFLIGHT",
+                "providerPreflight": {"heavyweightInstallAllowed": False},
+            },
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator._gate", side_effect=fake_gate
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.prepare_handoff",
+            return_value={"status": "READY_INPUTS_BLOCKED_AUTHORING"},
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.shutil.which",
+            return_value="blender",
+        ), patch("scripts.ai3d.hybrid_quality_orchestrator.write_json"):
+            report = hybrid_quality_orchestrator.build_hybrid_report(
+                art_root=Path(temporary),
+                output=Path(temporary) / "orchestration.json",
+                contract_path=contract_path,
+                socket_contract_path=ROOT / "contracts" / "current_roster_socket_contract_v001.json",
+                character="CH101",
+            )
+
+        self.assertEqual(report["selectedStrategies"], ["UNIFIED_SEMANTIC_AUTHORING_V002"])
+        self.assertFalse(
+            report["strategies"]["SEMANTIC_PROXY_REFERENCE_FITTED_V001"]["runAllowed"]
+        )
+        self.assertTrue(
+            report["strategies"]["UNIFIED_SEMANTIC_AUTHORING_V002"]["runAllowed"]
+        )
+        self.assertFalse(report["unityInputAllowed"])
 
     def test_unified_candidate_metadata_preserves_semantic_audit(self):
         contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
