@@ -513,16 +513,19 @@ def main() -> int:
     gltf_export_error = ""
     transport_path = args.output_glb if args.output_glb.is_file() else None
     transport_format = "GLB" if transport_path else ""
-    try:
-        bpy.ops.object.select_all(action="SELECT")
-        bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
-        if args.output_glb.is_file():
-            transport_path = args.output_glb
-            transport_format = "GLB"
-    except Exception as exc:
-        gltf_export_error = f"{type(exc).__name__}: {exc}"
-    if not args.output_glb.is_file() and not gltf_export_error:
-        gltf_export_error = "GLB exporter returned without creating the requested file"
+    if tuple(bpy.app.version) >= (4, 0, 0):
+        try:
+            bpy.ops.object.select_all(action="SELECT")
+            bpy.ops.export_scene.gltf(filepath=str(args.output_glb), export_format="GLB", export_apply=True)
+            if args.output_glb.is_file():
+                transport_path = args.output_glb
+                transport_format = "GLB"
+        except Exception as exc:
+            gltf_export_error = f"{type(exc).__name__}: {exc}"
+        if not args.output_glb.is_file() and not gltf_export_error:
+            gltf_export_error = "GLB exporter returned without creating the requested file"
+    else:
+        gltf_export_error = f"GLB export skipped for Blender {bpy.app.version_string}; using OBJ transport"
     if gltf_export_error:
         fallback_obj = args.output_glb.with_suffix(".obj")
         try:

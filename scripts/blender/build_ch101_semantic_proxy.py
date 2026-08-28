@@ -300,14 +300,17 @@ def export_lod0(
     armature.select_set(True)
     bpy.context.view_layer.objects.active = armature
     path = output_dir / "CH101_SEMANTIC_PROXY_REFERENCE_FITTED_NOT_PRODUCTION.glb"
-    try:
-        bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", use_selection=True, export_apply=True)
-        if path.is_file():
-            return path, "GLB", ""
-    except Exception as exc:
-        gltf_error = f"{type(exc).__name__}: {exc}"
+    if tuple(bpy.app.version) >= (4, 0, 0):
+        try:
+            bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", use_selection=True, export_apply=True)
+            if path.is_file():
+                return path, "GLB", ""
+        except Exception as exc:
+            gltf_error = f"{type(exc).__name__}: {exc}"
+        else:
+            gltf_error = "GLB exporter returned without creating the requested file"
     else:
-        gltf_error = "GLB exporter returned without creating the requested file"
+        gltf_error = f"GLB export skipped for Blender {bpy.app.version_string}; using OBJ transport"
 
     if path.is_file():
         path.unlink()
