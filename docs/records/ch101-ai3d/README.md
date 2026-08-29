@@ -379,3 +379,10 @@ quality-progress gate, strict QA 연결과 83개 unittest·Colab/AI3D validator 
 완료했다. 실제 Blender/Kaggle 실행 결과가 나오기 전까지 점수나 Alpha Review 통과를
 주장하지 않으며, Gate B·Production·Unity 입력은 계속 잠금이다. 계획과 차단 조건은
 `docs/plans/ch101-quality-unity-android-plan-2026-08-28.md`에 고정한다.
+
+2026-08-29 로컬 Blender 4.5.10에서 V002를 실제 생성해 remesh·UV·LOD·weight·socket과
+GLB export를 확인했다. 평가기는 review floor와 중복 LOD를 캐릭터 topology에서 제외해
+geometry hard gate를 PASS로 판정했지만, appearance `0.346415`와 color `0.138373`이
+strict visual QA 기준에 미달해 `REJECT_GATE_B_AND_REGENERATE`로 남겼다. 이 실행은
+검토용 임시 산출물이며 Gate B·Production·Unity 입력을 해제하지 않는다. 상세 hash와
+점수는 `2026-08-29-local-blender-v002-review-v001.json`에 보관한다.
