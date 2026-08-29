@@ -329,6 +329,14 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("refinedTransportPath", refinement)
         self.assertIn("OBJ transport fallback", refinement)
 
+        evaluator = (ROOT / "scripts" / "blender" / "evaluate_ai3d_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("is_review_helper_mesh", evaluator)
+        self.assertIn("candidate_meshes", evaluator)
+        self.assertIn('startswith("ReviewFloor_")', evaluator)
+        self.assertIn("geometry_meshes", evaluator)
+        self.assertIn('"PRIMARY_SHELL"', evaluator)
+        self.assertIn("technicalAspectSourceObjects", evaluator)
+
 
 if __name__ == "__main__":
     unittest.main()

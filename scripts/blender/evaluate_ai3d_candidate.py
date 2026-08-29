@@ -103,6 +103,35 @@ def clear_render_objects() -> None:
             bpy.data.objects.remove(obj, do_unlink=True)
 
 
+def is_review_helper_mesh(obj: bpy.types.Object) -> bool:
+    """Keep presentation helpers out of candidate geometry metrics.
+
+    Reusing a normalized review Blend also loads its floor plane.  Treating
+    that plane as character geometry corrupts bounds, aspect, topology and
+    visual scores, so exclude the explicit helper naming contract here.
+    """
+
+    return obj.type == "MESH" and obj.name.startswith("ReviewFloor_")
+
+
+def candidate_meshes(objects: list[bpy.types.Object]) -> list[bpy.types.Object]:
+    meshes = [obj for obj in objects if obj.type == "MESH" and not is_review_helper_mesh(obj)]
+    if not meshes:
+        raise ValueError("candidate contains no non-helper mesh objects")
+    return meshes
+
+
+def geometry_meshes(meshes: list[bpy.types.Object]) -> list[bpy.types.Object]:
+    """Use the authored primary shell for topology gates, not duplicate LODs."""
+
+    lod0 = [obj for obj in meshes if obj.get("lod_level") == "LOD0"]
+    primary = [obj for obj in lod0 if "PRIMARY_SHELL" in obj.name]
+    if primary:
+        return primary
+    primary = [obj for obj in meshes if "PRIMARY_SHELL" in obj.name]
+    return primary or meshes
+
+
 def import_candidate(path: Path) -> list[bpy.types.Object]:
     before = set(bpy.data.objects)
     suffix = path.suffix.lower()
@@ -456,13 +485,22 @@ def collect_metrics(
                 material_names.add(material.name)
     minimum, maximum = world_bounds(meshes)
     dimensions = maximum - minimum
-    aspect = dimensions.z / max(dimensions.x, dimensions.y, 1e-6)
+    geometry_source = geometry_meshes(meshes)
+    geometry_minimum, geometry_maximum = world_bounds(geometry_source)
+    geometry_dimensions = geometry_maximum - geometry_minimum
+    # Equipment and ribbon tips can widen a character transport scene. Use the
+    # authored primary shell for the body aspect check so those intentional
+    # attachments do not make a valid humanoid fail technical readiness.
+    aspect = geometry_dimensions.z / max(
+        geometry_dimensions.x, geometry_dimensions.y, 1e-6
+    )
     technical_score = 0.25
     technical_score += 0.2 if not uv_missing else 0.0
     technical_score += 0.15 if material_names else 0.0
     technical_score += 0.2 if 1.2 <= aspect <= 4.5 else 0.05
     technical_score += 0.2 if 500 <= triangle_count <= 300000 else 0.05
-    transport_geometry_integrity = collect_geometry_integrity(meshes)
+    transport_geometry_integrity = collect_geometry_integrity(geometry_source)
+    transport_geometry_integrity["sourceObjects"] = [obj.name for obj in geometry_source]
     transport_geometry_integrity["basis"] = "IMPORTED_REVIEW_TRANSPORT_FILE"
     geometry_integrity = trusted_geometry_integrity or transport_geometry_integrity
     return {
@@ -476,6 +514,7 @@ def collect_metrics(
         "boundsMax": list(maximum),
         "dimensions": list(dimensions),
         "heightToWidthAspect": round(aspect, 6),
+        "technicalAspectSourceObjects": [obj.name for obj in geometry_source],
         "technicalScore": round(min(technical_score, 1.0), 6),
         "geometryIntegrity": geometry_integrity,
         "transportGeometryIntegrity": transport_geometry_integrity,
@@ -496,9 +535,9 @@ def main() -> int:
         if not integrity_blend.is_file() or integrity_blend.suffix.lower() != ".blend":
             raise FileNotFoundError(f"invalid integrity blend: {integrity_blend}")
         bpy.ops.wm.open_mainfile(filepath=str(integrity_blend))
-        integrity_meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
-        if not integrity_meshes:
-            raise ValueError("integrity blend contains no mesh objects")
+        integrity_meshes = geometry_meshes(
+            candidate_meshes(list(bpy.context.scene.objects))
+        )
         trusted_geometry_integrity = collect_geometry_integrity(integrity_meshes)
         trusted_geometry_integrity["basis"] = "PRE_EXPORT_REFINED_BLEND"
         trusted_geometry_integrity["sourcePath"] = str(integrity_blend)
@@ -512,9 +551,7 @@ def main() -> int:
             raise FileNotFoundError(f"invalid normalized review blend: {reused_normalized_blend}")
         bpy.ops.wm.open_mainfile(filepath=str(reused_normalized_blend))
         clear_render_objects()
-        meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
-        if not meshes:
-            raise ValueError("reused normalized blend contains no mesh objects")
+        meshes = candidate_meshes(list(bpy.context.scene.objects))
         root = next(
             (
                 obj

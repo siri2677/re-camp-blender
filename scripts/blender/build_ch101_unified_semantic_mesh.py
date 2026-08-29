@@ -107,6 +107,10 @@ def add_connectivity_bridges(root: bpy.types.Object, materials: dict[str, bpy.ty
 def join_objects(objects: list[bpy.types.Object], name: str) -> bpy.types.Object:
     if not objects:
         raise ValueError(f"cannot join empty semantic group: {name}")
+    # A previous join/remesh can leave another semantic group selected. Blender
+    # joins every selected object, so clear selection before selecting this
+    # group or the shell/equipment boundary is silently destroyed.
+    bpy.ops.object.select_all(action="DESELECT")
     for obj in objects:
         detach_from_root(obj, obj.parent) if obj.parent else None
         obj.hide_set(False)
@@ -122,7 +126,22 @@ def join_objects(objects: list[bpy.types.Object], name: str) -> bpy.types.Object
     return joined
 
 
-def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
+def _active_mesh_object(expected_name: str) -> bpy.types.Object | None:
+    """Return the current active mesh, tolerating sculpt remesh object swaps."""
+
+    try:
+        active = bpy.context.view_layer.objects.active
+        if active is not None and active.type == "MESH":
+            return active
+    except ReferenceError:
+        # Blender 4.x can invalidate the Python wrapper for the pre-remesh
+        # object while keeping the replacement selected.
+        pass
+    replacement = bpy.data.objects.get(expected_name)
+    return replacement if replacement is not None and replacement.type == "MESH" else None
+
+
+def apply_connectivity_remesh(obj: bpy.types.Object) -> tuple[bpy.types.Object, dict[str, Any]]:
     """Fuse overlapping authoring volumes into one actual mesh component.
 
     Joining Blender objects only changes object bookkeeping; it does not join
@@ -132,6 +151,7 @@ def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
     that a connected shell was produced.
     """
 
+    original_name = obj.name
     result: dict[str, Any] = {
         "status": "BLOCKED_REMESH_OPERATOR_UNAVAILABLE",
         "method": "SCULPT_VOXEL_REMESH_OR_MODIFIER_FALLBACK",
@@ -147,6 +167,13 @@ def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
         if not hasattr(bpy.ops.sculpt, "voxel_remesh"):
             raise RuntimeError("BLENDER_VOXEL_REMESH_OPERATOR_UNAVAILABLE")
         bpy.ops.sculpt.voxel_remesh()
+        # Sculpt voxel remesh may replace the underlying Object and invalidate
+        # the original StructRNA wrapper. Re-acquire the selected replacement
+        # before touching mesh data or returning to the caller.
+        remeshed = _active_mesh_object(original_name)
+        if remeshed is None:
+            raise RuntimeError("BLENDER_VOXEL_REMESH_DID_NOT_RETURN_ACTIVE_MESH")
+        obj = remeshed
         result["method"] = "SCULPT_VOXEL_REMESH"
     except (AttributeError, RuntimeError):
         if bpy.context.object and bpy.context.object.mode != "OBJECT":
@@ -168,6 +195,12 @@ def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
     finally:
         if bpy.context.object and bpy.context.object.mode != "OBJECT":
             bpy.ops.object.mode_set(mode="OBJECT")
+    remeshed = _active_mesh_object(original_name)
+    if remeshed is None:
+        result["status"] = "REMESH_FAILED"
+        result["error"] = "BLENDER_VOXEL_REMESH_DID_NOT_RETURN_ACTIVE_MESH"
+        raise RuntimeError(result["error"])
+    obj = remeshed
     bm = bmesh.new()
     try:
         bm.from_mesh(obj.data)
@@ -182,7 +215,29 @@ def apply_connectivity_remesh(obj: bpy.types.Object) -> dict[str, Any]:
     result["status"] = "PASS"
     result["vertexCount"] = len(obj.data.vertices)
     result["triangleCount"] = review.triangle_count([obj])
-    return result
+    return obj, result
+
+
+def ensure_review_uv(meshes: list[bpy.types.Object]) -> dict[str, Any]:
+    """Create deterministic review UVs before duplicating LOD meshes."""
+
+    missing_before = [obj.name for obj in meshes if not obj.data.uv_layers]
+    for obj in meshes:
+        if obj.data.uv_layers:
+            continue
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.hide_set(False)
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.smart_project(island_margin=0.03)
+        bpy.ops.object.mode_set(mode="OBJECT")
+    return {
+        "status": "PASS" if all(obj.data.uv_layers for obj in meshes) else "FAIL",
+        "createdFor": missing_before,
+        "missingAfter": [obj.name for obj in meshes if not obj.data.uv_layers],
+    }
 
 
 def mark_semantic_labels(
@@ -285,8 +340,9 @@ def main() -> int:
     shell_parts = [obj for obj in generated if proxy.classify(obj.name) != "equipment"]
     equipment_parts = [obj for obj in generated if proxy.classify(obj.name) == "equipment"]
     shell = join_objects(shell_parts, "CH101_UNIFIED_PRIMARY_SHELL_NOT_PRODUCTION")
-    remesh_report = apply_connectivity_remesh(shell)
+    shell, remesh_report = apply_connectivity_remesh(shell)
     equipment = join_objects(equipment_parts, "CH101_UNIFIED_EQUIPMENT_GROUP_NOT_PRODUCTION") if equipment_parts else None
+    uv_report = ensure_review_uv([shell] + ([equipment] if equipment else []))
     review.move_to_collection(shell, semantic_collections["body_face"])
     shell["semanticPart"] = "body_face|outfit|hair"
     if equipment:
@@ -362,6 +418,7 @@ def main() -> int:
         "equipmentGroup": equipment.name if equipment else None,
         "connectivityMethod": "ANALYTIC_BRIDGE_CAPSULES",
         "connectivityRemesh": remesh_report,
+        "uvReport": uv_report,
         "sourceMeshObjectCount": len(source_meshes),
         "triangleCounts": triangle_counts,
         "blend": str(blend_path),
