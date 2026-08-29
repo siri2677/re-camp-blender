@@ -46,10 +46,28 @@ def _score_entries(
     payload: Any, parent: dict[str, Any] | None = None
 ) -> Iterable[tuple[dict[str, Any], dict[str, Any]]]:
     if isinstance(payload, dict):
+        # Durable quality-progress records are intentionally smaller than a
+        # candidate score report and may not carry a candidateId.  Treat a
+        # recorded same-strategy plateau as one synthetic score entry so a
+        # fresh Kaggle session cannot silently select that strategy again.
+        if (
+            isinstance(payload.get("strategyId"), str)
+            and payload.get("status") == "QUALITY_PLATEAU_SAME_STRATEGY"
+            and not isinstance(payload.get("candidateId"), str)
+        ):
+            yield {
+                **payload,
+                "candidateId": f"STRATEGY_GATE:{payload['strategyId']}",
+                "eligibleForHumanReview": False,
+            }, parent or {}
         if isinstance(payload.get("candidateId"), str) and (
             "overallScore" in payload
             or isinstance(payload.get("scores"), dict)
             or "disposition" in payload
+            or (
+                isinstance(payload.get("status"), str)
+                and payload["status"].startswith(("REGENERATE", "REJECT"))
+            )
         ):
             yield payload, parent or {}
         for value in payload.values():
@@ -126,6 +144,24 @@ def collect_history(
             for entry, parent in _score_entries(payload)
             if entry.get("candidateId")
         )
+        # Some durable Kaggle execution records store the candidate under a
+        # strategy-keyed map and omit the repeated strategyId field.  Preserve
+        # that map key when importing the rejection into the one-shot gate.
+        strategies = payload.get("strategies") if isinstance(payload, dict) else None
+        if isinstance(strategies, dict):
+            for strategy_id, strategy_entry in strategies.items():
+                if not isinstance(strategy_entry, dict):
+                    continue
+                if not isinstance(strategy_entry.get("candidateId"), str):
+                    continue
+                status = str(strategy_entry.get("status") or "")
+                if not status.startswith(("REGENERATE", "REJECT")):
+                    continue
+                enriched = {
+                    **strategy_entry,
+                    "strategyId": strategy_entry.get("strategyId") or strategy_id,
+                }
+                entries.append(_normalise_entry(enriched, payload, resolved))
     return entries
 
 

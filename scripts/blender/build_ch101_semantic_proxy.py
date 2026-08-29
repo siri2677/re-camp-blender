@@ -227,15 +227,35 @@ def build_review_scene(output_dir: Path, materials: dict[str, bpy.types.Material
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
     scene.world.color = (0.02, 0.025, 0.04)
+    visible_meshes = [
+        obj
+        for obj in scene.objects
+        if obj.type == "MESH" and not obj.hide_render and not obj.hide_get()
+    ]
+    if not visible_meshes:
+        raise RuntimeError("review scene has no visible mesh objects to frame")
+    corners = [
+        obj.matrix_world @ Vector(corner)
+        for obj in visible_meshes
+        for corner in obj.bound_box
+    ]
+    minimum = Vector(tuple(min(point[index] for point in corners) for index in range(3)))
+    maximum = Vector(tuple(max(point[index] for point in corners) for index in range(3)))
+    dimensions = maximum - minimum
+    frame_target = (minimum + maximum) * 0.5
+    frame_target.z = minimum.z + dimensions.z * 0.52
+    # Keep the whole 5.3–5.4-head figure readable while leaving a small
+    # silhouette margin around the ribbon and saber.
+    frame_distance = max(7.6, dimensions.z * 1.95, max(dimensions.x, dimensions.y) * 2.2)
     bpy.ops.mesh.primitive_plane_add(size=30, location=(0, 0.5, 0.0))
     floor = bpy.context.object
     floor.name = "ReviewFloor_NOT_PRODUCTION"
     floor.data.materials.append(materials["graphite"])
-    bpy.ops.object.camera_add(location=(0, -6.8, 1.5))
+    bpy.ops.object.camera_add(location=(0, -frame_distance, frame_target.z))
     camera = bpy.context.object
     camera.name = "ReviewCamera_NOT_PRODUCTION"
     camera.data.lens = 58
-    base.look_at(camera, Vector((0, 0, 1.45)))
+    base.look_at(camera, frame_target)
     scene.camera = camera
     for name, loc, energy, color in (
         ("Key", (-4.5, -6, 6), 850, (1.0, 0.82, 0.72)),
@@ -260,8 +280,9 @@ def build_review_scene(output_dir: Path, materials: dict[str, bpy.types.Material
         "3-4": (4.8, -4.8, 1.5),
     }
     for view, location in view_positions.items():
-        camera.location = location
-        base.look_at(camera, Vector((0, 0, 1.45)))
+        direction = Vector((location[0], location[1], 0.0)).normalized()
+        camera.location = frame_target + direction * frame_distance
+        base.look_at(camera, frame_target)
         path = output_dir / "renders" / f"CH101_semantic_proxy_{view}_NOT_PRODUCTION.png"
         scene.render.filepath = str(path)
         bpy.ops.render.render(write_still=True)

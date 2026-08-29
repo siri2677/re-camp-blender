@@ -196,6 +196,14 @@
       "strategyScope": "UNIFIED_SEMANTIC_REVIEW_ONLY",
       "repeatPolicy": "PIVOT_AFTER_REJECTION",
       "geometryPolicy": "CONNECTED_PRIMARY_SHELL_WITH_SEMANTIC_LABELS"
+    },
+    "SEMANTIC_DETAIL_AUTHORING_V003": {
+      "provider": "blenderSemanticDetailAuthoring",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "PRESERVED_DETAIL_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "geometryPolicy": "CONNECTED_BODY_SHELL_WITH_PRESERVED_FACE_HAIR_OUTFIT_DETAIL"
     }
   },
   "candidateAcceptance": {

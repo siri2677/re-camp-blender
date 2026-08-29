@@ -111,6 +111,8 @@ def join_objects(objects: list[bpy.types.Object], name: str) -> bpy.types.Object
     # joins every selected object, so clear selection before selecting this
     # group or the shell/equipment boundary is silently destroyed.
     bpy.ops.object.select_all(action="DESELECT")
+    for existing in bpy.context.view_layer.objects:
+        existing.select_set(False)
     for obj in objects:
         detach_from_root(obj, obj.parent) if obj.parent else None
         obj.hide_set(False)

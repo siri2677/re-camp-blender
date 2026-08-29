@@ -37,6 +37,7 @@ except ImportError:
 TRELLIS_STRATEGY = "TRELLIS_SINGLE_VIEW_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
 UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
+DETAIL_SEMANTIC_STRATEGY = "SEMANTIC_DETAIL_AUTHORING_V003"
 
 
 def parse_args() -> argparse.Namespace:
@@ -89,6 +90,12 @@ def build_hybrid_report(
         score_dir,
         history_records,
     )
+    detail_gate = _gate(
+        "blenderSemanticDetailAuthoring",
+        DETAIL_SEMANTIC_STRATEGY,
+        score_dir,
+        history_records,
+    )
     handoff_path = output.parent / "semantic-reconstruction-inputs.json"
     semantic_handoff = prepare_handoff(
         art_root=art_root,
@@ -107,6 +114,11 @@ def build_hybrid_report(
     )
     unified_ready = (
         unified_gate["status"] == "READY_NEW_STRATEGY"
+        and semantic_inputs_ready
+        and bool(blender_path)
+    )
+    detail_ready = (
+        detail_gate["status"] == "READY_NEW_STRATEGY"
         and semantic_inputs_ready
         and bool(blender_path)
     )
@@ -144,6 +156,16 @@ def build_hybrid_report(
         unified_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
     else:
         unified_status = "BLOCKED_SEMANTIC_PREFLIGHT"
+    if detail_ready:
+        detail_status = "READY_TO_RUN_ONCE"
+    elif detail_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY":
+        detail_status = "QUALITY_PLATEAU_SAME_STRATEGY"
+    elif not semantic_inputs_ready:
+        detail_status = "BLOCKED_REFERENCE_INPUTS"
+    elif not blender_path:
+        detail_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+    else:
+        detail_status = "BLOCKED_SEMANTIC_PREFLIGHT"
 
     # One strategy is selected per run.  A compatible free GPU has priority;
     # the connected semantic authoring strategy is the fallback after the
@@ -155,6 +177,8 @@ def build_hybrid_report(
         selected = [SEMANTIC_STRATEGY]
     elif unified_ready:
         selected = [UNIFIED_SEMANTIC_STRATEGY]
+    elif detail_ready:
+        selected = [DETAIL_SEMANTIC_STRATEGY]
     else:
         selected = []
     if not selected:
@@ -162,6 +186,7 @@ def build_hybrid_report(
             "INSTALL_OR_SELECT_CPU_BLENDER_FOR_SEMANTIC_PROXY"
             if semantic_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             or unified_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+            or detail_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             else "RECONNECT_COMPATIBLE_GPU_OR_FIX_PROVIDER_PREFLIGHT"
         )
     else:
@@ -199,6 +224,16 @@ def build_hybrid_report(
                 # fails after preflight or its entrypoint produces no mesh.
                 "runAllowed": unified_ready and not semantic_ready,
                 "fallbackFor": [TRELLIS_STRATEGY, SEMANTIC_STRATEGY],
+                "maxRuns": 1,
+            },
+            DETAIL_SEMANTIC_STRATEGY: {
+                "provider": "blenderSemanticDetailAuthoring",
+                "status": detail_status,
+                "qualityGate": detail_gate,
+                "semanticHandoff": semantic_handoff,
+                "blenderExecutable": blender_path or "",
+                "runAllowed": detail_ready and not semantic_ready and not unified_ready,
+                "fallbackFor": [UNIFIED_SEMANTIC_STRATEGY],
                 "maxRuns": 1,
             },
         },

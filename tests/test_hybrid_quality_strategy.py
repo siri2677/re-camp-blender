@@ -90,6 +90,42 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertTrue(history[0]["rejected"])
         self.assertEqual(history[0]["strategyId"], "SEMANTIC_PROXY_REFERENCE_FITTED_V001")
 
+    def test_quality_plateau_record_without_candidate_id_blocks_same_strategy(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "quality-progress-gate.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+                        "provider": "blenderSemanticAuthoring",
+                        "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+                        "bestOverallScore": 0.608431,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            history = collect_history(None, [path])
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["candidateId"], "STRATEGY_GATE:UNIFIED_SEMANTIC_AUTHORING_V002")
+        self.assertTrue(history[0]["rejected"])
+        gate = build_progress_gate(
+            provider="blenderSemanticAuthoring",
+            strategy_id="UNIFIED_SEMANTIC_AUTHORING_V002",
+            history=history,
+        )
+        self.assertEqual(gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+
+    def test_kaggle_execution_record_strategy_map_blocks_semantic_proxy(self):
+        record = ROOT / "docs" / "records" / "ch101-ai3d" / "2026-08-28-kaggle-hybrid-semantic-proxy-v077.json"
+        history = collect_history(None, [record])
+        matching = [
+            item
+            for item in history
+            if item["strategyId"] == "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
+        ]
+        self.assertTrue(matching)
+        self.assertTrue(any(item["rejected"] for item in matching))
+
     def test_generic_candidate_registration_records_provider_strategy_and_hashes(self):
         contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
         with tempfile.TemporaryDirectory() as temporary:
@@ -164,6 +200,35 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertEqual(pivot_gate["status"], "READY_NEW_STRATEGY")
         self.assertFalse(pivot_gate["unityInputAllowed"])
 
+    def test_semantic_detail_strategy_is_the_next_pivot_after_v002_plateau(self):
+        contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
+        self.assertEqual(
+            contract["qualityStrategies"]["SEMANTIC_DETAIL_AUTHORING_V003"]["provider"],
+            "blenderSemanticDetailAuthoring",
+        )
+        history = [
+            {
+                "candidateId": "CH101-BLENDERSEMANTICAUTHORING-002",
+                "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+                "overallScore": 0.608431,
+                "status": "REGENERATE_REQUIRED",
+                "rejected": True,
+            }
+        ]
+        old_gate = build_progress_gate(
+            provider="blenderSemanticAuthoring",
+            strategy_id="UNIFIED_SEMANTIC_AUTHORING_V002",
+            history=history,
+        )
+        pivot_gate = build_progress_gate(
+            provider="blenderSemanticDetailAuthoring",
+            strategy_id="SEMANTIC_DETAIL_AUTHORING_V003",
+            history=history,
+        )
+        self.assertEqual(old_gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+        self.assertEqual(pivot_gate["status"], "READY_NEW_STRATEGY")
+        self.assertFalse(pivot_gate["productionPromotionAllowed"])
+
     def test_orchestrator_selects_v002_after_v001_plateau_without_gpu(self):
         contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
 
@@ -211,6 +276,56 @@ class HybridQualityStrategyTests(unittest.TestCase):
             report["strategies"]["UNIFIED_SEMANTIC_AUTHORING_V002"]["runAllowed"]
         )
         self.assertFalse(report["unityInputAllowed"])
+
+    def test_orchestrator_selects_v003_after_v002_plateau_without_gpu(self):
+        contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
+
+        def fake_gate(provider, strategy_id, score_dir, history_records):
+            status = "READY_NEW_STRATEGY"
+            if strategy_id in {
+                "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+                "UNIFIED_SEMANTIC_AUTHORING_V002",
+            }:
+                status = "QUALITY_PLATEAU_SAME_STRATEGY"
+            return {
+                "status": status,
+                "provider": provider,
+                "strategyId": strategy_id,
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            }
+
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.build_runtime_report",
+            return_value={
+                "status": "BLOCKED_PROVIDER_PREFLIGHT",
+                "providerPreflight": {"heavyweightInstallAllowed": False},
+            },
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator._gate", side_effect=fake_gate
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.prepare_handoff",
+            return_value={"status": "READY_INPUTS_BLOCKED_AUTHORING"},
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.shutil.which",
+            return_value="blender",
+        ), patch("scripts.ai3d.hybrid_quality_orchestrator.write_json"):
+            report = hybrid_quality_orchestrator.build_hybrid_report(
+                art_root=Path(temporary),
+                output=Path(temporary) / "orchestration.json",
+                contract_path=contract_path,
+                socket_contract_path=ROOT / "contracts" / "current_roster_socket_contract_v001.json",
+                character="CH101",
+            )
+
+        self.assertEqual(report["selectedStrategies"], ["SEMANTIC_DETAIL_AUTHORING_V003"])
+        self.assertFalse(
+            report["strategies"]["UNIFIED_SEMANTIC_AUTHORING_V002"]["runAllowed"]
+        )
+        self.assertTrue(
+            report["strategies"]["SEMANTIC_DETAIL_AUTHORING_V003"]["runAllowed"]
+        )
+        self.assertFalse(report["productionPromotionAllowed"])
 
     def test_unified_candidate_metadata_preserves_semantic_audit(self):
         contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
@@ -283,7 +398,9 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "TRELLIS_SINGLE_VIEW_V001",
             "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
             "UNIFIED_SEMANTIC_AUTHORING_V002",
+            "SEMANTIC_DETAIL_AUTHORING_V003",
             "build_ch101_unified_semantic_mesh.py",
+            "build_ch101_semantic_detail_candidate.py",
             "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
             "quality_progress_gate",
             "strict visual QA",
@@ -324,6 +441,19 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "productionPromotionAllowed",
         ):
             self.assertIn(marker, unified_builder)
+
+        detail_builder = (
+            ROOT / "scripts" / "blender" / "build_ch101_semantic_detail_candidate.py"
+        ).read_text(encoding="utf-8")
+        for marker in (
+            "SEMANTIC_DETAIL_AUTHORING_V003",
+            "CONNECTED_BODY_WITH_PRESERVED_DETAIL_GROUPS",
+            "preservedFaceDetail",
+            "MODEL_HAIR",
+            "MODEL_CLOTH_OUTFIT",
+            "productionPromotionAllowed",
+        ):
+            self.assertIn(marker, detail_builder)
 
         refinement = (ROOT / "scripts" / "blender" / "refine_ai3d_candidate.py").read_text(encoding="utf-8")
         self.assertIn("refinedTransportPath", refinement)

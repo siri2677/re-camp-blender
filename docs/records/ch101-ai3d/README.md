@@ -391,3 +391,14 @@ strict visual QA 기준에 미달해 `REJECT_GATE_B_AND_REGENERATE`로 남겼다
 최고 overall `0.608431`은 appearance·color 기준을 충족하지 못하므로 같은 전략을
 반복하지 않고, 다음 실행은 실제 semantic face/hair/outfit 재구성 또는 새로운 Provider로
 전환한다. 판정은 `2026-08-29-quality-progress-gate-v002.json`에 보관한다.
+
+V002 정체 이후의 다음 semantic pivot인 `SEMANTIC_DETAIL_AUTHORING_V003`도 로컬
+Blender 4.5.10에서 실제 생성·평가했다. body shell remesh는 PASS하고 face detail,
+hair, outfit, equipment를 별도 semantic group으로 보존했지만, transport 기준
+geometry hard gate는 연결 성분 192개·유의미 성분 70개로 실패했다. 점수는 overall
+`0.479447`, silhouette `0.441747`, appearance `0.369244`, color `0.182749`,
+face `0.514200`, technical `1.0`이며 strict visual QA는
+`REJECT_GATE_B_AND_REGENERATE`다. 이 결과는 Kaggle 실행 결과가 아닌 로컬
+CPU fallback 검증이며, 다음 Kaggle 세션에서 동일 전략을 반복하지 않도록
+V002 plateau 기록을 orchestrator history로 연결했다. 상세 결과는
+`2026-08-29-local-blender-v003-review-v001.json`에 보관한다.

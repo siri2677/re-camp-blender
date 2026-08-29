@@ -13,6 +13,10 @@ Wonder3D의 동일 전략 반복을 중단하고, 무료 환경에서 의미론�
 - `UNIFIED_SEMANTIC_AUTHORING_V002`: V001 거절 이후의 1회성 semantic pivot. V001의
   분리 primitive를 반복하지 않고, primary shell을 실제 connected mesh로 voxel
   remesh한 뒤 body/face, hair, outfit, equipment label을 보존한다.
+- `SEMANTIC_DETAIL_AUTHORING_V003`: V002 품질 정체 이후의 1회성 Blender semantic
+  detail pivot. body shell만 remesh하고 face detail, hair, outfit, equipment를
+  별도 그룹으로 보존해 얼굴·헤어·의상 판독성을 확인한다. 연결형 primary shell
+  외의 세부 그룹은 review-only이며 Gate B/Unity 입력을 열지 않는다.
 
 두 경로 모두 `refine_ai3d_candidate.py` → `evaluate_ai3d_candidate.py` →
 `score_candidate_renders.py` → `build_assisted_visual_review.py` →
@@ -40,6 +44,12 @@ placeholder report를 만든다. V002는 object join만으로 연결됐다고 �
 voxel remesh 성공 여부를 별도 기록한다. 실제 얼굴 BlendShape는 자동 생성하지
 않으며 `BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER`로 남긴다.
 
+V002가 strict visual QA에서 거절되면 `quality_progress_gate.py`가 기록된
+`QUALITY_PLATEAU_SAME_STRATEGY`를 읽고 V003으로 전환한다. V003은
+`scripts/blender/build_ch101_semantic_detail_candidate.py`를 통해 body shell만
+연결형 remesh하고 나머지 semantic detail 그룹을 보존한다. V003 역시 자동 Gate B
+승인을 하지 않으며, 얼굴 드라이버·소켓은 검토용 placeholder/자동 추정 상태다.
+
 ## 고정 상태와 중단
 
 모든 산출물은 다음 상태를 유지한다.
@@ -66,9 +76,12 @@ Kaggle 또는 Colab에서 다음 Notebook을 연다.
 notebooks/07_ch101_hybrid_quality_strategies.ipynb
 ```
 
-GPU가 없으면 TRELLIS는 heavyweight 설치 없이 차단된다. V001 거절 이력이 있으면
-동일 전략은 실행하지 않고, CPU Blender가 있으면 V002를 한 번만 실행한다. GPU가
+GPU가 없으면 TRELLIS는 heavyweight 설치 없이 차단된다. V001/V002 거절 이력이
+있으면 동일 전략은 실행하지 않고, CPU Blender가 있으면 다음 semantic pivot을
+한 번만 실행한다. GPU가
 사전검사를 통과해도 TRELLIS entrypoint가 검증되지 않거나 mesh를 만들지 못하면
 남은 semantic fallback을 한 번만 사용한다. Blender와 GPU가 모두 없으면
 orchestration report만 남기고 후보·Review `.blend`를 만들지 않는다. Gate B 승인
-전 Unity/Android 단계는 항상 차단된다.
+전 Unity/Android 단계는 항상 차단된다. V003은 현재 로컬에서 실행·평가된
+review-only 후보이며 strict visual QA를 통과하지 못했으므로 Kaggle 재실행 시에도
+동일 strategy를 반복하지 않고 더 강한 제작자/Provider 입력으로 전환한다.

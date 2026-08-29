@@ -182,6 +182,15 @@ CH101→CH105→Unity→Android gate sequence is documented in
 If Blender is unavailable, the notebook records the blocked decision and does not
 create a fake candidate.
 
+After the local V002 quality plateau, the hybrid notebook now recognizes
+`SEMANTIC_DETAIL_AUTHORING_V003` as the next one-shot Blender pivot. V003 preserves
+face detail, hair, outfit, and equipment as semantic review groups while remeshing
+only the connected body shell. The durable V002 plateau record is passed into the
+Kaggle orchestration gate, so a fresh Kaggle session selects V003 instead of silently
+rerunning V001/V002. V003 remains `REGENERATE_REQUIRED` until a stronger authored
+mesh passes the locked visual and geometry thresholds; no Gate B or Unity input is
+enabled.
+
 To make the next Wonder3D retry reproducible on the Kaggle Blender 3.0 runtime,
 the registration step now keeps the original NeuS GLB, writes a stdlib-only
 triangle-preserving OBJ transport copy, and records both hashes in a compatibility
