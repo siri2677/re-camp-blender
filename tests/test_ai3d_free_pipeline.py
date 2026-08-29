@@ -913,6 +913,20 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertIn(result["status"], {"PASS", "PASS_WITH_BLOCKED_PROVIDERS"})
         self.assertEqual(set(result["providers"]), {"sf3d", "instantmesh", "triposr", "wonder3D", "tripo"})
         self.assertEqual(result["providers"]["tripo"]["status"], "READY_NO_GPU_REQUIRED")
+        blocked_statuses = {
+            "BLOCKED_GPU_UNAVAILABLE",
+            "BLOCKED_GPU_UNSUPPORTED",
+            "BLOCKED_PROVIDER_PREFLIGHT",
+        }
+        self.assertEqual(
+            set(result["blockedProviders"]),
+            {
+                provider
+                for provider, report in result["providers"].items()
+                if report["status"] in blocked_statuses
+            },
+        )
+        self.assertEqual(result["unexpectedFailures"], [])
         for report in result["providers"].values():
             self.assertFalse(report["unityInputAllowed"])
             self.assertFalse(report["productionPromotionAllowed"])

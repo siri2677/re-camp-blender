@@ -23,6 +23,25 @@ ROOT = Path(__file__).resolve().parents[1]
 ROSTER_CONTRACT = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
 RUNTIME_PREFLIGHT_PROVIDERS = ("sf3d", "instantmesh", "triposr", "wonder3D", "tripo")
 
+# A provider can be unavailable because there is no GPU at all, or because a
+# visible GPU is not supported by the installed Torch/runtime.  Both are
+# expected outcomes for this CPU-safe runner and must not be reported as
+# unexpected failures.  Keep this list aligned with
+# ``scripts/ai3d/colab_runtime_preflight.py`` so the runner preserves the
+# distinction in its report while still completing successfully.
+EXPECTED_PREFLIGHT_STATUSES = {
+    "READY_GPU_VISIBLE",
+    "BLOCKED_GPU_UNAVAILABLE",
+    "BLOCKED_GPU_UNSUPPORTED",
+    "BLOCKED_PROVIDER_PREFLIGHT",
+    "READY_NO_GPU_REQUIRED",
+}
+BLOCKED_PREFLIGHT_STATUSES = {
+    "BLOCKED_GPU_UNAVAILABLE",
+    "BLOCKED_GPU_UNSUPPORTED",
+    "BLOCKED_PROVIDER_PREFLIGHT",
+}
+
 
 def is_git_tree(path: Path) -> bool:
     return (path / ".git").exists()
@@ -166,17 +185,13 @@ def run_runtime_preflight() -> dict[str, Any]:
             report["stdoutTail"] = result.stdout[-800:]
             report["stderrTail"] = result.stderr[-800:]
             providers[provider] = report
-            if result.returncode not in (0, 2) or report["status"] not in {
-                "READY_GPU_VISIBLE",
-                "BLOCKED_GPU_UNAVAILABLE",
-                "READY_NO_GPU_REQUIRED",
-            }:
+            if result.returncode not in (0, 2) or report["status"] not in EXPECTED_PREFLIGHT_STATUSES:
                 unexpected_failures.append(provider)
 
     blocked = [
         provider
         for provider, report in providers.items()
-        if report.get("status") == "BLOCKED_GPU_UNAVAILABLE"
+        if report.get("status") in BLOCKED_PREFLIGHT_STATUSES
     ]
     return {
         "name": "provider-runtime-preflight",
