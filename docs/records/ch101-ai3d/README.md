@@ -386,3 +386,8 @@ geometry hard gate를 PASS로 판정했지만, appearance `0.346415`와 color `0
 strict visual QA 기준에 미달해 `REJECT_GATE_B_AND_REGENERATE`로 남겼다. 이 실행은
 검토용 임시 산출물이며 Gate B·Production·Unity 입력을 해제하지 않는다. 상세 hash와
 점수는 `2026-08-29-local-blender-v002-review-v001.json`에 보관한다.
+
+동일 V002 전략은 quality-progress gate에서 `QUALITY_PLATEAU_SAME_STRATEGY`로 잠갔다.
+최고 overall `0.608431`은 appearance·color 기준을 충족하지 못하므로 같은 전략을
+반복하지 않고, 다음 실행은 실제 semantic face/hair/outfit 재구성 또는 새로운 Provider로
+전환한다. 판정은 `2026-08-29-quality-progress-gate-v002.json`에 보관한다.
