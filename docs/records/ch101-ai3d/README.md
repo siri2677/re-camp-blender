@@ -402,3 +402,11 @@ face `0.514200`, technical `1.0`이며 strict visual QA는
 CPU fallback 검증이며, 다음 Kaggle 세션에서 동일 전략을 반복하지 않도록
 V002 plateau 기록을 orchestrator history로 연결했다. 상세 결과는
 `2026-08-29-local-blender-v003-review-v001.json`에 보관한다.
+
+2026-08-31 Kaggle T4 x2 세션에서는 Provider를 재실행하지 않고 MPFB 기반 Blender-only
+의상·실루엣 보정 후보를 한 번 추가했다. aggregate overall은 `0.682993`까지 상승했지만,
+appearance `0.373505`, face `0.000000`, technical `0.8`과 연결 성분 194개·유의미
+성분 35개로 strict visual/geometry gate를 통과하지 못해 `REGENERATE_REQUIRED`로
+판정했다. 기록과 검토 패키지 SHA256은
+`2026-08-31-kaggle-semantic-authoring-v002-review.json`에 보관하며, Gate B·Production·
+Unity 입력은 계속 잠금이다.

@@ -1,0 +1,68 @@
+{
+  "recordVersion": "ch101-kaggle-semantic-authoring-v002-review-v001",
+  "recordedAt": "2026-08-31",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "runtime": {
+    "platform": "Kaggle",
+    "blender": "3.0.1",
+    "gpu": "Tesla T4 x2",
+    "execution": "KAGGLE_INTERACTIVE_GPU",
+    "providerInference": false,
+    "authoring": "BLENDER_ONLY_SEMANTIC_CLOTHING_REVIEW"
+  },
+  "source": {
+    "artRepository": "https://github.com/siri2677/re-camp.git",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "toolsRepository": "https://github.com/siri2677/re-camp-blender.git",
+    "toolsCommit": "cd5570411ba93dae74d50db0806602f4e08fa3f1"
+  },
+  "authoring": {
+    "strategyId": "MPFB_SEMANTIC_AUTHORING_CLOTHING_SEMANTIC_V002",
+    "candidateId": "MPFB-SEMANTIC-AUTHORING-CLOTHING-SEMANTIC-V002",
+    "candidateSha256": "fb256600417a5c1b14b6f746042ed3ae5ab5501f76ef4b80d07c8d08bfe1cdbd",
+    "method": "MPFB base with deterministic clothing, jacket-yoke, hair-lock, and palette adjustments",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
+  },
+  "evaluation": {
+    "scores": {
+      "overall": 0.682993,
+      "silhouette": 0.784026,
+      "appearance": 0.373505,
+      "color": 0.803549,
+      "faceDetail": 0.0,
+      "technical": 0.8
+    },
+    "status": "REGENERATE_REQUIRED",
+    "failureReasons": [
+      "FACE_DETAIL_SCORE_BELOW_MINIMUM",
+      "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM",
+      "SIGNIFICANT_COMPONENT_COUNT_ABOVE_MAXIMUM"
+    ],
+    "geometryIntegrity": {
+      "connectedComponentCount": 194,
+      "significantComponentCount": 35,
+      "largestComponentVertexRatio": 0.52644004,
+      "boundaryEdgeRatio": 0.01677961,
+      "nonManifoldEdgeRatio": 0.0,
+      "looseVertexRatio": 0.0
+    },
+    "strictVisualQA": "REJECT_GATE_B_AND_REGENERATE"
+  },
+  "artifacts": {
+    "kaggleNotebook": "https://www.kaggle.com/code/siri9108/ch101-ai3d-free-provider-review/edit",
+    "reviewPackage": "re-camp-CH101-semantic-authoring-review-v002-NOT-PRODUCTION.zip",
+    "reviewPackageSha256": "f31fd9dc1ef4bf8663d572ea1cf465fbaa5d2de0436ed5722034c89abcd54bcd",
+    "reviewPackageStatus": "REVIEW_ONLY_NOT_PRODUCTION"
+  },
+  "gates": {
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Human Blender mesh authoring and visual review for face/hair readability, outfit semantics, and connected production topology.",
+  "notes": [
+    "The aggregate score is not sufficient for approval because strict visual and geometry gates failed.",
+    "No provider generation was run in this continuation.",
+    "The Kaggle account restriction had been reversed before this run; future workflows should avoid borderline suggestive image-generation prompts."
+  ]
+}
