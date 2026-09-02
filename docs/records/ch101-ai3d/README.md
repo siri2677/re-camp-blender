@@ -427,3 +427,15 @@ appearance `0.373505`, face `0.000000`, technical `0.8`과 연결 성분 194개�
 판정했다. 기록과 검토 패키지 SHA256은
 `2026-08-31-kaggle-semantic-authoring-v002-review.json`에 보관하며, Gate B·Production·
 Unity 입력은 계속 잠금이다.
+
+2026-09-02 Kaggle T4 x2에서 새 저메모리 Provider PartCrafter를 공식 pinned commit으로
+실행했다. PyG `torch_cluster`를 Kaggle의 `torch 2.10.0+cu128`에 맞춰 보정한 뒤
+4-part·512-token·30-step 프로파일로 `object.glb`와 4개 part mesh를 생성하고, Blender
+OBJ transport·정규화·4방향 렌더·strict QA까지 완료했다. 후보 점수는 overall
+`0.462276`, silhouette `0.400006`, appearance `0.469088`, color `0.232131`, face
+detail `0.733035`, technical `0.85`였으며, `SOURCE_TRIANGLE_COUNT_ABOVE_MAXIMUM`와
+`LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM` 때문에 `REGENERATE_REQUIRED`다. PartCrafter
+전략은 재실행하지 않고, 다음은 새 Provider 또는 실제 Blender semantic authoring으로
+전환한다. 상세 provenance·SHA256·Kaggle 경로는
+`2026-09-02-kaggle-partcrafter-v002-review.json`에 보관한다. 모든 Gate B·Production·
+Unity 입력은 계속 잠금이다.
