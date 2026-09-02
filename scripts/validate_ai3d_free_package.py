@@ -37,6 +37,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "run_trellis_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis16_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
+    ROOT / "scripts" / "ai3d" / "run_partcrafter_candidate.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
@@ -140,6 +141,7 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
         return
     text = "\n".join("".join(cell.get("source", [])) for cell in cells)
     for marker in (
+        "PARTCRAFTER_PART_LEVEL_V001",
         "TRELLIS_SINGLE_VIEW_V001",
         "TRELLIS_SINGLE_VIEW_16GB_V002",
         "TRELLIS2_SINGLE_VIEW_V001",
@@ -149,6 +151,7 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
         "register_review_candidate.py",
         "run_trellis_candidate.py",
         "run_trellis16_candidate.py",
+        "run_partcrafter_candidate.py",
         "BLOCKED_PROVIDER_PREFLIGHT",
         "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
         "REGENERATE_REQUIRED",
@@ -244,11 +247,23 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, "TRELLIS.2 must remain disabled as an automatic fallback")
     if trellis2.get("unityInputAllowed") is not False or trellis2.get("productionPromotionAllowed") is not False:
         fail(errors, "TRELLIS.2 research candidate must keep Unity and production gates locked")
+    partcrafter = experimental.get("partcrafter", {})
+    if len(partcrafter.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.partcrafter must pin a 40-character commit")
+    if partcrafter.get("strategyId") != "PARTCRAFTER_PART_LEVEL_V001":
+        fail(errors, "PartCrafter strategy ID must be PARTCRAFTER_PART_LEVEL_V001")
+    if partcrafter.get("minimumVramMb", 0) < 8192:
+        fail(errors, "PartCrafter minimum VRAM must fail safe at 8192 MB or higher")
+    if partcrafter.get("fallbackEnabled") is not False:
+        fail(errors, "PartCrafter must remain a one-shot research lane")
+    if partcrafter.get("unityInputAllowed") is not False or partcrafter.get("productionPromotionAllowed") is not False:
+        fail(errors, "PartCrafter research candidate must keep production and Unity gates locked")
     strategies = contract.get("qualityStrategies", {})
     for strategy_id, provider in (
         ("TRELLIS_SINGLE_VIEW_V001", "trellis"),
         ("TRELLIS_SINGLE_VIEW_16GB_V002", "trellis16"),
         ("TRELLIS2_SINGLE_VIEW_V001", "trellis2"),
+        ("PARTCRAFTER_PART_LEVEL_V001", "partcrafter"),
         ("SEMANTIC_PROXY_REFERENCE_FITTED_V001", "semanticProxy"),
     ):
         strategy = strategies.get(strategy_id, {})

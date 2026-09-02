@@ -166,6 +166,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-stage", required=True)
     parser.add_argument("--candidate-label", default="001")
     parser.add_argument("--metadata-json", type=Path)
+    parser.add_argument(
+        "--asset-file",
+        action="append",
+        type=Path,
+        default=[],
+        help="Additional provider artifact to copy beside the review mesh.",
+    )
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument("--character")
     return parser.parse_args()
@@ -203,6 +210,16 @@ def main() -> int:
         report = convert_glb_to_obj(mesh, destination)
         write_json(transport_report, report)
         asset_files.extend([destination.name, transport_report.name])
+    for asset_file in args.asset_file:
+        source = asset_file.resolve()
+        if not source.is_file():
+            raise ValueError(f"provider asset file is missing: {source}")
+        if source == original_destination.resolve():
+            continue
+        copied = candidate_dir / source.name
+        shutil.copy2(source, copied)
+        if copied.name not in asset_files:
+            asset_files.append(copied.name)
     manifest = build_candidate_manifest(
         contract,
         reference_manifest,

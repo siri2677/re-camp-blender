@@ -211,6 +211,30 @@
       "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
       "unityInputAllowed": false,
       "productionPromotionAllowed": false
+    },
+    "partcrafter": {
+      "mode": "OPEN_SOURCE_PART_LEVEL_LOW_VRAM_RESEARCH_ONLY",
+      "repository": "https://github.com/wgsxm/PartCrafter.git",
+      "commit": "3d773bf02fad51c7ab31a5615573fec93b287b30",
+      "model": "wgsxm/PartCrafter",
+      "backgroundRemovalModel": "briaai/RMBG-1.4",
+      "license": "MIT_CODE_LICENSE_VERIFY_MODEL_TERMS",
+      "licenseNote": "The repository code is MIT; verify pretrained checkpoint and dependency terms separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 8192,
+      "requiresGpu": true,
+      "officialEntrypoint": "scripts/inference_partcrafter.py",
+      "memoryProfile": "8GB_CLASS_PART_LEVEL",
+      "defaultNumParts": 6,
+      "minNumParts": 4,
+      "maxNumParts": 16,
+      "semanticLabels": "UNLABELED_PROVIDER_PARTS_PENDING_HUMAN_MAPPING",
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
     }
   },
   "qualityStrategies": {
@@ -263,6 +287,17 @@
       "repeatPolicy": "PIVOT_AFTER_REJECTION",
       "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY",
       "memoryPolicy": "16GB_CLASS_TIGHT_NO_OFFICIAL_GUARANTEE"
+    },
+    "PARTCRAFTER_PART_LEVEL_V001": {
+      "provider": "partcrafter",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "strategyScope": "PART_LEVEL_STRUCTURED_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_SCRIPT_ONLY",
+      "memoryPolicy": "8GB_CLASS_LOW_RESOURCE",
+      "semanticPolicy": "PARTS_REQUIRE_HUMAN_BODY_HAIR_OUTFIT_EQUIPMENT_MAPPING"
     }
   },
   "candidateAcceptance": {

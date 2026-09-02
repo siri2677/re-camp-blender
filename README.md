@@ -97,6 +97,15 @@ human Gate B review; this pass can never approve Gate B or enable Unity input.
 The current EEVEE candidate (`0.529061`, color `0.300492`) is therefore judged
 `REJECT_GATE_B_AND_REGENERATE` by the strengthened policy.
 
+The next quality pivot is the low-memory, part-level `PartCrafter` strategy.
+It is pinned to `3d773bf02fad51c7ab31a5615573fec93b287b30`, requires an
+8-GB-class CUDA preflight, and is preferred before TRELLIS when explicitly
+authorized. Its `object.glb` and individual `part_*.glb` files are retained
+for the same Blender refine/evaluate/strict-QA path. Provider part indices are
+not treated as verified CH101 body/hair/outfit/equipment labels; that mapping
+remains pending review. See
+[docs/plans/ch101-part-level-low-memory-plan-2026-09-02.md](docs/plans/ch101-part-level-low-memory-plan-2026-09-02.md).
+
 The 2026-08-27 Kaggle T4 run completed Wonder3D's six-view inference and found
 that normal-alpha masks were crop-sized rectangles for four views. The voxel
 fallback now supports `--mask-source rgb-foreground` and Notebook 06 uses it

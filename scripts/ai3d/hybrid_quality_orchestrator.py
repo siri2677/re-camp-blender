@@ -37,6 +37,7 @@ except ImportError:
 TRELLIS_STRATEGY = "TRELLIS_SINGLE_VIEW_V001"
 TRELLIS16_STRATEGY = "TRELLIS_SINGLE_VIEW_16GB_V002"
 TRELLIS2_STRATEGY = "TRELLIS2_SINGLE_VIEW_V001"
+PARTCRAFTER_STRATEGY = "PARTCRAFTER_PART_LEVEL_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
 UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
 DETAIL_SEMANTIC_STRATEGY = "SEMANTIC_DETAIL_AUTHORING_V003"
@@ -86,9 +87,11 @@ def build_hybrid_report(
     trellis_preflight = build_runtime_report("trellis")
     trellis16_preflight = build_runtime_report("trellis16")
     trellis2_preflight = build_runtime_report("trellis2")
+    partcrafter_preflight = build_runtime_report("partcrafter")
     trellis_gate = _gate("trellis", TRELLIS_STRATEGY, score_dir, history_records)
     trellis16_gate = _gate("trellis16", TRELLIS16_STRATEGY, score_dir, history_records)
     trellis2_gate = _gate("trellis2", TRELLIS2_STRATEGY, score_dir, history_records)
+    partcrafter_gate = _gate("partcrafter", PARTCRAFTER_STRATEGY, score_dir, history_records)
     semantic_gate = _gate("semanticProxy", SEMANTIC_STRATEGY, score_dir, history_records)
     unified_gate = _gate(
         "blenderSemanticAuthoring",
@@ -143,6 +146,11 @@ def build_hybrid_report(
         and trellis2_preflight["status"] == "READY_GPU_VISIBLE"
         and trellis2_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
     )
+    partcrafter_ready = (
+        partcrafter_gate["status"] == "READY_NEW_STRATEGY"
+        and partcrafter_preflight["status"] == "READY_GPU_VISIBLE"
+        and partcrafter_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
+    )
     trellis2_status = (
         "READY_TO_RUN_ONCE"
         if trellis2_ready
@@ -167,6 +175,15 @@ def build_hybrid_report(
         else (
             "QUALITY_PLATEAU_SAME_STRATEGY"
             if trellis16_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY"
+            else "BLOCKED_PROVIDER_PREFLIGHT"
+        )
+    )
+    partcrafter_status = (
+        "READY_TO_RUN_ONCE"
+        if partcrafter_ready
+        else (
+            "QUALITY_PLATEAU_SAME_STRATEGY"
+            if partcrafter_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY"
             else "BLOCKED_PROVIDER_PREFLIGHT"
         )
     )
@@ -201,11 +218,13 @@ def build_hybrid_report(
     else:
         detail_status = "BLOCKED_SEMANTIC_PREFLIGHT"
 
-    # One strategy is selected per run. TRELLIS.2 has priority when its
-    # stricter 24 GB preflight is satisfied. Original TRELLIS then provides a
-    # separate 16 GB-class lane before the older 24 GB lane. This prevents two
-    # expensive or mutually competing authoring paths from running together.
-    if trellis2_ready:
+    # One strategy is selected per run. PartCrafter is first because its
+    # part-level output directly addresses CH101's repeated semantic-boundary
+    # failures and has a lower memory floor. Higher-memory TRELLIS lanes remain
+    # available when PartCrafter is blocked or already plateaued.
+    if partcrafter_ready:
+        selected = [PARTCRAFTER_STRATEGY]
+    elif trellis2_ready:
         selected = [TRELLIS2_STRATEGY]
     elif trellis16_ready:
         selected = [TRELLIS16_STRATEGY]
@@ -261,6 +280,17 @@ def build_hybrid_report(
                 "runAllowed": trellis2_ready,
                 "maxRuns": 1,
                 "entrypoint": "OFFICIAL_PYTHON_API_ONLY",
+            },
+            PARTCRAFTER_STRATEGY: {
+                "provider": "partcrafter",
+                "status": partcrafter_status,
+                "preflight": partcrafter_preflight,
+                "qualityGate": partcrafter_gate,
+                "runAllowed": partcrafter_ready,
+                "maxRuns": 1,
+                "entrypoint": "OFFICIAL_SCRIPT_ONLY",
+                "memoryProfile": "8GB_CLASS_PART_LEVEL",
+                "semanticLabels": "UNLABELED_PROVIDER_PARTS_PENDING_HUMAN_MAPPING",
             },
             SEMANTIC_STRATEGY: {
                 "provider": "semanticProxy",

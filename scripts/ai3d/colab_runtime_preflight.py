@@ -27,6 +27,7 @@ GPU_PROVIDERS = {
     "trellis",
     "trellis16",
     "trellis2",
+    "partcrafter",
 }
 
 # TRELLIS is deliberately conservative: a visible GPU is not enough to
@@ -36,6 +37,7 @@ GPU_PROVIDERS = {
 TRELLIS_MINIMUM_VRAM_MB = 24576
 TRELLIS16_MINIMUM_VRAM_MB = 16384
 TRELLIS2_MINIMUM_VRAM_MB = 24576
+PARTCRAFTER_MINIMUM_VRAM_MB = 8192
 
 
 def parse_args() -> argparse.Namespace:
@@ -160,6 +162,39 @@ def build_report(provider: str) -> dict[str, Any]:
             )
         )
         if trellis_ready:
+            status = "READY_GPU_VISIBLE"
+            provider_preflight["heavyweightInstallAllowed"] = True
+        else:
+            status = "BLOCKED_PROVIDER_PREFLIGHT"
+    elif provider == "partcrafter":
+        maximum_vram = max(
+            (gpu.get("memoryMb") or 0 for gpu in gpus),
+            default=0,
+        )
+        license_env = "RE_CAMP_PARTCRAFTER_LICENSE_ACK"
+        license_acknowledged = os.environ.get(license_env, "0") == "1"
+        provider_preflight = {
+            "minimumVramMb": PARTCRAFTER_MINIMUM_VRAM_MB,
+            "maximumVisibleVramMb": maximum_vram or None,
+            "vramSufficient": maximum_vram >= PARTCRAFTER_MINIMUM_VRAM_MB,
+            "cudaRuntimeVisible": bool(torch_info.get("cudaAvailable")),
+            "torchKernelSupportsDevice": bool(
+                torch_info.get("torchKernelSupportsDevice")
+            ),
+            "licenseTermsAcknowledged": license_acknowledged,
+            "licenseAcknowledgementEnv": license_env,
+            "officialEntrypoint": "scripts/inference_partcrafter.py",
+            "heavyweightInstallAllowed": False,
+        }
+        partcrafter_ready = (
+            bool(gpus)
+            and torch_info.get("available")
+            and torch_info.get("cudaAvailable")
+            and torch_info.get("torchKernelSupportsDevice")
+            and provider_preflight["vramSufficient"]
+            and license_acknowledged
+        )
+        if partcrafter_ready:
             status = "READY_GPU_VISIBLE"
             provider_preflight["heavyweightInstallAllowed"] = True
         else:
