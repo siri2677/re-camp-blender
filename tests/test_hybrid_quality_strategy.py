@@ -399,6 +399,8 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
             "UNIFIED_SEMANTIC_AUTHORING_V002",
             "SEMANTIC_DETAIL_AUTHORING_V003",
+            "2026-08-29-local-blender-v003-review-v001.json",
+            "2026-08-31-kaggle-semantic-authoring-v002-review.json",
             "build_ch101_unified_semantic_mesh.py",
             "build_ch101_semantic_detail_candidate.py",
             "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
