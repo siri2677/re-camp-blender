@@ -15,6 +15,14 @@
 실제 T4 실행 순서와 결과는
 `2026-08-19-colab-t4-runtime.md`에, 기계 판독용 요약은 JSON 실행 기록에 보관한다.
 점수 미달 원인과 이번 보정 내용은 `2026-08-19-score-root-cause.md`에 보관한다.
+
+2026-09-02에는 기존 Wonder3D·semantic V001~V003 전략의 반복을 막고 다음 무료
+Provider를 준비하기 위해 공식 Microsoft TRELLIS.2 경로를 추가했다. 24 GB 이상
+NVIDIA GPU, CUDA kernel, Linux 및 별도 약관 확인이 모두 필요하므로 현재 실행은
+`BLOCKED_PROVIDER_PREFLIGHT`이며, 실제 추론·mesh·점수는 아직 생성하지 않았다.
+고정 commit·공식 Python API·설정 명령·게이트 상태는
+`2026-09-02-trellis2-preflight-pivot-v001.json`과
+`docs/plans/ch101-trellis2-quality-pivot-2026-09-02.md`에 보관한다.
 Workbench→Eevee 색상 렌더 재검증 결과는 `2026-08-19-color-render-rerun.json`에 보관한다.
 새 Colab T4에서 Provider fallback부터 3회 후보 생성·평가까지 자동 실행한 결과는
 `2026-08-19-colab-t4-automatic-run.json`에 보관한다.

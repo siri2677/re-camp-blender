@@ -19,13 +19,14 @@ from pathlib import Path
 from typing import Any
 
 
-GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D", "trellis"}
+GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D", "trellis", "trellis2"}
 
 # TRELLIS is deliberately conservative: a visible GPU is not enough to
 # authorize installation of its heavyweight stack.  The documented pipeline
 # needs a high-memory CUDA device and its upstream/checkpoint terms must be
 # acknowledged in the runtime without storing a secret.
 TRELLIS_MINIMUM_VRAM_MB = 24576
+TRELLIS2_MINIMUM_VRAM_MB = 24576
 
 
 def parse_args() -> argparse.Namespace:
@@ -103,22 +104,30 @@ def build_report(provider: str) -> dict[str, Any]:
     torch_info = torch_status()
     requires_gpu = provider in GPU_PROVIDERS
     provider_preflight: dict[str, Any] = {}
-    if provider == "trellis":
+    if provider in {"trellis", "trellis2"}:
+        minimum_vram_mb = (
+            TRELLIS2_MINIMUM_VRAM_MB if provider == "trellis2" else TRELLIS_MINIMUM_VRAM_MB
+        )
+        license_env = (
+            "RE_CAMP_TRELLIS2_LICENSE_ACK"
+            if provider == "trellis2"
+            else "RE_CAMP_TRELLIS_LICENSE_ACK"
+        )
         maximum_vram = max(
             (gpu.get("memoryMb") or 0 for gpu in gpus),
             default=0,
         )
-        license_acknowledged = os.environ.get("RE_CAMP_TRELLIS_LICENSE_ACK", "0") == "1"
+        license_acknowledged = os.environ.get(license_env, "0") == "1"
         provider_preflight = {
-            "minimumVramMb": TRELLIS_MINIMUM_VRAM_MB,
+            "minimumVramMb": minimum_vram_mb,
             "maximumVisibleVramMb": maximum_vram or None,
-            "vramSufficient": maximum_vram >= TRELLIS_MINIMUM_VRAM_MB,
+            "vramSufficient": maximum_vram >= minimum_vram_mb,
             "cudaRuntimeVisible": bool(torch_info.get("cudaAvailable")),
             "torchKernelSupportsDevice": bool(
                 torch_info.get("torchKernelSupportsDevice")
             ),
             "licenseTermsAcknowledged": license_acknowledged,
-            "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS_LICENSE_ACK",
+            "licenseAcknowledgementEnv": license_env,
             "heavyweightInstallAllowed": False,
         }
         trellis_ready = (

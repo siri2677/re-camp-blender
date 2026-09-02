@@ -35,6 +35,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "hybrid_quality_orchestrator.py",
     ROOT / "scripts" / "ai3d" / "register_review_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis_candidate.py",
+    ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
@@ -139,6 +140,7 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
     text = "\n".join("".join(cell.get("source", [])) for cell in cells)
     for marker in (
         "TRELLIS_SINGLE_VIEW_V001",
+        "TRELLIS2_SINGLE_VIEW_V001",
         "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
         "hybrid_quality_orchestrator.py",
         "build_ch101_semantic_proxy.py",
@@ -217,9 +219,21 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, "TRELLIS must remain disabled as an automatic fallback")
     if trellis.get("unityInputAllowed") is not False or trellis.get("productionPromotionAllowed") is not False:
         fail(errors, "TRELLIS research candidate must keep Unity and production gates locked")
+    trellis2 = experimental.get("trellis2", {})
+    if len(trellis2.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.trellis2 must pin a 40-character commit")
+    if trellis2.get("strategyId") != "TRELLIS2_SINGLE_VIEW_V001":
+        fail(errors, "TRELLIS.2 strategy ID must be TRELLIS2_SINGLE_VIEW_V001")
+    if trellis2.get("minimumVramMb", 0) < 24576:
+        fail(errors, "TRELLIS.2 minimum VRAM must fail safe at 24576 MB or higher")
+    if trellis2.get("fallbackEnabled") is not False:
+        fail(errors, "TRELLIS.2 must remain disabled as an automatic fallback")
+    if trellis2.get("unityInputAllowed") is not False or trellis2.get("productionPromotionAllowed") is not False:
+        fail(errors, "TRELLIS.2 research candidate must keep Unity and production gates locked")
     strategies = contract.get("qualityStrategies", {})
     for strategy_id, provider in (
         ("TRELLIS_SINGLE_VIEW_V001", "trellis"),
+        ("TRELLIS2_SINGLE_VIEW_V001", "trellis2"),
         ("SEMANTIC_PROXY_REFERENCE_FITTED_V001", "semanticProxy"),
     ):
         strategy = strategies.get(strategy_id, {})

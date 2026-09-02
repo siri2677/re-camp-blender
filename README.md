@@ -182,6 +182,14 @@ CH101→CH105→Unity→Android gate sequence is documented in
 If Blender is unavailable, the notebook records the blocked decision and does not
 create a fake candidate.
 
+After the V003 semantic detail pivot was rejected, the next one-shot provider lane is
+the official Microsoft `TRELLIS.2` API. It is pinned to
+`75fbf0183001ed9876c8dbb35de6b68552ee08bd` and guarded by a Linux/CUDA/
+24-GB-VRAM preflight plus an explicit terms acknowledgement. The notebook does not
+install or run it when those checks fail; even a successful GLB remains a review-only
+candidate. See [the TRELLIS.2 pivot plan](docs/plans/ch101-trellis2-quality-pivot-2026-09-02.md)
+and [the preparation record](docs/records/ch101-ai3d/2026-09-02-trellis2-preflight-pivot-v001.json).
+
 After the local V002 quality plateau, the hybrid notebook now recognizes
 `SEMANTIC_DETAIL_AUTHORING_V003` as the next one-shot Blender pivot. V003 preserves
 face detail, hair, outfit, and equipment as semantic review groups while remeshing

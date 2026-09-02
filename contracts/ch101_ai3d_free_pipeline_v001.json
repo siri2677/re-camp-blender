@@ -171,6 +171,25 @@
       "strategyId": "TRELLIS_SINGLE_VIEW_V001",
       "unityInputAllowed": false,
       "productionPromotionAllowed": false
+    },
+    "trellis2": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.2.git",
+      "commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+      "model": "microsoft/TRELLIS.2-4B",
+      "license": "MIT",
+      "licenseNote": "Checkpoint and dependency terms must be checked separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 24576,
+      "requiresGpu": true,
+      "officialApi": "Trellis2ImageTo3DPipeline",
+      "officialExample": "example.py",
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
     }
   },
   "qualityStrategies": {
@@ -204,6 +223,15 @@
       "strategyScope": "PRESERVED_DETAIL_REVIEW_ONLY",
       "repeatPolicy": "PIVOT_AFTER_REJECTION",
       "geometryPolicy": "CONNECTED_BODY_SHELL_WITH_PRESERVED_FACE_HAIR_OUTFIT_DETAIL"
+    },
+    "TRELLIS2_SINGLE_VIEW_V001": {
+      "provider": "trellis2",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 24576,
+      "strategyScope": "TRELLIS2_SINGLE_VIEW_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY"
     }
   },
   "candidateAcceptance": {
@@ -242,7 +270,6 @@
     "productionPromotionAllowed": false
   },
   "excludedProviders": {
-    "hunyuan3d2": "The official community license excludes South Korea.",
-    "trellis2": "The current local machine has no supported NVIDIA GPU and the documented minimum is not available."
+    "hunyuan3d2": "The official community license excludes South Korea."
   }
 }

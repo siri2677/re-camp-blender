@@ -35,6 +35,7 @@ except ImportError:
 
 
 TRELLIS_STRATEGY = "TRELLIS_SINGLE_VIEW_V001"
+TRELLIS2_STRATEGY = "TRELLIS2_SINGLE_VIEW_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
 UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
 DETAIL_SEMANTIC_STRATEGY = "SEMANTIC_DETAIL_AUTHORING_V003"
@@ -82,7 +83,9 @@ def build_hybrid_report(
     contract = load_contract(contract_path, character)
     history_records = history_records or []
     trellis_preflight = build_runtime_report("trellis")
+    trellis2_preflight = build_runtime_report("trellis2")
     trellis_gate = _gate("trellis", TRELLIS_STRATEGY, score_dir, history_records)
+    trellis2_gate = _gate("trellis2", TRELLIS2_STRATEGY, score_dir, history_records)
     semantic_gate = _gate("semanticProxy", SEMANTIC_STRATEGY, score_dir, history_records)
     unified_gate = _gate(
         "blenderSemanticAuthoring",
@@ -127,6 +130,20 @@ def build_hybrid_report(
         and trellis_preflight["status"] == "READY_GPU_VISIBLE"
         and trellis_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
     )
+    trellis2_ready = (
+        trellis2_gate["status"] == "READY_NEW_STRATEGY"
+        and trellis2_preflight["status"] == "READY_GPU_VISIBLE"
+        and trellis2_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
+    )
+    trellis2_status = (
+        "READY_TO_RUN_ONCE"
+        if trellis2_ready
+        else (
+            "QUALITY_PLATEAU_SAME_STRATEGY"
+            if trellis2_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY"
+            else "BLOCKED_PROVIDER_PREFLIGHT"
+        )
+    )
     trellis_status = (
         "READY_TO_RUN_ONCE"
         if trellis_ready
@@ -167,11 +184,14 @@ def build_hybrid_report(
     else:
         detail_status = "BLOCKED_SEMANTIC_PREFLIGHT"
 
-    # One strategy is selected per run.  A compatible free GPU has priority;
-    # the connected semantic authoring strategy is the fallback after the
-    # original proxy has plateaued.  This prevents two expensive or mutually
+    # One strategy is selected per run.  TRELLIS.2 is the newest verified
+    # provider lane and therefore has priority when its stricter 24 GB
+    # preflight is satisfied.  The older TRELLIS lane remains available as a
+    # separate one-shot option.  This prevents two expensive or mutually
     # competing authoring paths from running in the same invocation.
-    if trellis_ready:
+    if trellis2_ready:
+        selected = [TRELLIS2_STRATEGY]
+    elif trellis_ready:
         selected = [TRELLIS_STRATEGY]
     elif semantic_ready:
         selected = [SEMANTIC_STRATEGY]
@@ -204,6 +224,15 @@ def build_hybrid_report(
                 "qualityGate": trellis_gate,
                 "runAllowed": trellis_ready,
                 "maxRuns": 1,
+            },
+            TRELLIS2_STRATEGY: {
+                "provider": "trellis2",
+                "status": trellis2_status,
+                "preflight": trellis2_preflight,
+                "qualityGate": trellis2_gate,
+                "runAllowed": trellis2_ready,
+                "maxRuns": 1,
+                "entrypoint": "OFFICIAL_PYTHON_API_ONLY",
             },
             SEMANTIC_STRATEGY: {
                 "provider": "semanticProxy",

@@ -9,6 +9,7 @@ from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.common import load_contract, sha256_file
 from scripts.ai3d import hybrid_quality_orchestrator
 from scripts.ai3d.register_review_candidate import build_candidate_manifest
+from scripts.ai3d.run_trellis2_candidate import build_report as build_trellis2_report
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -371,6 +372,116 @@ class HybridQualityStrategyTests(unittest.TestCase):
         )
         self.assertFalse(report["productionPromotionAllowed"])
 
+    def test_orchestrator_prioritizes_trellis2_when_strict_gpu_preflight_is_ready(self):
+        contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
+
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.build_runtime_report",
+            return_value={
+                "status": "READY_GPU_VISIBLE",
+                "providerPreflight": {"heavyweightInstallAllowed": True},
+            },
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator._gate",
+            return_value={
+                "status": "READY_NEW_STRATEGY",
+                "provider": "trellis2",
+                "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            },
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.prepare_handoff",
+            return_value={"status": "READY_INPUTS_BLOCKED_AUTHORING"},
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.shutil.which",
+            return_value="blender",
+        ), patch("scripts.ai3d.hybrid_quality_orchestrator.write_json"):
+            report = hybrid_quality_orchestrator.build_hybrid_report(
+                art_root=Path(temporary),
+                output=Path(temporary) / "orchestration.json",
+                contract_path=contract_path,
+                socket_contract_path=ROOT / "contracts" / "current_roster_socket_contract_v001.json",
+                character="CH101",
+            )
+
+        self.assertEqual(report["selectedStrategies"], ["TRELLIS2_SINGLE_VIEW_V001"])
+        self.assertTrue(
+            report["strategies"]["TRELLIS2_SINGLE_VIEW_V001"]["runAllowed"]
+        )
+        self.assertFalse(report["unityInputAllowed"])
+
+    def test_trellis2_high_memory_requires_its_own_terms_acknowledgement(self):
+        gpu = [{"name": "NVIDIA A10G", "memoryMb": 24576, "driverVersion": "test"}]
+        torch = {
+            "available": True,
+            "cudaAvailable": True,
+            "torchKernelSupportsDevice": True,
+        }
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch.dict(os.environ, {}, clear=True):
+            blocked = build_report("trellis2")
+        self.assertEqual(blocked["status"], "BLOCKED_PROVIDER_PREFLIGHT")
+        self.assertEqual(
+            blocked["providerPreflight"]["licenseAcknowledgementEnv"],
+            "RE_CAMP_TRELLIS2_LICENSE_ACK",
+        )
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch.dict(os.environ, {"RE_CAMP_TRELLIS2_LICENSE_ACK": "1"}, clear=True):
+            ready = build_report("trellis2")
+        self.assertEqual(ready["status"], "READY_GPU_VISIBLE")
+        self.assertTrue(ready["providerPreflight"]["heavyweightInstallAllowed"])
+
+    def test_trellis2_wrapper_refuses_unpinned_checkout_and_locked_gate_change(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "trellis2",
+                        "status": "READY_GPU_VISIBLE",
+                        "providerPreflight": {
+                            "vramSufficient": True,
+                            "heavyweightInstallAllowed": True,
+                        },
+                        "unityInputAllowed": True,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            args = type(
+                "Args",
+                (),
+                {
+                    "provider_repo": repo,
+                    "input_image": image,
+                    "output_dir": root / "output",
+                    "preflight": preflight,
+                    "output_report": root / "report.json",
+                    "texture_size": 2048,
+                    "decimation_target": 100000,
+                    "execute": False,
+                },
+            )()
+            with patch(
+                "scripts.ai3d.run_trellis2_candidate.git_head",
+                return_value="not-the-pinned-commit",
+            ):
+                report = build_trellis2_report(args)
+        self.assertEqual(report["status"], "BLOCKED_PROVIDER_PREFLIGHT")
+        self.assertIn("TRELLIS2_COMMIT_MISMATCH", report["blockers"])
+        self.assertIn("PROJECT_GATE_ALREADY_OPEN", report["blockers"])
+        self.assertFalse(report["unityInputAllowed"])
+        self.assertFalse(report["productionPromotionAllowed"])
+
     def test_unified_candidate_metadata_preserves_semantic_audit(self):
         contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")
         with tempfile.TemporaryDirectory() as temporary:
@@ -440,6 +551,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         )
         for marker in (
             "TRELLIS_SINGLE_VIEW_V001",
+            "TRELLIS2_SINGLE_VIEW_V001",
             "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
             "UNIFIED_SEMANTIC_AUTHORING_V002",
             "SEMANTIC_DETAIL_AUTHORING_V003",
@@ -448,6 +560,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "build_ch101_unified_semantic_mesh.py",
             "build_ch101_semantic_detail_candidate.py",
             "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
+            "run_trellis2_candidate.py",
             "quality_progress_gate",
             "strict visual QA",
             "BLOCKED_PROVIDER_PREFLIGHT",
