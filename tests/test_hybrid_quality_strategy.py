@@ -21,6 +21,7 @@ from scripts.ai3d.run_partcrafter_candidate import (
     build_report as build_partcrafter_report,
     dependency_preflight as dependency_preflight_partcrafter,
 )
+from scripts.ai3d import run_partcrafter_candidate
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -63,6 +64,62 @@ class HybridQualityStrategyTests(unittest.TestCase):
         command = run_process.call_args.args[0]
         self.assertEqual(command[0], __import__("sys").executable)
         self.assertIn("PartCrafterPipeline", command[2])
+
+    def test_partcrafter_inference_adds_provider_root_to_pythonpath(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "partcrafter",
+                        "status": "READY_GPU_VISIBLE",
+                        "providerPreflight": {
+                            "vramSufficient": True,
+                            "heavyweightInstallAllowed": True,
+                            "licenseTermsAcknowledged": True,
+                        },
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            report = root / "report.json"
+            result = type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+            with patch(
+                "scripts.ai3d.run_partcrafter_candidate.git_head",
+                return_value="3d773bf02fad51c7ab31a5615573fec93b287b30",
+            ), patch(
+                "scripts.ai3d.run_partcrafter_candidate.subprocess.run",
+                side_effect=[result, result],
+            ) as run_process, patch(
+                "scripts.ai3d.run_partcrafter_candidate.sys.argv",
+                [
+                    "run_partcrafter_candidate.py",
+                    "--provider-repo",
+                    str(repo),
+                    "--input-image",
+                    str(image),
+                    "--output-dir",
+                    str(root / "output"),
+                    "--preflight",
+                    str(preflight),
+                    "--output-report",
+                    str(report),
+                    "--execute",
+                ],
+            ):
+                self.assertEqual(run_partcrafter_candidate.main(), 2)
+            inference_call = run_process.call_args_list[-1]
+            provider_env = inference_call.kwargs["env"]
+            self.assertEqual(
+                provider_env["PYTHONPATH"].split(os.pathsep)[0], str(repo.resolve())
+            )
 
     def test_partcrafter_wrapper_keeps_review_gates_locked_and_requires_part_count(self):
         with tempfile.TemporaryDirectory() as temporary:

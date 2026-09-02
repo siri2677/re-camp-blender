@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -204,7 +205,21 @@ def main() -> int:
                 "--rmbg",
             ]
             report["command"] = command
-            result = subprocess.run(command, cwd=args.provider_repo.resolve(), check=False)
+            provider_root = str(args.provider_repo.resolve())
+            provider_env = os.environ.copy()
+            existing_pythonpath = provider_env.get("PYTHONPATH", "")
+            provider_env["PYTHONPATH"] = (
+                provider_root
+                if not existing_pythonpath
+                else provider_root + os.pathsep + existing_pythonpath
+            )
+            report["pythonPathRoot"] = provider_root
+            result = subprocess.run(
+                command,
+                cwd=args.provider_repo.resolve(),
+                env=provider_env,
+                check=False,
+            )
             report["returnCode"] = result.returncode
             mesh_outputs, part_outputs, manifest = _find_outputs(output_dir)
             report["actualInference"] = result.returncode == 0
