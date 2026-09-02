@@ -9,7 +9,10 @@ from scripts.ai3d.colab_runtime_preflight import build_report
 from scripts.ai3d.common import load_contract, sha256_file
 from scripts.ai3d import hybrid_quality_orchestrator
 from scripts.ai3d.register_review_candidate import build_candidate_manifest
-from scripts.ai3d.run_trellis2_candidate import build_report as build_trellis2_report
+from scripts.ai3d.run_trellis2_candidate import (
+    build_report as build_trellis2_report,
+    dependency_preflight,
+)
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -481,6 +484,17 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("PROJECT_GATE_ALREADY_OPEN", report["blockers"])
         self.assertFalse(report["unityInputAllowed"])
         self.assertFalse(report["productionPromotionAllowed"])
+
+    def test_trellis2_dependency_preflight_is_import_only(self):
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.run_trellis2_candidate.subprocess.run",
+            return_value=type("Result", (), {"returncode": 0})(),
+        ) as run_process:
+            ready, status = dependency_preflight(Path(temporary))
+        self.assertTrue(ready)
+        self.assertEqual(status, "READY_IMPORTS")
+        command = run_process.call_args.args[0]
+        self.assertEqual(command[1:3], ["-c", "import torch; import trellis2; import o_voxel"])
 
     def test_unified_candidate_metadata_preserves_semantic_audit(self):
         contract = load_contract(ROOT / "contracts" / "ch101_ai3d_free_pipeline_v001.json")

@@ -48,6 +48,25 @@ def git_head(repo: Path) -> str:
     return result.stdout.strip() if result.returncode == 0 else "UNAVAILABLE"
 
 
+def dependency_preflight(repo: Path) -> tuple[bool, str]:
+    """Verify imports without loading checkpoints or starting inference."""
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import torch; import trellis2; import o_voxel",
+        ],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.returncode == 0, (
+        "READY_IMPORTS" if result.returncode == 0 else "TRELLIS2_DEPENDENCIES_IMPORT_FAILED"
+    )
+
+
 def _safe_int(value: Any, default: int) -> int:
     try:
         return int(value)
@@ -152,27 +171,33 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     if args.execute and report["status"] == "READY_TO_RUN_ONCE":
-        script_path = output_dir / "trellis2-inference.py"
-        _write_inference_script(args, script_path)
-        result = subprocess.run(
-            [sys.executable, str(script_path)],
-            cwd=args.provider_repo.resolve(),
-            check=False,
-        )
-        report["returnCode"] = result.returncode
-        report["actualInference"] = result.returncode == 0
-        report["meshOutputs"] = sorted(
-            str(path.resolve())
-            for path in output_dir.glob("*.glb")
-            if path.is_file()
-        )
-        if result.returncode != 0:
-            report["status"] = "TRELLIS2_EXECUTION_FAILED"
-        elif not report["meshOutputs"]:
-            report["status"] = "TRELLIS2_EXECUTION_NO_MESH"
-            report["blockers"] = ["MESH_EXTRACTION_OUTPUT_MISSING"]
+        imports_ready, dependency_status = dependency_preflight(args.provider_repo.resolve())
+        report["dependencyPreflight"] = dependency_status
+        if not imports_ready:
+            report["status"] = "BLOCKED_PROVIDER_DEPENDENCY_PREFLIGHT"
+            report["blockers"].append("TRELLIS2_DEPENDENCIES_IMPORT_FAILED")
         else:
-            report["status"] = "TRELLIS2_EXECUTED"
+            script_path = output_dir / "trellis2-inference.py"
+            _write_inference_script(args, script_path)
+            result = subprocess.run(
+                [sys.executable, str(script_path)],
+                cwd=args.provider_repo.resolve(),
+                check=False,
+            )
+            report["returnCode"] = result.returncode
+            report["actualInference"] = result.returncode == 0
+            report["meshOutputs"] = sorted(
+                str(path.resolve())
+                for path in output_dir.glob("*.glb")
+                if path.is_file()
+            )
+            if result.returncode != 0:
+                report["status"] = "TRELLIS2_EXECUTION_FAILED"
+            elif not report["meshOutputs"]:
+                report["status"] = "TRELLIS2_EXECUTION_NO_MESH"
+                report["blockers"] = ["MESH_EXTRACTION_OUTPUT_MISSING"]
+            else:
+                report["status"] = "TRELLIS2_EXECUTED"
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if report["status"] in {"READY_TO_RUN_ONCE", "TRELLIS2_EXECUTED"} else 2

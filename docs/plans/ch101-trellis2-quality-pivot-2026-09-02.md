@@ -32,9 +32,12 @@ any Unity/Production gate. The optional setup command is explicit:
    inference.
 3. If preflight is ready but no explicit setup command is supplied, it writes
    `BLOCKED_PROVIDER_SETUP_UNVERIFIED` and stops safely.
-4. With both preflight and setup command approved, the pinned checkout runs
-   once through `run_trellis2_candidate.py`.
-5. Any GLB follows the existing candidate registration → Blender refine →
+4. After setup, the wrapper imports `torch`, `trellis2`, and `o_voxel` without
+   loading checkpoints. An import failure is recorded as
+   `BLOCKED_PROVIDER_DEPENDENCY_PREFLIGHT` and inference does not start.
+5. With preflight, setup, and import smoke check approved, the pinned checkout
+   runs once through `run_trellis2_candidate.py`.
+6. Any GLB follows the existing candidate registration → Blender refine →
    evaluate → score → geometry hard gate → strict visual QA → ranking path.
 
 ## Gates
