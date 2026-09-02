@@ -454,6 +454,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
             "REGENERATE_REQUIRED",
             "unityInputAllowed",
             "productionPromotionAllowed",
+            "Kaggle archive retained in the output workspace",
         ):
             self.assertIn(marker, source)
 
