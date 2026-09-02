@@ -412,6 +412,30 @@ class HybridQualityStrategyTests(unittest.TestCase):
         )
         self.assertEqual(gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
 
+    def test_top_level_partcrafter_review_record_blocks_same_strategy(self):
+        record = (
+            ROOT
+            / "docs"
+            / "records"
+            / "ch101-ai3d"
+            / "2026-09-02-kaggle-partcrafter-v002-review.json"
+        )
+        history = collect_history(None, [record])
+        matching = [
+            item
+            for item in history
+            if item["strategyId"] == "PARTCRAFTER_PART_LEVEL_V001"
+        ]
+        self.assertEqual(len(matching), 1)
+        self.assertEqual(matching[0]["overallScore"], 0.462276)
+        self.assertTrue(matching[0]["rejected"])
+        gate = build_progress_gate(
+            provider="partcrafter",
+            strategy_id="PARTCRAFTER_PART_LEVEL_V001",
+            history=history,
+        )
+        self.assertEqual(gate["status"], "QUALITY_PLATEAU_SAME_STRATEGY")
+
     def test_nested_review_record_blocks_recorded_semantic_detail_strategy(self):
         record = (
             ROOT

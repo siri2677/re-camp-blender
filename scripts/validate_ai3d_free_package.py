@@ -38,6 +38,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "run_trellis16_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_partcrafter_candidate.py",
+    ROOT / "scripts" / "ai3d" / "diagnose_partcrafter_review.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
     ROOT / "scripts" / "ai3d" / "colab_runtime_preflight.py",
@@ -59,6 +60,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "apply_reference_projection_review.py",
     ROOT / "scripts" / "blender" / "apply_review_multiview_textures.py",
     ROOT / "scripts" / "blender" / "build_ai3d_review_asset.py",
+    ROOT / "scripts" / "blender" / "repair_partcrafter_review_candidate.py",
     ROOT / "scripts" / "blender" / "build_ch101_semantic_proxy.py",
 )
 NOTEBOOK_MARKERS = (
@@ -152,6 +154,10 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
         "run_trellis_candidate.py",
         "run_trellis16_candidate.py",
         "run_partcrafter_candidate.py",
+        "diagnose_partcrafter_review.py",
+        "repair_partcrafter_review_candidate.py",
+        "RE_CAMP_PARTCRAFTER_REPAIR_BLEND",
+        "PARTCRAFTER_STORED_ARTIFACT_REPAIR",
         "BLOCKED_PROVIDER_PREFLIGHT",
         "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
         "REGENERATE_REQUIRED",

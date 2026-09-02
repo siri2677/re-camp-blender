@@ -46,6 +46,39 @@ def _score_entries(
     payload: Any, parent: dict[str, Any] | None = None
 ) -> Iterable[tuple[dict[str, Any], dict[str, Any]]]:
     if isinstance(payload, dict):
+        # Durable provider review records may store the strategy, rejection,
+        # and score map at the top level without a candidateId.  Flatten that
+        # shape into the same synthetic entry used by the explicit plateau
+        # record so a fresh Kaggle session cannot rerun a rejected provider.
+        top_level_scores = payload.get("scores")
+        top_level_status = str(payload.get("status") or "")
+        if (
+            isinstance(payload.get("strategyId"), str)
+            and isinstance(top_level_scores, dict)
+            and top_level_status.startswith(("REGENERATE", "REJECT"))
+            and not isinstance(payload.get("candidateId"), str)
+        ):
+            flattened = {
+                "candidateId": (
+                    f"STRATEGY_RECORD:{payload['strategyId']}:"
+                    f"{payload.get('recordVersion', 'UNKNOWN')}"
+                ),
+                "strategyId": payload["strategyId"],
+                "provider": payload.get("provider", ""),
+                "status": top_level_status,
+                "eligibleForHumanReview": False,
+            }
+            for output_key, score_key in (
+                ("overallScore", "overall"),
+                ("appearanceScore", "appearance"),
+                ("silhouetteScore", "silhouette"),
+                ("colorScore", "color"),
+                ("technicalScore", "technical"),
+            ):
+                score_entry = top_level_scores.get(score_key)
+                if isinstance(score_entry, dict) and "value" in score_entry:
+                    flattened[output_key] = score_entry["value"]
+            yield flattened, payload
         # Durable quality-progress records are intentionally smaller than a
         # candidate score report and may not carry a candidateId.  Treat a
         # recorded same-strategy plateau as one synthetic score entry so a

@@ -72,3 +72,29 @@ promoted to a Unity socket or production semantic group automatically.
 If PartCrafter fails, compare one new strategy such as SPAR3D only when its
 Hugging Face access is available. Do not rerun PartCrafter with the same
 strategy after a rejection, and do not lower the strict thresholds.
+
+## Rejection diagnosis and stored-artifact repair
+
+The v002 rejection record is also supplied to `quality_progress_gate`. Its
+top-level `strategyId`, `scores`, and `REGENERATE_REQUIRED` state are flattened
+into the gate history, so PartCrafter cannot be selected again by a fresh
+Kaggle notebook run.
+
+The only automatic repair allowed for the stored v002 artifact is
+`scripts/blender/repair_partcrafter_review_candidate.py`. Set
+`RE_CAMP_PARTCRAFTER_REPAIR_BLEND` to a supplied review `.blend` to run the
+bounded path:
+
+```text
+join provider objects
+→ bridge measured gaps only within the safe distance
+→ decimate to the contract triangle budget
+→ generate missing UVs
+→ apply the coarse CH101 review palette
+→ re-evaluate and re-score
+```
+
+An unsafe component gap blocks the repair without saving a partial output.
+Semantic material mapping and reference-conditioned face/hair/outfit/equipment
+geometry remain external-input requirements. The repair is never a provider
+rerun, never a Production Mesh, and never enables Gate B or Unity input.

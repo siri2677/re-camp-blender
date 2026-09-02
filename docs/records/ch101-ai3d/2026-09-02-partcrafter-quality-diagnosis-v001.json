@@ -1,0 +1,55 @@
+{
+  "recordVersion": "ch101-ai3d-partcrafter-quality-diagnosis-v001",
+  "recordedAt": "2026-09-02T18:30:00+09:00",
+  "sourceRecord": "2026-09-02-kaggle-partcrafter-v002-review.json",
+  "character": "CH101",
+  "provider": "partcrafter",
+  "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+  "status": "QUALITY_DIAGNOSIS_COMPLETE",
+  "scoreSnapshot": {
+    "overall": {"value": 0.462276, "minimum": 0.6, "gap": 0.137724},
+    "silhouette": {"value": 0.400006, "minimum": 0.5, "gap": 0.099994},
+    "appearance": {"value": 0.469088, "minimum": 0.55, "gap": 0.080912},
+    "color": {"value": 0.232131, "minimum": 0.38, "gap": 0.147869},
+    "faceDetail": {"value": 0.733035, "minimum": 0.25, "gap": 0.0},
+    "technical": {"value": 0.85, "minimum": 0.9, "gap": 0.05}
+  },
+  "rootCauses": [
+    {
+      "code": "DETACHED_PROVIDER_PARTS",
+      "evidence": "PartCrafter emitted four provider parts and the largest connected component hard gate failed.",
+      "fixStatus": "AUTOMATION_ADDED",
+      "fix": "Join meshes, bridge only measured nearby gaps, and remeasure before scoring."
+    },
+    {
+      "code": "SOURCE_TRIANGLE_BUDGET_EXCEEDED",
+      "evidence": "The source mesh exceeded the configured maximum before final review export.",
+      "fixStatus": "AUTOMATION_ADDED",
+      "fix": "Apply bounded deterministic decimation and reject the repair if the budget is still exceeded."
+    },
+    {
+      "code": "UNLABELED_PROVIDER_APPEARANCE",
+      "evidence": "Provider part indices do not identify CH101 body/hair/outfit/equipment semantic regions; color gap is 0.147869.",
+      "fixStatus": "EXTERNAL_INPUT_REQUIRED",
+      "fix": "Use explicit semantic material mapping or reference-conditioned texture authoring."
+    },
+    {
+      "code": "REFERENCE_IDENTITY_MISMATCH",
+      "evidence": "Silhouette and appearance remain below strict thresholds even though faceDetail is numerically high.",
+      "fixStatus": "EXTERNAL_INPUT_REQUIRED",
+      "fix": "Pivot to a new reference-conditioned provider or real semantic Blender authoring; do not repeat PartCrafter inference."
+    }
+  ],
+  "repairPath": {
+    "script": "scripts/blender/repair_partcrafter_review_candidate.py",
+    "status": "READY_FOR_STORED_ARTIFACT_ONLY",
+    "providerInferenceRerunAllowed": false,
+    "unsafeGapPolicy": "BLOCK_AND_PIVOT",
+    "maximumSourceTriangles": 300000
+  },
+  "nextStep": "Run the stored-artifact repair when the Kaggle review .blend is supplied; otherwise pivot to a new reference-conditioned strategy.",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

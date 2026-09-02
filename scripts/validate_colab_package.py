@@ -42,6 +42,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/apply_reference_projection_review.py",
     "scripts/blender/apply_review_multiview_textures.py",
     "scripts/blender/build_ai3d_review_asset.py",
+    "scripts/blender/repair_partcrafter_review_candidate.py",
     "scripts/blender/build_ch101_semantic_proxy.py",
 )
 UTILITY_SCRIPTS = (
@@ -62,6 +63,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/run_trellis16_candidate.py",
     "scripts/ai3d/run_trellis2_candidate.py",
     "scripts/ai3d/run_partcrafter_candidate.py",
+    "scripts/ai3d/diagnose_partcrafter_review.py",
     "scripts/ai3d/register_wonder3d_candidate.py",
     "scripts/ai3d/build_wonder3d_voxel_surface.py",
     "scripts/ai3d/colab_runtime_preflight.py",
@@ -214,6 +216,11 @@ REQUIRED_MARKERS = {
         "run_trellis_candidate.py",
         "run_trellis16_candidate.py",
         "run_partcrafter_candidate.py",
+        "diagnose_partcrafter_review.py",
+        "repair_partcrafter_review_candidate.py",
+        "RE_CAMP_PARTCRAFTER_REPAIR_BLEND",
+        "PARTCRAFTER_STORED_ARTIFACT_REPAIR",
+        "2026-09-02-kaggle-partcrafter-v002-review.json",
         "RE_CAMP_TRELLIS16_SETUP_COMMAND",
         "RE_CAMP_PARTCRAFTER_SETUP_COMMAND",
         "BLOCKED_PROVIDER_PREFLIGHT",

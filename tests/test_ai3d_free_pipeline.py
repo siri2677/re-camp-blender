@@ -1185,6 +1185,33 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertNotIn("API_KEY", serialized)
         self.assertNotIn("HF_TOKEN", serialized)
 
+    def test_partcrafter_review_diagnosis_exposes_fixable_and_unfixable_causes(self):
+        from scripts.ai3d.diagnose_partcrafter_review import build_diagnosis
+
+        record = json.loads(
+            Path(
+                "docs/records/ch101-ai3d/2026-09-02-kaggle-partcrafter-v002-review.json"
+            ).read_text(encoding="utf-8")
+        )
+        diagnosis = build_diagnosis(record)
+        self.assertEqual(diagnosis["status"], "QUALITY_DIAGNOSIS_COMPLETE")
+        self.assertIn("LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM", diagnosis["failureReasons"])
+        self.assertIn("CONNECTIVITY_REPAIR_REVIEW_ONLY", diagnosis["fixesAvailableNow"])
+        self.assertIn("SEMANTIC_MATERIAL_MAPPING_REQUIRED", diagnosis["externalInputsRequired"])
+        self.assertIn("REFERENCE_CONDITIONED_GEOMETRY_REQUIRED", diagnosis["externalInputsRequired"])
+
+    def test_partcrafter_review_repair_path_is_bounded_and_gate_locked(self):
+        source = Path(
+            "scripts/blender/repair_partcrafter_review_candidate.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn("--max-triangles", source)
+        self.assertIn("maxBridgeDistance", source)
+        self.assertIn("REVIEW_REPAIR_APPLIED", source)
+        self.assertIn("REVIEW_REPAIR_BLOCKED_UNSAFE_GAPS", source)
+        self.assertIn("validate_stored_review_gate", source)
+        self.assertIn('scene["unity_input_allowed"] = False', source)
+        self.assertIn('scene["production_promotion_allowed"] = False', source)
+
     def test_color_render_rerun_is_persisted_and_stays_gate_locked(self):
         record = json.loads(
             Path(

@@ -439,3 +439,12 @@ detail `0.733035`, technical `0.85`였으며, `SOURCE_TRIANGLE_COUNT_ABOVE_MAXIM
 전환한다. 상세 provenance·SHA256·Kaggle 경로는
 `2026-09-02-kaggle-partcrafter-v002-review.json`에 보관한다. 모든 Gate B·Production·
 Unity 입력은 계속 잠금이다.
+
+같은 PartCrafter 결과를 반복 추론하지 않기 위해 v002 실패 원인을 별도 진단했다.
+분리된 provider part와 삼각형 예산은 저장된 review `.blend`에 한해 자동 보정할 수
+있지만, semantic material mapping·CH101 실루엣/의상 정체성은 기존 파일만으로
+복원할 수 없다. 따라서 안전한 간격만 연결하고 예산을 제한하는
+`repair_partcrafter_review_candidate.py`를 추가했으며, 간격이 크면 억지로 연결하지
+않고 차단한다. 진단·후속 입력 조건은
+`2026-09-02-partcrafter-quality-diagnosis-v001.json`에 보관한다. 보정 후에도 strict
+visual QA와 Gate B는 별도로 통과해야 하며, 모든 Production·Unity gate는 잠금이다.
