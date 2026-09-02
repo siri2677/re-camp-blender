@@ -2,7 +2,8 @@
   "recordVersion": "ch101-ai3d-trellis2-preflight-pivot-v001",
   "recordedAt": "2026-09-02",
   "branch": "feature/ch101-free-ai3d-autobuild",
-  "toolsCommit": "b3e48a1",
+  "toolsCommit": "a27d0e7",
+  "followUpValidationCommit": "4c9e3b5",
   "provider": {
     "name": "trellis2",
     "repository": "https://github.com/microsoft/TRELLIS.2.git",
@@ -27,6 +28,18 @@
     "nextRequiredInput": "Kaggle or other Linux runtime with supported NVIDIA GPU >= 24 GB",
     "explicitSetupEnv": "RE_CAMP_TRELLIS2_SETUP_COMMAND",
     "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS2_LICENSE_ACK"
+  },
+  "localPreflight": {
+    "status": "BLOCKED_PROVIDER_PREFLIGHT",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pythonVersion": "3.14.5",
+    "gpuCount": 0,
+    "torchAvailable": false,
+    "cudaRuntimeVisible": false,
+    "torchKernelSupportsDevice": false,
+    "maximumVisibleVramMb": null,
+    "heavyweightInstallAllowed": false,
+    "reason": "The local host has no visible NVIDIA GPU and cannot satisfy the documented Linux/CUDA/24-GB runtime requirement."
   },
   "currentGate": {
     "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
