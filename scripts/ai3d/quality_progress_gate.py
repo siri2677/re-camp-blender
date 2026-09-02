@@ -101,8 +101,14 @@ def _normalise_entry(
         or ""
     )
     disposition = str(entry.get("disposition") or parent.get("disposition") or "")
-    overall = _number(entry.get("overallScore", scores.get("overallScore")))
-    appearance = _number(entry.get("appearanceScore", scores.get("appearanceScore")))
+    overall = _number(
+        entry.get("overallScore", scores.get("overallScore", scores.get("overall")))
+    )
+    appearance = _number(
+        entry.get(
+            "appearanceScore", scores.get("appearanceScore", scores.get("appearance"))
+        )
+    )
     rejected = (
         status.startswith("REGENERATE")
         or recommendation.startswith("REJECT")
@@ -139,11 +145,42 @@ def collect_history(
             continue
         seen.add(resolved)
         payload = _read_json(resolved)
-        entries.extend(
+        # Durable review records keep the strategy under ``authoring`` and
+        # the score/candidate under ``evaluation``.  Flatten that sibling
+        # relationship before the generic recursive scan so a future session
+        # cannot rerun a rejected strategy merely because the record shape
+        # differs from candidate-score.json.
+        authoring = payload.get("authoring") if isinstance(payload, dict) else None
+        evaluation = payload.get("evaluation") if isinstance(payload, dict) else None
+        structured_entry = None
+        if (
+            isinstance(authoring, dict)
+            and isinstance(evaluation, dict)
+            and isinstance(authoring.get("strategyId"), str)
+            and isinstance(authoring.get("candidateId") or evaluation.get("candidateId"), str)
+            and (
+                isinstance(evaluation.get("scores"), dict)
+                or isinstance(evaluation.get("status"), str)
+            )
+        ):
+            structured_entry = {
+                **evaluation,
+                "candidateId": authoring.get("candidateId") or evaluation.get("candidateId"),
+                "strategyId": authoring["strategyId"],
+                "provider": authoring.get("provider") or payload.get("provider", ""),
+            }
+            entries.append(_normalise_entry(structured_entry, {}, resolved))
+
+        generic_entries = [
             _normalise_entry(entry, parent, resolved)
             for entry, parent in _score_entries(payload)
             if entry.get("candidateId")
-        )
+        ]
+        # The evaluation child of the structured shape is already represented
+        # above; discard its strategy-less recursive duplicate.
+        if structured_entry is not None:
+            generic_entries = [item for item in generic_entries if item["strategyId"]]
+        entries.extend(generic_entries)
         # Some durable Kaggle execution records store the candidate under a
         # strategy-keyed map and omit the repeated strategyId field.  Preserve
         # that map key when importing the rejection into the one-shot gate.
