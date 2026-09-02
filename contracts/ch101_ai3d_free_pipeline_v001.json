@@ -172,6 +172,27 @@
       "unityInputAllowed": false,
       "productionPromotionAllowed": false
     },
+    "trellis16": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_LOW_VRAM_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.git",
+      "commit": "442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+      "model": "microsoft/TRELLIS-image-large",
+      "license": "VERIFY_UPSTREAM_TERMS",
+      "licenseNote": "Original TRELLIS is a separate 16 GB-class fallback; verify repository, checkpoint, and dependency terms before redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 16384,
+      "requiresGpu": true,
+      "officialApi": "TrellisImageTo3DPipeline",
+      "officialExample": "example.py",
+      "memoryProfile": "16GB_CLASS_TIGHT",
+      "experimental": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS_SINGLE_VIEW_16GB_V002",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
     "trellis2": {
       "mode": "OPEN_SOURCE_SINGLE_VIEW_RESEARCH_ONLY",
       "repository": "https://github.com/microsoft/TRELLIS.2.git",
@@ -232,6 +253,16 @@
       "strategyScope": "TRELLIS2_SINGLE_VIEW_RESEARCH_ONLY",
       "repeatPolicy": "PIVOT_AFTER_REJECTION",
       "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY"
+    },
+    "TRELLIS_SINGLE_VIEW_16GB_V002": {
+      "provider": "trellis16",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 16384,
+      "strategyScope": "TRELLIS_SINGLE_VIEW_16GB_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY",
+      "memoryPolicy": "16GB_CLASS_TIGHT_NO_OFFICIAL_GUARANTEE"
     }
   },
   "candidateAcceptance": {

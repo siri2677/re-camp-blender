@@ -35,6 +35,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "hybrid_quality_orchestrator.py",
     ROOT / "scripts" / "ai3d" / "register_review_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis_candidate.py",
+    ROOT / "scripts" / "ai3d" / "run_trellis16_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
@@ -140,12 +141,14 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
     text = "\n".join("".join(cell.get("source", [])) for cell in cells)
     for marker in (
         "TRELLIS_SINGLE_VIEW_V001",
+        "TRELLIS_SINGLE_VIEW_16GB_V002",
         "TRELLIS2_SINGLE_VIEW_V001",
         "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
         "hybrid_quality_orchestrator.py",
         "build_ch101_semantic_proxy.py",
         "register_review_candidate.py",
         "run_trellis_candidate.py",
+        "run_trellis16_candidate.py",
         "BLOCKED_PROVIDER_PREFLIGHT",
         "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
         "REGENERATE_REQUIRED",
@@ -219,6 +222,17 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, "TRELLIS must remain disabled as an automatic fallback")
     if trellis.get("unityInputAllowed") is not False or trellis.get("productionPromotionAllowed") is not False:
         fail(errors, "TRELLIS research candidate must keep Unity and production gates locked")
+    trellis16 = experimental.get("trellis16", {})
+    if len(trellis16.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.trellis16 must pin a 40-character commit")
+    if trellis16.get("strategyId") != "TRELLIS_SINGLE_VIEW_16GB_V002":
+        fail(errors, "16GB TRELLIS strategy ID must be TRELLIS_SINGLE_VIEW_16GB_V002")
+    if trellis16.get("minimumVramMb", 0) < 16384:
+        fail(errors, "16GB TRELLIS minimum VRAM must fail safe at 16384 MB or higher")
+    if trellis16.get("fallbackEnabled") is not False:
+        fail(errors, "16GB TRELLIS must remain disabled as an automatic fallback")
+    if trellis16.get("unityInputAllowed") is not False or trellis16.get("productionPromotionAllowed") is not False:
+        fail(errors, "16GB TRELLIS research candidate must keep Unity and production gates locked")
     trellis2 = experimental.get("trellis2", {})
     if len(trellis2.get("commit", "")) != 40:
         fail(errors, "experimentalProviders.trellis2 must pin a 40-character commit")
@@ -233,6 +247,7 @@ def validate_contract(errors: list[str]) -> None:
     strategies = contract.get("qualityStrategies", {})
     for strategy_id, provider in (
         ("TRELLIS_SINGLE_VIEW_V001", "trellis"),
+        ("TRELLIS_SINGLE_VIEW_16GB_V002", "trellis16"),
         ("TRELLIS2_SINGLE_VIEW_V001", "trellis2"),
         ("SEMANTIC_PROXY_REFERENCE_FITTED_V001", "semanticProxy"),
     ):

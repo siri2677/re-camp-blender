@@ -182,6 +182,16 @@ CH101→CH105→Unity→Android gate sequence is documented in
 If Blender is unavailable, the notebook records the blocked decision and does not
 create a fake candidate.
 
+TRELLIS.2 is not mandatory. For a 16 GB-class CUDA runtime, the hybrid
+Notebook also has a separate one-shot original TRELLIS lane,
+`TRELLIS_SINGLE_VIEW_16GB_V002`, using the official
+`TrellisImageTo3DPipeline` API at the pinned upstream commit. It requires a
+single GPU exposing at least 16384 MB, explicit terms acknowledgement, and an
+explicit setup command. The route is intentionally conservative and review-only;
+it does not lower strict visual thresholds, repeat the older TRELLIS strategy,
+or unlock Production/Unity gates. See
+[the 16GB fallback plan](docs/plans/ch101-trellis16-fallback-plan-2026-09-02.md).
+
 After the V003 semantic detail pivot was rejected, the next one-shot provider lane is
 the official Microsoft `TRELLIS.2` API. It is pinned to
 `75fbf0183001ed9876c8dbb35de6b68552ee08bd` and guarded by a Linux/CUDA/

@@ -59,7 +59,7 @@ InstantMesh 재시도도 `front`·`right`·`back` 입력을 시도별로 순환�
 
 - Meshy 무료 플랜: 현재 모델 다운로드와 API 접근이 없어 자동 파이프라인에 사용하지 않는다.
 - Hunyuan3D-2: 공식 Community License의 허용 지역에서 대한민국이 제외되어 사용하지 않는다.
-- TRELLIS.2: 현재 PC에 지원되는 NVIDIA GPU가 없고 무료 Colab에서 요구 VRAM을 안정적으로 확보할 수 없어 제외한다.
+- TRELLIS.2: 현재 PC에 지원되는 NVIDIA GPU가 없고 무료 Colab에서 요구 VRAM을 안정적으로 확보할 수 없어 24 GB 경로는 제외한다. 16 GB-class 런타임 보완은 원본 TRELLIS의 별도 `TRELLIS_SINGLE_VIEW_16GB_V002` one-shot 전략으로만 검증한다.
 
 ## 실행 단계
 

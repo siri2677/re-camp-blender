@@ -19,13 +19,22 @@ from pathlib import Path
 from typing import Any
 
 
-GPU_PROVIDERS = {"sf3d", "instantmesh", "triposr", "wonder3D", "trellis", "trellis2"}
+GPU_PROVIDERS = {
+    "sf3d",
+    "instantmesh",
+    "triposr",
+    "wonder3D",
+    "trellis",
+    "trellis16",
+    "trellis2",
+}
 
 # TRELLIS is deliberately conservative: a visible GPU is not enough to
 # authorize installation of its heavyweight stack.  The documented pipeline
 # needs a high-memory CUDA device and its upstream/checkpoint terms must be
 # acknowledged in the runtime without storing a secret.
 TRELLIS_MINIMUM_VRAM_MB = 24576
+TRELLIS16_MINIMUM_VRAM_MB = 16384
 TRELLIS2_MINIMUM_VRAM_MB = 24576
 
 
@@ -104,13 +113,19 @@ def build_report(provider: str) -> dict[str, Any]:
     torch_info = torch_status()
     requires_gpu = provider in GPU_PROVIDERS
     provider_preflight: dict[str, Any] = {}
-    if provider in {"trellis", "trellis2"}:
+    if provider in {"trellis", "trellis16", "trellis2"}:
         minimum_vram_mb = (
-            TRELLIS2_MINIMUM_VRAM_MB if provider == "trellis2" else TRELLIS_MINIMUM_VRAM_MB
+            TRELLIS2_MINIMUM_VRAM_MB
+            if provider == "trellis2"
+            else TRELLIS16_MINIMUM_VRAM_MB
+            if provider == "trellis16"
+            else TRELLIS_MINIMUM_VRAM_MB
         )
         license_env = (
             "RE_CAMP_TRELLIS2_LICENSE_ACK"
             if provider == "trellis2"
+            else "RE_CAMP_TRELLIS16_LICENSE_ACK"
+            if provider == "trellis16"
             else "RE_CAMP_TRELLIS_LICENSE_ACK"
         )
         maximum_vram = max(
@@ -130,6 +145,8 @@ def build_report(provider: str) -> dict[str, Any]:
             "licenseAcknowledgementEnv": license_env,
             "heavyweightInstallAllowed": False,
         }
+        if provider == "trellis16":
+            provider_preflight["linuxRuntime"] = platform.system() == "Linux"
         trellis_ready = (
             bool(gpus)
             and torch_info.get("available")
@@ -137,6 +154,10 @@ def build_report(provider: str) -> dict[str, Any]:
             and torch_info.get("torchKernelSupportsDevice")
             and provider_preflight["vramSufficient"]
             and license_acknowledged
+            and (
+                provider != "trellis16"
+                or provider_preflight.get("linuxRuntime") is True
+            )
         )
         if trellis_ready:
             status = "READY_GPU_VISIBLE"

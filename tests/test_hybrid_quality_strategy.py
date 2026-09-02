@@ -13,6 +13,10 @@ from scripts.ai3d.run_trellis2_candidate import (
     build_report as build_trellis2_report,
     dependency_preflight,
 )
+from scripts.ai3d.run_trellis16_candidate import (
+    build_report as build_trellis16_report,
+    dependency_preflight as dependency_preflight_trellis16,
+)
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -20,6 +24,92 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class HybridQualityStrategyTests(unittest.TestCase):
+    def test_trellis16_accepts_16gb_class_gpu_only_with_explicit_terms_acknowledgement(self):
+        gpu = [{"name": "NVIDIA T4", "memoryMb": 16384, "driverVersion": "test"}]
+        torch = {
+            "available": True,
+            "cudaAvailable": True,
+            "torchKernelSupportsDevice": True,
+        }
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch("scripts.ai3d.colab_runtime_preflight.platform.system", return_value="Linux"), patch.dict(os.environ, {}, clear=True):
+            blocked = build_report("trellis16")
+        self.assertEqual(blocked["status"], "BLOCKED_PROVIDER_PREFLIGHT")
+        self.assertEqual(blocked["providerPreflight"]["minimumVramMb"], 16384)
+        self.assertEqual(
+            blocked["providerPreflight"]["licenseAcknowledgementEnv"],
+            "RE_CAMP_TRELLIS16_LICENSE_ACK",
+        )
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch("scripts.ai3d.colab_runtime_preflight.platform.system", return_value="Linux"), patch.dict(os.environ, {"RE_CAMP_TRELLIS16_LICENSE_ACK": "1"}, clear=True):
+            ready = build_report("trellis16")
+        self.assertEqual(ready["status"], "READY_GPU_VISIBLE")
+        self.assertTrue(ready["providerPreflight"]["heavyweightInstallAllowed"])
+
+    def test_trellis16_dependency_preflight_uses_notebook_python(self):
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.run_trellis16_candidate.subprocess.run",
+            return_value=type("Result", (), {"returncode": 0})(),
+        ) as run_process:
+            ready, status = dependency_preflight_trellis16(Path(temporary))
+        self.assertTrue(ready)
+        self.assertEqual(status, "READY_IMPORTS")
+        command = run_process.call_args.args[0]
+        self.assertEqual(command[0], __import__("sys").executable)
+        self.assertIn("import trellis", command[2])
+
+    def test_trellis16_wrapper_keeps_review_gates_locked_and_requires_provider_preflight(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "trellis16",
+                        "status": "BLOCKED_PROVIDER_PREFLIGHT",
+                        "providerPreflight": {
+                            "vramSufficient": False,
+                            "heavyweightInstallAllowed": False,
+                        },
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            args = type(
+                "Args",
+                (),
+                {
+                    "provider_repo": repo,
+                    "input_image": image,
+                    "output_dir": root / "output",
+                    "preflight": preflight,
+                    "output_report": root / "report.json",
+                    "texture_size": 1024,
+                    "simplify": 0.95,
+                    "seed": 1,
+                    "attention_backend": "",
+                    "execute": False,
+                },
+            )()
+            with patch(
+                "scripts.ai3d.run_trellis16_candidate.git_head",
+                return_value="442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+            ):
+                report = build_trellis16_report(args)
+        self.assertEqual(report["status"], "BLOCKED_PROVIDER_PREFLIGHT")
+        self.assertIn("PROVIDER_PREFLIGHT_NOT_READY", report["blockers"])
+        self.assertIn("TRELLIS16_VRAM_INSUFFICIENT", report["blockers"])
+        self.assertFalse(report["unityInputAllowed"])
+        self.assertFalse(report["productionPromotionAllowed"])
+
     def test_trellis_low_vram_fails_provider_preflight_without_install_authorization(self):
         with patch(
             "scripts.ai3d.colab_runtime_preflight.nvidia_gpus",
@@ -411,6 +501,53 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertEqual(report["selectedStrategies"], ["TRELLIS2_SINGLE_VIEW_V001"])
         self.assertTrue(
             report["strategies"]["TRELLIS2_SINGLE_VIEW_V001"]["runAllowed"]
+        )
+        self.assertFalse(report["unityInputAllowed"])
+
+    def test_orchestrator_selects_original_trellis16_when_trellis2_is_blocked(self):
+        contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
+
+        def fake_runtime(provider):
+            ready = provider == "trellis16"
+            return {
+                "provider": provider,
+                "status": "READY_GPU_VISIBLE" if ready else "BLOCKED_PROVIDER_PREFLIGHT",
+                "providerPreflight": {"heavyweightInstallAllowed": ready},
+            }
+
+        def fake_gate(provider, strategy_id, score_dir, history_records):
+            ready = strategy_id == "TRELLIS_SINGLE_VIEW_16GB_V002"
+            return {
+                "status": "READY_NEW_STRATEGY" if ready else "QUALITY_PLATEAU_SAME_STRATEGY",
+                "provider": provider,
+                "strategyId": strategy_id,
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            }
+
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.build_runtime_report",
+            side_effect=fake_runtime,
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator._gate", side_effect=fake_gate
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.prepare_handoff",
+            return_value={"status": "READY_INPUTS_BLOCKED_AUTHORING"},
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.shutil.which",
+            return_value="blender",
+        ), patch("scripts.ai3d.hybrid_quality_orchestrator.write_json"):
+            report = hybrid_quality_orchestrator.build_hybrid_report(
+                art_root=Path(temporary),
+                output=Path(temporary) / "orchestration.json",
+                contract_path=contract_path,
+                socket_contract_path=ROOT / "contracts" / "current_roster_socket_contract_v001.json",
+                character="CH101",
+            )
+
+        self.assertEqual(report["selectedStrategies"], ["TRELLIS_SINGLE_VIEW_16GB_V002"])
+        self.assertTrue(
+            report["strategies"]["TRELLIS_SINGLE_VIEW_16GB_V002"]["runAllowed"]
         )
         self.assertFalse(report["unityInputAllowed"])
 

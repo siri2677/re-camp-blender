@@ -23,6 +23,15 @@ NVIDIA GPU, CUDA kernel, Linux 및 별도 약관 확인이 모두 필요하므�
 고정 commit·공식 Python API·설정 명령·게이트 상태는
 `2026-09-02-trellis2-preflight-pivot-v001.json`과
 `docs/plans/ch101-trellis2-quality-pivot-2026-09-02.md`에 보관한다.
+
+TRELLIS.2는 필수가 아니므로 16 GB-class 런타임을 위한 별도 원본 TRELLIS
+fallback도 준비했다. `TRELLIS_SINGLE_VIEW_16GB_V002`는 공식
+`TrellisImageTo3DPipeline` API와 고정 commit을 사용하고, 단일 GPU의 실제
+VRAM이 16384 MB 이상이며 `RE_CAMP_TRELLIS16_LICENSE_ACK=1`과 명시적인
+`RE_CAMP_TRELLIS16_SETUP_COMMAND`가 있을 때만 one-shot 실행한다. 현재 로컬은
+GPU가 없으므로 이 경로도 실행되지 않았고, 후보·점수·Alpha Review 통과를 주장하지
+않는다. 상세 계획은 `docs/plans/ch101-trellis16-fallback-plan-2026-09-02.md`에
+보관한다.
 Workbench→Eevee 색상 렌더 재검증 결과는 `2026-08-19-color-render-rerun.json`에 보관한다.
 새 Colab T4에서 Provider fallback부터 3회 후보 생성·평가까지 자동 실행한 결과는
 `2026-08-19-colab-t4-automatic-run.json`에 보관한다.

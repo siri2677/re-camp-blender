@@ -68,11 +68,14 @@ Wonder3D와 V001 semantic proxy의 거절 이력이 있으므로 해당 전략�
 새 Notebook `notebooks/07_ch101_hybrid_quality_strategies.ipynb`는 다음 경로를
 quality gate에 따라 각각 최대 한 번만 평가한다.
 
-1. `TRELLIS_SINGLE_VIEW_V001`: 24576 MB 이상 VRAM, CUDA kernel, 약관 확인을
+1. `TRELLIS_SINGLE_VIEW_16GB_V002`: 원본 TRELLIS 공식 API를 16384 MB 이상
+   VRAM, CUDA kernel, 약관 확인을 통과할 때만 one-shot 실행한다. 24 GB 이상
+   환경에서는 `TRELLIS2_SINGLE_VIEW_V001`을 우선 검토한다.
+2. `TRELLIS_SINGLE_VIEW_V001`: 24576 MB 이상 VRAM, CUDA kernel, 약관 확인을
    포함한 provider preflight가 모두 PASS일 때만 실행한다.
-2. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`: 과거 경로로 기록만 유지하며 거절 이력이
+3. `SEMANTIC_PROXY_REFERENCE_FITTED_V001`: 과거 경로로 기록만 유지하며 거절 이력이
    있으면 재실행하지 않는다.
-3. `UNIFIED_SEMANTIC_AUTHORING_V002`: CPU Blender에서 연결형 primary shell,
+4. `UNIFIED_SEMANTIC_AUTHORING_V002`: CPU Blender에서 연결형 primary shell,
    semantic labels, LOD, rig, Socket placeholder를 만들고 remesh 결과를 검사한다.
 
 두 후보는 동일한 Blender refine → evaluate → score → strict visual QA → rank
