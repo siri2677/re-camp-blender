@@ -53,7 +53,7 @@
     "unitTests": "PASS",
     "pythonCompile": "PASS",
     "providerSourcePatchFixture": "PASS",
-    "kaggleRetest": "PENDING_V004_PATCH_COMMIT"
+    "kaggleRetest": "FAILED_V004_KAGGLE_RETEST"
   },
   "gates": {
     "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
@@ -61,5 +61,5 @@
     "unityInputAllowed": false,
     "productionPromotionAllowed": false
   },
-  "nextAction": "Push V004, rerun Notebook 08 once on Kaggle, and record whether SPAR3D completes diagnostic mesh export without registering a candidate."
+  "nextAction": "Keep V005 as the next one-time strategy correction; do not repeat V004 unchanged."
 }

@@ -112,6 +112,24 @@ class HybridQualityStrategyTests(unittest.TestCase):
                 '            )',
                 encoding="utf-8",
             )
+            backbone_dir = system_dir / "models" / "transformers"
+            backbone_dir.mkdir(parents=True)
+            (backbone_dir / "backbone.py").write_text(
+                'from typing import Optional\n'
+                '\n'
+                'import torch\n'
+                '\n'
+                '        #  attention\n'
+                '        x = torch.nn.functional.scaled_dot_product_attention(\n'
+                '            q.transpose(1, 2),\n'
+                '            k.transpose(1, 2),\n'
+                '            v.transpose(1, 2),\n'
+                '            attn_mask=None,\n'
+                '            dropout_p=self.attn_drop,\n'
+                '            scale=self.scale,\n'
+                '        ).transpose(1, 2)',
+                encoding="utf-8",
+            )
             with patch(
                 "scripts.ai3d.patch_spar3d_t4_compat.git_head",
                 return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
@@ -125,6 +143,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("torch.cat(sdf_chunks, dim=1)", patched_system)
         self.assertIn("runner.cli_defaults:1", report["applied"])
         self.assertIn("system.chunked_grid_decode:1", report["applied"])
+        self.assertIn("backbone.chunked_attention:1", report["applied"])
         self.assertEqual(report["missing"], [])
 
     def test_spar3d_t4_compat_patch_upgrades_previous_chunk_patch(self):
@@ -157,6 +176,24 @@ class HybridQualityStrategyTests(unittest.TestCase):
             (system_dir / "system.py").write_text(
                 _CHUNKED_GRID_DECODE_BLOCK_V003, encoding="utf-8"
             )
+            backbone_dir = system_dir / "models" / "transformers"
+            backbone_dir.mkdir(parents=True)
+            (backbone_dir / "backbone.py").write_text(
+                'from typing import Optional\n'
+                '\n'
+                'import torch\n'
+                '\n'
+                '        #  attention\n'
+                '        x = torch.nn.functional.scaled_dot_product_attention(\n'
+                '            q.transpose(1, 2),\n'
+                '            k.transpose(1, 2),\n'
+                '            v.transpose(1, 2),\n'
+                '            attn_mask=None,\n'
+                '            dropout_p=self.attn_drop,\n'
+                '            scale=self.scale,\n'
+                '        ).transpose(1, 2)',
+                encoding="utf-8",
+            )
             with patch(
                 "scripts.ai3d.patch_spar3d_t4_compat.git_head",
                 return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
@@ -165,6 +202,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
             upgraded = (system_dir / "system.py").read_text(encoding="utf-8")
 
         self.assertIn("system.chunked_grid_decode_backoff:1", report["applied"])
+        self.assertIn("backbone.chunked_attention:1", report["applied"])
         self.assertIn("SPAR3D_DECODER_MIN_CHUNK_SIZE", upgraded)
         self.assertNotIn("SPAR3D_DECODER_CHUNK_SIZE\", \"65536\"", upgraded)
         self.assertEqual(report["missing"], [])
@@ -257,6 +295,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         sanitized = sanitize_provider_output(raw)
         self.assertIn("RuntimeError", sanitized)
         self.assertIn("CUDA out of memory", sanitized)
+        self.assertIn("run.py", sanitized)
         self.assertNotIn("/kaggle/working/provider", sanitized)
         self.assertNotIn("hf_abcdefghijklmnopqrstuvwxyz", sanitized)
         self.assertNotIn("secret-value-must-not-appear", sanitized)
@@ -380,6 +419,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("media.githubusercontent.com/media/siri2677/re-camp", source)
         self.assertIn("downloaded_image.verify()", source)
         self.assertIn("SPAR3D_DECODER_CHUNK_SIZE", source)
+        self.assertIn("SPAR3D_ATTENTION_QUERY_CHUNK_SIZE", source)
         self.assertIn("RE_CAMP_SPAR3D_TEXTURE_RESOLUTION", source)
         self.assertNotIn("files.download", source)
 

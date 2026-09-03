@@ -223,3 +223,21 @@ candidate 미등록이었다. 상세 기록은
 - 다음 실패부터는 sanitized traceback 파일·라인을 함께 기록
 
 V004도 진단 전용이며 모든 Production·Gate B·Unity 입력은 계속 잠근다.
+
+## 2026-09-03 재현 결과: V004 CrossAttention score matrix 메모리 초과
+
+V004는 `8192` grid chunk와 CUDA FP16 decoder까지 진입했지만, 실제 Kaggle
+T4에서는 pinned `spar3d/models/transformers/backbone.py`의
+`CrossAttention.forward()` 경로에서 다시 CUDA OOM으로 종료됐다. traceback의
+소스 라인 `197`은 `FuseBlock.forward()`의 attention 호출이고, 라인 `43`은
+`scaled_dot_product_attention()` 호출이다. 즉 이번 실패는 인증·LFS 입력·CUDA
+커널·grid decoder가 아니라 T4에서 attention score matrix를 한 번에 만드는
+메모리 피크다. 상세 기록은
+`docs/records/ch101-ai3d/2026-09-03-spar3d-cross-attention-root-cause-v006.json`
+에 보관한다.
+
+V005는 동일 연산의 query 행을 기본 `256`개씩 나눠 계산하도록 패치하고,
+`SPAR3D_ATTENTION_QUERY_CHUNK_SIZE`로 조정할 수 있게 했다. 출력 순서는
+유지하며, V004의 grid decoder backoff·FP16·CLI 보정도 함께 유지한다.
+다음 Kaggle 재검증에서 attention 단계 통과 여부를 확인한다. 이 역시
+diagnostic-only이며 Production·Gate B·Unity 입력은 계속 잠근다.

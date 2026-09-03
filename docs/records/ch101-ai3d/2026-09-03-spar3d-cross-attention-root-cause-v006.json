@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "ch101-spar3d-kaggle-root-cause-v006",
+  "recordedAt": "2026-09-03",
+  "runtime": "Kaggle",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "8e28e72bf859bb533ed3524cfdbd3b1c8c25fd07",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "reproduction": {
+    "status": "SPAR3D_DIAGNOSTIC_FAILED",
+    "returnCode": 1,
+    "gpu": "2x Tesla T4 15360MB",
+    "selectedDevice": "GPU 0",
+    "preflight": "READY_GPU_VISIBLE",
+    "dependencyPreflight": "READY_IMPORTS",
+    "referenceDownload": "PASS_MEDIA_GITHUB_LFS_BINARY",
+    "runtimeCompatibilityPatch": "SPAR3D_T4_BF16_CLI_CHUNKED_BACKOFF_V004",
+    "configuredDecoderChunkSize": 8192,
+    "diagnosticTextureResolution": 512,
+    "diagnosticMeshCount": 0,
+    "candidateRegistered": false,
+    "tracebackFrames": [
+      "spar3d/models/transformers/backbone.py:197:FuseBlock.forward",
+      "torch.nn.Module._wrapped_call_impl",
+      "torch.nn.Module._call_impl",
+      "spar3d/models/transformers/backbone.py:43:CrossAttention.forward"
+    ],
+    "executionFailureDetail": "CUDA out of memory occurred in the pinned CrossAttention scaled-dot-product path; the previous sanitizer retained line numbers but not source basenames"
+  },
+  "rootCause": {
+    "status": "SOURCE_AND_RUNTIME_CONFIRMED",
+    "code": "SPAR3D_CROSS_ATTENTION_SCORE_MATRIX_EXCEEDS_T4_HEADROOM",
+    "evidence": "The V004 run passed GPU, access, dependency, and decoder setup, then failed at the pinned backbone CrossAttention call. Its scaled_dot_product_attention path can materialize a large query-key score matrix on a T4; the remaining 16GB headroom was insufficient.",
+    "notAuthFailure": true,
+    "notCudaKernelFailure": true,
+    "notReferenceFileFailure": true,
+    "notGridDecoderFailure": true
+  },
+  "fix": {
+    "patchId": "SPAR3D_T4_BF16_CLI_CHUNKED_ATTENTION_BACKOFF_V005",
+    "script": "scripts/ai3d/patch_spar3d_t4_compat.py",
+    "application": "run_spar3d_candidate.py applies the idempotent patch to the ephemeral provider checkout before execution",
+    "changes": [
+      "Process CrossAttention query rows in bounded 256-row chunks",
+      "Keep the same scaled dot-product attention operation and output ordering",
+      "Expose SPAR3D_ATTENTION_QUERY_CHUNK_SIZE for runtime tuning",
+      "Retain the V004 adaptive grid decoder, FP16 T4 path, and CLI defaults",
+      "Preserve detached pinned provider commit"
+    ],
+    "productionMesh": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "validation": {
+    "unitTests": "PASS",
+    "pythonCompile": "PASS",
+    "providerSourcePatchFixture": "PASS",
+    "kaggleRetest": "PENDING_V005_PATCH_COMMIT"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Push V005, rerun Notebook 08 once on Kaggle, and record whether SPAR3D completes diagnostic mesh export without registering a candidate."
+}

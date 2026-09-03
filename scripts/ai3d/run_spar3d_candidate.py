@@ -266,15 +266,18 @@ def sanitize_provider_output(output: str, limit: int = 6) -> str:
         r"http\s+[45]\d\d|killed|memory)"
     )
     lines = [" ".join(line.split()) for line in output.splitlines() if line.strip()]
-    selected = [line for line in lines if error_pattern.search(line)]
+    error_lines = [line for line in lines if error_pattern.search(line)]
     # Preserve sanitized traceback locations so the next runtime fix can be
     # targeted to the failing provider stage without persisting raw logs.
-    selected.extend(
+    traceback_lines = [
         line
         for line in lines
         if re.search(r'(?i)\bFile\s+["\']?.*\bline\s+\d+', line)
-    )
-    selected = selected or lines[-limit:]
+    ]
+    if error_lines:
+        selected = [error_lines[-1]] + traceback_lines[-(limit - 1) :]
+    else:
+        selected = traceback_lines or lines[-limit:]
     sanitized: list[str] = []
     for line in reversed(selected[-limit:]):
         line = re.sub(r"(?i)\b(?:hf|sk)[_-][A-Za-z0-9_-]{10,}\b", "[REDACTED_TOKEN]", line)
@@ -285,7 +288,11 @@ def sanitize_provider_output(output: str, limit: int = 6) -> str:
         )
         line = re.sub(r"(?i)\bBearer\s+[^\s,;]+", "Bearer [REDACTED]", line)
         line = re.sub(r"https?://[^\s,;]+", "[URL]", line)
-        line = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", line)
+        line = re.sub(
+            r"(?i)(?:[A-Za-z]:)?[/\\](?:[^\\/\s,;]+[/\\])*([^\\/\s,;]+)",
+            r"[PATH]/\1",
+            line,
+        )
         line = line[:240]
         if line and line not in sanitized:
             sanitized.append(line)
