@@ -133,6 +133,14 @@ def _png_dimensions(path: Path) -> list[int] | None:
 
 
 def _git_head(art_root: Path) -> str:
+    archive_marker = art_root / ".source-commit"
+    if archive_marker.is_file():
+        try:
+            marker_value = archive_marker.read_text(encoding="utf-8").strip()
+        except OSError:
+            marker_value = ""
+        if len(marker_value) == 40 and all(char in "0123456789abcdef" for char in marker_value.lower()):
+            return marker_value
     try:
         result = subprocess.run(
             ["git", "-C", str(art_root), "rev-parse", "HEAD"],

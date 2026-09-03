@@ -405,6 +405,35 @@ class AI3DFreePipelineTests(unittest.TestCase):
         self.assertFalse(report["unityInputAllowed"])
         self.assertFalse(report["productionPromotionAllowed"])
 
+    def test_semantic_reconstruction_handoff_accepts_archive_commit_marker(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            art_root = Path(temp_dir)
+            for relative_path in (
+                "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+                "art_refs/characters/rin/concept/CH101_Rin_Turnaround_REVIEW_v001.png",
+                "art_refs/characters/rin/concept/CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+                "art_refs/characters/rin/concept/CH101_Rin_ExpressionSheet_REVIEW_v001.png",
+            ):
+                path = art_root / relative_path
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(
+                    b"\x89PNG\r\n\x1a\n"
+                    + struct.pack(">I", 13)
+                    + b"IHDR"
+                    + struct.pack(">II", 1, 1)
+                    + b"\x08\x06\x00\x00\x00"
+                )
+            (art_root / ".source-commit").write_text(
+                "b6c9b3128358e061eee6184230929413eba84101\n",
+                encoding="utf-8",
+            )
+            report = prepare_handoff(art_root=art_root, output=Path("unused-report.json"))
+            self.assertEqual(report["status"], "READY_INPUTS_BLOCKED_AUTHORING")
+            self.assertEqual(
+                report["artCommitActual"],
+                "b6c9b3128358e061eee6184230929413eba84101",
+            )
+
     def test_wonder3d_command_uses_pinned_six_view_pipeline(self):
         provider = self.contract["experimentalProviders"]["wonder3D"]
         command = build_generation_command(
