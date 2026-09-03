@@ -109,6 +109,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         command = run_process.call_args.args[0]
         self.assertIn("child = subprocess.run", command[2])
         self.assertIn("one child", command[2])
+        self.assertIn("reversed(output_lines)", command[2])
 
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:

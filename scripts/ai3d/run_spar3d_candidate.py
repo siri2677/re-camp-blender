@@ -95,7 +95,16 @@ for module in modules:
     )
     if child.returncode == 0:
         continue
-    message = " ".join((child.stderr or child.stdout).split())[:160]
+    output_lines = (child.stderr or child.stdout).splitlines()
+    error_line = next(
+        (
+            line.strip()
+            for line in reversed(output_lines)
+            if re.search(r"\b[A-Za-z_][A-Za-z0-9_]*(?:Error|Exception|Exit)\b", line)
+        ),
+        "",
+    )
+    message = " ".join((error_line or (child.stderr or child.stdout)).split())[:160]
     message = re.sub(
         r"(?i)(token|secret|password|authorization|bearer)[=:][^\s,;]+",
         r"\1=[REDACTED]",
@@ -106,9 +115,15 @@ for module in modules:
         {
             "module": module,
             "errorType": (
-                "SUBPROCESS_EXIT_" + str(child.returncode)
-                if not message
-                else (message.split(":", 1)[0].split()[-1][:80] or "IMPORT_FAILED")
+                (
+                    re.findall(
+                        r"\b[A-Za-z_][A-Za-z0-9_]*(?:Error|Exception|Exit)\b",
+                        error_line,
+                    )
+                    or ["IMPORT_FAILED"]
+                )[-1]
+                if message
+                else "SUBPROCESS_EXIT_" + str(child.returncode)
             ),
             "errorMessage": message or "UNSPECIFIED",
         }
