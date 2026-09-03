@@ -47,6 +47,12 @@ SPAR3D `run.py`까지 시작됐지만, provider가 `returnCode: 1`을 반환해
 어느 단계인지 구분할 수 없다. 다음 실행부터는 원문을 저장하지 않고 오류 유형·짧은
 메시지·경로·token을 마스킹한 `executionFailureDetail`만 기록해 원인별로 분기한다.
 
+이를 실행할 전용 Notebook
+`08_ch101_spar3d_diagnostic.ipynb`도 추가했다. 이 Notebook은 Kaggle Secret과
+GPU preflight가 모두 통과할 때만 동일한 공식 `run.py`를 `--diagnostic-only`로
+한 번 실행한다. 결과 mesh가 생겨도 후보 등록·`.blend` 생성·Unity 입력은 하지
+않으며, 실패 시에는 마스킹된 진단 문자열만 남긴다.
+
 ## 사용자가 한 번 수행할 준비
 
 1. [SPAR3D 공식 모델 카드](https://huggingface.co/stabilityai/stable-point-aware-3d)에서

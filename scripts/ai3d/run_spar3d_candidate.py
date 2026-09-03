@@ -37,6 +37,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-report", required=True, type=Path)
     parser.add_argument("--texture-resolution", type=int, default=1024)
     parser.add_argument("--target-count", type=int, default=20000)
+    parser.add_argument(
+        "--diagnostic-only",
+        action="store_true",
+        help="Run the provider once for sanitized failure diagnosis without registering a candidate.",
+    )
     parser.add_argument("--execute", action="store_true")
     return parser.parse_args()
 
@@ -223,6 +228,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "memoryProfile": "LOW_VRAM_APPROXIMATELY_7GB",
         "textureResolution": args.texture_resolution,
         "targetCount": args.target_count,
+        "diagnosticOnly": bool(getattr(args, "diagnostic_only", False)),
         "hfTokenPresent": provider_preflight.get("hfTokenPresent") is True,
         "actualInference": False,
         "meshOutputs": [],
@@ -326,7 +332,24 @@ def main() -> int:
             )
             report["returnCode"] = result.returncode
             mesh_outputs = find_mesh_outputs(output_dir)
-            if result.returncode != 0:
+            if getattr(args, "diagnostic_only", False):
+                report["diagnosticMeshCount"] = len(mesh_outputs)
+                if result.returncode != 0:
+                    report["status"] = "SPAR3D_DIAGNOSTIC_FAILED"
+                    report["blockers"] = ["SPAR3D_PROVIDER_RETURNED_NONZERO"]
+                    report["executionFailureDetail"] = sanitize_provider_output(
+                        "\n".join(
+                            value
+                            for value in (
+                                getattr(result, "stdout", ""),
+                                getattr(result, "stderr", ""),
+                            )
+                            if isinstance(value, str)
+                        )
+                    )
+                else:
+                    report["status"] = "SPAR3D_DIAGNOSTIC_EXECUTED"
+            elif result.returncode != 0:
                 report["status"] = "SPAR3D_EXECUTION_FAILED"
                 report["blockers"] = ["SPAR3D_PROVIDER_RETURNED_NONZERO"]
                 report["executionFailureDetail"] = sanitize_provider_output(
@@ -373,7 +396,11 @@ def main() -> int:
                 report["candidateManifest"] = str(candidate_manifest.resolve())
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    return 0 if report["status"] in {"READY_TO_RUN_ONCE", "SPAR3D_EXECUTED"} else 2
+    return 0 if report["status"] in {
+        "READY_TO_RUN_ONCE",
+        "SPAR3D_EXECUTED",
+        "SPAR3D_DIAGNOSTIC_EXECUTED",
+    } else 2
 
 
 if __name__ == "__main__":

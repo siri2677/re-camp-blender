@@ -129,6 +129,79 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertNotIn("should-not-appear", sanitized)
         self.assertLessEqual(len(sanitized.split(" | ")), 6)
 
+    def test_spar3d_diagnostic_only_records_runtime_failure_without_candidate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "spar3d",
+                        "status": "READY_GPU_VISIBLE",
+                        "providerPreflight": {
+                            "vramSufficient": True,
+                            "heavyweightInstallAllowed": True,
+                            "hfTokenPresent": True,
+                            "modelAccessAcknowledged": True,
+                            "licenseTermsAcknowledged": True,
+                        },
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            report_path = root / "report.json"
+            dependency_result = type(
+                "Result",
+                (),
+                {"returncode": 0, "stdout": '{"failures": []}', "stderr": ""},
+            )()
+            provider_result = type(
+                "Result",
+                (),
+                {
+                    "returncode": 1,
+                    "stdout": "",
+                    "stderr": "RuntimeError: CUDA out of memory token=secret-value",
+                },
+            )()
+            with patch(
+                "scripts.ai3d.run_spar3d_candidate.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.subprocess.run",
+                side_effect=[dependency_result, provider_result],
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.sys.argv",
+                [
+                    "run_spar3d_candidate.py",
+                    "--provider-repo",
+                    str(repo),
+                    "--input-image",
+                    str(image),
+                    "--output-dir",
+                    str(root / "output"),
+                    "--preflight",
+                    str(preflight),
+                    "--output-report",
+                    str(report_path),
+                    "--diagnostic-only",
+                    "--execute",
+                ],
+            ):
+                self.assertEqual(run_spar3d_candidate.main(), 2)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+        self.assertEqual(report["status"], "SPAR3D_DIAGNOSTIC_FAILED")
+        self.assertFalse(report["actualInference"])
+        self.assertIn("CUDA out of memory", report["executionFailureDetail"])
+        self.assertNotIn("secret-value", report["executionFailureDetail"])
+        self.assertNotIn("candidateManifest", report)
+
     def test_spar3d_notebook_pins_transparent_background_flet_compatibility(self):
         notebook = json.loads(
             (ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb").read_text(
@@ -142,6 +215,22 @@ class HybridQualityStrategyTests(unittest.TestCase):
         )
         self.assertIn('flet==0.23.1', source)
         self.assertIn("OFFICIAL_REQUIREMENTS_NO_BUILD_ISOLATION_FLET_COMPAT", source)
+
+    def test_spar3d_diagnostic_notebook_is_candidate_free_and_secret_safe(self):
+        notebook = json.loads(
+            (ROOT / "notebooks" / "08_ch101_spar3d_diagnostic.ipynb").read_text(
+                encoding="utf-8"
+            )
+        )
+        source = "\n".join(
+            "".join(cell.get("source", []))
+            for cell in notebook.get("cells", [])
+            if cell.get("cell_type") == "code"
+        )
+        self.assertIn("--diagnostic-only", source)
+        self.assertIn("candidateRegistered': False", source)
+        self.assertIn("flet==0.23.1", source)
+        self.assertNotIn("files.download", source)
 
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:
