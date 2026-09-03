@@ -4,7 +4,7 @@
   "runtime": "Kaggle",
   "branch": "feature/ch101-free-ai3d-autobuild",
   "character": "CH101",
-  "toolsCommit": "PENDING_COMMIT_AFTER_FIX",
+  "toolsCommit": "5107d3db0d18693780d82ddeac84df3ea52f8cbc",
   "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
   "provider": "spar3d",
   "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
@@ -18,7 +18,7 @@
   },
   "rootCause": {
     "status": "SOURCE_CONFIRMED_FIX_IMPLEMENTED_KAGGLE_RETEST_PENDING",
-    "code": "SPAR3D_T4_BF16_AUTocast_UNSUPPORTED",
+    "code": "SPAR3D_T4_BF16_AUTOCAST_UNSUPPORTED",
     "evidence": "Pinned provider run.py unconditionally constructs torch.autocast(device_type=device, dtype=torch.bfloat16); the observed device is Tesla T4 sm_75, while CUDA BF16 hardware support starts at compute capability 8.0.",
     "notAuthFailure": true,
     "notVramPreflightFailure": true
