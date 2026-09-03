@@ -119,9 +119,54 @@ class HybridQualityStrategyTests(unittest.TestCase):
                 report = patch_runner(repo)
             patched_system = system.read_text(encoding="utf-8")
         self.assertIn("SPAR3D_DECODER_CHUNK_SIZE", patched_system)
+        self.assertIn("SPAR3D_DECODER_MIN_CHUNK_SIZE", patched_system)
+        self.assertIn("torch.cuda.OutOfMemoryError", patched_system)
+        self.assertIn("torch.autocast(device_type=\"cuda\", dtype=torch.float16)", patched_system)
         self.assertIn("torch.cat(sdf_chunks, dim=1)", patched_system)
         self.assertIn("runner.cli_defaults:1", report["applied"])
         self.assertIn("system.chunked_grid_decode:1", report["applied"])
+        self.assertEqual(report["missing"], [])
+
+    def test_spar3d_t4_compat_patch_upgrades_previous_chunk_patch(self):
+        from scripts.ai3d.patch_spar3d_t4_compat import (
+            _CHUNKED_GRID_DECODE_BLOCK_V003,
+        )
+
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            (repo / "run.py").write_text(
+                '    print("Device used: ", device)\n'
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n'
+                '    if TRIANGLE_REMESH_AVAILABLE or QUAD_REMESH_AVAILABLE:\n'
+                '        parser.add_argument(\n'
+                '            "--reduction_count_type",\n'
+                '            choices=["keep", "vertex", "faces"],\n'
+                '            default="keep",\n'
+                '            help="Vertex count type",\n'
+                '        )\n'
+                '        parser.add_argument(\n'
+                '            "--target_count",\n'
+                '            type=check_positive,\n'
+                '            help="Selected target count.",\n'
+                '            default=2000,\n'
+                '        )\n',
+                encoding="utf-8",
+            )
+            system_dir = repo / "spar3d"
+            system_dir.mkdir()
+            (system_dir / "system.py").write_text(
+                _CHUNKED_GRID_DECODE_BLOCK_V003, encoding="utf-8"
+            )
+            with patch(
+                "scripts.ai3d.patch_spar3d_t4_compat.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ):
+                report = patch_runner(repo)
+            upgraded = (system_dir / "system.py").read_text(encoding="utf-8")
+
+        self.assertIn("system.chunked_grid_decode_backoff:1", report["applied"])
+        self.assertIn("SPAR3D_DECODER_MIN_CHUNK_SIZE", upgraded)
+        self.assertNotIn("SPAR3D_DECODER_CHUNK_SIZE\", \"65536\"", upgraded)
         self.assertEqual(report["missing"], [])
 
     def test_spar3d_preflight_requires_gpu_access_and_license_acknowledgements(self):

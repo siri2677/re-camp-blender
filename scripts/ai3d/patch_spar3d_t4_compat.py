@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Patch the pinned SPAR3D runner for Kaggle's pre-Ampere CUDA devices.
 
-The pinned SPAR3D runner has two compatibility problems on a stock Kaggle T4:
+The pinned SPAR3D runner has compatibility and memory problems on a stock Kaggle T4:
 it unconditionally enters CUDA autocast with ``torch.bfloat16`` even though
 T4 (compute capability 7.5) has no CUDA BF16 support, and it defines the
 ``reduction_count_type``/``target_count`` CLI arguments only when optional
 remeshing packages are installed even though the values are always consumed.
-This small, idempotent patch keeps BF16 on supported devices, selects FP16 on
-older CUDA GPUs, and makes those two defaulted arguments unconditional.
+The upstream all-at-once marching-tetrahedra decoder also creates a multi-GB
+temporary tensor on a 16GB T4. This idempotent patch keeps BF16 on supported
+devices, selects FP16 on older CUDA GPUs, makes those two defaulted arguments
+unconditional, and decodes the grid in an adaptive bounded loop.
 
 The provider checkout remains detached at the pinned commit.  The patch is
 applied only to the ephemeral runtime copy used by Kaggle and its exact
@@ -25,7 +27,7 @@ from typing import Any
 
 
 EXPECTED_COMMIT = "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1"
-PATCH_ID = "SPAR3D_T4_BF16_CLI_CHUNKED_V003"
+PATCH_ID = "SPAR3D_T4_BF16_CLI_CHUNKED_BACKOFF_V004"
 
 _DEVICE_PRINT = '    print("Device used: ", device)'
 _DEVICE_PRINT_PATCHED = '''    print("Device used: ", device)
@@ -79,7 +81,7 @@ _FULL_GRID_DECODE_BLOCK = '''            values = self.query_triplane(grid_verti
             mesh: Mesh = self.isosurface_helper(
                 sdf.view(-1, 1), deform.view(-1, 3) if deform is not None else None
             )'''
-_CHUNKED_GRID_DECODE_BLOCK = '''            # Decode the 160^3 marching-tetrahedra grid in bounded chunks.
+_CHUNKED_GRID_DECODE_BLOCK_V003 = '''            # Decode the 160^3 marching-tetrahedra grid in bounded chunks.
             # The upstream all-at-once decoder can request several GiB on a
             # 16GB T4 even with low-vram mode enabled.
             chunk_size = max(
@@ -99,6 +101,69 @@ _CHUNKED_GRID_DECODE_BLOCK = '''            # Decode the 160^3 marching-tetrahed
                     chunk_decoded["density"] - self.cfg.isosurface_threshold
                 )
                 deform_chunks.append(chunk_decoded["vertex_offset"])
+            sdf = torch.cat(sdf_chunks, dim=1)
+            deform = torch.cat(deform_chunks, dim=1).squeeze(0)
+
+            mesh: Mesh = self.isosurface_helper(
+                sdf.view(-1, 1), deform.view(-1, 3) if deform is not None else None
+            )'''
+
+_CHUNKED_GRID_DECODE_BLOCK_V004 = '''            # Decode the 160^3 marching-tetrahedra grid in bounded chunks.
+            # The upstream all-at-once decoder can request several GiB on a
+            # 16GB T4 even with low-vram mode enabled. Keep the default small
+            # enough for a T4 and back off again if the runtime is fragmented.
+            requested_chunk_size = max(
+                1, int(os.environ.get("SPAR3D_DECODER_CHUNK_SIZE", "8192"))
+            )
+            minimum_chunk_size = max(
+                1, int(os.environ.get("SPAR3D_DECODER_MIN_CHUNK_SIZE", "1024"))
+            )
+            chunk_size = min(requested_chunk_size, grid_vertices.shape[0])
+            sdf_chunks = []
+            deform_chunks = []
+            chunk_start = 0
+            print("Grid decode chunk size: ", chunk_size)
+            while chunk_start < grid_vertices.shape[0]:
+                chunk_end = min(chunk_start + chunk_size, grid_vertices.shape[0])
+                chunk_values = None
+                chunk_decoded = None
+                try:
+                    chunk_values = self.query_triplane(
+                        grid_vertices[chunk_start:chunk_end], triplane
+                    )
+                    # Mesh extraction is intentionally outside the runner's
+                    # global disabled autocast block. T4 supports FP16, and
+                    # the decoder is the peak-memory operation here.
+                    decode_context = (
+                        torch.autocast(device_type="cuda", dtype=torch.float16)
+                        if "cuda" in str(self.device)
+                        else nullcontext()
+                    )
+                    with decode_context:
+                        chunk_decoded = self.decoder(
+                            chunk_values, include=["vertex_offset", "density"]
+                        )
+                    sdf_chunks.append(
+                        (chunk_decoded["density"] - self.cfg.isosurface_threshold)
+                        .float()
+                        .detach()
+                    )
+                    deform_chunks.append(
+                        chunk_decoded["vertex_offset"].float().detach()
+                    )
+                    del chunk_values, chunk_decoded
+                    chunk_start = chunk_end
+                except torch.cuda.OutOfMemoryError:
+                    if chunk_values is not None:
+                        del chunk_values
+                    if chunk_decoded is not None:
+                        del chunk_decoded
+                    if "cuda" in str(self.device) and torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    if chunk_size <= minimum_chunk_size:
+                        raise
+                    chunk_size = max(minimum_chunk_size, chunk_size // 2)
+                    print("Grid decode OOM backoff chunk size: ", chunk_size)
             sdf = torch.cat(sdf_chunks, dim=1)
             deform = torch.cat(deform_chunks, dim=1).squeeze(0)
 
@@ -170,11 +235,16 @@ def patch_runner(provider_repo: Path) -> dict[str, Any]:
 
     if not system.is_file():
         missing.append("system.chunked_grid_decode")
-    elif _CHUNKED_GRID_DECODE_BLOCK in system_updated:
+    elif _CHUNKED_GRID_DECODE_BLOCK_V004 in system_updated:
         already_present.append("system.chunked_grid_decode")
+    elif _CHUNKED_GRID_DECODE_BLOCK_V003 in system_updated:
+        system_updated = system_updated.replace(
+            _CHUNKED_GRID_DECODE_BLOCK_V003, _CHUNKED_GRID_DECODE_BLOCK_V004, 1
+        )
+        applied.append("system.chunked_grid_decode_backoff:1")
     elif _FULL_GRID_DECODE_BLOCK in system_updated:
         system_updated = system_updated.replace(
-            _FULL_GRID_DECODE_BLOCK, _CHUNKED_GRID_DECODE_BLOCK, 1
+            _FULL_GRID_DECODE_BLOCK, _CHUNKED_GRID_DECODE_BLOCK_V004, 1
         )
         applied.append("system.chunked_grid_decode:1")
     else:

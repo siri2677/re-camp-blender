@@ -204,3 +204,22 @@ low-VRAM 모드만으로는 Kaggle 16GB T4의 peak를 넘는다.
 동일한 16GB T4에서 chunked decoder가 추론과 mesh export를 완료하는지 확인한다.
 성공하더라도 diagnostic-only 경로이므로 후보 등록·Production 승격·Unity
 입력은 열리지 않는다.
+
+## 2026-09-03 재현 결과: V003 청크도 T4 메모리 한계 초과
+
+V003 청크 디코더 패치를 실제 Kaggle T4에서 실행한 결과, 전체 grid를 한 번에
+디코드하는 오류는 지나갔지만 `65536` vertex 청크가 여전히 FP32 decoder의 큰
+임시 tensor를 만들었다. GPU 0은 14.56GiB 중 2.95GiB만 남은 상태에서
+5.94GiB 추가 할당을 요청했고, 결과는 `SPAR3D_DIAGNOSTIC_FAILED`, mesh 0개,
+candidate 미등록이었다. 상세 기록은
+`docs/records/ch101-ai3d/2026-09-03-spar3d-adaptive-decoder-root-cause-v005.json`
+에 보관한다.
+
+따라서 기준을 낮추지 않고 V004를 추가했다.
+
+- 기본 decoder chunk를 `8192`로 축소
+- CUDA decoder 구간을 FP16 autocast로 실행하고 marching tetra 입력은 FP32로 유지
+- CUDA OOM이 다시 발생하면 chunk를 절반씩 줄여 최소 `1024`까지 자동 backoff
+- 다음 실패부터는 sanitized traceback 파일·라인을 함께 기록
+
+V004도 진단 전용이며 모든 Production·Gate B·Unity 입력은 계속 잠근다.
