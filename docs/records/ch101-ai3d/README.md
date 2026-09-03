@@ -448,3 +448,12 @@ Unity 입력은 계속 잠금이다.
 않고 차단한다. 진단·후속 입력 조건은
 `2026-09-02-partcrafter-quality-diagnosis-v001.json`에 보관한다. 보정 후에도 strict
 visual QA와 Gate B는 별도로 통과해야 하며, 모든 Production·Unity gate는 잠금이다.
+
+2026-09-03 Kaggle 재개 실행에서는 최신 tools commit `5864edc`를 확인한 뒤
+PartCrafter 동일 전략 재실행 차단, TRELLIS 계열 VRAM preflight 차단,
+semantic authoring plateau 차단이 정상 작동했다. 세션의 `/kaggle/working/**/*.blend`
+검색 결과는 비어 있어 저장 artifact 수리와 후보 재평가는 실행되지 않았고, 최종 상태는
+`NO_CANDIDATE_STRATEGY_READY`다. 실행 기록은
+`2026-09-03-kaggle-hybrid-v001-no-candidate.json`에 보관하며, 다음 입력은 저장된
+review `.blend` 또는 새 reference-conditioned Provider다. 모든 Gate B·Production·Unity
+입력은 계속 잠금이다.

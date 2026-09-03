@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "ch101-kaggle-hybrid-execution-record-v001",
+  "recordedAt": "2026-09-03T04:16:03.6672311Z",
+  "runtime": "kaggle",
+  "character": "CH101",
+  "toolsCommitExpected": "5864edcf46e132295f843a6732a1cc1055381b78",
+  "toolsCommitActual": "5864edcf46e132295f843a6732a1cc1055381b78",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "gpu": {
+    "status": "VISIBLE_BUT_PROVIDER_LIMITED",
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "torchKernelSupportsDevice": true
+      },
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "torchKernelSupportsDevice": true
+      }
+    ],
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8"
+  },
+  "strategies": {
+    "partcrafter": {
+      "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+      "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+      "inferenceExecuted": false,
+      "reason": "Recorded v002 rejection blocks same-strategy rerun."
+    },
+    "trellis2": {
+      "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "reason": "Required VRAM 24576MB; visible maximum 15360MB."
+    },
+    "trellis16": {
+      "strategyId": "TRELLIS_SINGLE_VIEW_16GB_V002",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "reason": "Required VRAM 16384MB; visible maximum 15360MB."
+    },
+    "trellis": {
+      "strategyId": "TRELLIS_SINGLE_VIEW_V001",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "reason": "Required VRAM 24576MB; visible maximum 15360MB."
+    },
+    "unifiedSemanticAuthoring": {
+      "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+      "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+      "reason": "Existing strategy rejection blocks repeat."
+    },
+    "semanticDetailAuthoring": {
+      "strategyId": "SEMANTIC_DETAIL_AUTHORING_V003",
+      "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+      "reason": "Existing strategy rejection blocks repeat."
+    }
+  },
+  "artifactProbe": {
+    "glob": "/kaggle/working/**/*.blend",
+    "matches": [],
+    "storedRepairReport": null
+  },
+  "selectedStrategies": [],
+  "candidateCount": 0,
+  "status": "NO_CANDIDATE_STRATEGY_READY",
+  "nextAction": "SUPPLY_STORED_REVIEW_BLEND_OR_NEW_REFERENCE_CONDITIONED_PROVIDER",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}
