@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "ch101-spar3d-kaggle-runtime-failure-v001",
+  "recordedAt": "2026-09-03T08:28:09.338681+00:00",
+  "runtime": "kaggle",
+  "notebook": "07_ch101_hybrid_quality_strategies.ipynb",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "90e51b2",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommitExpected": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "providerCommitActual": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "secrets": {
+    "loadedSecretCount": 3,
+    "secretNames": [
+      "HF_TOKEN",
+      "RE_CAMP_SPAR3D_ACCESS_ACK",
+      "RE_CAMP_SPAR3D_LICENSE_ACK"
+    ],
+    "secretValuesRecorded": false
+  },
+  "gpu": {
+    "status": "READY_GPU_VISIBLE",
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "driverVersion": "580.159.04"
+      },
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "driverVersion": "580.159.04"
+      }
+    ],
+    "torchVersion": "2.10.0+cu128",
+    "cudaVersion": "12.8",
+    "torchKernelSupportsDevice": true,
+    "vramSufficient": true
+  },
+  "dependencyPreflight": "READY_IMPORTS",
+  "execution": {
+    "status": "SPAR3D_EXECUTION_FAILED",
+    "actualInference": false,
+    "returnCode": 1,
+    "meshOutputs": [],
+    "failureCode": "SPAR3D_PROVIDER_RETURNED_NONZERO",
+    "failureDetail": "UNAVAILABLE_LEGACY_RUNNER_DROPPED_PROVIDER_OUTPUT",
+    "candidateId": "CH101-SPAR3D-RUNTIME-FAILURE-001"
+  },
+  "candidate": {
+    "candidateId": "CH101-SPAR3D-RUNTIME-FAILURE-001",
+    "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+    "provider": "spar3d",
+    "status": "REGENERATE_REQUIRED",
+    "eligibleForHumanReview": false,
+    "reason": "Provider returned nonzero before a unique mesh was produced. The strategy is terminal for this run and must not be repeated silently."
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Use_the_new_sanitized_runtime_diagnostic_on_a_new_provider_or_authoring_strategy; do_not_retry_SPAR3D_SINGLE_VIEW_V001"
+}
