@@ -1,5 +1,13 @@
 # CH101 AI 3D 실행 기록
 
+2026-09-03 Kaggle hybrid 재실행은 `92ac1d2`를 정상 로드하고 공개 archive·Git LFS
+fallback과 commit marker handoff를 통과했다. T4 15GB×2와 PyTorch CUDA kernel은
+사용 가능했지만 SPAR3D는 HF token·모델 접근 승인·라이선스 승인이 없어
+`BLOCKED_PROVIDER_PREFLIGHT`로 설치·추론하지 않았다. TRELLIS 계열도 VRAM 기준
+미달이고 PartCrafter는 동일 전략 정체 gate에 걸려 `selectedStrategies=[]`, 후보·점수
+없는 `NO_CANDIDATE_STRATEGY_READY`로 종료했다. 상세 결과는
+`2026-09-03-kaggle-hybrid-run-v001.json`에 보관한다.
+
 이 디렉터리는 Colab에서 생성된 대용량 모델 파일을 저장하지 않고, 이후 실행과
 판정을 재현하는 데 필요한 메타데이터만 Git으로 추적한다.
 
