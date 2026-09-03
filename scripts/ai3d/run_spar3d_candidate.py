@@ -363,6 +363,15 @@ def main() -> int:
             mesh_outputs = find_mesh_outputs(output_dir)
             if getattr(args, "diagnostic_only", False):
                 report["diagnosticMeshCount"] = len(mesh_outputs)
+                report["meshOutputs"] = [
+                    str(path.resolve()) for path in mesh_outputs
+                ]
+                if len(mesh_outputs) == 1:
+                    report["meshSha256"] = sha256_file(mesh_outputs[0])
+                elif mesh_outputs:
+                    report["meshSha256"] = [
+                        sha256_file(path) for path in mesh_outputs
+                    ]
                 if result.returncode != 0:
                     report["status"] = "SPAR3D_DIAGNOSTIC_FAILED"
                     report["blockers"] = ["SPAR3D_PROVIDER_RETURNED_NONZERO"]

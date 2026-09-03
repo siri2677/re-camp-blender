@@ -388,6 +388,96 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertNotIn("secret-value", report["executionFailureDetail"])
         self.assertNotIn("candidateManifest", report)
 
+    def test_spar3d_diagnostic_only_records_mesh_hash_without_candidate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            (repo / "run.py").write_text(
+                '    print("Device used: ", device)\n'
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n',
+                encoding="utf-8",
+            )
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "spar3d",
+                        "status": "READY_GPU_VISIBLE",
+                        "providerPreflight": {
+                            "vramSufficient": True,
+                            "heavyweightInstallAllowed": True,
+                            "hfTokenPresent": True,
+                            "modelAccessAcknowledged": True,
+                            "licenseTermsAcknowledged": True,
+                        },
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            report_path = root / "report.json"
+            mesh = root / "output" / "0" / "mesh.glb"
+            dependency_result = type(
+                "Result",
+                (),
+                {"returncode": 0, "stdout": '{"failures": []}', "stderr": ""},
+            )()
+            provider_result = type(
+                "Result",
+                (),
+                {"returncode": 0, "stdout": "", "stderr": ""},
+            )()
+            with patch(
+                "scripts.ai3d.run_spar3d_candidate.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.patch_runner",
+                return_value={
+                    "patchId": "SPAR3D_T4_BF16_CLI_CHUNKED_ATTENTION_BACKOFF_V005",
+                    "providerCommitActual": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+                    "missing": [],
+                    "providerCommitUnchanged": True,
+                },
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.subprocess.run",
+                side_effect=[dependency_result, provider_result],
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.find_mesh_outputs",
+                return_value=[mesh],
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.sha256_file",
+                return_value="mesh-sha256",
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.sys.argv",
+                [
+                    "run_spar3d_candidate.py",
+                    "--provider-repo",
+                    str(repo),
+                    "--input-image",
+                    str(image),
+                    "--output-dir",
+                    str(root / "output"),
+                    "--preflight",
+                    str(preflight),
+                    "--output-report",
+                    str(report_path),
+                    "--diagnostic-only",
+                    "--execute",
+                ],
+            ):
+                self.assertEqual(run_spar3d_candidate.main(), 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+        self.assertEqual(report["status"], "SPAR3D_DIAGNOSTIC_EXECUTED")
+        self.assertEqual(report["diagnosticMeshCount"], 1)
+        self.assertEqual(report["meshSha256"], "mesh-sha256")
+        self.assertTrue(report["meshOutputs"][0].endswith("mesh.glb"))
+        self.assertFalse(report["actualInference"])
+        self.assertNotIn("candidateManifest", report)
+
     def test_spar3d_notebook_pins_transparent_background_flet_compatibility(self):
         notebook = json.loads(
             (ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb").read_text(

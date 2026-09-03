@@ -241,3 +241,24 @@ V005는 동일 연산의 query 행을 기본 `256`개씩 나눠 계산하도록 
 유지하며, V004의 grid decoder backoff·FP16·CLI 보정도 함께 유지한다.
 다음 Kaggle 재검증에서 attention 단계 통과 여부를 확인한다. 이 역시
 diagnostic-only이며 Production·Gate B·Unity 입력은 계속 잠근다.
+
+## 2026-09-03 재검증 결과: V005에서 SPAR3D mesh 생성 성공
+
+V005를 최신 tools commit `c772484`로 Kaggle T4에서 실행한 결과, GPU
+preflight와 의존성 검증을 통과한 뒤 556.428초 후 `returnCode: 0`,
+`diagnosticMeshCount: 1`, `SPAR3D_DIAGNOSTIC_EXECUTED`가 확인됐다. 따라서
+현재 SPAR3D는 T4에서 실제 non-empty GLB를 생성할 수 있다. 성공 기록은
+`docs/records/ch101-ai3d/2026-09-03-spar3d-diagnostic-success-v007.json`에
+보관한다.
+
+진단 성공 경로는 다음 설정을 사용했다.
+
+- CrossAttention query chunk: `256`
+- grid decoder chunk: `8192`
+- CUDA decoder: FP16 autocast
+- diagnostic texture resolution: `512`
+
+이 결과는 기술 실행 성공이지 품질 통과나 Production Mesh 승격이 아니다.
+후보 등록은 하지 않았고 `sourceStatus`, `gateB`, `unityInputAllowed`,
+`productionPromotionAllowed`는 계속 잠긴다. 다음 단계는 생성 GLB의 SHA256을
+기준으로 Blender refine·evaluate·strict visual QA를 수행하는 것이다.
