@@ -295,3 +295,6 @@ token. Missing access, GPU, or verified setup blocks before heavyweight install.
 Any generated mesh remains review-only and must pass the existing strict visual
 QA; Unity and production gates stay locked. See
 [the SPAR3D one-shot plan](docs/plans/ch101-spar3d-one-shot-plan-2026-09-03.md).
+Kaggle Secret 연결과 재개 절차는
+[the SPAR3D Kaggle unblock checklist](docs/plans/ch101-spar3d-kaggle-unblock-checklist-2026-09-03.md)에
+기록한다.

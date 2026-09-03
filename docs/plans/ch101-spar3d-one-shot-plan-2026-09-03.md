@@ -63,10 +63,13 @@ Unity package·Prefab·Android 작업을 시작하지 않는다.
 
 ## 현재 차단과 완료 기준
 
-2026-09-03 기준 실제 SPAR3D 추론 결과는 아직 없다. 직전 Kaggle hybrid 실행은
-T4 15GB에서 기존 전략 plateau와 TRELLIS VRAM preflight로
-`NO_CANDIDATE_STRATEGY_READY`였다. 이번 변경은 다음 호환 Kaggle 세션에서
-SPAR3D preflight를 먼저 실행하도록 준비한 것이다.
+2026-09-03 Kaggle hybrid 실행에서 T4 15GB×2, CUDA, PyTorch kernel은 확인됐다.
+하지만 HF token, 모델 접근 승인, 라이선스 acknowledgement가 모두 없어
+SPAR3D preflight가 `BLOCKED_PROVIDER_PREFLIGHT`로 종료됐다. 따라서 실제 SPAR3D
+추론·mesh·점수는 아직 없고, 최종 실행 상태는 `NO_CANDIDATE_STRATEGY_READY`다.
+Notebook은 Kaggle `UserSecretsClient`를 통해 사용자가 등록한 Secret을 메모리
+환경변수로만 전달하도록 보강했다. 재개 절차는
+`docs/plans/ch101-spar3d-kaggle-unblock-checklist-2026-09-03.md`에 고정한다.
 
 완료로 기록하려면 SPAR3D report, mesh SHA256, candidate manifest, Blender
 evaluation/score/ranking 결과가 모두 있어야 한다. Kaggle GPU나 gated model
