@@ -111,6 +111,20 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("one child", command[2])
         self.assertIn("reversed(output_lines)", command[2])
 
+    def test_spar3d_notebook_pins_transparent_background_flet_compatibility(self):
+        notebook = json.loads(
+            (ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb").read_text(
+                encoding="utf-8"
+            )
+        )
+        source = "\n".join(
+            "".join(cell.get("source", []))
+            for cell in notebook.get("cells", [])
+            if cell.get("cell_type") == "code"
+        )
+        self.assertIn('flet==0.23.1', source)
+        self.assertIn("OFFICIAL_REQUIREMENTS_NO_BUILD_ISOLATION_FLET_COMPAT", source)
+
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

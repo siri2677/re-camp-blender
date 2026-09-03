@@ -32,6 +32,14 @@ mesh, candidate manifest는 아직 생성되지 않았다.
 위해 import를 모듈별로 검사하고 `module:errorType`만 기록하도록 보강한다.
 원본 stderr, 파일 경로, Secret 값은 기록하지 않는다.
 
+두 번째 오류의 실제 원인은 `transparent-background==1.3.3`이 import 시 legacy
+GUI 모듈을 함께 읽으면서 `FilePickerResultEvent`를 요구하는데, Kaggle의 최신
+`flet`에는 해당 심볼이 없었던 것이다. 따라서 Notebook 07의 기본 설치 경로는
+공식 requirements를 유지하면서 `flet==0.23.1`을 추가로 고정한다. 이 호환성
+pin이 import preflight를 통과시키는지 Kaggle에서 재검증하며, 통과 전에는
+GPU 추론을 시작하지 않는다. 참고: [transparent-background 공식 문서](https://github.com/plemeri/transparent-background),
+[동일 import 오류 이슈](https://github.com/plemeri/transparent-background/issues/104).
+
 ## 사용자가 한 번 수행할 준비
 
 1. [SPAR3D 공식 모델 카드](https://huggingface.co/stabilityai/stable-point-aware-3d)에서
