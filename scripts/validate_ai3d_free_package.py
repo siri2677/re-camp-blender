@@ -38,6 +38,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "run_trellis16_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_partcrafter_candidate.py",
+    ROOT / "scripts" / "ai3d" / "run_spar3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "diagnose_partcrafter_review.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",
@@ -144,6 +145,7 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
     text = "\n".join("".join(cell.get("source", [])) for cell in cells)
     for marker in (
         "PARTCRAFTER_PART_LEVEL_V001",
+        "SPAR3D_SINGLE_VIEW_V001",
         "TRELLIS_SINGLE_VIEW_V001",
         "TRELLIS_SINGLE_VIEW_16GB_V002",
         "TRELLIS2_SINGLE_VIEW_V001",
@@ -154,9 +156,11 @@ def validate_hybrid_notebook(errors: list[str]) -> None:
         "run_trellis_candidate.py",
         "run_trellis16_candidate.py",
         "run_partcrafter_candidate.py",
+        "run_spar3d_candidate.py",
         "diagnose_partcrafter_review.py",
         "repair_partcrafter_review_candidate.py",
         "RE_CAMP_PARTCRAFTER_REPAIR_BLEND",
+        "RE_CAMP_SPAR3D_SETUP_COMMAND",
         "PARTCRAFTER_STORED_ARTIFACT_REPAIR",
         "BLOCKED_PROVIDER_PREFLIGHT",
         "BLOCKED_PROVIDER_ENTRYPOINT_UNVERIFIED",
@@ -264,12 +268,24 @@ def validate_contract(errors: list[str]) -> None:
         fail(errors, "PartCrafter must remain a one-shot research lane")
     if partcrafter.get("unityInputAllowed") is not False or partcrafter.get("productionPromotionAllowed") is not False:
         fail(errors, "PartCrafter research candidate must keep production and Unity gates locked")
+    spar3d = experimental.get("spar3d", {})
+    if len(spar3d.get("commit", "")) != 40:
+        fail(errors, "experimentalProviders.spar3d must pin a 40-character commit")
+    if spar3d.get("strategyId") != "SPAR3D_SINGLE_VIEW_V001":
+        fail(errors, "SPAR3D strategy ID must be SPAR3D_SINGLE_VIEW_V001")
+    if spar3d.get("minimumVramMb", 0) < 8192:
+        fail(errors, "SPAR3D minimum VRAM must fail safe at 8192 MB or higher")
+    if spar3d.get("fallbackEnabled") is not False:
+        fail(errors, "SPAR3D must remain a one-shot research lane")
+    if spar3d.get("unityInputAllowed") is not False or spar3d.get("productionPromotionAllowed") is not False:
+        fail(errors, "SPAR3D research candidate must keep production and Unity gates locked")
     strategies = contract.get("qualityStrategies", {})
     for strategy_id, provider in (
         ("TRELLIS_SINGLE_VIEW_V001", "trellis"),
         ("TRELLIS_SINGLE_VIEW_16GB_V002", "trellis16"),
         ("TRELLIS2_SINGLE_VIEW_V001", "trellis2"),
         ("PARTCRAFTER_PART_LEVEL_V001", "partcrafter"),
+        ("SPAR3D_SINGLE_VIEW_V001", "spar3d"),
         ("SEMANTIC_PROXY_REFERENCE_FITTED_V001", "semanticProxy"),
     ):
         strategy = strategies.get(strategy_id, {})

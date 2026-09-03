@@ -457,3 +457,19 @@ semantic authoring plateau 차단이 정상 작동했다. 세션의 `/kaggle/wor
 `2026-09-03-kaggle-hybrid-v001-no-candidate.json`에 보관하며, 다음 입력은 저장된
 review `.blend` 또는 새 reference-conditioned Provider다. 모든 Gate B·Production·Unity
 입력은 계속 잠금이다.
+
+다음 품질 pivot으로 SPAR3D one-shot 경로를 추가했다. 공식 pinned commit
+`fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1`의 `run.py`와 `--low-vram-mode`만
+사용하며, T4 15GB급에서도 실행 가능성이 있는 보수적 8192MB preflight를 둔다.
+다만 모델은 Hugging Face gated access가 필요하므로 token 값은 저장하지 않고,
+사용자가 접근·라이선스 확인을 명시한 경우에만 heavyweight setup과 추론을
+허용한다. 전략은 `SPAR3D_SINGLE_VIEW_V001`로 한 번만 실행하며, 같은 전략
+재실행은 quality-progress gate가 차단한다. 결과가 생겨도 기존 refine → evaluate
+→ strict visual QA를 통과해야 하며, 모든 Gate B·Production·Unity 입력은 잠금이다.
+구현·실행 조건은
+`docs/plans/ch101-spar3d-one-shot-plan-2026-09-03.md`에 보관한다.
+
+같은 날 로컬 Windows 사전검사도 실행했다. GPU 0개, CUDA/PyTorch kernel 미사용,
+HF 접근·라이선스 acknowledgement 미설정으로 `BLOCKED_PROVIDER_PREFLIGHT`가
+기록됐으며 heavyweight 설치와 추론은 실행되지 않았다. 상세 secret-free report는
+`2026-09-03-local-spar3d-preflight-v001.json`이다.

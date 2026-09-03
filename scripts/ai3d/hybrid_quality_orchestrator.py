@@ -38,6 +38,7 @@ TRELLIS_STRATEGY = "TRELLIS_SINGLE_VIEW_V001"
 TRELLIS16_STRATEGY = "TRELLIS_SINGLE_VIEW_16GB_V002"
 TRELLIS2_STRATEGY = "TRELLIS2_SINGLE_VIEW_V001"
 PARTCRAFTER_STRATEGY = "PARTCRAFTER_PART_LEVEL_V001"
+SPAR3D_STRATEGY = "SPAR3D_SINGLE_VIEW_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
 UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
 DETAIL_SEMANTIC_STRATEGY = "SEMANTIC_DETAIL_AUTHORING_V003"
@@ -88,10 +89,12 @@ def build_hybrid_report(
     trellis16_preflight = build_runtime_report("trellis16")
     trellis2_preflight = build_runtime_report("trellis2")
     partcrafter_preflight = build_runtime_report("partcrafter")
+    spar3d_preflight = build_runtime_report("spar3d")
     trellis_gate = _gate("trellis", TRELLIS_STRATEGY, score_dir, history_records)
     trellis16_gate = _gate("trellis16", TRELLIS16_STRATEGY, score_dir, history_records)
     trellis2_gate = _gate("trellis2", TRELLIS2_STRATEGY, score_dir, history_records)
     partcrafter_gate = _gate("partcrafter", PARTCRAFTER_STRATEGY, score_dir, history_records)
+    spar3d_gate = _gate("spar3d", SPAR3D_STRATEGY, score_dir, history_records)
     semantic_gate = _gate("semanticProxy", SEMANTIC_STRATEGY, score_dir, history_records)
     unified_gate = _gate(
         "blenderSemanticAuthoring",
@@ -151,6 +154,11 @@ def build_hybrid_report(
         and partcrafter_preflight["status"] == "READY_GPU_VISIBLE"
         and partcrafter_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
     )
+    spar3d_ready = (
+        spar3d_gate["status"] == "READY_NEW_STRATEGY"
+        and spar3d_preflight["status"] == "READY_GPU_VISIBLE"
+        and spar3d_preflight.get("providerPreflight", {}).get("heavyweightInstallAllowed") is True
+    )
     trellis2_status = (
         "READY_TO_RUN_ONCE"
         if trellis2_ready
@@ -184,6 +192,15 @@ def build_hybrid_report(
         else (
             "QUALITY_PLATEAU_SAME_STRATEGY"
             if partcrafter_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY"
+            else "BLOCKED_PROVIDER_PREFLIGHT"
+        )
+    )
+    spar3d_status = (
+        "READY_TO_RUN_ONCE"
+        if spar3d_ready
+        else (
+            "QUALITY_PLATEAU_SAME_STRATEGY"
+            if spar3d_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY"
             else "BLOCKED_PROVIDER_PREFLIGHT"
         )
     )
@@ -221,9 +238,13 @@ def build_hybrid_report(
     # One strategy is selected per run. PartCrafter is first because its
     # part-level output directly addresses CH101's repeated semantic-boundary
     # failures and has a lower memory floor. Higher-memory TRELLIS lanes remain
-    # available when PartCrafter is blocked or already plateaued.
+    # available when PartCrafter is blocked or already plateaued. SPAR3D is
+    # the next low-VRAM research lane and is selected before higher-memory
+    # TRELLIS variants when its gated model access is ready.
     if partcrafter_ready:
         selected = [PARTCRAFTER_STRATEGY]
+    elif spar3d_ready:
+        selected = [SPAR3D_STRATEGY]
     elif trellis2_ready:
         selected = [TRELLIS2_STRATEGY]
     elif trellis16_ready:
@@ -291,6 +312,17 @@ def build_hybrid_report(
                 "entrypoint": "OFFICIAL_SCRIPT_ONLY",
                 "memoryProfile": "8GB_CLASS_PART_LEVEL",
                 "semanticLabels": "UNLABELED_PROVIDER_PARTS_PENDING_HUMAN_MAPPING",
+            },
+            SPAR3D_STRATEGY: {
+                "provider": "spar3d",
+                "status": spar3d_status,
+                "preflight": spar3d_preflight,
+                "qualityGate": spar3d_gate,
+                "runAllowed": spar3d_ready,
+                "maxRuns": 1,
+                "entrypoint": "OFFICIAL_RUN_PY_ONLY",
+                "memoryProfile": "LOW_VRAM_APPROXIMATELY_7GB",
+                "accessPolicy": "HF_GATED_ACCESS_ACK_AND_READ_TOKEN_REQUIRED",
             },
             SEMANTIC_STRATEGY: {
                 "provider": "semanticProxy",

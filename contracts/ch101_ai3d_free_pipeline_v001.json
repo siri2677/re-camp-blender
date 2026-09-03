@@ -235,6 +235,29 @@
       "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
       "unityInputAllowed": false,
       "productionPromotionAllowed": false
+    },
+    "spar3d": {
+      "mode": "OPEN_SOURCE_POINT_AWARE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/Stability-AI/stable-point-aware-3d.git",
+      "commit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+      "model": "stabilityai/stable-point-aware-3d",
+      "license": "Stability AI Community License",
+      "licenseNote": "The model is gated on Hugging Face. Accept the model terms and provide a read-only token through the runtime secret store; never persist the token.",
+      "requiresSecret": "HF_TOKEN_OR_HUGGINGFACE_HUB_TOKEN",
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "memoryProfile": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
+      "officialEntrypoint": "run.py",
+      "lowVramFlag": "--low-vram-mode",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "textureResolution": 1024,
+      "targetCount": 20000,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
     }
   },
   "qualityStrategies": {
@@ -298,6 +321,17 @@
       "entrypointPolicy": "OFFICIAL_SCRIPT_ONLY",
       "memoryPolicy": "8GB_CLASS_LOW_RESOURCE",
       "semanticPolicy": "PARTS_REQUIRE_HUMAN_BODY_HAIR_OUTFIT_EQUIPMENT_MAPPING"
+    },
+    "SPAR3D_SINGLE_VIEW_V001": {
+      "provider": "spar3d",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "strategyScope": "SPAR3D_LOW_VRAM_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_RUN_PY_ONLY",
+      "memoryPolicy": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
+      "accessPolicy": "HF_GATED_ACCESS_ACK_AND_READ_TOKEN_REQUIRED"
     }
   },
   "candidateAcceptance": {

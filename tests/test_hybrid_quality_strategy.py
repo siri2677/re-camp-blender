@@ -22,6 +22,11 @@ from scripts.ai3d.run_partcrafter_candidate import (
     dependency_preflight as dependency_preflight_partcrafter,
 )
 from scripts.ai3d import run_partcrafter_candidate
+from scripts.ai3d import run_spar3d_candidate
+from scripts.ai3d.run_spar3d_candidate import (
+    build_report as build_spar3d_report,
+    dependency_preflight as dependency_preflight_spar3d,
+)
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -29,6 +34,94 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class HybridQualityStrategyTests(unittest.TestCase):
+    def test_spar3d_preflight_requires_gpu_access_and_license_acknowledgements(self):
+        gpu = [{"name": "NVIDIA T4", "memoryMb": 15360, "driverVersion": "test"}]
+        torch = {
+            "available": True,
+            "cudaAvailable": True,
+            "torchKernelSupportsDevice": True,
+        }
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch.dict(os.environ, {}, clear=True):
+            blocked = build_report("spar3d")
+        self.assertEqual(blocked["status"], "BLOCKED_PROVIDER_PREFLIGHT")
+        self.assertEqual(blocked["providerPreflight"]["minimumVramMb"], 8192)
+        self.assertFalse(blocked["providerPreflight"]["hfTokenPresent"])
+        self.assertFalse(blocked["providerPreflight"]["heavyweightInstallAllowed"])
+        env = {
+            "HF_TOKEN": "secret-is-not-recorded",
+            "RE_CAMP_SPAR3D_ACCESS_ACK": "1",
+            "RE_CAMP_SPAR3D_LICENSE_ACK": "1",
+        }
+        with patch("scripts.ai3d.colab_runtime_preflight.nvidia_gpus", return_value=gpu), patch(
+            "scripts.ai3d.colab_runtime_preflight.torch_status", return_value=torch
+        ), patch.dict(os.environ, env, clear=True):
+            ready = build_report("spar3d")
+        self.assertEqual(ready["status"], "READY_GPU_VISIBLE")
+        self.assertTrue(ready["providerPreflight"]["heavyweightInstallAllowed"])
+        self.assertNotIn("secret-is-not-recorded", json.dumps(ready))
+
+    def test_spar3d_dependency_preflight_uses_notebook_python_and_import_only(self):
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.run_spar3d_candidate.subprocess.run",
+            return_value=type("Result", (), {"returncode": 0})(),
+        ) as run_process:
+            ready, status = dependency_preflight_spar3d(Path(temporary))
+        self.assertTrue(ready)
+        self.assertEqual(status, "READY_IMPORTS")
+        command = run_process.call_args.args[0]
+        self.assertEqual(command[0], __import__("sys").executable)
+        self.assertIn("spar3d.system", command[2])
+
+    def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "provider"
+            repo.mkdir()
+            image = root / "front.png"
+            image.write_bytes(b"image")
+            preflight = root / "preflight.json"
+            preflight.write_text(
+                json.dumps(
+                    {
+                        "provider": "spar3d",
+                        "status": "READY_GPU_VISIBLE",
+                        "providerPreflight": {
+                            "vramSufficient": True,
+                            "heavyweightInstallAllowed": True,
+                            "hfTokenPresent": True,
+                            "modelAccessAcknowledged": True,
+                            "licenseTermsAcknowledged": True,
+                        },
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            args = type(
+                "Args",
+                (),
+                {
+                    "provider_repo": repo,
+                    "input_image": image,
+                    "preflight": preflight,
+                    "texture_resolution": 1024,
+                    "target_count": 20000,
+                },
+            )()
+            with patch(
+                "scripts.ai3d.run_spar3d_candidate.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ):
+                report = build_spar3d_report(args)
+        self.assertEqual(report["status"], "READY_TO_RUN_ONCE")
+        self.assertEqual(report["officialEntrypoint"], "run.py")
+        self.assertTrue(report["lowVramMode"])
+        self.assertFalse(report["unityInputAllowed"])
+        self.assertFalse(report["productionPromotionAllowed"])
+
     def test_partcrafter_preflight_accepts_8gb_gpu_only_with_explicit_terms_acknowledgement(self):
         gpu = [{"name": "NVIDIA T4", "memoryMb": 15360, "driverVersion": "test"}]
         torch = {
@@ -225,6 +318,52 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertTrue(
             report["strategies"]["PARTCRAFTER_PART_LEVEL_V001"]["runAllowed"]
         )
+        self.assertFalse(report["unityInputAllowed"])
+
+    def test_orchestrator_pivots_to_spar3d_after_partcrafter_plateau(self):
+        contract_path = ROOT / "contracts" / "current_roster_ai3d_pipeline_v001.json"
+
+        def fake_runtime(provider):
+            ready = provider == "spar3d"
+            return {
+                "provider": provider,
+                "status": "READY_GPU_VISIBLE" if ready else "BLOCKED_PROVIDER_PREFLIGHT",
+                "providerPreflight": {"heavyweightInstallAllowed": ready},
+            }
+
+        def fake_gate(provider, strategy_id, score_dir, history_records):
+            plateau = strategy_id == "PARTCRAFTER_PART_LEVEL_V001"
+            return {
+                "status": "QUALITY_PLATEAU_SAME_STRATEGY" if plateau else "READY_NEW_STRATEGY",
+                "provider": provider,
+                "strategyId": strategy_id,
+                "unityInputAllowed": False,
+                "productionPromotionAllowed": False,
+            }
+
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.build_runtime_report",
+            side_effect=fake_runtime,
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator._gate", side_effect=fake_gate
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.prepare_handoff",
+            return_value={"status": "READY_INPUTS_BLOCKED_AUTHORING"},
+        ), patch(
+            "scripts.ai3d.hybrid_quality_orchestrator.shutil.which",
+            return_value="blender",
+        ), patch("scripts.ai3d.hybrid_quality_orchestrator.write_json"):
+            report = hybrid_quality_orchestrator.build_hybrid_report(
+                art_root=Path(temporary),
+                output=Path(temporary) / "orchestration.json",
+                contract_path=contract_path,
+                socket_contract_path=ROOT / "contracts" / "current_roster_socket_contract_v001.json",
+                character="CH101",
+            )
+
+        self.assertEqual(report["selectedStrategies"], ["SPAR3D_SINGLE_VIEW_V001"])
+        self.assertTrue(report["strategies"]["SPAR3D_SINGLE_VIEW_V001"]["runAllowed"])
+        self.assertTrue(report["strategies"]["SPAR3D_SINGLE_VIEW_V001"]["preflight"]["providerPreflight"]["heavyweightInstallAllowed"])
         self.assertFalse(report["unityInputAllowed"])
 
     def test_trellis16_accepts_16gb_class_gpu_only_with_explicit_terms_acknowledgement(self):

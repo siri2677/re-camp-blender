@@ -28,6 +28,7 @@ GPU_PROVIDERS = {
     "trellis16",
     "trellis2",
     "partcrafter",
+    "spar3d",
 }
 
 # TRELLIS is deliberately conservative: a visible GPU is not enough to
@@ -38,6 +39,7 @@ TRELLIS_MINIMUM_VRAM_MB = 24576
 TRELLIS16_MINIMUM_VRAM_MB = 16384
 TRELLIS2_MINIMUM_VRAM_MB = 24576
 PARTCRAFTER_MINIMUM_VRAM_MB = 8192
+SPAR3D_MINIMUM_VRAM_MB = 8192
 
 
 def parse_args() -> argparse.Namespace:
@@ -162,6 +164,54 @@ def build_report(provider: str) -> dict[str, Any]:
             )
         )
         if trellis_ready:
+            status = "READY_GPU_VISIBLE"
+            provider_preflight["heavyweightInstallAllowed"] = True
+        else:
+            status = "BLOCKED_PROVIDER_PREFLIGHT"
+    elif provider == "spar3d":
+        maximum_vram = max(
+            (gpu.get("memoryMb") or 0 for gpu in gpus),
+            default=0,
+        )
+        token_envs = (
+            "HF_TOKEN",
+            "HUGGINGFACE_HUB_TOKEN",
+            "HUGGINGFACEHUB_API_TOKEN",
+        )
+        token_env = next((name for name in token_envs if os.environ.get(name)), "")
+        access_env = "RE_CAMP_SPAR3D_ACCESS_ACK"
+        license_env = "RE_CAMP_SPAR3D_LICENSE_ACK"
+        access_acknowledged = os.environ.get(access_env, "0") == "1"
+        license_acknowledged = os.environ.get(license_env, "0") == "1"
+        provider_preflight = {
+            "minimumVramMb": SPAR3D_MINIMUM_VRAM_MB,
+            "maximumVisibleVramMb": maximum_vram or None,
+            "vramSufficient": maximum_vram >= SPAR3D_MINIMUM_VRAM_MB,
+            "cudaRuntimeVisible": bool(torch_info.get("cudaAvailable")),
+            "torchKernelSupportsDevice": bool(
+                torch_info.get("torchKernelSupportsDevice")
+            ),
+            "modelAccessAcknowledged": access_acknowledged,
+            "licenseTermsAcknowledged": license_acknowledged,
+            "hfTokenPresent": bool(token_env),
+            "tokenEnvironment": token_env or None,
+            "accessAcknowledgementEnv": access_env,
+            "licenseAcknowledgementEnv": license_env,
+            "officialEntrypoint": "run.py",
+            "lowVramMode": True,
+            "heavyweightInstallAllowed": False,
+        }
+        spar3d_ready = (
+            bool(gpus)
+            and torch_info.get("available")
+            and torch_info.get("cudaAvailable")
+            and torch_info.get("torchKernelSupportsDevice")
+            and provider_preflight["vramSufficient"]
+            and access_acknowledged
+            and license_acknowledged
+            and bool(token_env)
+        )
+        if spar3d_ready:
             status = "READY_GPU_VISIBLE"
             provider_preflight["heavyweightInstallAllowed"] = True
         else:

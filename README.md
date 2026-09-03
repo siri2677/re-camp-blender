@@ -286,3 +286,12 @@ Before Unity is available, validate the future roster input manifest with
 [docs/plans/unity-input-package-preflight.md](docs/plans/unity-input-package-preflight.md).
 The preflight checks the five-character socket contract, source/tool commits,
 blend hashes, Gate lock, and—after approval—the final Unity package SHA256.
+
+The next one-shot quality pivot is `SPAR3D_SINGLE_VIEW_V001`. It uses the official
+SPAR3D `run.py` with `--low-vram-mode` and a conservative 8-GB preflight, but its
+Hugging Face model is gated. The notebook records only whether a runtime token
+exists and requires explicit access/license acknowledgements; it never stores the
+token. Missing access, GPU, or verified setup blocks before heavyweight install.
+Any generated mesh remains review-only and must pass the existing strict visual
+QA; Unity and production gates stay locked. See
+[the SPAR3D one-shot plan](docs/plans/ch101-spar3d-one-shot-plan-2026-09-03.md).
