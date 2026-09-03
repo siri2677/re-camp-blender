@@ -40,6 +40,13 @@ pin이 import preflight를 통과시키는지 Kaggle에서 재검증하며, 통�
 GPU 추론을 시작하지 않는다. 참고: [transparent-background 공식 문서](https://github.com/plemeri/transparent-background),
 [동일 import 오류 이슈](https://github.com/plemeri/transparent-background/issues/104).
 
+호환성 pin을 반영한 재실행에서는 import preflight가 `READY_IMPORTS`로 통과했고
+SPAR3D `run.py`까지 시작됐지만, provider가 `returnCode: 1`을 반환해
+`SPAR3D_EXECUTION_FAILED`로 종료됐다. 이 첫 실행 래퍼는 provider stdout/stderr를
+완전히 버렸기 때문에 현재 기록만으로는 CUDA·모델 다운로드·provider 런타임 중
+어느 단계인지 구분할 수 없다. 다음 실행부터는 원문을 저장하지 않고 오류 유형·짧은
+메시지·경로·token을 마스킹한 `executionFailureDetail`만 기록해 원인별로 분기한다.
+
 ## 사용자가 한 번 수행할 준비
 
 1. [SPAR3D 공식 모델 카드](https://huggingface.co/stabilityai/stable-point-aware-3d)에서

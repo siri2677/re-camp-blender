@@ -243,6 +243,36 @@ def find_mesh_outputs(output_dir: Path) -> list[Path]:
     )
 
 
+def sanitize_provider_output(output: str, limit: int = 6) -> str:
+    """Keep a short actionable failure signal without persisting raw output."""
+
+    if not isinstance(output, str) or not output.strip():
+        return "PROVIDER_OUTPUT_EMPTY"
+
+    error_pattern = re.compile(
+        r"(?i)(error|exception|traceback|failed|failure|cuda|out of memory|oom|"
+        r"not found|missing|invalid|permission|denied|unauthorized|forbidden|"
+        r"http\s+[45]\d\d|killed|memory)"
+    )
+    lines = [" ".join(line.split()) for line in output.splitlines() if line.strip()]
+    selected = [line for line in lines if error_pattern.search(line)] or lines[-limit:]
+    sanitized: list[str] = []
+    for line in reversed(selected[-limit:]):
+        line = re.sub(r"(?i)\b(?:hf|sk)[_-][A-Za-z0-9_-]{10,}\b", "[REDACTED_TOKEN]", line)
+        line = re.sub(
+            r"(?i)\b(token|secret|password|authorization|bearer)\s*[=:]\s*[^\s,;]+",
+            r"\1=[REDACTED]",
+            line,
+        )
+        line = re.sub(r"(?i)\bBearer\s+[^\s,;]+", "Bearer [REDACTED]", line)
+        line = re.sub(r"https?://[^\s,;]+", "[URL]", line)
+        line = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", line)
+        line = line[:240]
+        if line and line not in sanitized:
+            sanitized.append(line)
+    return " | ".join(reversed(sanitized)) or "PROVIDER_OUTPUT_EMPTY"
+
+
 def main() -> int:
     args = parse_args()
     report = build_report(args)
@@ -282,14 +312,16 @@ def main() -> int:
                 if not existing_pythonpath
                 else provider_root + os.pathsep + existing_pythonpath
             )
-            # Do not capture or persist provider output: it could contain
-            # environment-specific paths or accidental secret material.
+            # Capture only in memory so a short sanitized diagnostic can be
+            # recorded. Raw provider output is never written to the report.
             result = subprocess.run(
                 command,
                 cwd=args.provider_repo.resolve(),
                 env=provider_env,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                errors="replace",
                 check=False,
             )
             report["returnCode"] = result.returncode
@@ -297,6 +329,16 @@ def main() -> int:
             if result.returncode != 0:
                 report["status"] = "SPAR3D_EXECUTION_FAILED"
                 report["blockers"] = ["SPAR3D_PROVIDER_RETURNED_NONZERO"]
+                report["executionFailureDetail"] = sanitize_provider_output(
+                    "\n".join(
+                        value
+                        for value in (
+                            getattr(result, "stdout", ""),
+                            getattr(result, "stderr", ""),
+                        )
+                        if isinstance(value, str)
+                    )
+                )
             elif len(mesh_outputs) != 1:
                 report["status"] = "SPAR3D_EXECUTION_NO_UNIQUE_MESH"
                 report["blockers"] = ["EXPECTED_ONE_NONEMPTY_MESH_GLB"]

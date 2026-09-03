@@ -26,6 +26,7 @@ from scripts.ai3d import run_spar3d_candidate
 from scripts.ai3d.run_spar3d_candidate import (
     build_report as build_spar3d_report,
     dependency_preflight as dependency_preflight_spar3d,
+    sanitize_provider_output,
 )
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
@@ -110,6 +111,23 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("child = subprocess.run", command[2])
         self.assertIn("one child", command[2])
         self.assertIn("reversed(output_lines)", command[2])
+
+    def test_spar3d_execution_diagnostic_is_sanitized_and_bounded(self):
+        raw = (
+            "Traceback (most recent call last):\n"
+            "  File /kaggle/working/provider/run.py, line 7\n"
+            "RuntimeError: CUDA out of memory for hf_abcdefghijklmnopqrstuvwxyz\n"
+            "Authorization: Bearer secret-value-must-not-appear\n"
+            "https://example.test/private?token=should-not-appear\n"
+        )
+        sanitized = sanitize_provider_output(raw)
+        self.assertIn("RuntimeError", sanitized)
+        self.assertIn("CUDA out of memory", sanitized)
+        self.assertNotIn("/kaggle/working/provider", sanitized)
+        self.assertNotIn("hf_abcdefghijklmnopqrstuvwxyz", sanitized)
+        self.assertNotIn("secret-value-must-not-appear", sanitized)
+        self.assertNotIn("should-not-appear", sanitized)
+        self.assertLessEqual(len(sanitized.split(" | ")), 6)
 
     def test_spar3d_notebook_pins_transparent_background_flet_compatibility(self):
         notebook = json.loads(
