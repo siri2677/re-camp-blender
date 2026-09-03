@@ -97,6 +97,19 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertNotIn("provider path", status)
         self.assertNotIn("SHOULD_NOT_LEAK", status)
 
+    def test_spar3d_dependency_preflight_isolates_each_import(self):
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.run_spar3d_candidate.subprocess.run",
+            return_value=type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})(),
+        ) as run_process:
+            ready, status = dependency_preflight_spar3d(Path(temporary))
+        self.assertTrue(ready)
+        self.assertEqual(status, "READY_IMPORTS")
+        self.assertEqual(run_process.call_count, 1)
+        command = run_process.call_args.args[0]
+        self.assertIn("child = subprocess.run", command[2])
+        self.assertIn("one child", command[2])
+
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

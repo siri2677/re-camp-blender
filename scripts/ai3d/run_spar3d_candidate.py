@@ -70,6 +70,8 @@ def dependency_preflight(repo: Path) -> tuple[bool, str]:
     imports = r'''
 import importlib
 import json
+import re
+import subprocess
 import sys
 
 modules = (
@@ -82,25 +84,35 @@ modules = (
 )
 failures = []
 for module in modules:
-    try:
-        importlib.import_module(module)
-    except Exception as exc:  # pragma: no cover - executed in provider env
-        message = " ".join(str(exc).split())[:160]
-        # Preserve only a short, scrubbed diagnostic.  Provider exceptions can
-        # contain local paths or credential-like query parameters.
-        message = re.sub(
-            r"(?i)(token|secret|password|authorization|bearer)[=:][^\s,;]+",
-            r"\1=[REDACTED]",
-            message,
-        )
-        message = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", message)
-        failures.append(
-            {
-                "module": module,
-                "errorType": type(exc).__name__,
-                "errorMessage": message or "UNSPECIFIED",
-            }
-        )
+    # Isolate every provider import.  A native extension can terminate its
+    # interpreter before the parent loop gets a Python exception; one child
+    # per module keeps the remaining diagnostics observable.
+    child = subprocess.run(
+        [sys.executable, "-c", f"import importlib; importlib.import_module({module!r})"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if child.returncode == 0:
+        continue
+    message = " ".join((child.stderr or child.stdout).split())[:160]
+    message = re.sub(
+        r"(?i)(token|secret|password|authorization|bearer)[=:][^\s,;]+",
+        r"\1=[REDACTED]",
+        message,
+    )
+    message = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", message)
+    failures.append(
+        {
+            "module": module,
+            "errorType": (
+                "SUBPROCESS_EXIT_" + str(child.returncode)
+                if not message
+                else (message.split(":", 1)[0].split()[-1][:80] or "IMPORT_FAILED")
+            ),
+            "errorMessage": message or "UNSPECIFIED",
+        }
+    )
 print(json.dumps({"failures": failures}, sort_keys=True))
 sys.exit(1 if failures else 0)
 '''
