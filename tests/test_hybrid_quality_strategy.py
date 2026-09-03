@@ -80,7 +80,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
             (),
             {
                 "returncode": 1,
-                "stdout": '{"failures": [{"module": "spar3d.system", "errorType": "ModuleNotFoundError"}]}\n',
+                "stdout": '{"failures": [{"errorMessage": "No module named transparent_background", "errorType": "ModuleNotFoundError", "module": "spar3d.system"}]}\n',
                 "stderr": "provider path and secret material must not be persisted",
             },
         )()
@@ -92,9 +92,10 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertFalse(ready)
         self.assertEqual(
             status,
-            "SPAR3D_DEPENDENCIES_IMPORT_FAILED:spar3d.system:ModuleNotFoundError",
+            "SPAR3D_DEPENDENCIES_IMPORT_FAILED:spar3d.system:ModuleNotFoundError:No module named transparent_background",
         )
         self.assertNotIn("provider path", status)
+        self.assertNotIn("SHOULD_NOT_LEAK", status)
 
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:

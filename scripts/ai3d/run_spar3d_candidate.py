@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -84,7 +85,22 @@ for module in modules:
     try:
         importlib.import_module(module)
     except Exception as exc:  # pragma: no cover - executed in provider env
-        failures.append({"module": module, "errorType": type(exc).__name__})
+        message = " ".join(str(exc).split())[:160]
+        # Preserve only a short, scrubbed diagnostic.  Provider exceptions can
+        # contain local paths or credential-like query parameters.
+        message = re.sub(
+            r"(?i)(token|secret|password|authorization|bearer)[=:][^\s,;]+",
+            r"\1=[REDACTED]",
+            message,
+        )
+        message = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", message)
+        failures.append(
+            {
+                "module": module,
+                "errorType": type(exc).__name__,
+                "errorMessage": message or "UNSPECIFIED",
+            }
+        )
 print(json.dumps({"failures": failures}, sort_keys=True))
 sys.exit(1 if failures else 0)
 '''
@@ -117,7 +133,17 @@ sys.exit(1 if failures else 0)
         module = failure.get("module")
         error_type = failure.get("errorType")
         if isinstance(module, str) and isinstance(error_type, str):
-            details.append(f"{module}:{error_type}")
+            message = failure.get("errorMessage", "UNSPECIFIED")
+            if not isinstance(message, str):
+                message = "UNSPECIFIED"
+            message = " ".join(message.split())[:160]
+            message = re.sub(
+                r"(?i)(token|secret|password|authorization|bearer)[=:][^\s,;]+",
+                r"\1=[REDACTED]",
+                message,
+            )
+            message = re.sub(r"(?:[A-Za-z]:)?[/\\][^\s,;]+", "[PATH]", message)
+            details.append(f"{module}:{error_type}:{message}")
     suffix = ",".join(details) if details else "UNKNOWN"
     return False, f"SPAR3D_DEPENDENCIES_IMPORT_FAILED:{suffix}"
 
