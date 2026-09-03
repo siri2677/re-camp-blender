@@ -267,6 +267,8 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("--diagnostic-only", source)
         self.assertIn("candidateRegistered': False", source)
         self.assertIn("flet==0.23.1", source)
+        self.assertIn("media.githubusercontent.com/media/siri2677/re-camp", source)
+        self.assertIn("downloaded_image.verify()", source)
         self.assertNotIn("files.download", source)
 
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):

@@ -68,6 +68,11 @@ validator를 통과했다. 새 Kaggle 진단 세션은 런타임 할당이 `Sess
 에서 멈춰 중지했으므로, FP16 전환 후 실제 `run.py`가 mesh를 쓰는지는 호환 GPU가
 할당되는 즉시 진단 Notebook 08에서 한 번 확인한다.
 
+재검증 중 Notebook 08의 GitHub raw 다운로드가 PNG 대신 132바이트 Git LFS
+pointer를 받아 `PIL.UnidentifiedImageError`를 냈다. 아트 파일은 LFS binary를
+제공하는 `media.githubusercontent.com` URL로 받도록 바꾸고, 다운로드 직후
+Pillow `verify()`를 통과하지 않으면 provider 설치·추론으로 진행하지 않는다.
+
 이를 실행할 전용 Notebook
 `08_ch101_spar3d_diagnostic.ipynb`도 추가했다. 이 Notebook은 Kaggle Secret과
 GPU preflight가 모두 통과할 때만 동일한 공식 `run.py`를 `--diagnostic-only`로
