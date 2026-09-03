@@ -134,3 +134,43 @@ gateB: PENDING_HUMAN_REVIEW
 unityInputAllowed: false
 productionPromotionAllowed: false
 ```
+
+## 2026-09-03 재현 결과: CLI 기본값 오류
+
+FP16 호환성 패치를 적용한 새 Kaggle T4 진단은 다음 단계까지 정상적으로
+진입했다.
+
+- GPU: `2x Tesla T4 15360MB`
+- GPU preflight: `READY_GPU_VISIBLE`
+- PyTorch kernel: `torchKernelSupportsDevice: true`
+- Secret: `HF_TOKEN`, access acknowledgement, license acknowledgement 모두
+  존재 여부만 확인됨
+- reference image: Git LFS binary 다운로드 및 Pillow 검증 통과
+- dependency import: `READY_IMPORTS`
+- T4 runtime patch: 적용됨
+
+그 뒤 pinned SPAR3D `run.py`가 다음 오류로 종료됐다.
+
+```text
+AttributeError: 'Namespace' object has no attribute 'reduction_count_type'
+```
+
+원인은 pinned `run.py`가 `gpytoolbox` 또는
+`pynanoinstantmeshes` 중 하나가 설치된 경우에만
+`--reduction_count_type`와 `--target_count`를 argparse에 추가하지만,
+remesh backend가 모두 없는 일반 Kaggle 설치에서도 두 값을 무조건 읽기
+때문이다. 기본 remesh 옵션은 `none`이므로 optional remesh 패키지를 강제로
+설치할 필요는 없다.
+
+`SPAR3D_T4_BF16_CLI_DEFAULTS_V002` 패치를 추가했다. 이 패치는 다음을
+detached pinned checkout에만 적용한다.
+
+- `reduction_count_type=keep` 기본값을 항상 정의
+- `target_count=2000` 기본값을 항상 정의
+- 기존 T4 BF16→FP16 자동 선택 유지
+- provider commit 불일치 또는 패치 누락이면 실행 중단
+
+패치 대상은 Kaggle 임시 checkout이며 upstream commit은 변경하지 않는다.
+이번 진단은 `SPAR3D_DIAGNOSTIC_FAILED`, mesh 0개, candidate 미등록으로
+종료됐고, 다음 재실행은 새 패치 커밋을 사용한다. 성공 여부를 확인하기
+전까지 Production·Gate B·Unity 입력은 계속 잠근다.

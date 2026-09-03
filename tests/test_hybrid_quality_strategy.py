@@ -42,7 +42,20 @@ class HybridQualityStrategyTests(unittest.TestCase):
             runner = repo / "run.py"
             runner.write_text(
                 '    print("Device used: ", device)\n'
-                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n',
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n'
+                '    if TRIANGLE_REMESH_AVAILABLE or QUAD_REMESH_AVAILABLE:\n'
+                '        parser.add_argument(\n'
+                '            "--reduction_count_type",\n'
+                '            choices=["keep", "vertex", "faces"],\n'
+                '            default="keep",\n'
+                '            help="Vertex count type",\n'
+                '        )\n'
+                '        parser.add_argument(\n'
+                '            "--target_count",\n'
+                '            type=check_positive,\n'
+                '            help="Selected target count.",\n'
+                '            default=2000,\n'
+                '        )\n',
                 encoding="utf-8",
             )
             with patch(
@@ -56,7 +69,10 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("dtype=amp_dtype", patched)
         self.assertTrue(report["changed"])
         self.assertFalse(second["changed"])
-        self.assertEqual(second["alreadyPresent"], ["runner.dynamic_amp_dtype", "runner.autocast_dtype"])
+        self.assertEqual(
+            second["alreadyPresent"],
+            ["runner.dynamic_amp_dtype", "runner.autocast_dtype", "runner.cli_defaults"],
+        )
         self.assertTrue(second["providerCommitUnchanged"])
 
     def test_spar3d_preflight_requires_gpu_access_and_license_acknowledgements(self):
