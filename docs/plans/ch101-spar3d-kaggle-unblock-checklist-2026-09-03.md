@@ -53,7 +53,8 @@ token 존재 여부와 acknowledgement 여부뿐이다.
 - Hugging Face 접근 승인 미완료
 - license acknowledgement 누락
 - 8GB 미만 GPU 또는 CUDA kernel 미지원
-- `RE_CAMP_SPAR3D_SETUP_COMMAND` 미설정
+- 공식 `requirements.txt` 기본 설치가 실패하거나, 별도 설치가 필요한 경우의
+  `RE_CAMP_SPAR3D_SETUP_COMMAND` override 오류
 - pinned commit·mesh hash·reference hash 불일치
 
 조건이 하나라도 빠지면 `BLOCKED_PROVIDER_PREFLIGHT` 또는 구체적인 실패 상태로

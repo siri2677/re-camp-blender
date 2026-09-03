@@ -37,8 +37,9 @@ Secret은 report, log, archive, Git에 기록하지 않는다. 모델 terms 접�
    VRAM, token 존재 여부, 접근·라이선스 acknowledgement를 확인한다.
 3. 조건이 하나라도 빠지면 heavyweight 설치·추론 없이
    `BLOCKED_PROVIDER_PREFLIGHT`로 종료한다.
-4. 조건이 모두 충족될 때만 Notebook이 pinned checkout과 사용자가 제공한 setup
-   command를 실행한다.
+4. 조건이 모두 충족될 때만 Notebook이 pinned checkout과 공식 pinned
+   `requirements.txt` 설치 명령을 실행한다. 특수한 런타임 조정이 필요할 때만
+   `RE_CAMP_SPAR3D_SETUP_COMMAND`로 명시적 override를 제공한다.
 5. `run_spar3d_candidate.py`가 `run.py`를 Notebook과 같은 Python interpreter로
    실행하고, 정확히 하나의 non-empty `mesh.glb`를 확인한다.
 6. GLB는 `register_review_candidate.py`로 등록한 뒤 기존 Blender refine →
