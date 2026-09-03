@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "ch101-spar3d-t4-root-cause-v002",
+  "recordedAt": "2026-09-03",
+  "runtime": "Kaggle",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "PENDING_COMMIT_AFTER_FIX",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "priorObservedFailure": {
+    "status": "SPAR3D_EXECUTION_FAILED",
+    "returnCode": 1,
+    "dependencyPreflight": "READY_IMPORTS",
+    "gpu": "2x Tesla T4 15360MB",
+    "failureDetail": "UNAVAILABLE_LEGACY_RUNNER_DROPPED_PROVIDER_OUTPUT"
+  },
+  "rootCause": {
+    "status": "SOURCE_CONFIRMED_FIX_IMPLEMENTED_KAGGLE_RETEST_PENDING",
+    "code": "SPAR3D_T4_BF16_AUTocast_UNSUPPORTED",
+    "evidence": "Pinned provider run.py unconditionally constructs torch.autocast(device_type=device, dtype=torch.bfloat16); the observed device is Tesla T4 sm_75, while CUDA BF16 hardware support starts at compute capability 8.0.",
+    "notAuthFailure": true,
+    "notVramPreflightFailure": true
+  },
+  "fix": {
+    "patchId": "SPAR3D_T4_BF16_TO_FP16_V001",
+    "script": "scripts/ai3d/patch_spar3d_t4_compat.py",
+    "application": "run_spar3d_candidate.py applies the idempotent patch before dependency/runtime execution",
+    "behavior": "Use FP16 when torch.cuda.is_bf16_supported() is false; preserve BF16 otherwise",
+    "providerCommitUnchanged": true,
+    "productionMesh": false
+  },
+  "localValidation": {
+    "unittest": "PASS_118",
+    "pythonCompile": "PASS",
+    "ai3dValidator": "PASS",
+    "colabValidator": "PASS"
+  },
+  "kaggleRetest": {
+    "status": "PENDING_COMPATIBLE_GPU_SESSION",
+    "diagnosticNotebook": "notebooks/08_ch101_spar3d_diagnostic.ipynb",
+    "lastAttempt": "SESSION_STARTING_STALLED_AND_STOPPED",
+    "rawProviderOutputPersisted": false
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Run diagnostic Notebook 08 on a newly allocated T4/L4/A10; if the patched provider writes a mesh, use a new repaired strategy ID for candidate evaluation rather than silently retrying the failed V001 strategy."
+}

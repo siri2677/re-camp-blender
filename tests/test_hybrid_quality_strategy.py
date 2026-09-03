@@ -23,6 +23,7 @@ from scripts.ai3d.run_partcrafter_candidate import (
 )
 from scripts.ai3d import run_partcrafter_candidate
 from scripts.ai3d import run_spar3d_candidate
+from scripts.ai3d.patch_spar3d_t4_compat import patch_runner
 from scripts.ai3d.run_spar3d_candidate import (
     build_report as build_spar3d_report,
     dependency_preflight as dependency_preflight_spar3d,
@@ -35,6 +36,29 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class HybridQualityStrategyTests(unittest.TestCase):
+    def test_spar3d_t4_compat_patch_switches_bfloat16_to_supported_dtype(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            runner = repo / "run.py"
+            runner.write_text(
+                '    print("Device used: ", device)\n'
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n',
+                encoding="utf-8",
+            )
+            with patch(
+                "scripts.ai3d.patch_spar3d_t4_compat.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ):
+                report = patch_runner(repo)
+                second = patch_runner(repo)
+                patched = runner.read_text(encoding="utf-8")
+        self.assertIn("torch.cuda.is_bf16_supported()", patched)
+        self.assertIn("dtype=amp_dtype", patched)
+        self.assertTrue(report["changed"])
+        self.assertFalse(second["changed"])
+        self.assertEqual(second["alreadyPresent"], ["runner.dynamic_amp_dtype", "runner.autocast_dtype"])
+        self.assertTrue(second["providerCommitUnchanged"])
+
     def test_spar3d_preflight_requires_gpu_access_and_license_acknowledgements(self):
         gpu = [{"name": "NVIDIA T4", "memoryMb": 15360, "driverVersion": "test"}]
         torch = {
@@ -134,6 +158,11 @@ class HybridQualityStrategyTests(unittest.TestCase):
             root = Path(temporary)
             repo = root / "provider"
             repo.mkdir()
+            (repo / "run.py").write_text(
+                '    print("Device used: ", device)\n'
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n',
+                encoding="utf-8",
+            )
             image = root / "front.png"
             image.write_bytes(b"image")
             preflight = root / "preflight.json"
@@ -173,6 +202,14 @@ class HybridQualityStrategyTests(unittest.TestCase):
             with patch(
                 "scripts.ai3d.run_spar3d_candidate.git_head",
                 return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ), patch(
+                "scripts.ai3d.run_spar3d_candidate.patch_runner",
+                return_value={
+                    "patchId": "SPAR3D_T4_BF16_TO_FP16_V001",
+                    "providerCommitActual": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+                    "missing": [],
+                    "providerCommitUnchanged": True,
+                },
             ), patch(
                 "scripts.ai3d.run_spar3d_candidate.subprocess.run",
                 side_effect=[dependency_result, provider_result],

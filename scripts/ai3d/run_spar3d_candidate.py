@@ -21,6 +21,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    from .patch_spar3d_t4_compat import patch_runner
+except ImportError:  # Direct execution from the provider runner Notebook.
+    from patch_spar3d_t4_compat import patch_runner
+
 
 EXPECTED_COMMIT = "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1"
 STRATEGY_ID = "SPAR3D_SINGLE_VIEW_V001"
@@ -287,6 +292,15 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
+    if args.execute and report["status"] == "READY_TO_RUN_ONCE":
+        compatibility_patch = patch_runner(args.provider_repo.resolve())
+        report["runtimeCompatibilityPatch"] = compatibility_patch
+        if compatibility_patch["providerCommitActual"] != EXPECTED_COMMIT:
+            report["status"] = "BLOCKED_PROVIDER_COMMIT_MISMATCH"
+            report["blockers"].append("SPAR3D_COMPATIBILITY_PATCH_COMMIT_MISMATCH")
+        elif compatibility_patch["missing"]:
+            report["status"] = "BLOCKED_PROVIDER_COMPATIBILITY_PATCH"
+            report["blockers"].append("SPAR3D_COMPATIBILITY_PATCH_INCOMPLETE")
     if args.execute and report["status"] == "READY_TO_RUN_ONCE":
         imports_ready, dependency_status = dependency_preflight(args.provider_repo.resolve())
         report["dependencyPreflight"] = dependency_status

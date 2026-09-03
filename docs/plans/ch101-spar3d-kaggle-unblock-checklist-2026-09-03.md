@@ -47,6 +47,27 @@ SPAR3D `run.py`까지 시작됐지만, provider가 `returnCode: 1`을 반환해
 어느 단계인지 구분할 수 없다. 다음 실행부터는 원문을 저장하지 않고 오류 유형·짧은
 메시지·경로·token을 마스킹한 `executionFailureDetail`만 기록해 원인별로 분기한다.
 
+## T4 원인 분석 및 수정
+
+고정된 SPAR3D `run.py`를 소스 대조한 결과, CUDA 경로가
+`torch.autocast(..., dtype=torch.bfloat16)`을 무조건 선택한다. Kaggle의 Tesla T4는
+Compute Capability 7.5(sm_75)이고 CUDA BF16 연산은 Compute Capability 8.0 이상이
+필요하므로, T4에서는 provider가 추론 초기에 종료할 수 있다. 이는 token·모델 접근
+승인·VRAM preflight와 별개의 하드웨어 정밀도 호환성 문제다.
+
+이를 해결하기 위해 `scripts/ai3d/patch_spar3d_t4_compat.py`와 wrapper 연결을
+추가했다. Kaggle의 detached provider checkout에서만 다음 규칙을 적용한다.
+
+- `torch.cuda.is_bf16_supported()`가 true면 기존 BF16 유지
+- false인 CUDA 장치(T4 포함)는 FP16 autocast로 전환
+- provider HEAD가 pinned commit과 다르면 패치·실행 중단
+- 원본/패치 SHA256과 patch ID만 report에 기록하고 upstream commit은 변경하지 않음
+
+현재 이 수정은 로컬 118개 unittest, Python compile, AI3D validator, Colab
+validator를 통과했다. 새 Kaggle 진단 세션은 런타임 할당이 `Session is starting...`
+에서 멈춰 중지했으므로, FP16 전환 후 실제 `run.py`가 mesh를 쓰는지는 호환 GPU가
+할당되는 즉시 진단 Notebook 08에서 한 번 확인한다.
+
 이를 실행할 전용 Notebook
 `08_ch101_spar3d_diagnostic.ipynb`도 추가했다. 이 Notebook은 Kaggle Secret과
 GPU preflight가 모두 통과할 때만 동일한 공식 `run.py`를 `--diagnostic-only`로
