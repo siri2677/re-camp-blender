@@ -75,6 +75,55 @@ class HybridQualityStrategyTests(unittest.TestCase):
         )
         self.assertTrue(second["providerCommitUnchanged"])
 
+    def test_spar3d_t4_compat_patch_chunks_grid_decoder(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            runner = repo / "run.py"
+            runner.write_text(
+                '    print("Device used: ", device)\n'
+                '                torch.autocast(device_type=device, dtype=torch.bfloat16)\n'
+                '    if TRIANGLE_REMESH_AVAILABLE or QUAD_REMESH_AVAILABLE:\n'
+                '        parser.add_argument(\n'
+                '            "--reduction_count_type",\n'
+                '            choices=["keep", "vertex", "faces"],\n'
+                '            default="keep",\n'
+                '            help="Vertex count type",\n'
+                '        )\n'
+                '        parser.add_argument(\n'
+                '            "--target_count",\n'
+                '            type=check_positive,\n'
+                '            help="Selected target count.",\n'
+                '            default=2000,\n'
+                '        )\n',
+                encoding="utf-8",
+            )
+            system_dir = repo / "spar3d"
+            system_dir.mkdir()
+            system = system_dir / "system.py"
+            system.write_text(
+                '            values = self.query_triplane(grid_vertices, triplane)\n'
+                '            decoded = self.decoder(values, include=["vertex_offset", "density"])\n'
+                '            sdf = decoded["density"] - self.cfg.isosurface_threshold\n'
+                '\n'
+                '            deform = decoded["vertex_offset"].squeeze(0)\n'
+                '\n'
+                '            mesh: Mesh = self.isosurface_helper(\n'
+                '                sdf.view(-1, 1), deform.view(-1, 3) if deform is not None else None\n'
+                '            )',
+                encoding="utf-8",
+            )
+            with patch(
+                "scripts.ai3d.patch_spar3d_t4_compat.git_head",
+                return_value="fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+            ):
+                report = patch_runner(repo)
+            patched_system = system.read_text(encoding="utf-8")
+        self.assertIn("SPAR3D_DECODER_CHUNK_SIZE", patched_system)
+        self.assertIn("torch.cat(sdf_chunks, dim=1)", patched_system)
+        self.assertIn("runner.cli_defaults:1", report["applied"])
+        self.assertIn("system.chunked_grid_decode:1", report["applied"])
+        self.assertEqual(report["missing"], [])
+
     def test_spar3d_preflight_requires_gpu_access_and_license_acknowledgements(self):
         gpu = [{"name": "NVIDIA T4", "memoryMb": 15360, "driverVersion": "test"}]
         torch = {
@@ -285,6 +334,8 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertIn("flet==0.23.1", source)
         self.assertIn("media.githubusercontent.com/media/siri2677/re-camp", source)
         self.assertIn("downloaded_image.verify()", source)
+        self.assertIn("SPAR3D_DECODER_CHUNK_SIZE", source)
+        self.assertIn("RE_CAMP_SPAR3D_TEXTURE_RESOLUTION", source)
         self.assertNotIn("files.download", source)
 
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):

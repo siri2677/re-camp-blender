@@ -174,3 +174,33 @@ detached pinned checkout에만 적용한다.
 이번 진단은 `SPAR3D_DIAGNOSTIC_FAILED`, mesh 0개, candidate 미등록으로
 종료됐고, 다음 재실행은 새 패치 커밋을 사용한다. 성공 여부를 확인하기
 전까지 Production·Gate B·Unity 입력은 계속 잠근다.
+
+## 2026-09-03 재현 결과: 16GB T4 메모리 피크
+
+CLI 기본값 패치를 포함한 최신 Kaggle 실행은 `run.py`의 모델 추론과 mesh
+변환까지 진입했지만, GPU 0에서 다음 OOM으로 종료됐다.
+
+```text
+torch.OutOfMemoryError: CUDA out of memory
+Tried to allocate 5.94 GiB
+GPU 0 total 14.56 GiB; free 2.95 GiB; process in use 11.61 GiB
+```
+
+이는 HF token·모델 접근 승인·reference 파일·CUDA kernel 문제가 아니다.
+원본 `spar3d/system.py`의 `triplane_to_meshes()`가 160-tet grid 전체를 한 번에
+decoder에 넣어 큰 임시 tensor를 만들기 때문에, pinned provider가 말하는
+low-VRAM 모드만으로는 Kaggle 16GB T4의 peak를 넘는다.
+
+다음 완화 패치를 추가했다.
+
+- `SPAR3D_T4_BF16_CLI_CHUNKED_V003`
+- `system.py`의 grid decoder를 기본 65,536개 vertex chunk로 분할
+- `SPAR3D_DECODER_CHUNK_SIZE` 환경변수로 runtime에서 조정 가능
+- Notebook 08의 diagnostic texture resolution 기본값을 512로 낮춰 후반
+  texture bake peak도 줄임
+- provider checkout은 계속 detached pinned commit으로 유지
+
+이 패치는 품질 기준을 낮추지 않고 peak memory만 줄인다. 다음 Kaggle 진단은
+동일한 16GB T4에서 chunked decoder가 추론과 mesh export를 완료하는지 확인한다.
+성공하더라도 diagnostic-only 경로이므로 후보 등록·Production 승격·Unity
+입력은 열리지 않는다.

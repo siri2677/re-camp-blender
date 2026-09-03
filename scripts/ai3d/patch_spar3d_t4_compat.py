@@ -25,7 +25,7 @@ from typing import Any
 
 
 EXPECTED_COMMIT = "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1"
-PATCH_ID = "SPAR3D_T4_BF16_CLI_DEFAULTS_V002"
+PATCH_ID = "SPAR3D_T4_BF16_CLI_CHUNKED_V003"
 
 _DEVICE_PRINT = '    print("Device used: ", device)'
 _DEVICE_PRINT_PATCHED = '''    print("Device used: ", device)
@@ -70,6 +70,42 @@ _UNCONDITIONAL_REDUCTION_BLOCK = '''    # The runner consumes these values even 
         default=2000,
     )'''
 
+_FULL_GRID_DECODE_BLOCK = '''            values = self.query_triplane(grid_vertices, triplane)
+            decoded = self.decoder(values, include=["vertex_offset", "density"])
+            sdf = decoded["density"] - self.cfg.isosurface_threshold
+
+            deform = decoded["vertex_offset"].squeeze(0)
+
+            mesh: Mesh = self.isosurface_helper(
+                sdf.view(-1, 1), deform.view(-1, 3) if deform is not None else None
+            )'''
+_CHUNKED_GRID_DECODE_BLOCK = '''            # Decode the 160^3 marching-tetrahedra grid in bounded chunks.
+            # The upstream all-at-once decoder can request several GiB on a
+            # 16GB T4 even with low-vram mode enabled.
+            chunk_size = max(
+                1, int(os.environ.get("SPAR3D_DECODER_CHUNK_SIZE", "65536"))
+            )
+            sdf_chunks = []
+            deform_chunks = []
+            for chunk_start in range(0, grid_vertices.shape[0], chunk_size):
+                chunk_end = min(chunk_start + chunk_size, grid_vertices.shape[0])
+                chunk_values = self.query_triplane(
+                    grid_vertices[chunk_start:chunk_end], triplane
+                )
+                chunk_decoded = self.decoder(
+                    chunk_values, include=["vertex_offset", "density"]
+                )
+                sdf_chunks.append(
+                    chunk_decoded["density"] - self.cfg.isosurface_threshold
+                )
+                deform_chunks.append(chunk_decoded["vertex_offset"])
+            sdf = torch.cat(sdf_chunks, dim=1)
+            deform = torch.cat(deform_chunks, dim=1).squeeze(0)
+
+            mesh: Mesh = self.isosurface_helper(
+                sdf.view(-1, 1), deform.view(-1, 3) if deform is not None else None
+            )'''
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -94,9 +130,14 @@ def patch_runner(provider_repo: Path) -> dict[str, Any]:
     if not runner.is_file():
         raise FileNotFoundError(runner)
 
+    system = provider_repo / "spar3d" / "system.py"
+
     original = runner.read_text(encoding="utf-8")
     original_sha256 = sha256_file(runner)
     updated = original
+    system_original = system.read_text(encoding="utf-8") if system.is_file() else ""
+    system_original_sha256 = sha256_file(system) if system.is_file() else "UNAVAILABLE"
+    system_updated = system_original
     applied: list[str] = []
     already_present: list[str] = []
     missing: list[str] = []
@@ -127,17 +168,36 @@ def patch_runner(provider_repo: Path) -> dict[str, Any]:
     else:
         missing.append("runner.cli_defaults")
 
+    if not system.is_file():
+        missing.append("system.chunked_grid_decode")
+    elif _CHUNKED_GRID_DECODE_BLOCK in system_updated:
+        already_present.append("system.chunked_grid_decode")
+    elif _FULL_GRID_DECODE_BLOCK in system_updated:
+        system_updated = system_updated.replace(
+            _FULL_GRID_DECODE_BLOCK, _CHUNKED_GRID_DECODE_BLOCK, 1
+        )
+        applied.append("system.chunked_grid_decode:1")
+    else:
+        missing.append("system.chunked_grid_decode")
+
     if updated != original:
         runner.write_text(updated, encoding="utf-8")
+    if system_updated != system_original:
+        system.write_text(system_updated, encoding="utf-8")
+
+    changed = updated != original or system_updated != system_original
 
     return {
         "patchId": PATCH_ID,
         "path": str(runner),
+        "paths": [str(runner), str(system)] if system.is_file() else [str(runner)],
         "providerCommitExpected": EXPECTED_COMMIT,
         "providerCommitActual": git_head(provider_repo),
         "originalSha256": original_sha256,
         "patchedSha256": sha256_file(runner),
-        "changed": updated != original,
+        "systemOriginalSha256": system_original_sha256,
+        "systemPatchedSha256": sha256_file(system) if system.is_file() else "UNAVAILABLE",
+        "changed": changed,
         "applied": applied,
         "alreadyPresent": already_present,
         "missing": missing,
