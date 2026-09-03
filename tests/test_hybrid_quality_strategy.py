@@ -74,6 +74,28 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertEqual(command[0], __import__("sys").executable)
         self.assertIn("spar3d.system", command[2])
 
+    def test_spar3d_dependency_preflight_reports_sanitized_import_failure(self):
+        failure = type(
+            "Result",
+            (),
+            {
+                "returncode": 1,
+                "stdout": '{"failures": [{"module": "spar3d.system", "errorType": "ModuleNotFoundError"}]}\n',
+                "stderr": "provider path and secret material must not be persisted",
+            },
+        )()
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "scripts.ai3d.run_spar3d_candidate.subprocess.run",
+            return_value=failure,
+        ):
+            ready, status = dependency_preflight_spar3d(Path(temporary))
+        self.assertFalse(ready)
+        self.assertEqual(
+            status,
+            "SPAR3D_DEPENDENCIES_IMPORT_FAILED:spar3d.system:ModuleNotFoundError",
+        )
+        self.assertNotIn("provider path", status)
+
     def test_spar3d_wrapper_requires_pinned_repo_and_keeps_review_gates_locked(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

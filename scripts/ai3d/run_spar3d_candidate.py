@@ -61,10 +61,33 @@ def sha256_file(path: Path) -> str:
 def dependency_preflight(repo: Path) -> tuple[bool, str]:
     """Import only; never download weights or start inference."""
 
-    imports = (
-        "import torch; import trimesh; import PIL; import tqdm; "
-        "import transparent_background; import spar3d.system"
-    )
+    # Keep this diagnostic deliberately small and sanitized.  The previous
+    # one-line import only returned a boolean, which made a Kaggle failure
+    # indistinguishable from a bad token or a CUDA problem.  Import each
+    # dependency independently and emit only module names and exception
+    # classes; never persist provider stderr, environment paths, or secrets.
+    imports = r'''
+import importlib
+import json
+import sys
+
+modules = (
+    "torch",
+    "trimesh",
+    "PIL",
+    "tqdm",
+    "transparent_background",
+    "spar3d.system",
+)
+failures = []
+for module in modules:
+    try:
+        importlib.import_module(module)
+    except Exception as exc:  # pragma: no cover - executed in provider env
+        failures.append({"module": module, "errorType": type(exc).__name__})
+print(json.dumps({"failures": failures}, sort_keys=True))
+sys.exit(1 if failures else 0)
+'''
     result = subprocess.run(
         [sys.executable, "-c", imports],
         cwd=repo,
@@ -72,9 +95,31 @@ def dependency_preflight(repo: Path) -> tuple[bool, str]:
         text=True,
         check=False,
     )
-    return result.returncode == 0, (
-        "READY_IMPORTS" if result.returncode == 0 else "SPAR3D_DEPENDENCIES_IMPORT_FAILED"
-    )
+    if result.returncode == 0:
+        return True, "READY_IMPORTS"
+
+    diagnostic = {}
+    for line in reversed(
+        f"{getattr(result, 'stdout', '')}\n{getattr(result, 'stderr', '')}".splitlines()
+    ):
+        try:
+            parsed = json.loads(line)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        if isinstance(parsed, dict) and isinstance(parsed.get("failures"), list):
+            diagnostic = parsed
+            break
+    failures = diagnostic.get("failures", [])
+    details = []
+    for failure in failures:
+        if not isinstance(failure, dict):
+            continue
+        module = failure.get("module")
+        error_type = failure.get("errorType")
+        if isinstance(module, str) and isinstance(error_type, str):
+            details.append(f"{module}:{error_type}")
+    suffix = ",".join(details) if details else "UNKNOWN"
+    return False, f"SPAR3D_DEPENDENCIES_IMPORT_FAILED:{suffix}"
 
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
@@ -159,6 +204,7 @@ def main() -> int:
         if not imports_ready:
             report["status"] = "BLOCKED_PROVIDER_DEPENDENCY_PREFLIGHT"
             report["blockers"].append("SPAR3D_DEPENDENCIES_IMPORT_FAILED")
+            report["dependencyFailureDetail"] = dependency_status
         else:
             command = [
                 sys.executable,

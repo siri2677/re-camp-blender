@@ -2,30 +2,35 @@
 
 ## 현재 판정
 
-2026-09-03 Kaggle T4 15GB×2에서 GPU·CUDA·PyTorch kernel은 준비됐지만, 다음
-세 입력이 없어 SPAR3D 설치·추론이 차단됐다.
+2026-09-03 Kaggle T4 15GB×2에서 GPU·CUDA·PyTorch kernel과 세 Secret 연결은
+준비됐지만, SPAR3D import preflight에서 차단됐다.
 
-- Hugging Face model access가 승인된 계정의 token
-- `RE_CAMP_SPAR3D_ACCESS_ACK=1`
-- `RE_CAMP_SPAR3D_LICENSE_ACK=1`
+- `HF_TOKEN`이 Kaggle Secret으로 연결됨
+- `RE_CAMP_SPAR3D_ACCESS_ACK=1`이 Kaggle Secret으로 연결됨
+- `RE_CAMP_SPAR3D_LICENSE_ACK=1`이 Kaggle Secret으로 연결됨
 
-이 상태는 모델 품질 미달이 아니라 provider 접근 preflight 차단이다. 후보 mesh,
-score, Alpha Review 승인으로 해석하지 않는다.
+현재 상태는 모델 품질 미달이나 token 누락이 아니라 provider 의존성 import
+차단이다. 후보 mesh, score, Alpha Review 승인으로 해석하지 않는다.
 
 ## Secret 연결 후 첫 재개 결과
 
 2026-09-03 Secret 연결 후 메인 Kaggle Notebook을 재실행한 결과, Secret 3개와
 T4 15GB×2 GPU는 정상 인식되어 SPAR3D preflight는 `READY_GPU_VISIBLE`이 됐다.
-그러나 pinned SPAR3D `requirements.txt`의 `AlphaCLIP` git 패키지가 최신 pip의
-격리 빌드 환경에서 wheel 요구사항 단계에 실패해 `SPAR3D_SETUP_FAILED`
-(`returnCode: 1`)로 종료됐다. 실제 `run.py` 추론, mesh, candidate manifest는
-생성되지 않았다.
+그러나 첫 실행에서는 pinned SPAR3D `requirements.txt`의 `AlphaCLIP` git
+패키지가 최신 pip의 격리 빌드 환경에서 실패해 `SPAR3D_SETUP_FAILED`
+(`returnCode: 1`)로 종료됐다. 설치 경로를 `--no-build-isolation`로 고친 뒤
+재실행에서는 AlphaCLIP·texture_baker·uv_unwrapper 설치가 완료됐지만,
+`run_spar3d_candidate.py`의 import-only preflight가
+`SPAR3D_DEPENDENCIES_IMPORT_FAILED`로 중단됐다. 따라서 실제 `run.py` 추론,
+mesh, candidate manifest는 아직 생성되지 않았다.
 
-원인은 모델 접근 권한이나 GPU가 아니라 `AlphaCLIP`의 pinned `setup.py`와
-격리 build environment의 호환성 문제로 기록한다. Notebook 기본 설치 경로는
+첫 오류의 원인은 모델 접근 권한이나 GPU가 아니라 `AlphaCLIP`의 pinned
+`setup.py`와 격리 build environment의 호환성 문제였다. Notebook 기본 설치 경로는
 이제 `setuptools==69.5.1`·`wheel`을 먼저 runtime에 설치한 뒤
 `--no-build-isolation -r requirements.txt`로 설치하도록 보강했으며, 각 설치
-단계의 반환 코드와 실패 단계만 기록한다. Secret 값은 기록하지 않는다.
+단계의 반환 코드와 실패 단계만 기록한다. 두 번째 오류의 원인을 확인하기
+위해 import를 모듈별로 검사하고 `module:errorType`만 기록하도록 보강한다.
+원본 stderr, 파일 경로, Secret 값은 기록하지 않는다.
 
 ## 사용자가 한 번 수행할 준비
 
