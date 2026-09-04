@@ -1,0 +1,64 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-ch101-alpha-review-pass-v013",
+  "recordedAt": "2026-08-20T16:30:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommit": "07eb541",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "torch": "2.7.1+cu118",
+    "blenderPython": "3.10",
+    "blenderNumpy": "1.23.5",
+    "apiCreditUsed": 0
+  },
+  "candidateGeneration": {
+    "provider": "TripoSR",
+    "attempts": 3,
+    "mode": "REUSED_EXISTING_CANDIDATES",
+    "manifests": 3
+  },
+  "ranking": {
+    "status": "AUTO_SELECTED_FOR_HUMAN_REVIEW",
+    "selectedCandidate": "03-CH101-TRIPOSR-001",
+    "candidates": [
+      {
+        "candidateId": "03-CH101-TRIPOSR-001",
+        "rank": 1,
+        "overallScore": 0.529055,
+        "eligibleForHumanReview": true
+      },
+      {
+        "candidateId": "02-CH101-TRIPOSR-001",
+        "rank": 2,
+        "overallScore": 0.508958,
+        "eligibleForHumanReview": true
+      },
+      {
+        "candidateId": "01-CH101-TRIPOSR-001",
+        "rank": 3,
+        "overallScore": 0.507364,
+        "eligibleForHumanReview": true
+      }
+    ],
+    "minimumOverallScore": 0.5,
+    "failureReasons": []
+  },
+  "reviewAsset": {
+    "status": "AI_GENERATED_REVIEW_NOT_PRODUCTION",
+    "path": "/kaggle/working/re-camp-ai3d/CH101/review/CH101_AI_AutoReview_NOT_PRODUCTION_v001.blend",
+    "sha256": "74171f2c8a52b7cb099fcce3938316a24bf0a65050324a92c6526c9873a1e114",
+    "archive": "/kaggle/working/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip",
+    "faceDriver": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Human Gate B visual review of the archived candidate; do not export Unity package or begin Android validation before approval."
+}

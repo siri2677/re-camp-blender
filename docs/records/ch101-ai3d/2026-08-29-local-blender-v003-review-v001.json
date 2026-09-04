@@ -1,0 +1,85 @@
+{
+  "recordVersion": "ch101-local-blender-v003-review-v001",
+  "recordedAt": "2026-08-29",
+  "branch": "feature/ch101-quality-v002-validation",
+  "toolsBaseCommit": "4cbc59e",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Windows",
+    "blender": "4.5.10 LTS",
+    "execution": "LOCAL_BACKGROUND_RENDER",
+    "actualInference": false,
+    "kaggleExecution": false
+  },
+  "authoring": {
+    "strategyId": "SEMANTIC_DETAIL_AUTHORING_V003",
+    "status": "SEMANTIC_DETAIL_REVIEW_CANDIDATE_NOT_PRODUCTION",
+    "semanticRepresentation": "CONNECTED_BODY_WITH_PRESERVED_DETAIL_GROUPS",
+    "connectivityRemesh": {
+      "status": "PASS",
+      "method": "REMESH_MODIFIER_VOXEL",
+      "voxelSize": 0.035,
+      "vertexCount": 8355,
+      "triangleCount": 16706
+    },
+    "uvStatus": "PASS",
+    "semanticComponentAudit": {
+      "status": "PASS",
+      "body_face": 2,
+      "hair": 1,
+      "outfit": 1,
+      "equipment": 1,
+      "connectedPrimaryShell": true,
+      "preservedFaceDetail": true,
+      "slabGrayboxAccepted": false
+    },
+    "faceDriverStatus": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "weightStatus": "FALLBACK_NEAREST_BONE_WEIGHTED_FOR_REVIEW"
+  },
+  "evaluation": {
+    "candidateId": "CH101-BLENDERSEMANTICDETAILAUTHORING-003",
+    "candidateSha256": "17153c0997b9b738d579c98a2e4811e389a8a700755378383dc4918df2563958",
+    "blendSha256": "00ff655d83d62fce1a51a026ef9a4ad5244d0ef5b5621c05049b7e69dcf6f326",
+    "triangleCount": 19994,
+    "normalizedDimensions": [1.397827386856079, 0.7547970414161682, 1.6800000667572021],
+    "scores": {
+      "overall": 0.479447,
+      "silhouette": 0.441747,
+      "appearance": 0.369244,
+      "color": 0.182749,
+      "faceDetail": 0.5142,
+      "technical": 1.0
+    },
+    "geometryHardGate": {
+      "status": "FAIL",
+      "connectedComponentCount": 192,
+      "significantComponentCount": 70,
+      "largestComponentVertexRatio": 0.17822859,
+      "detachedVertexRatio": 0.82177141,
+      "boundaryEdgeRatio": 0.01247403
+    },
+    "status": "REGENERATE_REQUIRED",
+    "strictVisualQA": "REJECT_GATE_B_AND_REGENERATE",
+    "reasonCodes": [
+      "OVERALL_IDENTITY_SCORE_WEAK",
+      "SILHOUETTE_PROPORTION_MISMATCH",
+      "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+      "OUTFIT_COLOR_BLOCKING_WEAK",
+      "GEOMETRY_OR_RENDER_HARD_GATE_FAILED",
+      "AUTOMATED_SCORE_GATE_FAILED"
+    ]
+  },
+  "artifacts": {
+    "runRoot": "C:\\Users\\shp80\\AppData\\Local\\Temp\\recamp-ch101-v003-run-20260829-g",
+    "evaluationRoot": "C:\\Users\\shp80\\AppData\\Local\\Temp\\recamp-ch101-v003-eval-20260829-c",
+    "candidateRoot": "C:\\Users\\shp80\\AppData\\Local\\Temp\\recamp-ch101-v003-candidate-20260829-final"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "RUN_KAGGLE_NOTEBOOK_07_WITH_V003_OR_REQUIRE_STRONGER_AUTHORED_MESH; DO_NOT_PROMOTE_TO_UNITY"
+}

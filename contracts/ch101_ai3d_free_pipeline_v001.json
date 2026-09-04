@@ -1,0 +1,375 @@
+{
+  "contractVersion": "ch101-ai3d-free-pipeline-v001",
+  "createdAt": "2026-08-18",
+  "character": "CH101",
+  "subject": "AmasawaRin",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "authoritativeSource": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+  "generationSource": {
+    "path": "art_refs/characters/rin/concept/CH101_Rin_Turnaround_REVIEW_v001.png",
+    "role": "CLEAN_CROP_HELPER_ONLY",
+    "expectedSize": [
+      1665,
+      944
+    ]
+  },
+  "referenceViews": {
+    "front": {
+      "providerKey": "front",
+      "crop": [
+        32,
+        12,
+        520,
+        936
+      ]
+    },
+    "right": {
+      "providerKey": "right",
+      "crop": [
+        500,
+        12,
+        890,
+        936
+      ]
+    },
+    "back": {
+      "providerKey": "back",
+      "crop": [
+        872,
+        12,
+        1360,
+        936
+      ]
+    }
+  },
+  "referenceCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "margin": 48,
+    "background": [
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "providerPolicy": {
+    "mode": "FREE_FIRST",
+    "defaultProvider": "stableFast3D",
+    "freeFallbackOrder": [
+      "stableFast3D",
+      "instantMesh",
+      "tripoSR"
+    ],
+    "optionalPaidProvider": "tripoApi",
+    "apiCreditsRequiredByDefault": false
+  },
+  "providers": {
+    "tripoApi": {
+      "mode": "FREE_TRIAL_ONLY",
+      "baseUrl": "https://openapi.tripo3d.ai/v3",
+      "model": "v3.1-20260211",
+      "requiresSecret": "TRIPO_API_KEY",
+      "candidateSeeds": [
+        101001,
+        101002,
+        101003,
+        101004
+      ],
+      "texture": true,
+      "pbr": true,
+      "geometryQuality": "detailed"
+    },
+    "stableFast3D": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_FALLBACK",
+      "repository": "https://github.com/Stability-AI/stable-fast-3d.git",
+      "commit": "ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2",
+      "model": "stabilityai/stable-fast-3d",
+      "requiresSecret": "HF_TOKEN_WHEN_MODEL_ACCESS_REQUIRES_IT",
+      "license": "Stability AI Community License",
+      "targetVertexCount": 20000,
+      "textureResolution": 1024
+    },
+    "instantMesh": {
+      "mode": "OPEN_SOURCE_SPARSE_VIEW_SINGLE_IMAGE_FALLBACK",
+      "repository": "https://github.com/TencentARC/InstantMesh.git",
+      "commit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "model": "instant-mesh-large",
+      "config": "configs/instant-mesh-base.yaml",
+      "license": "Apache-2.0",
+      "memoryProfile": "T4_SAFE_BASE",
+      "view": 4,
+      "exportTextureMap": true
+    },
+    "tripoSR": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_LAST_FALLBACK",
+      "repository": "https://github.com/VAST-AI-Research/TripoSR.git",
+      "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+      "model": "stabilityai/TripoSR",
+      "license": "MIT",
+      "marchingCubesResolution": 256,
+      "referenceViews": [
+        "front",
+        "right",
+        "back"
+      ],
+      "foregroundRatios": [
+        0.75,
+        0.85,
+        0.95
+      ]
+    }
+  },
+  "experimentalProviders": {
+    "wonder3D": {
+      "mode": "OPEN_SOURCE_CONSISTENT_MULTIVIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/xxlong0/Wonder3D.git",
+      "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+      "model": "flamehaze1115/wonder3d-v1.0",
+      "customPipeline": "flamehaze1115/wonder3d-pipeline",
+      "license": "MIT",
+      "licenseNote": "Verify checkpoint terms separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 6,
+      "generatedAzimuths": [
+        0,
+        45,
+        90,
+        180,
+        -90,
+        -45
+      ],
+      "generatedResolution": 256,
+      "outputs": [
+        "rgb",
+        "normal"
+      ],
+      "meshExtraction": "NeuS",
+      "requiresGpu": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    "trellis": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.git",
+      "commit": "442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+      "model": "microsoft/TRELLIS-image-large",
+      "license": "VERIFY_UPSTREAM_TERMS",
+      "licenseNote": "Verify repository, checkpoint, and dependency terms before redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 24576,
+      "requiresGpu": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    "trellis16": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_LOW_VRAM_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.git",
+      "commit": "442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+      "model": "microsoft/TRELLIS-image-large",
+      "license": "VERIFY_UPSTREAM_TERMS",
+      "licenseNote": "Original TRELLIS is a separate 16 GB-class fallback; verify repository, checkpoint, and dependency terms before redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 16384,
+      "requiresGpu": true,
+      "officialApi": "TrellisImageTo3DPipeline",
+      "officialExample": "example.py",
+      "memoryProfile": "16GB_CLASS_TIGHT",
+      "experimental": true,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS_SINGLE_VIEW_16GB_V002",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    "trellis2": {
+      "mode": "OPEN_SOURCE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/microsoft/TRELLIS.2.git",
+      "commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+      "model": "microsoft/TRELLIS.2-4B",
+      "license": "MIT",
+      "licenseNote": "Checkpoint and dependency terms must be checked separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 24576,
+      "requiresGpu": true,
+      "officialApi": "Trellis2ImageTo3DPipeline",
+      "officialExample": "example.py",
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    "partcrafter": {
+      "mode": "OPEN_SOURCE_PART_LEVEL_LOW_VRAM_RESEARCH_ONLY",
+      "repository": "https://github.com/wgsxm/PartCrafter.git",
+      "commit": "3d773bf02fad51c7ab31a5615573fec93b287b30",
+      "model": "wgsxm/PartCrafter",
+      "backgroundRemovalModel": "briaai/RMBG-1.4",
+      "license": "MIT_CODE_LICENSE_VERIFY_MODEL_TERMS",
+      "licenseNote": "The repository code is MIT; verify pretrained checkpoint and dependency terms separately before commercial redistribution.",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "minimumVramMb": 8192,
+      "requiresGpu": true,
+      "officialEntrypoint": "scripts/inference_partcrafter.py",
+      "memoryProfile": "8GB_CLASS_PART_LEVEL",
+      "defaultNumParts": 6,
+      "minNumParts": 4,
+      "maxNumParts": 16,
+      "semanticLabels": "UNLABELED_PROVIDER_PARTS_PENDING_HUMAN_MAPPING",
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    "spar3d": {
+      "mode": "OPEN_SOURCE_POINT_AWARE_SINGLE_VIEW_RESEARCH_ONLY",
+      "repository": "https://github.com/Stability-AI/stable-point-aware-3d.git",
+      "commit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+      "model": "stabilityai/stable-point-aware-3d",
+      "license": "Stability AI Community License",
+      "licenseNote": "The model is gated on Hugging Face. Accept the model terms and provide a read-only token through the runtime secret store; never persist the token.",
+      "requiresSecret": "HF_TOKEN_OR_HUGGINGFACE_HUB_TOKEN",
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "memoryProfile": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
+      "officialEntrypoint": "run.py",
+      "lowVramFlag": "--low-vram-mode",
+      "inputView": "front",
+      "generatedViewCount": 1,
+      "textureResolution": 1024,
+      "targetCount": 20000,
+      "fallbackEnabled": false,
+      "status": "RESEARCH_ONLY",
+      "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    }
+  },
+  "qualityStrategies": {
+    "TRELLIS_SINGLE_VIEW_V001": {
+      "provider": "trellis",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 24576,
+      "strategyScope": "TRELLIS_SINGLE_VIEW_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION"
+    },
+    "SEMANTIC_PROXY_REFERENCE_FITTED_V001": {
+      "provider": "semanticProxy",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "REFERENCE_FITTED_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION"
+    },
+    "UNIFIED_SEMANTIC_AUTHORING_V002": {
+      "provider": "blenderSemanticAuthoring",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "UNIFIED_SEMANTIC_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "geometryPolicy": "CONNECTED_PRIMARY_SHELL_WITH_SEMANTIC_LABELS"
+    },
+    "SEMANTIC_DETAIL_AUTHORING_V003": {
+      "provider": "blenderSemanticDetailAuthoring",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "PRESERVED_DETAIL_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "geometryPolicy": "CONNECTED_BODY_SHELL_WITH_PRESERVED_FACE_HAIR_OUTFIT_DETAIL"
+    },
+    "TRELLIS2_SINGLE_VIEW_V001": {
+      "provider": "trellis2",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 24576,
+      "strategyScope": "TRELLIS2_SINGLE_VIEW_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY"
+    },
+    "TRELLIS_SINGLE_VIEW_16GB_V002": {
+      "provider": "trellis16",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 16384,
+      "strategyScope": "TRELLIS_SINGLE_VIEW_16GB_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_PYTHON_API_ONLY",
+      "memoryPolicy": "16GB_CLASS_TIGHT_NO_OFFICIAL_GUARANTEE"
+    },
+    "PARTCRAFTER_PART_LEVEL_V001": {
+      "provider": "partcrafter",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "strategyScope": "PART_LEVEL_STRUCTURED_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_SCRIPT_ONLY",
+      "memoryPolicy": "8GB_CLASS_LOW_RESOURCE",
+      "semanticPolicy": "PARTS_REQUIRE_HUMAN_BODY_HAIR_OUTFIT_EQUIPMENT_MAPPING"
+    },
+    "SPAR3D_SINGLE_VIEW_V001": {
+      "provider": "spar3d",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "strategyScope": "SPAR3D_LOW_VRAM_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_RUN_PY_ONLY",
+      "memoryPolicy": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
+      "accessPolicy": "HF_GATED_ACCESS_ACK_AND_READ_TOKEN_REQUIRED"
+    }
+  },
+  "candidateAcceptance": {
+    "minimumOverallScore": 0.5,
+    "minimumSilhouetteScore": 0.35,
+    "minimumAppearanceScore": 0.25,
+    "minimumColorScore": 0.2,
+    "minimumFaceDetailScore": 0.12,
+    "minimumVerticalPolarityImprovement": 0.02,
+    "maximumSourceTriangles": 300000,
+    "reviewRenderSize": 512,
+    "visualReviewPolicy": {
+      "minimumAutoReviewOverallScore": 0.6,
+      "minimumAutoReviewSilhouetteScore": 0.5,
+      "minimumAutoReviewAppearanceScore": 0.55,
+      "minimumAutoReviewColorScore": 0.38,
+      "minimumAutoReviewFaceDetailScore": 0.25,
+      "minimumAutoReviewTechnicalScore": 0.9,
+      "faceMetricRequiresHumanConfirmation": true,
+      "decisionMode": "REJECTION_ONLY_AUTO_QA_DEFER_IF_NO_OBJECTIVE_FAILURE"
+    },
+    "geometryHardGates": {
+      "minimumLargestComponentVertexRatio": 0.9,
+      "maximumSignificantComponentCount": 24,
+      "maximumLooseVertexRatio": 0.0005,
+      "maximumNonManifoldEdgeRatio": 0.01,
+      "maximumDegenerateTriangleRatio": 0.002,
+      "minimumVisiblePrimaryComponentAreaRatio": 0.7,
+      "maximumVisibleSignificantComponentCount": 8
+    }
+  },
+  "statusPolicy": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "excludedProviders": {
+    "hunyuan3d2": "The official community license excludes South Korea."
+  }
+}

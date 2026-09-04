@@ -1,0 +1,86 @@
+{
+  "recordVersion": "ch101-local-blender-v002-review-v001",
+  "recordedAt": "2026-08-29",
+  "character": "CH101",
+  "branch": "feature/ch101-quality-v002-validation",
+  "toolsCommit": "55679dad83333b614af15a9fdd258c9ac32b0b0c",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Windows",
+    "blender": "4.5.10 LTS",
+    "execution": "LOCAL_BACKGROUND_RENDER",
+    "actualInference": false
+  },
+  "inputHandoff": {
+    "status": "READY_INPUTS_BLOCKED_AUTHORING",
+    "referenceCount": 4,
+    "artCommitVerified": true,
+    "referenceHashesVerified": true
+  },
+  "authoring": {
+    "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+    "status": "UNIFIED_SEMANTIC_REVIEW_CANDIDATE_NOT_PRODUCTION",
+    "connectivityRemesh": {
+      "status": "PASS",
+      "method": "REMESH_MODIFIER_VOXEL",
+      "voxelSize": 0.035,
+      "vertexCount": 11134,
+      "triangleCount": 22248
+    },
+    "uvReport": {
+      "status": "PASS",
+      "missingAfter": []
+    },
+    "semanticComponentAudit": {
+      "status": "PASS",
+      "partObjectCountsLOD0": {
+        "body_face": 1,
+        "hair": 1,
+        "outfit": 1,
+        "equipment": 1
+      },
+      "connectedPrimaryShell": true,
+      "slabGrayboxAccepted": false
+    },
+    "weightStatus": "AUTO_WEIGHTED_FOR_REVIEW",
+    "weightAudit": "PASS",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "faceDriverStatus": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "lodTriangleCounts": {
+      "SOURCE": 25532,
+      "LOD0": 19996,
+      "LOD1": 10998,
+      "LOD2": 5997
+    }
+  },
+  "evaluation": {
+    "meshFormat": "GLB",
+    "blendSha256": "7a8d4926f46b9795bf99bbf989d2ea2689be6ecac8549b3b2b3a79091d7563a9",
+    "meshSha256": "17fc1411c9760762fdd3950af723356f7079ff10685dbcf1479b83c4349d1460",
+    "overallScore": 0.608431,
+    "silhouetteScore": 0.672042,
+    "appearanceScore": 0.346415,
+    "colorScore": 0.138373,
+    "faceDetailScore": 0.613108,
+    "technicalScore": 0.85,
+    "qualityHardGate": "PASS",
+    "strictVisualQa": "REJECT_GATE_B_AND_REGENERATE",
+    "failureReasons": [
+      "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+      "OUTFIT_COLOR_BLOCKING_WEAK",
+      "TECHNICAL_REVIEW_READINESS_WEAK"
+    ]
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifactPersistence": {
+    "status": "LOCAL_TEMP_EPHEMERAL",
+    "binaryAndRendersInGit": false,
+    "note": "Blend, GLB, and renders remain in the local temporary output directory; only provenance and scores are committed."
+  },
+  "nextAction": "SEMANTIC_FACE_HAIR_OUTFIT_DETAIL_RECONSTRUCTION_REQUIRED"
+}

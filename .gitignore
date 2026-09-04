@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.env
+.env.*
+!.env.example
 
 # Blender temporary and generated files
 *.blend1
@@ -9,6 +12,7 @@ __pycache__/
 *.tmp
 artifacts/
 outputs/
+ai3d-work/
 
 # OS files
 .DS_Store

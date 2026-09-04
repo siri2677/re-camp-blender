@@ -30,6 +30,11 @@
 - 2026-08-16 v008 budget-review variant: deterministic LOD0 simplification으로 19,090 tris, combined review budget `PASS`; LOD1/LOD2는 계속 대기
 - 2026-08-16 v009 LOD review: LOD0/LOD1/LOD2가 각각 19,090/10,383/5,704 tris로 생성되고 구조 검증 `PASS`; Unity `LODGroup` 연결은 Phase 6에서 수행
 - 2026-08-16 v010 production-skinning review: LOD0/LOD1/LOD2 동일 예산을 유지하면서 89개 LOD0 파츠에 정규화된 최대 2-bone influence를 적용하고, 6개 material slot budget을 `PASS`
+- production mesh intake Notebook 추가: 업로드된 `CH101_A_HighRes_Production_v001.blend`를 headless Blender로 검사하고, PASS 리포트·SHA256·handoff JSON·ZIP을 재현 가능하게 생성
+- 실행 순서와 Gate B·Unity 전달 조건은 [production mesh intake checklist](ch101-production-mesh-intake-checklist.md)에 고정
+- CH101~CH105 공용 인테이크 Notebook과 캐릭터별 장비·소켓 계약 검증기를 추가해 후속 4인 확장 경로를 준비
+- 공용 Socket 계약·5인 handoff 병합 도구·Unity manifest 정적 검증·Blender package CI를 추가
+- GPU 상태를 감지해 Provider Notebook 또는 No-GPU 검증으로 전환하는 adaptive runner를 추가
 
 현재 결과는 최종 캐릭터 모델이 아니다. v010은 프리미티브 기반 Blender 기술 스캐폴드이며, 사용자가 요구한 원신·니케·젠레스 존 제로 계열의 매력적인 일본 서브컬처 캐릭터 품질을 충족하지 않는다. Unity Import 이전에 고품질 3D 제작 모델 단계가 새로 필요하다.
 
@@ -191,4 +196,10 @@ CH101을 Phase 3까지 정리한 뒤 같은 규격으로 다른 캐릭터를 확
 
 ## 다음 실행 항목
 
-현재 바로 진행할 작업은 CH101을 프리미티브 스캐폴드에서 고품질 3D 제작 모델로 교체하는 시각 제작 단계다. 공통 베이스 run3/4, 연결 Skin run2, voxel body run1을 실행했지만 모두 레고·토이형 표면으로 반려되었으므로 Gate B 후보로 승격하지 않는다. 실제 고해상도 수동/스컬프 베이스 메시와 의상 패턴이 `CH101_A_HighRes_Production_v001.blend`로 확보된 뒤에만 Unity 라이선스가 활성화된 Editor에서 v010 기술 계약을 새 모델에 적용하고 Import/LODGroup/Prefab/Animator/AndroidPlayer 증거를 수집한다.
+수동 Blender 정밀 제작을 수행할 사용자가 없으므로, 먼저 [무료 AI 3D 자동 제작 계획](ch101-free-ai3d-autobuild-plan.md)에 따라 CH101 후보를 생성·평가한다. 이 경로는 Stable Fast 3D를 기본으로 사용하고, 실패 시 TripoSR로 전환한다. Tripo API는 선택적 다중 시점 경로로만 사용하며, 모든 결과를 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`으로 고정한다. 자동 후보가 시각 기준에 미달하면 재생성하고, 파일명이나 status 변경만으로 Production Mesh로 승격하지 않는다.
+
+실행 환경 선택은 [GPU/No-GPU 자동 전환 계획](adaptive-gpu-workstream.md)에 따라
+adaptive runner가 담당한다. GPU가 없을 때는 정적 검증과 handoff 준비를 수행하고,
+GPU가 다시 보이는 실행부터 실제 후보 생성 셀을 계속한다.
+
+실제 고해상도 수동/스컬프 또는 승인 가능한 AI 보정 mesh가 `CH101_A_HighRes_Production_v001.blend`로 확보되면 새 Colab 인테이크 Notebook으로 기술 조건을 먼저 검사하고, 그 결과가 PASS인 경우에만 Unity 라이선스가 활성화된 Editor에서 v010 기술 계약을 새 모델에 적용한다. 이후 Import/LODGroup/Prefab/Animator/AndroidPlayer 증거를 수집한다.
