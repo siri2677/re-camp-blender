@@ -283,6 +283,7 @@ preflight와 의존성 검증을 통과한 뒤 556.428초 후 `returnCode: 0`,
 완료되어도 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
 `PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
 `productionPromotionAllowed=false`를 유지한다. Blender refine·evaluate·strict
-visual QA는 기존 `07_ch101_hybrid_quality_strategies.ipynb`의 공용 경로로
-이어간다. 현재 상태의 실행 대기 기록은
+visual QA는 새 artifact Notebook의 다음 셀에서 같은 공용 스크립트로
+이어간다. 기존 hybrid Notebook을 재실행해 같은 SPAR3D 전략을 중복 호출하지
+않는다. 현재 상태의 실행 대기 기록은
 `docs/records/ch101-ai3d/2026-09-04-spar3d-artifact-run-path-v008.json`이다.
