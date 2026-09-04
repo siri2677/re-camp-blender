@@ -298,3 +298,9 @@ QA; Unity and production gates stay locked. See
 Kaggle Secret 연결과 재개 절차는
 [the SPAR3D Kaggle unblock checklist](docs/plans/ch101-spar3d-kaggle-unblock-checklist-2026-09-03.md)에
 기록한다.
+진단 성공 후 실제 파일을 보존하는 1회 실행점은
+[`notebooks/09_ch101_spar3d_artifact_run.ipynb`](notebooks/09_ch101_spar3d_artifact_run.ipynb)이며,
+실행 전용 기록기는 [`record_spar3d_artifact.py`](scripts/ai3d/record_spar3d_artifact.py)다.
+artifact가 생성되어도 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`과
+`unityInputAllowed=false`를 유지하고, 이후 Blender refine/evaluate/strict visual QA를
+통과해야 사람 Gate B 검토 대상으로 남는다.

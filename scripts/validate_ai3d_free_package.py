@@ -39,6 +39,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "run_trellis2_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_partcrafter_candidate.py",
     ROOT / "scripts" / "ai3d" / "run_spar3d_candidate.py",
+    ROOT / "scripts" / "ai3d" / "record_spar3d_artifact.py",
     ROOT / "scripts" / "ai3d" / "diagnose_partcrafter_review.py",
     ROOT / "scripts" / "ai3d" / "register_wonder3d_candidate.py",
     ROOT / "scripts" / "ai3d" / "build_wonder3d_voxel_surface.py",

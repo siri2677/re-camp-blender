@@ -26,6 +26,8 @@ NOTEBOOKS = (
     "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
     "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
     "notebooks/07_ch101_hybrid_quality_strategies.ipynb",
+    "notebooks/08_ch101_spar3d_diagnostic.ipynb",
+    "notebooks/09_ch101_spar3d_artifact_run.ipynb",
 )
 BLENDER_SCRIPTS = (
     "scripts/blender/build_blockout.py",
@@ -64,6 +66,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/run_trellis2_candidate.py",
     "scripts/ai3d/run_partcrafter_candidate.py",
     "scripts/ai3d/run_spar3d_candidate.py",
+    "scripts/ai3d/record_spar3d_artifact.py",
     "scripts/ai3d/diagnose_partcrafter_review.py",
     "scripts/ai3d/register_wonder3d_candidate.py",
     "scripts/ai3d/build_wonder3d_voxel_surface.py",
@@ -238,6 +241,29 @@ REQUIRED_MARKERS = {
         "unityInputAllowed",
         "productionPromotionAllowed",
         "files.download",
+    ),
+    "notebooks/08_ch101_spar3d_diagnostic.ipynb": (
+        "diagnostic-only",
+        "SPAR3D_DECODER_CHUNK_SIZE",
+        "SPAR3D_ATTENTION_QUERY_CHUNK_SIZE",
+        "candidateRegistered",
+        "unityInputAllowed",
+        "productionPromotionAllowed",
+    ),
+    "notebooks/09_ch101_spar3d_artifact_run.ipynb": (
+        "SPAR3D artifact run",
+        "SPAR3D_SINGLE_VIEW_V001",
+        "READY_GPU_VISIBLE",
+        "SPAR3D_EXECUTED",
+        "register_review_candidate.py",
+        "record_spar3d_artifact.py",
+        "sourceArtifact",
+        "meshSha256",
+        "SPAR3D_ARTIFACT_READY_FOR_REVIEW",
+        "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+        "PENDING_HUMAN_REVIEW",
+        "unityInputAllowed",
+        "productionPromotionAllowed",
     ),
 }
 

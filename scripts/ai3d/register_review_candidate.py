@@ -97,6 +97,23 @@ def build_candidate_manifest(
     label = _safe_token(candidate_label, "001")
     provider_metadata = _provider_metadata(contract, provider, strategy_id)
     source_metadata = metadata if isinstance(metadata, dict) else {}
+    source_artifact_sha256 = sha256_file(mesh_path)
+    asset_file_sha256: dict[str, str] = {}
+    for asset_file in asset_files or [destination.name]:
+        asset_path = destination.parent / Path(asset_file).name
+        if asset_path.is_file():
+            asset_file_sha256[Path(asset_file).name] = sha256_file(asset_path)
+    provenance = {
+        "toolsCommit": str(source_metadata.get("toolsCommit") or ""),
+        "artCommit": str(source_metadata.get("artCommit") or contract["artLock"]["commit"]),
+        "providerCommit": str(
+            source_metadata.get("providerCommitActual")
+            or source_metadata.get("providerCommit")
+            or provider_metadata["providerCommit"]
+        ),
+        "referenceManifestSha256": sha256_file(reference_manifest_path),
+        "sourceArtifactSha256": source_artifact_sha256,
+    }
     candidate = {
         "candidateId": f"{contract['character']}-{provider_token}-{label}",
         "status": "DOWNLOADED",
@@ -108,6 +125,8 @@ def build_candidate_manifest(
         "providerCommit": provider_metadata["providerCommit"],
         "artCommit": contract["artLock"]["commit"],
         "strategyId": strategy_id,
+        "sourceArtifactSha256": source_artifact_sha256,
+        "assetFileSha256": asset_file_sha256,
         **candidate_gate_fields(contract),
     }
     if source_metadata:
@@ -151,6 +170,7 @@ def build_candidate_manifest(
         "referenceManifest": str(reference_manifest_path.resolve()),
         "referenceManifestSha256": sha256_file(reference_manifest_path),
         "artCommit": contract["artLock"]["commit"],
+        "provenance": provenance,
         "candidates": [candidate],
         **candidate_gate_fields(contract),
     }

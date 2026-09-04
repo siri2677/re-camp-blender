@@ -262,3 +262,27 @@ preflight와 의존성 검증을 통과한 뒤 556.428초 후 `returnCode: 0`,
 후보 등록은 하지 않았고 `sourceStatus`, `gateB`, `unityInputAllowed`,
 `productionPromotionAllowed`는 계속 잠긴다. 다음 단계는 생성 GLB의 SHA256을
 기준으로 Blender refine·evaluate·strict visual QA를 수행하는 것이다.
+
+## 2026-09-04 다음 단계: artifact run 경로 준비
+
+진단 실행에서 생성된 GLB는 Kaggle 세션 종료와 함께 보존되지 않았으므로,
+진단 Notebook과 별도로 `notebooks/09_ch101_spar3d_artifact_run.ipynb`를
+추가했다. 이 Notebook은 다음 순서를 한 번만 수행한다.
+
+1. `READY_GPU_VISIBLE`와 `heavyweightInstallAllowed`를 먼저 확인한다.
+2. 조건이 맞을 때만 pinned SPAR3D 의존성을 설치하고 V005 호환 패치가 적용된
+   `run_spar3d_candidate.py`를 diagnostic-only 없이 실행한다.
+3. `SPAR3D_EXECUTED`, non-empty mesh 1개, mesh SHA256을 확인한다.
+4. `register_review_candidate.py`로 review-only candidate를 만들고 원본 GLB,
+   변환 OBJ, reference manifest, art/tools/provider commit의 해시를 기록한다.
+5. `record_spar3d_artifact.py`가 실행 보고서·reference SHA256·candidate
+   manifest·provider commit을 교차 검증한다.
+
+새 `record_spar3d_artifact.py`는 실제 추론을 수행하지 않으며, 진단 상태나
+빈/누락/해시 불일치 파일을 artifact로 인정하지 않는다. artifact 기록이
+완료되어도 `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
+`PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
+`productionPromotionAllowed=false`를 유지한다. Blender refine·evaluate·strict
+visual QA는 기존 `07_ch101_hybrid_quality_strategies.ipynb`의 공용 경로로
+이어간다. 현재 상태의 실행 대기 기록은
+`docs/records/ch101-ai3d/2026-09-04-spar3d-artifact-run-path-v008.json`이다.

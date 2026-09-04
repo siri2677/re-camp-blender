@@ -29,6 +29,7 @@ from scripts.ai3d.run_spar3d_candidate import (
     dependency_preflight as dependency_preflight_spar3d,
     sanitize_provider_output,
 )
+from scripts.ai3d.record_spar3d_artifact import build_artifact_record
 from scripts.ai3d.quality_progress_gate import build_progress_gate, collect_history
 
 
@@ -477,6 +478,97 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertTrue(report["meshOutputs"][0].endswith("mesh.glb"))
         self.assertFalse(report["actualInference"])
         self.assertNotIn("candidateManifest", report)
+
+    def test_spar3d_artifact_record_requires_real_mesh_and_preserves_provenance(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            mesh = root / "CH101_spar3d_cand_001.glb"
+            mesh.write_bytes(b"non-empty-mesh")
+            expected_mesh_sha256 = sha256_file(mesh)
+            reference_files = {}
+            for view_name in ("front", "right", "back"):
+                view = root / f"{view_name}.png"
+                view.write_bytes(view_name.encode("ascii"))
+                reference_files[view_name] = view
+            reference_manifest = root / "reference-views-manifest.json"
+            reference_payload = {
+                "contractVersion": "ch101-ai3d-free-pipeline-v001",
+                "character": "CH101",
+                "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+                "views": {
+                    name: {
+                        "path": str(path),
+                        "sha256": sha256_file(path),
+                    }
+                    for name, path in reference_files.items()
+                },
+                "unityInputAllowed": False,
+            }
+            reference_manifest.write_text(
+                json.dumps(reference_payload), encoding="utf-8"
+            )
+            report = root / "spar3d-report.json"
+            report.write_text(
+                json.dumps(
+                    {
+                        "provider": "spar3d",
+                        "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+                        "status": "SPAR3D_EXECUTED",
+                        "actualInference": True,
+                        "providerCommitActual": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+                        "meshOutputs": [str(mesh)],
+                        "meshSha256": expected_mesh_sha256,
+                        "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+                        "gateB": "PENDING_HUMAN_REVIEW",
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            record = build_artifact_record(
+                run_report_path=report,
+                reference_manifest_path=reference_manifest,
+                output=root / "handoff.json",
+                tools_commit="c772484f5e22a3dcbba032ab68cf153a76dc1417",
+                art_commit="b6c9b3128358e061eee6184230929413eba84101",
+            )
+        self.assertEqual(record["status"], "SPAR3D_ARTIFACT_READY_FOR_REVIEW")
+        self.assertEqual(record["sourceArtifact"]["sha256"], expected_mesh_sha256)
+        self.assertEqual(
+            record["provenance"]["providerCommit"],
+            "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+        )
+        self.assertFalse(record["unityInputAllowed"])
+        self.assertFalse(record["productionPromotionAllowed"])
+
+    def test_spar3d_artifact_record_rejects_open_gate_or_non_execution(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            report = root / "spar3d-report.json"
+            report.write_text(
+                json.dumps(
+                    {
+                        "provider": "spar3d",
+                        "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+                        "status": "SPAR3D_DIAGNOSTIC_EXECUTED",
+                        "actualInference": False,
+                        "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+                        "gateB": "PENDING_HUMAN_REVIEW",
+                        "unityInputAllowed": False,
+                        "productionPromotionAllowed": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ValueError):
+                build_artifact_record(
+                    run_report_path=report,
+                    reference_manifest_path=root / "missing-reference.json",
+                    output=root / "handoff.json",
+                    tools_commit="c772484f5e22a3dcbba032ab68cf153a76dc1417",
+                    art_commit="b6c9b3128358e061eee6184230929413eba84101",
+                )
 
     def test_spar3d_notebook_pins_transparent_background_flet_compatibility(self):
         notebook = json.loads(
