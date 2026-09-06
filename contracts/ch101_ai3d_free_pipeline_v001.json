@@ -292,6 +292,14 @@
       "repeatPolicy": "PIVOT_AFTER_REJECTION",
       "geometryPolicy": "CONNECTED_BODY_SHELL_WITH_PRESERVED_FACE_HAIR_OUTFIT_DETAIL"
     },
+    "SEMANTIC_CONNECTED_AUTHORING_V004": {
+      "provider": "blenderSemanticConnectedAuthoring",
+      "maxRuns": 1,
+      "requiresGpu": false,
+      "strategyScope": "CONNECTED_SEMANTIC_REVIEW_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "geometryPolicy": "STRONG_OVERLAPPING_CORE_WITH_PRESERVED_SEMANTIC_DETAIL_GROUPS"
+    },
     "TRELLIS2_SINGLE_VIEW_V001": {
       "provider": "trellis2",
       "maxRuns": 1,
