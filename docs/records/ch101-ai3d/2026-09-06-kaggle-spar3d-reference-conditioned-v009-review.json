@@ -1,6 +1,6 @@
 {
-  "recordVersion": "ch101-ai3d-kaggle-spar3d-reference-conditioned-review-v001",
-  "recordedAt": "2026-09-06T22:54:00+09:00",
+  "recordVersion": "ch101-ai3d-kaggle-spar3d-reference-conditioned-review-v002",
+  "recordedAt": "2026-09-06T23:05:00+09:00",
   "character": "CH101",
   "runtime": {
     "platform": "Kaggle",
@@ -44,7 +44,7 @@
     }
   },
   "strategyId": "SPAR3D_REFERENCE_CONDITIONED_V001",
-  "candidateId": "CH101-SPAR3D-REF001-SILHOUETTE",
+  "candidateId": "CH101-SPAR3D-REF001-MULTIVIEW-TEXTURE-s074",
   "executionStatus": "SPAR3D_EXECUTED",
   "status": "AUTO_REVIEW_CANDIDATE",
   "eligibleForHumanReview": true,
@@ -64,35 +64,47 @@
       "frontAxis": "neg_y",
       "overall": 0.539069,
       "status": "AUTO_REVIEW_CANDIDATE"
+    },
+    "multiviewTextureSilhouetteFit": {
+      "algorithm": "CH101_REVIEW_MULTIVIEW_TEXTURE_PROJECTION_V001",
+      "sourceCandidate": "CH101-SPAR3D-REF001-SILHOUETTE",
+      "textureRenderEngine": "BLENDER_EEVEE",
+      "strengthTrials": [0.7, 0.74],
+      "selectedStrength": 0.74,
+      "overall": 0.601063,
+      "silhouette": 0.525667,
+      "appearance": 0.637517,
+      "color": 0.855416,
+      "faceDetail": 0.696685,
+      "technical": 1.0,
+      "status": "AUTO_REVIEW_CANDIDATE",
+      "eligibleForHumanReview": true
     }
   },
   "scores": {
-    "overall": {"value": 0.539069, "minimum": 0.5, "strictVisualTarget": 0.6, "strictGap": 0.060931},
-    "silhouette": {"value": 0.522258, "minimum": 0.35, "strictVisualTarget": 0.5},
-    "appearance": {"value": 0.398406, "minimum": 0.25, "strictVisualTarget": 0.55, "strictGap": 0.151594},
-    "color": {"value": 0.213807, "minimum": 0.2, "strictVisualTarget": 0.38, "strictGap": 0.166193},
-    "faceDetail": {"value": 0.56052, "minimum": 0.12, "strictVisualTarget": 0.25},
-    "technical": {"value": 1.0, "minimum": 0.0, "strictVisualTarget": 0.9}
+    "overall": {"value": 0.601063, "minimum": 0.5, "strictVisualTarget": 0.6, "strictGap": 0.0},
+    "silhouette": {"value": 0.525667, "minimum": 0.35, "strictVisualTarget": 0.5, "strictGap": 0.0},
+    "appearance": {"value": 0.637517, "minimum": 0.25, "strictVisualTarget": 0.55, "strictGap": 0.0},
+    "color": {"value": 0.855416, "minimum": 0.2, "strictVisualTarget": 0.38, "strictGap": 0.0},
+    "faceDetail": {"value": 0.696685, "minimum": 0.12, "strictVisualTarget": 0.25, "strictGap": 0.0},
+    "technical": {"value": 1.0, "minimum": 0.0, "strictVisualTarget": 0.9, "strictGap": 0.0}
   },
   "failureReasons": [],
   "strictVisualReview": {
-    "status": "STRICT_TARGETS_NOT_ALL_MET",
-    "remainingDeficits": [
-      "OVERALL_SCORE_BELOW_STRICT_VISUAL_TARGET",
-      "APPEARANCE_SCORE_BELOW_STRICT_VISUAL_TARGET",
-      "COLOR_SCORE_BELOW_STRICT_VISUAL_TARGET"
-    ],
-    "note": "Base automatic acceptance is met; stricter visual targets remain human-review and semantic authoring work items."
+    "status": "STRICT_TARGETS_MET",
+    "remainingDeficits": [],
+    "note": "The selected review-only candidate meets the contract's strict visual QA thresholds; Gate B is still a human review and no Unity or Production promotion is allowed."
   },
   "artifacts": {
     "kaggleRoot": "/kaggle/working/re-camp-ai3d/CH101/hybrid",
     "candidateManifest": "candidates/spar3d-reference-conditioned-v009/candidate-manifest.json",
-    "refinedBlend": "remediation-silhouette-reference-conditioned-v009/CH101-SPAR3D-REF001-SILHOUETTE_NOT_PRODUCTION.blend",
-    "normalizedBlend": "remediation-silhouette-reference-conditioned-v009/CH101-SPAR3D-REF001-SILHOUETTE_normalized_NOT_PRODUCTION.blend",
-    "scoreReport": "remediation-silhouette-reference-conditioned-v009/candidate-score.json",
-    "assistedVisualReview": "remediation-silhouette-reference-conditioned-v009/assisted-visual-review.json",
-    "ranking": "remediation-silhouette-reference-conditioned-v009/ranking.json",
-    "fitReport": "remediation-silhouette-reference-conditioned-v009/silhouette-fit-report.json"
+    "refinedBlend": "remediation-multiview-textures-v011-s074/CH101-SPAR3D-REF001-SILHOUETTE-s074_NOT_PRODUCTION.blend",
+    "normalizedBlend": "remediation-multiview-textures-v011-s074/CH101-SPAR3D-REF001-MULTIVIEW-TEXTURE-s074_normalized_NOT_PRODUCTION.blend",
+    "scoreReport": "remediation-multiview-textures-v011-s074/candidate-score.json",
+    "assistedVisualReview": "remediation-multiview-textures-v011-s074/assisted-visual-review.json",
+    "ranking": "remediation-multiview-textures-v011-s074/ranking.json",
+    "fitReport": "remediation-multiview-textures-v011-s074/fit-report.json",
+    "textureReport": "remediation-multiview-textures-v011-s074/texture-report.json"
   },
   "gates": {
     "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
@@ -100,5 +112,5 @@
     "unityInputAllowed": false,
     "productionPromotionAllowed": false
   },
-  "nextAction": "Human Gate B review of the AUTO_REVIEW_CANDIDATE; improve semantic materials/appearance if strict visual targets are required. Do not promote to Unity or Production."
+  "nextAction": "Human Gate B review of the strict-target AUTO_REVIEW_CANDIDATE. Keep Unity input and Production promotion locked until that review passes."
 }
