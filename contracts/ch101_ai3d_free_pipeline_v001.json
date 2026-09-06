@@ -340,6 +340,18 @@
       "entrypointPolicy": "OFFICIAL_RUN_PY_ONLY",
       "memoryPolicy": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
       "accessPolicy": "HF_GATED_ACCESS_ACK_AND_READ_TOKEN_REQUIRED"
+    },
+    "SPAR3D_REFERENCE_CONDITIONED_V001": {
+      "provider": "spar3d",
+      "maxRuns": 1,
+      "requiresGpu": true,
+      "minimumVramMb": 8192,
+      "strategyScope": "SPAR3D_REFERENCE_CONDITIONED_LOW_VRAM_RESEARCH_ONLY",
+      "repeatPolicy": "PIVOT_AFTER_REJECTION",
+      "entrypointPolicy": "OFFICIAL_RUN_PY_ONLY",
+      "memoryPolicy": "LOW_VRAM_MODE_APPROXIMATELY_7GB",
+      "accessPolicy": "HF_GATED_ACCESS_ACK_AND_READ_TOKEN_REQUIRED",
+      "inputPolicy": "APPROVED_AUTHORITATIVE_FRONT_REFERENCE_PREPROCESSING_ONLY"
     }
   },
   "candidateAcceptance": {

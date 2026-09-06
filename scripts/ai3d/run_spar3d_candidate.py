@@ -43,6 +43,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--texture-resolution", type=int, default=1024)
     parser.add_argument("--target-count", type=int, default=20000)
     parser.add_argument(
+        "--strategy-id",
+        default=STRATEGY_ID,
+        help="Stable review strategy identifier; defaults to the original one-shot lane.",
+    )
+    parser.add_argument(
         "--diagnostic-only",
         action="store_true",
         help="Run the provider once for sanitized failure diagnosis without registering a candidate.",
@@ -221,7 +226,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "schemaVersion": "spar3d-one-shot-run-report-v001",
         "recordedAt": datetime.now(timezone.utc).isoformat(),
         "provider": "spar3d",
-        "strategyId": STRATEGY_ID,
+        "strategyId": args.strategy_id,
         "providerRepository": str(repo),
         "providerCommitExpected": EXPECTED_COMMIT,
         "providerCommitActual": actual_commit,
