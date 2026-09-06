@@ -42,6 +42,7 @@ SPAR3D_STRATEGY = "SPAR3D_SINGLE_VIEW_V001"
 SEMANTIC_STRATEGY = "SEMANTIC_PROXY_REFERENCE_FITTED_V001"
 UNIFIED_SEMANTIC_STRATEGY = "UNIFIED_SEMANTIC_AUTHORING_V002"
 DETAIL_SEMANTIC_STRATEGY = "SEMANTIC_DETAIL_AUTHORING_V003"
+CONNECTED_SEMANTIC_STRATEGY = "SEMANTIC_CONNECTED_AUTHORING_V004"
 
 
 def parse_args() -> argparse.Namespace:
@@ -108,6 +109,12 @@ def build_hybrid_report(
         score_dir,
         history_records,
     )
+    connected_gate = _gate(
+        "blenderSemanticConnectedAuthoring",
+        CONNECTED_SEMANTIC_STRATEGY,
+        score_dir,
+        history_records,
+    )
     handoff_path = output.parent / "semantic-reconstruction-inputs.json"
     semantic_handoff = prepare_handoff(
         art_root=art_root,
@@ -131,6 +138,11 @@ def build_hybrid_report(
     )
     detail_ready = (
         detail_gate["status"] == "READY_NEW_STRATEGY"
+        and semantic_inputs_ready
+        and bool(blender_path)
+    )
+    connected_ready = (
+        connected_gate["status"] == "READY_NEW_STRATEGY"
         and semantic_inputs_ready
         and bool(blender_path)
     )
@@ -234,6 +246,16 @@ def build_hybrid_report(
         detail_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
     else:
         detail_status = "BLOCKED_SEMANTIC_PREFLIGHT"
+    if connected_ready:
+        connected_status = "READY_TO_RUN_ONCE"
+    elif connected_gate["status"] == "QUALITY_PLATEAU_SAME_STRATEGY":
+        connected_status = "QUALITY_PLATEAU_SAME_STRATEGY"
+    elif not semantic_inputs_ready:
+        connected_status = "BLOCKED_REFERENCE_INPUTS"
+    elif not blender_path:
+        connected_status = "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+    else:
+        connected_status = "BLOCKED_SEMANTIC_PREFLIGHT"
 
     # One strategy is selected per run. PartCrafter is first because its
     # part-level output directly addresses CH101's repeated semantic-boundary
@@ -257,6 +279,8 @@ def build_hybrid_report(
         selected = [UNIFIED_SEMANTIC_STRATEGY]
     elif detail_ready:
         selected = [DETAIL_SEMANTIC_STRATEGY]
+    elif connected_ready:
+        selected = [CONNECTED_SEMANTIC_STRATEGY]
     else:
         selected = []
     if not selected:
@@ -265,6 +289,7 @@ def build_hybrid_report(
             if semantic_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             or unified_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             or detail_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
+            or connected_status == "BLOCKED_BLENDER_AUTHORING_ENVIRONMENT"
             else "RECONNECT_COMPATIBLE_GPU_OR_FIX_PROVIDER_PREFLIGHT"
         )
     else:
@@ -353,6 +378,19 @@ def build_hybrid_report(
                 "blenderExecutable": blender_path or "",
                 "runAllowed": detail_ready and not semantic_ready and not unified_ready,
                 "fallbackFor": [UNIFIED_SEMANTIC_STRATEGY],
+                "maxRuns": 1,
+            },
+            CONNECTED_SEMANTIC_STRATEGY: {
+                "provider": "blenderSemanticConnectedAuthoring",
+                "status": connected_status,
+                "qualityGate": connected_gate,
+                "semanticHandoff": semantic_handoff,
+                "blenderExecutable": blender_path or "",
+                "runAllowed": connected_ready
+                and not semantic_ready
+                and not unified_ready
+                and not detail_ready,
+                "fallbackFor": [DETAIL_SEMANTIC_STRATEGY],
                 "maxRuns": 1,
             },
         },
