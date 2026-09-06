@@ -1,0 +1,104 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-spar3d-reference-conditioned-review-v001",
+  "recordedAt": "2026-09-06T22:54:00+09:00",
+  "character": "CH101",
+  "runtime": {
+    "platform": "Kaggle",
+    "accelerator": "GPU T4 x2",
+    "gpuMemoryMbPerDevice": 15360,
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "inferenceToolsCommit": "8776e99ec650c8f36c6208d70bde38edbf64a5e",
+    "evaluationToolsCommit": "272a31598ddfe3c4d33e1243423ce2436bbe6e76"
+  },
+  "provider": {
+    "name": "spar3d",
+    "repository": "https://github.com/Stability-AI/stable-point-aware-3d.git",
+    "commit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+    "officialEntrypoint": "run.py",
+    "runtimeCompatibilityPatch": "SPAR3D_T4_BF16_CLI_CHUNKED_ATTENTION_BACKOFF_V005",
+    "referenceConditionedRun": {
+      "runId": "v009-20260906T131705Z",
+      "strategyId": "SPAR3D_REFERENCE_CONDITIONED_V001",
+      "actualInference": true,
+      "inputSha256": "d775f8c4b2e443908f61a4ceff41cc9bb11ed3ed0a88680955cfe708f3003bf2",
+      "inputBoundingBox": [229, 0, 795, 1024],
+      "meshSha256": "2807ba362917373e2ee632da6847165eb92472b237a704d5a6ad439e7051a99f"
+    },
+    "fullFramePivot": {
+      "strategyId": "SPAR3D_AUTHORITATIVE_FULLFRAME_V002",
+      "actualInference": true,
+      "meshSha256": "ee09744b2c02ee183f0b274d92aba49859c4caefa130aebf7106bab3fd1c521b",
+      "status": "REGENERATE_REQUIRED",
+      "overallScore": 0.310132,
+      "failureReasons": [
+        "SILHOUETTE_SCORE_BELOW_MINIMUM",
+        "APPEARANCE_SCORE_BELOW_MINIMUM",
+        "FACE_DETAIL_SCORE_BELOW_MINIMUM",
+        "OVERALL_SCORE_BELOW_MINIMUM",
+        "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM",
+        "VISIBLE_PRIMARY_COMPONENT_RATIO_BELOW_MINIMUM",
+        "VISIBLE_SIGNIFICANT_COMPONENT_COUNT_ABOVE_MAXIMUM"
+      ]
+    }
+  },
+  "strategyId": "SPAR3D_REFERENCE_CONDITIONED_V001",
+  "candidateId": "CH101-SPAR3D-REF001-SILHOUETTE",
+  "executionStatus": "SPAR3D_EXECUTED",
+  "status": "AUTO_REVIEW_CANDIDATE",
+  "eligibleForHumanReview": true,
+  "remediation": {
+    "palette": {
+      "overall": 0.487821,
+      "status": "REGENERATE_REQUIRED"
+    },
+    "surfaceBridge": {
+      "overall": 0.488077,
+      "status": "REGENERATE_REQUIRED",
+      "geometryHardGate": "PASS"
+    },
+    "referenceSilhouetteFit": {
+      "algorithm": "CH101_REFERENCE_SILHOUETTE_PROFILE_FIT_V001",
+      "strength": 0.72,
+      "frontAxis": "neg_y",
+      "overall": 0.539069,
+      "status": "AUTO_REVIEW_CANDIDATE"
+    }
+  },
+  "scores": {
+    "overall": {"value": 0.539069, "minimum": 0.5, "strictVisualTarget": 0.6, "strictGap": 0.060931},
+    "silhouette": {"value": 0.522258, "minimum": 0.35, "strictVisualTarget": 0.5},
+    "appearance": {"value": 0.398406, "minimum": 0.25, "strictVisualTarget": 0.55, "strictGap": 0.151594},
+    "color": {"value": 0.213807, "minimum": 0.2, "strictVisualTarget": 0.38, "strictGap": 0.166193},
+    "faceDetail": {"value": 0.56052, "minimum": 0.12, "strictVisualTarget": 0.25},
+    "technical": {"value": 1.0, "minimum": 0.0, "strictVisualTarget": 0.9}
+  },
+  "failureReasons": [],
+  "strictVisualReview": {
+    "status": "STRICT_TARGETS_NOT_ALL_MET",
+    "remainingDeficits": [
+      "OVERALL_SCORE_BELOW_STRICT_VISUAL_TARGET",
+      "APPEARANCE_SCORE_BELOW_STRICT_VISUAL_TARGET",
+      "COLOR_SCORE_BELOW_STRICT_VISUAL_TARGET"
+    ],
+    "note": "Base automatic acceptance is met; stricter visual targets remain human-review and semantic authoring work items."
+  },
+  "artifacts": {
+    "kaggleRoot": "/kaggle/working/re-camp-ai3d/CH101/hybrid",
+    "candidateManifest": "candidates/spar3d-reference-conditioned-v009/candidate-manifest.json",
+    "refinedBlend": "remediation-silhouette-reference-conditioned-v009/CH101-SPAR3D-REF001-SILHOUETTE_NOT_PRODUCTION.blend",
+    "normalizedBlend": "remediation-silhouette-reference-conditioned-v009/CH101-SPAR3D-REF001-SILHOUETTE_normalized_NOT_PRODUCTION.blend",
+    "scoreReport": "remediation-silhouette-reference-conditioned-v009/candidate-score.json",
+    "assistedVisualReview": "remediation-silhouette-reference-conditioned-v009/assisted-visual-review.json",
+    "ranking": "remediation-silhouette-reference-conditioned-v009/ranking.json",
+    "fitReport": "remediation-silhouette-reference-conditioned-v009/silhouette-fit-report.json"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Human Gate B review of the AUTO_REVIEW_CANDIDATE; improve semantic materials/appearance if strict visual targets are required. Do not promote to Unity or Production."
+}
