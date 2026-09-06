@@ -1,0 +1,80 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-spar3d-blender-qa-v008-v001",
+  "recordedAt": "2026-09-06T21:40:00+09:00",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "provider": "spar3d",
+  "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+  "runId": "v008-20260906T054319Z",
+  "toolsCommit": "a179dabd8e617b8cbcf7b4bf7bcd7c9de09e36c0",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "runtime": {
+    "platform": "Kaggle",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "gpuCount": 2,
+    "gpus": [
+      { "name": "Tesla T4", "memoryMb": 15360 },
+      { "name": "Tesla T4", "memoryMb": 15360 }
+    ],
+    "blender": "3.0.1",
+    "blenderLauncher": "xvfb-run",
+    "textureResolution": 512,
+    "targetCount": 20000,
+    "lowVramMode": true
+  },
+  "execution": {
+    "status": "SPAR3D_EXECUTED",
+    "actualInference": true,
+    "returnCode": 0,
+    "sourceArtifact": {
+      "path": "provider-output/CH101_spar3d_cand_001.glb",
+      "format": "glb",
+      "bytes": 557816,
+      "sha256": "0270d372adec732143d7022f97ea8b8b84ffbe16cc6286e28e2a700fa7d63248"
+    },
+    "candidateManifestSha256": "7eddd74a6d7b3295009f02077469d87aa65dc9ec2945c2bce6ad3d1b985b9bbf"
+  },
+  "blenderReview": {
+    "refinementStatus": "REFINED_REVIEW_CANDIDATE_GLTF_EXPORT_FAILED",
+    "transportFormat": "OBJ",
+    "refinedTransportSha256": "efae8233bfab4a992ff550ddb2c2f8a482103cff016b9f74d96888c20d01cd34",
+    "evaluationStatus": "EVALUATION_RENDERED",
+    "technicalScore": 1.0,
+    "vertexCount": 6080,
+    "triangleCount": 12160,
+    "geometryIntegrity": {
+      "connectedComponentCount": 1,
+      "boundaryEdgeCount": 0,
+      "nonManifoldEdgeCount": 0,
+      "degenerateTriangleCount": 0
+    },
+    "faceDriver": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "paletteFallbackUsed": true
+  },
+  "strictVisualQa": {
+    "status": "REGENERATE_REQUIRED",
+    "eligibleForHumanReview": false,
+    "overallScore": 0.48558,
+    "minimumOverallScore": 0.5,
+    "silhouetteScore": 0.402121,
+    "appearanceScore": 0.496805,
+    "colorScore": 0.229381,
+    "faceDetailScore": 0.79206,
+    "technicalScore": 1.0,
+    "failureReasons": ["OVERALL_SCORE_BELOW_MINIMUM"]
+  },
+  "decision": "REGENERATE_REQUIRED_SAME_STRATEGY_RETRY_BLOCKED",
+  "nextAction": "PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "notes": [
+    "SPAR3D inference completed successfully and the artifact was registered review-only.",
+    "Blender 3.0.1 could not export GLB, so OBJ transport and a normalized review .blend were used.",
+    "The one-shot plan blocks rerunning the same SPAR3D_SINGLE_VIEW_V001 after rejection; TRELLIS was not substituted."
+  ]
+}
