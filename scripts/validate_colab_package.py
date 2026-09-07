@@ -67,6 +67,7 @@ UTILITY_SCRIPTS = (
     "scripts/ai3d/run_partcrafter_candidate.py",
     "scripts/ai3d/run_spar3d_candidate.py",
     "scripts/ai3d/recover_spar3d_reference_artifact.py",
+    "scripts/ai3d/review_recovered_spar3d_artifact.py",
     "scripts/ai3d/record_spar3d_artifact.py",
     "scripts/ai3d/diagnose_partcrafter_review.py",
     "scripts/ai3d/register_wonder3d_candidate.py",
