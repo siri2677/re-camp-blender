@@ -2,6 +2,15 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
+## Current status — 2026-09-07
+
+The latest SPAR3D binary is not present in Git/LFS or the inspected Kaggle
+outputs. The historical 0.601063 score is **not** a currently available or
+human-approved model. Recovery and corrected Blender texture projection come
+before further quality claims. See the [recovery plan](docs/plans/ch101-artifact-recovery-2026-09-07.md).
+Modeling, human Gate B, Production, Unity and Android remain incomplete.
+Older experiment summaries below are historical, not the current completion state.
+
 ## What this repository contains
 
 - Colab notebooks for Drive and no-Drive execution

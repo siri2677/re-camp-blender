@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import sys
@@ -11,6 +12,14 @@ from pathlib import Path
 
 import bpy
 from mathutils import Vector
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def parse_args() -> argparse.Namespace:
@@ -91,11 +100,14 @@ def _foreground_texture(name: str, image_path: Path, threshold: float) -> tuple[
         else:
             masked_pixels[index * 4 + 3] = max(masked_pixels[index * 4 + 3], 1.0)
     masked = bpy.data.images.new(f"{name}_FOREGROUND_MASKED", width, height, alpha=True)
-    masked.pixels = masked_pixels
     try:
         masked.colorspace_settings.name = "sRGB"
     except (AttributeError, TypeError):
         pass
+    # Changing color space invalidates a generated image's pixel buffer in
+    # Blender. Configure it BEFORE writing the foreground alpha, or pack()
+    # silently stores an opaque image again.
+    masked.pixels = masked_pixels
     masked.pack()
     source.user_clear()
     bpy.data.images.remove(source)
@@ -151,9 +163,22 @@ def _texture_material(
 
 
 def _apply_textures(args: argparse.Namespace) -> dict[str, object]:
+    if args.input_blend.resolve() == args.output_blend.resolve():
+        raise ValueError("review output must not overwrite the source blend")
     bpy.ops.wm.open_mainfile(filepath=str(args.input_blend.resolve()))
+    objects = [
+        obj for obj in bpy.context.scene.objects
+        if obj.type == "MESH" and len(obj.data.vertices) and not obj.name.startswith("ReviewFloor_")
+    ]
+    if not objects:
+        raise ValueError("candidate contains no non-helper mesh objects")
+    bpy.context.view_layer.update()
+    points = [obj.matrix_world @ vertex.co for obj in objects for vertex in obj.data.vertices]
+    minimum = Vector(tuple(min(point[axis] for point in points) for axis in range(3)))
+    maximum = Vector(tuple(max(point[axis] for point in points) for axis in range(3)))
+    dx, dy, dz = (max(maximum[axis] - minimum[axis], 1e-6) for axis in range(3))
     source_material = next(
-        (obj.data.materials[0] for obj in bpy.context.scene.objects if obj.type == "MESH" and obj.data.materials),
+        (obj.data.materials[0] for obj in objects if obj.data.materials),
         None,
     )
     base_color = _base_color(source_material)
@@ -171,46 +196,45 @@ def _apply_textures(args: argparse.Namespace) -> dict[str, object]:
         "CH101_REVIEW_TEXTURE_RIGHT", args.right_image.resolve(), base_color, args.background_threshold
     )
     mesh_count = 0
-    for obj in (item for item in bpy.context.scene.objects if item.type == "MESH"):
+    for obj in objects:
         mesh_count += 1
+        # UVs depend on each object's world transform, not shared datablocks.
+        if obj.data.users > 1:
+            obj.data = obj.data.copy()
         mesh = obj.data
         if mesh.uv_layers.active is None:
             uv_layer = mesh.uv_layers.new(name="UVMap")
         else:
             uv_layer = mesh.uv_layers.active
-        minimum = Vector(
-            (min(vertex.co.x for vertex in mesh.vertices), min(vertex.co.y for vertex in mesh.vertices), min(vertex.co.z for vertex in mesh.vertices))
-        )
-        maximum = Vector(
-            (max(vertex.co.x for vertex in mesh.vertices), max(vertex.co.y for vertex in mesh.vertices), max(vertex.co.z for vertex in mesh.vertices))
-        )
-        dx = max(maximum.x - minimum.x, 1e-6)
-        dy = max(maximum.y - minimum.y, 1e-6)
-        dz = max(maximum.z - minimum.z, 1e-6)
         mesh.materials.clear()
         for material in (front, back, right):
             mesh.materials.append(material)
         for polygon in mesh.polygons:
-            if polygon.normal.y >= 0.30:
+            normal = obj.matrix_world.to_3x3().inverted_safe().transposed() @ polygon.normal
+            normal.normalize()
+            if normal.y <= -0.30:
                 polygon.material_index = 0
-            elif polygon.normal.y <= -0.30:
+            elif normal.y >= 0.30:
                 polygon.material_index = 1
-            elif polygon.normal.x >= 0.30:
+            elif normal.x >= 0.30:
                 polygon.material_index = 2
             else:
-                polygon.material_index = 0 if polygon.normal.y >= 0.0 else 1
+                polygon.material_index = 0 if normal.y <= 0.0 else 1
         loop_material: dict[int, int] = {}
         for polygon in mesh.polygons:
             for loop_index in polygon.loop_indices:
                 loop_material[loop_index] = polygon.material_index
         for loop in mesh.loops:
-            coordinate = mesh.vertices[loop.vertex_index].co
+            coordinate = obj.matrix_world @ mesh.vertices[loop.vertex_index].co
             material_index = loop_material[loop.index]
             u = (
                 (coordinate.y - minimum.y) / dy
                 if material_index == 2
                 else (coordinate.x - minimum.x) / dx
             )
+            # Camera +Y looks toward -Y: screen-right is world -X.
+            if material_index == 1:
+                u = 1.0 - u
             v = (coordinate.z - minimum.z) / dz
             uv_layer.data[loop.index].uv = (max(0.0, min(1.0, u)), max(0.0, min(1.0, v)))
         if args.smooth_level > 0:
@@ -240,18 +264,35 @@ def _apply_textures(args: argparse.Namespace) -> dict[str, object]:
     if args.output_glb:
         args.output_glb.parent.mkdir(parents=True, exist_ok=True)
         try:
-            bpy.ops.object.select_all(action="SELECT")
+            bpy.ops.object.select_all(action="DESELECT")
+            for obj in objects:
+                obj.select_set(True)
             bpy.ops.export_scene.gltf(
                 filepath=str(args.output_glb.resolve()),
                 export_format="GLB",
                 export_image_format="AUTO",
                 export_materials="EXPORT",
+                use_selection=True,
             )
             glb_status = "EXPORTED"
         except Exception as error:  # Blender-version-specific exporter failure is recorded, not hidden.
             glb_status = f"FAILED:{type(error).__name__}:{error}"
     return {
         "status": "REVIEW_TEXTURES_APPLIED",
+        "algorithm": "CH101_REVIEW_WORLDSPACE_MASKED_TEXTURE_V002",
+        "inputBlendSha256": sha256_file(args.input_blend),
+        "outputBlendSha256": sha256_file(args.output_blend),
+        "referenceSha256": {
+            view: sha256_file(path) for view, path in (
+                ("front", args.front_image), ("back", args.back_image), ("right", args.right_image)
+            )
+        },
+        "projection": {
+            "frontAxis": "neg_y", "rightAxis": "pos_x", "backAxis": "pos_y",
+            "boundsSpace": "SHARED_WORLD_SPACE",
+            "boundsMin": list(minimum), "boundsMax": list(maximum),
+            "objects": [obj.name for obj in objects],
+        },
         "meshCount": mesh_count,
         "outputBlend": str(args.output_blend.resolve()),
         "outputGlb": str(args.output_glb.resolve()) if args.output_glb else None,
