@@ -226,7 +226,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "schemaVersion": "spar3d-one-shot-run-report-v001",
         "recordedAt": datetime.now(timezone.utc).isoformat(),
         "provider": "spar3d",
-        "strategyId": args.strategy_id,
+        "strategyId": STRATEGY_ID,
         "providerRepository": str(repo),
         "providerCommitExpected": EXPECTED_COMMIT,
         "providerCommitActual": actual_commit,
