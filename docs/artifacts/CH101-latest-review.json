@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "candidateId": "CH101-SPAR3D-reconstruction-v001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-spar3d-review-20260907-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-spar3d-review-20260907-v001",
+  "assetName": "CH101-SPAR3D-reconstruction-v001-kaggle-347992219.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-spar3d-review-20260907-v001/CH101-SPAR3D-reconstruction-v001-kaggle-347992219.zip",
+  "bundleBytes": 1437949,
+  "bundleSha256": "8db1924380e8db5defdc941c8a5378b61ebf6cea0187f080d2fdb9a04b2ac9e2",
+  "manifestSha256": "4fc61496868c071e3489bdb668fa815128ec4840d05a990eeb516c43420041e2",
+  "toolsCommit": "f6502fd8142e83bdf08de5c77992515d3424c411",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}
