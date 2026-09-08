@@ -91,6 +91,18 @@
   "unityInputAllowed": false,
   "productionPromotionAllowed": false,
   "recordedDate": "2026-09-08",
+  "release": {
+    "status": "UPLOADED_AND_FETCH_VERIFIED",
+    "tag": "ch101-reference-correction-review-v001",
+    "url": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-reference-correction-review-v001",
+    "assetName": "CH101-reference-correction-NOT_PRODUCTION-v001.zip",
+    "assetBytes": 14743557,
+    "assetSha256": "69f395207048730011439efb2b67b926756b926f5ac8b499e9a054b1e812cf8b",
+    "manifestSha256": "03dade0c5d52fa02471f376edbe6a56b663ae3fb1e9fda1cf22a7e5a2e8c5ac9",
+    "payloadCount": 45,
+    "toolsCommit": "32bd4c91c27bb8952b1e0411071c9727eea17851",
+    "targetBranch": "feature/ch101-free-ai3d-autobuild"
+  },
   "providerInferenceExecuted": false,
   "executionEnvironment": "LOCAL_BLENDER_5.2_CPU_CAPABLE_POSTPROCESSING",
   "visualInspection": {

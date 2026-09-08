@@ -46,9 +46,15 @@ Unity input, and disabled Production promotion.
 The committed pointer in `docs/artifacts/CH101-latest-review.json` now points
 to the latest recovered CH101 SPAR3D review bundle:
 
-- Release: `ch101-ai3d-recovered-review-v003`
-- Bundle: `CH101-SPAR3D-recovered-review-v003.zip`
-- Bundle SHA256: `ec6eff9abd770335b2293c541514f850a46cbb3200f5161c24f3bcd9d942c96b`
+- Release: `ch101-reference-correction-review-v001`
+- Bundle: `CH101-reference-correction-NOT_PRODUCTION-v001.zip`
+- Bundle SHA256: `69f395207048730011439efb2b67b926756b926f5ac8b499e9a054b1e812cf8b`
 - Decision: `REJECT_GATE_B_AND_REGENERATE`
+
+This contains the subject-bounds texture and fixed two-axis geometry experiments,
+plus the same-evaluator comparison and standalone comparison image assets.
+All numeric thresholds pass for the profile candidate, but semantic geometry
+and direct visual inspection still fail. The 45-payload ZIP was downloaded
+again and verified against its manifest after publication.
 
 The bundle remains review-only; it is not a Production Mesh or Unity input.
