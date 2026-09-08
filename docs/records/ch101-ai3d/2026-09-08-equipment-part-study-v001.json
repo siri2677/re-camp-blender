@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "ch101-equipment-part-study-v001",
+  "strategyId": "CH101_REFERENCE_EQUIPMENT_LOFT_STUDY_V001",
+  "status": "PART_STUDY_TECHNICAL_PASS_NOT_FULL_CHARACTER",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "artifactScope": "EQUIPMENT_ONLY",
+  "implementationRevision": "PHYSICAL_LENGTH_UV_FIX_V002",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "meshAudit": [
+    {
+      "object": "CH101_Saber",
+      "vertices": 96,
+      "triangles": 188,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "CH101_Sheath",
+      "vertices": 72,
+      "triangles": 140,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "CH101_SignalRibbon_SINGLE",
+      "vertices": 324,
+      "triangles": 644,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    }
+  ],
+  "totalTriangles": 972,
+  "uniqueMaterialCount": 5,
+  "canonicalSaberCount": 1,
+  "canonicalRibbonCount": 1,
+  "runtimeSocketMap": {
+    "Socket_Equipment_Primary": "Socket_Weapon_R"
+  },
+  "duplicateAliasTransformCreated": false,
+  "fullCharacterScore": null,
+  "fullCharacterStrictQa": "NOT_RUN_INAPPLICABLE_TO_PART_ONLY_STUDY",
+  "limitations": [
+    "ESTIMATED_SCALE_DEPTH_AND_RIBBON_PATH",
+    "NO_CHARACTER_ATTACHMENT_FIT",
+    "CLASP_POMMEL_LOOP_AND_SHEATH_ORNAMENT_DETAIL_INCOMPLETE",
+    "BODY_FACE_HAIR_OUTFIT_UNCHANGED",
+    "PROCEDURAL_MATERIAL_NOT_BAKED",
+    "NO_RIG_LOD_OR_PHYSICS_VALIDATION"
+  ],
+  "blendFile": "CH101_EquipmentStudy_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "15d9bf3040c62ad32d918fd9c2931174ba0f13f0a0941c2885cc4713d8c9584e",
+  "renders": [
+    {
+      "view": "front",
+      "file": "front.png",
+      "sha256": "9aaa87e9f699efaba42ce07e433c6f393d6f59b6bafc87e7cc53ed2502e8428f"
+    },
+    {
+      "view": "back",
+      "file": "back.png",
+      "sha256": "f146a2b92829e792df41c681487a7b9342da0b25f2fbdee378ae1113bbaa2713"
+    },
+    {
+      "view": "three_quarter",
+      "file": "three_quarter.png",
+      "sha256": "281dc6f80fc139c268e76a4ecc44e7c6b880d8d5c1da7bff642b5e46ef6eee72"
+    },
+    {
+      "view": "side",
+      "file": "side.png",
+      "sha256": "545f2e02aa4e07b425b00851735bb42507f30ed36df30de9d06edb83ffc02eeb"
+    }
+  ]
+}

@@ -49,7 +49,10 @@ voxel, or AI slab may not be renamed into a Production Mesh.
    - Model the jacket, shorts, straps, boots, and major seams as separate
      semantic regions matching the approved sheet's proportions and palette.
 4. **Equipment**
-   - Model the saber, sheath, ribbon pair, and pouch as distinct objects.
+   - Follow the approved sheet's canonical one saber and one signal ribbon;
+     model the sheath as the saber's storage part. Do not infer a ribbon pair
+     from the two endpoint Socket labels. Pouch details require a clear source
+     location before authoring; they are not an extra canonical weapon.
    - Preserve clear blade tip, grip, ribbon, and equipment-root attachment
      points rather than relying on guessed surface locations.
 5. **Presentation pass**
@@ -100,3 +103,9 @@ productionPromotionAllowed: false
 Only after semantic reconstruction, technical intake, and a human Gate B
 decision may the project move to Unity. Until Blender or a compatible 3D
 authoring environment is available, this handoff is prepared but blocked.
+
+Update 2026-09-08: Blender 5.2 is now available and the
+[equipment-only authoring study](ch101-equipment-part-study-2026-09-08.md)
+has actually run. The environment is no longer the authoring blocker; reliable
+full-character semantic geometry, attachment fit and visual quality are still
+unfinished. Historical blocked statuses above are not an environment diagnosis.

@@ -21,6 +21,11 @@ overall quality gain or verified semantic geometry. Their latest review-only
 artifacts are retained; the prior `0.834283` baseline remains available. See
 [the experiment record and authoring boundary](docs/plans/ch101-continuous-projection-2026-09-08.md).
 Modeling, human Gate B, Production, Unity and Android remain incomplete.
+An independent [equipment part study](docs/plans/ch101-equipment-part-study-2026-09-08.md)
+now contains one saber, one hollow-mouth sheath and one signal ribbon (972
+triangles total). This is a reference-guided authoring start, not a new
+full-character score or approved equipment. The full-character pointer is
+preserved; equipment artifacts use a separate pointer and prerelease.
 Older experiment summaries below are historical, not the current completion state.
 
 ## What this repository contains

@@ -30,6 +30,7 @@ NOTEBOOKS = (
     "notebooks/09_ch101_spar3d_artifact_run.ipynb",
 )
 BLENDER_SCRIPTS = (
+    "scripts/blender/build_ch101_equipment_study.py",
     "scripts/blender/apply_continuous_review_projection.py",
     "scripts/blender/smooth_review_face_region.py",
     "scripts/blender/build_blockout.py",
