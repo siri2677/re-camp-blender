@@ -91,6 +91,16 @@
   "unityInputAllowed": false,
   "productionPromotionAllowed": false,
   "recordedDate": "2026-09-08",
+  "release": {
+    "tag": "ch101-continuous-projection-review-v001",
+    "assetName": "CH101-continuous-projection-NOT_PRODUCTION-v001.zip",
+    "assetBytes": 13438232,
+    "assetSha256": "7f093002263ddae2b65b39e78f6c1f314f62621ce90f415c1193f30938cbff9f",
+    "manifestSha256": "736e006090b3e41fe4042430e800552e79e0a32e2b0696f2ad5f8a1a18a77ee6",
+    "payloadCount": 40,
+    "toolsCommit": "4b93fff10d4260a73cf93a7670dd968533bd991b",
+    "targetBranch": "feature/ch101-free-ai3d-autobuild"
+  },
   "executionEnvironment": "LOCAL_BLENDER_5.2",
   "providerInferenceExecuted": false,
   "visualAssessment": {

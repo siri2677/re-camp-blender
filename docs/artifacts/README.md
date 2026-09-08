@@ -46,15 +46,16 @@ Unity input, and disabled Production promotion.
 The committed pointer in `docs/artifacts/CH101-latest-review.json` now points
 to the latest recovered CH101 SPAR3D review bundle:
 
-- Release: `ch101-reference-correction-review-v001`
-- Bundle: `CH101-reference-correction-NOT_PRODUCTION-v001.zip`
-- Bundle SHA256: `69f395207048730011439efb2b67b926756b926f5ac8b499e9a054b1e812cf8b`
+- Release: `ch101-continuous-projection-review-v001`
+- Bundle: `CH101-continuous-projection-NOT_PRODUCTION-v001.zip`
+- Bundle SHA256: `7f093002263ddae2b65b39e78f6c1f314f62621ce90f415c1193f30938cbff9f`
 - Decision: `REJECT_GATE_B_AND_REGENERATE`
 
-This contains the subject-bounds texture and fixed two-axis geometry experiments,
-plus the same-evaluator comparison and standalone comparison image assets.
-All numeric thresholds pass for the profile candidate, but semantic geometry
-and direct visual inspection still fail. The 45-payload ZIP was downloaded
-again and verified against its manifest after publication.
+This contains continuous projection and bounded face-curvature experiments,
+plus the source profile Blend, same-evaluator comparison and comparison image.
+The 40-payload ZIP preserves the latest experiments, not an approved or improved
+selection. Their scores are effectively unchanged and semantic/visual QA still
+rejects them. The previous profile baseline remains in
+`ch101-reference-correction-review-v001`.
 
 The bundle remains review-only; it is not a Production Mesh or Unity input.
