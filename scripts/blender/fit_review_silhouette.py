@@ -20,10 +20,13 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ai3d'))
+from reference_foreground import foreground_mask
+
 
 SOURCE_STATUS = "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
 GATE_B = "PENDING_HUMAN_REVIEW"
-ALGORITHM = "CH101_REFERENCE_SILHOUETTE_PROFILE_FIT_V001"
+ALGORITHM = "CH101_REFERENCE_SILHOUETTE_PROFILE_FIT_V002"
 DEFAULT_BIN_COUNT = 96
 
 
@@ -55,7 +58,8 @@ def sha256_file(path: Path) -> str:
 
 
 def mesh_objects() -> list[bpy.types.Object]:
-    objects = [obj for obj in bpy.data.objects if obj.type == "MESH"]
+    objects = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"
+               and len(obj.data.vertices) and not obj.name.startswith('ReviewFloor_')]
     if not objects:
         raise ValueError("blend contains no mesh objects")
     return objects
@@ -84,27 +88,11 @@ def read_reference_profile(
     if width < 8 or height < 8:
         raise ValueError("reference image is too small")
     pixels = list(image.pixels[:])
-    border: list[tuple[float, float, float]] = []
-    step_x = max(1, width // 96)
-    step_y = max(1, height // 96)
-    for x in range(0, width, step_x):
-        for y in (0, height - 1):
-            index = (y * width + x) * 4
-            border.append(tuple(float(pixels[index + channel]) for channel in range(3)))
-    for y in range(0, height, step_y):
-        for x in (0, width - 1):
-            index = (y * width + x) * 4
-            border.append(tuple(float(pixels[index + channel]) for channel in range(3)))
-    background = tuple(sum(sample[channel] for sample in border) / len(border) for channel in range(3))
+    mask, mask_report = foreground_mask(
+        bytes(max(0, min(255, round(value * 255))) for value in pixels), width, height)
 
     def active(x: int, y: int) -> bool:
-        index = (y * width + x) * 4
-        rgba = pixels[index : index + 4]
-        if len(rgba) < 4 or rgba[3] < 0.05:
-            return False
-        rgb = rgba[:3]
-        distance = math.sqrt(sum((rgb[channel] - background[channel]) ** 2 for channel in range(3)))
-        return distance >= 0.055 or min(rgb) <= 0.82
+        return bool(mask[y * width + x])
 
     active_points = [(x, y) for y in range(height) for x in range(width) if active(x, y)]
     if not active_points:
@@ -122,7 +110,8 @@ def read_reference_profile(
         row = [x for x in range(left, right + 1) if active(x, y)]
         if not row:
             continue
-        normalized_z = 1.0 - (y - top) / reference_height
+        # Blender pixels are bottom-up; image row zero corresponds to feet.
+        normalized_z = (y - top) / reference_height
         slot = max(0, min(bin_count - 1, int(round(normalized_z * (bin_count - 1)))))
         row_min = min(row)
         row_max = max(row)
@@ -168,7 +157,7 @@ def read_reference_profile(
         "sha256": sha256_file(path),
         "size": [width, height],
         "maskBounds": [left, top, right, bottom],
-        "backgroundColor": [round(value, 6) for value in background],
+        "foregroundMask": mask_report,
         "algorithm": ALGORITHM,
     }
 
@@ -211,7 +200,8 @@ def deform_to_profile(
     current_profile: list[tuple[float, float]] = []
     for values in current_bins:
         if values:
-            current_profile.append((0.0, max((max(values) - min(values)) * 0.5, 0.01)))
+            current_profile.append(((max(values) + min(values)) * .5,
+                                    max((max(values) - min(values)) * 0.5, 0.01)))
         else:
             current_profile.append((0.0, 0.01))
     for index, current in enumerate(current_profile):
@@ -235,13 +225,14 @@ def deform_to_profile(
             normalized_z = (point.z - minimum.z) / height
             slot = max(0, min(bin_count - 1, int(round(normalized_z * (bin_count - 1)))))
             target_center, target_half = profile_value(profile, normalized_z)
-            current_center, current_half = current_profile[slot]
+            current_center, current_half = profile_value(current_profile, normalized_z)
             ratio = max(0.55, min(1.65, target_half / max(current_half, 0.01)))
             factor = 1.0 + strength * (ratio - 1.0)
             target_center_world = lateral_center + target_center * lateral_half
             current_center_world = lateral_center + current_center * lateral_half
             old_lateral = lateral_coordinate(point, front_axis)
-            new_lateral = target_center_world + (old_lateral - current_center_world) * factor
+            shifted_center = current_center_world + strength * (target_center_world - current_center_world)
+            new_lateral = shifted_center + (old_lateral - current_center_world) * factor
             if front_axis in {"pos_x", "neg_x"}:
                 point.y = new_lateral
             else:
@@ -274,10 +265,9 @@ def enforce_review_gate() -> None:
 
 def export_glb(path: Path) -> None:
     bpy.ops.object.select_all(action="DESELECT")
-    for obj in bpy.data.objects:
-        if obj.type == "MESH":
-            obj.select_set(True)
-    bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", export_apply=True)
+    for obj in mesh_objects():
+        obj.select_set(True)
+    bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", export_apply=True, use_selection=True)
 
 
 def main() -> int:

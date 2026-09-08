@@ -1088,6 +1088,14 @@ class AI3DFreePipelineTests(unittest.TestCase):
             "unityInputAllowed": False,
             "productionPromotionAllowed": False,
         }
+        missing = assess_score_report(self.contract, report)
+        self.assertEqual(missing['disposition'], 'REJECT')
+        self.assertIn('SEMANTIC_COMPONENT_STRUCTURE_MISSING', missing['reasonCodes'])
+        report['semanticComponentAudit'] = {
+            'status': 'PASS',
+            'partObjectCountsLOD0': {'body_face': 1, 'hair': 1, 'outfit': 1, 'equipment': 1},
+            'slabGrayboxAccepted': False,
+        }
         decision = assess_score_report(self.contract, report)
         self.assertEqual(decision["disposition"], "DEFER_TO_HUMAN_REVIEW")
         review = build_review(self.contract, [(Path("strong-score.json"), report)])

@@ -24,6 +24,8 @@ HYBRID_NOTEBOOK = ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb
 PLAN = ROOT / "docs" / "plans" / "ch101-free-ai3d-autobuild-plan.md"
 PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "common.py",
+    ROOT / "scripts" / "ai3d" / "reference_foreground.py",
+    ROOT / "scripts" / "ai3d" / "build_reference_correction_comparison.py",
     ROOT / "scripts" / "ai3d" / "prepare_reference_views.py",
     ROOT / "scripts" / "ai3d" / "prepare_roster_reference_views.py",
     ROOT / "scripts" / "ai3d" / "tripo_api.py",

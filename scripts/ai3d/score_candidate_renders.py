@@ -30,6 +30,11 @@ except ImportError:
 
 CARDINAL_CYCLE = ("neg_y", "pos_x", "pos_y", "neg_x")
 
+try:
+    from .reference_foreground import foreground_mask, ALGORITHM as MASK_ALGORITHM
+except ImportError:
+    from reference_foreground import foreground_mask, ALGORITHM as MASK_ALGORITHM
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -63,11 +68,8 @@ def _normalize_view(
     if candidate:
         mask = rgba.getchannel("A").point(lambda value: 255 if value > 16 else 0)
     else:
-        rgb = rgba.convert("RGB")
-        background = Image.new("RGB", rgb.size, "white")
-        difference = ImageChops.difference(rgb, background).convert("L")
-        mask = difference.point(lambda value: 255 if value > 12 else 0)
-        mask = mask.filter(ImageFilter.MaxFilter(5))
+        values, _ = foreground_mask(rgba.tobytes(), *rgba.size)
+        mask = Image.frombytes('L', rgba.size, bytes(values))
     bbox = mask.getbbox()
     if bbox is None:
         raise ValueError(f"empty silhouette mask: {path}")
@@ -501,6 +503,8 @@ def build_score_report(
         "orientationValidation": polarity,
         "qualityHardGateAudit": quality_audit,
         "metricLimitations": {
+            "referenceMaskAlgorithm": MASK_ALGORITHM,
+            "scoreComparability": "RESCORE_OLD_RENDERS_WITH_SAME_MASK_BEFORE_COMPARISON",
             "faceDetailScore": "UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY",
             "automaticAcceptance": "ALPHA_REVIEW_ROUTING_ONLY_NOT_GATE_B_APPROVAL",
             "geometryHardGates": "TOPOLOGY_AND_RENDER_FRAGMENTATION_ONLY_NOT_SEMANTIC_DESIGN_MATCH",

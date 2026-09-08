@@ -325,7 +325,7 @@ def publish_release(
         "--target",
         target_branch,
         "--title",
-        f"{character} review artifact {candidate_id}",
+        f"{character} NOT_PRODUCTION review artifact {candidate_id}",
         "--notes",
         f"Review-only AI 3D artifact {candidate_id}. Gate B remains pending; Unity and Production are disabled.",
         "--prerelease",

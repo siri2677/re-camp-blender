@@ -35,7 +35,7 @@ except ImportError:
 
 
 REVIEWER_CLASS = "ASSISTED_VISUAL_QA_NOT_HUMAN_GATE_B"
-REVIEW_VERSION = "ch101-assisted-visual-review-v003"
+REVIEW_VERSION = "ch101-assisted-visual-review-v004"
 ALLOWED_DISPOSITIONS = {"REJECT", "DEFER_TO_HUMAN_REVIEW"}
 
 
@@ -169,6 +169,13 @@ def assess_score_report(
         )
 
     semantic_audit = report.get("semanticComponentAudit")
+    if not isinstance(semantic_audit, dict):
+        failures.append({
+            'reasonCode': 'SEMANTIC_COMPONENT_STRUCTURE_MISSING',
+            'metric': 'semanticComponentAudit',
+            'actual': 'MISSING',
+            'minimum': 'body_face/hair/outfit/equipment present',
+        })
     if isinstance(semantic_audit, dict):
         counts = semantic_audit.get("partObjectCountsLOD0")
         required_parts = {"body_face", "hair", "outfit", "equipment"}

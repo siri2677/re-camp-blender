@@ -2,12 +2,19 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-07
+## Current status — 2026-09-08
 
-The latest SPAR3D binary is not present in Git/LFS or the inspected Kaggle
-outputs. The historical 0.601063 score is **not** a currently available or
-human-approved model. Recovery and corrected Blender texture projection come
-before further quality claims. See the [recovery plan](docs/plans/ch101-artifact-recovery-2026-09-07.md).
+The recovered SPAR3D binary is now preserved through GitHub Releases; use
+[the latest artifact pointer](docs/artifacts/CH101-latest-review.json).
+The reference gray canvas was being counted as silhouette, and padded texture
+coordinates shrank the character onto the model. Those defects are corrected.
+A fixed two-axis geometry correction now scores overall `0.834283`, silhouette
+`0.847052`, appearance `0.734795` on the corrected evaluator. All numerical
+thresholds pass, but strict QA **rejects missing semantic component evidence**.
+Direct render inspection still finds malformed head/face volume, broken side
+texture continuity and missing independent equipment. This is not a visual pass.
+Older scores cannot be compared without rescoring the same renders. See the
+[correction evidence and next steps](docs/plans/ch101-reference-correction-2026-09-08.md).
 Modeling, human Gate B, Production, Unity and Android remain incomplete.
 Older experiment summaries below are historical, not the current completion state.
 

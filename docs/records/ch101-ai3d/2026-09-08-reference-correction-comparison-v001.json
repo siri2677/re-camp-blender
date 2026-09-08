@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "ch101-reference-correction-comparison-v001",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceManifestSha256": "e51d1e7b3fdad92868ff5b8a6169b7ecebd2b6b0e67d0d0032f700ccd436a8d4",
+  "status": "REGENERATE_REQUIRED",
+  "candidates": [
+    {
+      "candidateId": "CH101-WORLDSPACE-MASK-V002",
+      "strategyId": "CH101_REVIEW_WORLDSPACE_MASKED_TEXTURE_V002",
+      "scores": {
+        "overallScore": 0.774501,
+        "silhouetteScore": 0.817458,
+        "appearanceScore": 0.572612,
+        "colorScore": 0.549267,
+        "faceDetailScore": 0.672202,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "ccf1236a56e46ab4aaaa1e6bf938cdd70152c2b0e2106246c5b4029a8e5f39ea",
+      "renderedBlendSha256": "7279390e8b99319ce63328f886fe369c8a726c4f1f5738ac73efba446ec31bab",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\recovered-review-20260908\\worldspace-review-v002\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "d7ad0615dc31defce11b6bcaa792e0ab4aa92f030b1cddef8fb7b1ae5ff4a30b",
+        "pos_x": "7c9191f29d92c6c2c98885664ebd681fc2dbae5b3b9efc0f3e39a25b40be3e01",
+        "pos_y": "a1d8f3890a913d2445c54107d06a758d78e7c3c1b20fe8970615c4ff4f6b09ff",
+        "neg_x": "f3b5fa466b346863a4e8fbfa60d2bfd71135a4e9f233ddcf738fea154f68ec51",
+        "three_quarter": "d5707a4381adf8b2f55c6f58b32ba5da34482383072a1b724693e0f088675ece"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    },
+    {
+      "candidateId": "CH101-SUBJECT-BOUNDS-V003",
+      "strategyId": "CH101_REVIEW_SUBJECT_BOUNDS_TEXTURE_V003",
+      "scores": {
+        "overallScore": 0.812296,
+        "silhouetteScore": 0.820783,
+        "appearanceScore": 0.715149,
+        "colorScore": 0.669197,
+        "faceDetailScore": 0.849627,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "c2f73972d54295ff3bed2188be707c2616262cecf185f37db6593a82c3caada4",
+      "renderedBlendSha256": "c83449ab061c9415ba234815178ccb9797d2b74394914664d3d7beef2ca2c333",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\recovered-review-20260908\\subject-bounds-review-v003\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "5798fe7ab61c150d954be26a6b60670888721b3aa74ead56af99d584211bb533",
+        "pos_x": "e2dbaaa73f91811d5e52debcca936cd6b652b41d677fbf8a2b5caa6057c79ea3",
+        "pos_y": "766b4ae0ad93c2b36e1687a6a574b6344e20ab36a555e782d0210f751fe4b444",
+        "neg_x": "440d5faef02f80c12b5a9eda4bba497474ac15f3e7f008856acf9fa6b204c5db",
+        "three_quarter": "36800841bf0ab2104280eb2d348509679a13de17c7b831a2f60773ee2a477b06"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    },
+    {
+      "candidateId": "CH101_REFERENCE_TWO_AXIS_PROFILE_CORRECTION_V002",
+      "strategyId": "CH101_REFERENCE_TWO_AXIS_PROFILE_CORRECTION_V002",
+      "scores": {
+        "overallScore": 0.834283,
+        "silhouetteScore": 0.847052,
+        "appearanceScore": 0.734795,
+        "colorScore": 0.662127,
+        "faceDetailScore": 0.871344,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "ecce806689652f4351f3237c742e4f7e0aa24061eb6288f896b51a0dbe8e1985",
+      "renderedBlendSha256": "db64df69f1c86dbf1605dbcaccbd5af9c613904cc2de67ff05407d1c93f3b80b",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\recovered-review-20260908\\two-axis-profile-review-v002\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "c9aafdf365c4430ebcc26269ba748a587b7a0cfba5cfc435ce97bf575b08373c",
+        "pos_x": "70a06a3cdef3f150e938226bfb6265227b0e49aba8ca3cf005623fa84f789b3e",
+        "pos_y": "4f0522daf6d588424c6f30ff3eb39a81f057494beab4bbff2b2c1c856365c4c0",
+        "neg_x": "b68abd208c77f09569f108e8e91c06c7866867a0fdba1aaba1d5d5c69e2fdf95",
+        "three_quarter": "f35825504f772383637a679dc6c30bad79f4906a9523c90cb2f827595e776350"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    }
+  ],
+  "historicalScoreComparisonAllowed": false,
+  "comparisonBasis": "ALL_INPUTS_RESCORED_WITH_LIGHT_NEUTRAL_BORDER_CANVAS_V002",
+  "selectedCandidate": null,
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "recordedDate": "2026-09-08",
+  "providerInferenceExecuted": false,
+  "executionEnvironment": "LOCAL_BLENDER_5.2_CPU_CAPABLE_POSTPROCESSING",
+  "visualInspection": {
+    "reviewer": "ASSISTANT_NOT_HUMAN_GATE_B",
+    "decision": "REGENERATE_REQUIRED",
+    "observations": [
+      "Texture extent and clothing alignment visibly improved.",
+      "Malformed head and protruding facial planes remain.",
+      "Side projection seams and white patches remain.",
+      "Independent face/body, hair, outfit and equipment structures have not been verified."
+    ],
+    "nextAction": "REAL_SEMANTIC_GEOMETRY_AND_CONTINUOUS_TEXTURE_AUTHORING"
+  }
+}

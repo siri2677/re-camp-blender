@@ -111,6 +111,16 @@ class TextureProjectionTests(unittest.TestCase):
         self.assertEqual(before, self.source.read_bytes())
         self.assertEqual(report["outputBlendSha256"], texture.sha256_file(self.root / "result.blend"))
 
+    def test_projection_uses_subject_extent_inside_padded_reference(self):
+        self.apply()
+        # Subject spans x=3..12 and y=2..13 in the fixture, not the canvas.
+        values = [loop.uv for obj in (bpy.data.objects['body'], bpy.data.objects['hair'])
+                  for loop in obj.data.uv_layers.active.data]
+        self.assertGreater(min(v.x for v in values), .1)
+        self.assertLess(max(v.x for v in values), .9)
+        self.assertGreater(min(v.y for v in values), .05)
+        self.assertLess(max(v.y for v in values), .95)
+
 
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TextureProjectionTests)

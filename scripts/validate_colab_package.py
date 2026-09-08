@@ -51,6 +51,8 @@ UTILITY_SCRIPTS = (
     "scripts/merge_current_roster_handoffs.py",
     "scripts/validate_ai3d_free_package.py",
     "scripts/ai3d/common.py",
+    "scripts/ai3d/reference_foreground.py",
+    "scripts/ai3d/build_reference_correction_comparison.py",
     "scripts/ai3d/prepare_reference_views.py",
     "scripts/ai3d/prepare_roster_reference_views.py",
     "scripts/ai3d/tripo_api.py",

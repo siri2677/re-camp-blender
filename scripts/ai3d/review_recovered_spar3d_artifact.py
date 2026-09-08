@@ -15,10 +15,12 @@ except ImportError:
     from common import load_contract, require_reference_manifest, sha256_file, write_json, candidate_gate_fields
 
 ROOT = Path(__file__).resolve().parents[2]
-STRATEGY = "CH101_REVIEW_WORLDSPACE_MASKED_TEXTURE_V002"
+STRATEGY = "CH101_REVIEW_SUBJECT_BOUNDS_TEXTURE_V003"
+PROFILE_STRATEGY = "CH101_REFERENCE_TWO_AXIS_PROFILE_CORRECTION_V002"
 
 
 def execute(args) -> dict:
+    strategy = PROFILE_STRATEGY if getattr(args, 'fit_reference_profile', False) else STRATEGY
     contract = load_contract(args.contract, "CH101")
     gates = candidate_gate_fields(contract)
     if not args.mesh.is_file() or sha256_file(args.mesh) != args.mesh_sha256:
@@ -33,7 +35,7 @@ def execute(args) -> dict:
         raise ValueError("BLOCKED_BLENDER_RUNTIME_UNAVAILABLE")
     args.output_dir.mkdir(parents=True)
     out = args.output_dir.resolve()
-    report = dict(status="REVIEW_STARTED", strategyId=STRATEGY,
+    report = dict(status="REVIEW_STARTED", strategyId=strategy,
                   sourceMeshSha256=args.mesh_sha256, referenceManifestSha256=args.reference_sha256,
                   artCommit=contract["artLock"]["commit"], **gates)
     write_json(out / "review-run.json", report)
@@ -53,7 +55,7 @@ def execute(args) -> dict:
 
     try:
         gate_command = [sys.executable, ROOT / "scripts/ai3d/quality_progress_gate.py",
-                        "--provider", "spar3d", "--strategy-id", STRATEGY,
+                        "--provider", "spar3d", "--strategy-id", strategy,
                         "--score-dir", out.parent, "--output", out / "quality-progress.json"]
         for record in sorted((ROOT / "docs/records/ch101-ai3d").glob("*.json")):
             gate_command += ["--history-record", record]
@@ -72,6 +74,18 @@ def execute(args) -> dict:
                        "--candidate-id", "CH101-RECOVERED-SOURCE", "--output-dir", out / "baseline",
                        "--report", out / "baseline-evaluation.json", "--normalized-blend", normalized,
                        "--integrity-blend", refined)
+        if getattr(args, 'fit_reference_profile', False):
+            # Both axes use the same fixed conservative strength; no score-driven tuning.
+            for axis, view in (('neg_y', 'front'), ('pos_x', 'right')):
+                fitted = out / f'{view}_fitted_NOT_PRODUCTION.blend'
+                transport = out / f'{view}_fitted.glb'
+                blender_script('fit_review_silhouette.py', '--blend', refined,
+                               '--reference-image', references['views'][view]['path'],
+                               '--front-axis', axis, '--strength', '.35',
+                               '--output-blend', fitted, '--output-glb', transport,
+                               '--report', out / f'{view}-fit-report.json')
+                refined = fitted
+            normalized = refined
         masked = out / "CH101_WorldspaceMasked_NOT_PRODUCTION.blend"
         blender_script("apply_review_multiview_textures.py", "--input-blend", normalized,
                        "--front-image", references["views"]["front"]["path"],
@@ -80,7 +94,7 @@ def execute(args) -> dict:
                        "--output-blend", masked, "--report", out / "texture-report.json")
         evaluation = out / "evaluation-report.json"
         blender_script("evaluate_ai3d_candidate.py", "--candidate", transport,
-                       "--candidate-id", "CH101-WORLDSPACE-MASK-V002", "--strategy-id", STRATEGY,
+                       "--candidate-id", strategy, "--strategy-id", strategy,
                        "--output-dir", out, "--report", evaluation, "--integrity-blend", refined,
                        "--reuse-normalized-blend", masked,
                        "--normalized-blend", out / "CH101_Review_NOT_PRODUCTION.blend")
@@ -118,6 +132,8 @@ def main() -> int:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--contract", type=Path, default=ROOT / "contracts/ch101_ai3d_free_pipeline_v001.json")
     parser.add_argument("--blender")
+    parser.add_argument('--fit-reference-profile', action='store_true',
+                        help='One-shot two-axis geometry correction using the verified bottom-up profile fit.')
     args = parser.parse_args()
     report = execute(args)
     print(json.dumps(report, indent=2))
