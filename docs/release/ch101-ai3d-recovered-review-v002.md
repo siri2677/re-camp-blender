@@ -35,9 +35,11 @@ re-run as a quality retry.
 - Art commit: `b6c9b3128358e061eee6184230929413eba84101`
 - Reference manifest SHA256: `e51d1e7b3fdad92868ff5b8a6169b7ecebd2b6b0e67d0d0032f700ccd436a8d4`
 - Source GLB SHA256: `3812e28a8c64b08c549abe44a0cf5714de7b7238db51537300468b83e4560371`
-- Payload ZIP SHA256: `e59164b7a4e3fbcd31797467349dbb9ea7f480440065114719db08dce7803a6c`
+- Release bundle: `CH101-SPAR3D-recovered-review-v002.zip`
+- Release bundle SHA256: `9290fc011f51978f38ffac59fec9f6fa384389a963aaede686faa85eeba2f61c`
+- Release URL: https://github.com/siri2677/re-camp-blender/releases/tag/ch101-ai3d-recovered-review-v002
 
 The release assets contain the source recovered GLB, the Blender review
 outputs, five-direction renders, evaluation reports, and provenance files.
-The release helper also uploads a generated SHA256 manifest. No token or
-secret is included.
+The release helper uploads a generated SHA256 manifest. No token or secret is
+included.

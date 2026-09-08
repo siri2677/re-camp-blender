@@ -35,9 +35,15 @@
   "productionPromotionAllowed": false,
   "retention": "GITHUB_RELEASE_PRERELEASE",
   "release": {
-    "status": "PENDING_UPLOAD",
+    "status": "UPLOADED",
     "repository": "siri2677/re-camp-blender",
     "targetBranch": "feature/ch101-free-ai3d-autobuild",
-    "tag": "ch101-ai3d-recovered-review-v002"
+    "tag": "ch101-ai3d-recovered-review-v002",
+    "url": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-ai3d-recovered-review-v002",
+    "assetName": "CH101-SPAR3D-recovered-review-v002.zip",
+    "assetBytes": 7165521,
+    "assetSha256": "9290fc011f51978f38ffac59fec9f6fa384389a963aaede686faa85eeba2f61c",
+    "manifestSha256": "69e594aa00f0250e2f42dd1581d1b29d4320b5578dd3dfca6bdb64d050335667",
+    "toolsCommit": "b8bc2590a09417c2b38e086fe66ef43e16b7cf70"
   }
 }

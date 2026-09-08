@@ -267,9 +267,9 @@ for versioned review bundles and a committed latest pointer. GitHub Release or
 Git LFS remain options when persistent `.blend` or `.fbx` storage is needed.
 
 For AI review results, publish the latest non-production payload as a prerelease
-with `scripts/ai3d/publish_review_release.ps1`. The helper records asset SHA256
-values and refuses to publish when `unityInputAllowed` or
-`productionPromotionAllowed` is true. Review releases must keep
+with `scripts/ai3d/review_artifact_release.py publish`. The helper verifies
+payload SHA256 values, writes the committed latest pointer, and refuses to
+publish unlocked Unity or Production state. Review releases must keep
 `NOT_PRODUCTION` in the title until human Gate B approval.
 
 For the budget-review variant, pass `--optimize-budget` to
