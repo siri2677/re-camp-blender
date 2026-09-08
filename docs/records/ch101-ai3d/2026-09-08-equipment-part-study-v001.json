@@ -7,6 +7,11 @@
   "unityInputAllowed": false,
   "productionPromotionAllowed": false,
   "artifactScope": "EQUIPMENT_ONLY",
+  "releaseTag": "ch101-equipment-part-study-v001",
+  "releaseBundleSha256": "b3aa1119d8e5715eb7ab401fb4b24261e1864bf2da7d2b09953184d51929b63a",
+  "releaseDownloadVerified": true,
+  "toolsCommit": "d268f07f72231bd7fb2948250957456868dbe744",
+  "agentVisualDisposition": "SIMPLIFIED_PART_STUDY_REQUIRES_DETAIL_AND_ATTACHMENT_WORK",
   "implementationRevision": "PHYSICAL_LENGTH_UV_FIX_V002",
   "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
   "references": [

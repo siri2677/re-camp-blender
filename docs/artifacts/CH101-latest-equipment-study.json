@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "EQUIPMENT_ONLY",
+  "fullCharacterCandidate": false,
+  "candidateId": "CH101_REFERENCE_EQUIPMENT_LOFT_STUDY_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-equipment-part-study-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-equipment-part-study-v001",
+  "assetName": "CH101-equipment-part-study-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-equipment-part-study-v001/CH101-equipment-part-study-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 9573445,
+  "bundleSha256": "b3aa1119d8e5715eb7ab401fb4b24261e1864bf2da7d2b09953184d51929b63a",
+  "manifestSha256": "ef86fb4470ffafef09c3d241005f96d1ea43543421a7212e8150b178a55e56de",
+  "toolsCommit": "d268f07f72231bd7fb2948250957456868dbe744",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

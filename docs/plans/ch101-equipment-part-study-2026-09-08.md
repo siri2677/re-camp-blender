@@ -88,7 +88,9 @@ Release: `ch101-equipment-part-study-v001`. Use the separate
 `docs/artifacts/CH101-latest-equipment-study.json` pointer. The existing latest
 full-character pointer stays unchanged, avoiding accidental replacement by a
 partial kit. The archive contains both implementations, their reports, four
-views each, this note and preflight evidence. Full SHA256 records accompany
+views each and preflight evidence (13 payloads). This note is a separate
+release attachment because the bundle's allowlist excludes Markdown files.
+Full SHA256 records accompany
 every file in the release manifest.
 
 All outputs remain `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
