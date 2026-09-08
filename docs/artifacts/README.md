@@ -46,9 +46,9 @@ Unity input, and disabled Production promotion.
 The committed pointer in `docs/artifacts/CH101-latest-review.json` now points
 to the latest recovered CH101 SPAR3D review bundle:
 
-- Release: `ch101-ai3d-recovered-review-v002`
-- Bundle: `CH101-SPAR3D-recovered-review-v002.zip`
-- Bundle SHA256: `9290fc011f51978f38ffac59fec9f6fa384389a963aaede686faa85eeba2f61c`
+- Release: `ch101-ai3d-recovered-review-v003`
+- Bundle: `CH101-SPAR3D-recovered-review-v003.zip`
+- Bundle SHA256: `ec6eff9abd770335b2293c541514f850a46cbb3200f5161c24f3bcd9d942c96b`
 - Decision: `REJECT_GATE_B_AND_REGENERATE`
 
 The bundle remains review-only; it is not a Production Mesh or Unity input.
