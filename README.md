@@ -15,6 +15,11 @@ Direct render inspection still finds malformed head/face volume, broken side
 texture continuity and missing independent equipment. This is not a visual pass.
 Older scores cannot be compared without rescoring the same renders. See the
 [correction evidence and next steps](docs/plans/ch101-reference-correction-2026-09-08.md).
+The subsequent continuous-projection and bounded face-curvature experiments
+reached `0.833999` and `0.833983`, respectively. Neither provides a meaningful
+overall quality gain or verified semantic geometry. Their latest review-only
+artifacts are retained; the prior `0.834283` baseline remains available. See
+[the experiment record and authoring boundary](docs/plans/ch101-continuous-projection-2026-09-08.md).
 Modeling, human Gate B, Production, Unity and Android remain incomplete.
 Older experiment summaries below are historical, not the current completion state.
 

@@ -30,6 +30,8 @@ NOTEBOOKS = (
     "notebooks/09_ch101_spar3d_artifact_run.ipynb",
 )
 BLENDER_SCRIPTS = (
+    "scripts/blender/apply_continuous_review_projection.py",
+    "scripts/blender/smooth_review_face_region.py",
     "scripts/blender/build_blockout.py",
     "scripts/blender/validate_asset.py",
     "scripts/blender/validate_current_roster_mesh_intake.py",
@@ -48,6 +50,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/build_ch101_semantic_proxy.py",
 )
 UTILITY_SCRIPTS = (
+    "scripts/ai3d/run_continuous_projection_review.py",
     "scripts/merge_current_roster_handoffs.py",
     "scripts/validate_ai3d_free_package.py",
     "scripts/ai3d/common.py",

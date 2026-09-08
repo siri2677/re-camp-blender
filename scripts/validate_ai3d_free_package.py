@@ -25,6 +25,9 @@ PLAN = ROOT / "docs" / "plans" / "ch101-free-ai3d-autobuild-plan.md"
 PYTHON_SOURCES = (
     ROOT / "scripts" / "ai3d" / "common.py",
     ROOT / "scripts" / "ai3d" / "reference_foreground.py",
+    ROOT / "scripts" / "ai3d" / "run_continuous_projection_review.py",
+    ROOT / "scripts" / "blender" / "apply_continuous_review_projection.py",
+    ROOT / "scripts" / "blender" / "smooth_review_face_region.py",
     ROOT / "scripts" / "ai3d" / "build_reference_correction_comparison.py",
     ROOT / "scripts" / "ai3d" / "prepare_reference_views.py",
     ROOT / "scripts" / "ai3d" / "prepare_roster_reference_views.py",

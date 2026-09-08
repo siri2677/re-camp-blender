@@ -54,7 +54,7 @@ def build(args):
     width, height = 320, 380
     canvas = Image.new('RGB', (width * (len(reports) + 1), height * 3 + 60), '#202631')
     draw = ImageDraw.Draw(canvas)
-    draw.text((12, 12), 'CH101: reference / previous / subject bounds / profile fit', fill='white')
+    draw.text((12, 12), 'CH101: reference / candidate variants in evaluation input order', fill='white')
     draw.text((12, 32), 'NOT PRODUCTION - compare geometry and texture; numeric scores do not approve identity.', fill='white')
     for row, (ref_view, render_view) in enumerate((('front', 'neg_y'), ('right', 'pos_x'), ('back', 'pos_y'))):
         paths = [Path(refs['views'][ref_view]['path'])] + [Path(s['evaluationReport']['renders'][render_view]) for _, s in reports]

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "ch101-reference-correction-comparison-v001",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceManifestSha256": "e51d1e7b3fdad92868ff5b8a6169b7ecebd2b6b0e67d0d0032f700ccd436a8d4",
+  "status": "REGENERATE_REQUIRED",
+  "candidates": [
+    {
+      "candidateId": "CH101_REFERENCE_TWO_AXIS_PROFILE_CORRECTION_V002",
+      "strategyId": "CH101_REFERENCE_TWO_AXIS_PROFILE_CORRECTION_V002",
+      "scores": {
+        "overallScore": 0.834283,
+        "silhouetteScore": 0.847052,
+        "appearanceScore": 0.734795,
+        "colorScore": 0.662127,
+        "faceDetailScore": 0.871344,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "ecce806689652f4351f3237c742e4f7e0aa24061eb6288f896b51a0dbe8e1985",
+      "renderedBlendSha256": "db64df69f1c86dbf1605dbcaccbd5af9c613904cc2de67ff05407d1c93f3b80b",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\recovered-review-20260908\\two-axis-profile-review-v002\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "c9aafdf365c4430ebcc26269ba748a587b7a0cfba5cfc435ce97bf575b08373c",
+        "pos_x": "70a06a3cdef3f150e938226bfb6265227b0e49aba8ca3cf005623fa84f789b3e",
+        "pos_y": "4f0522daf6d588424c6f30ff3eb39a81f057494beab4bbff2b2c1c856365c4c0",
+        "neg_x": "b68abd208c77f09569f108e8e91c06c7866867a0fdba1aaba1d5d5c69e2fdf95",
+        "three_quarter": "f35825504f772383637a679dc6c30bad79f4906a9523c90cb2f827595e776350"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    },
+    {
+      "candidateId": "CH101_CONTINUOUS_WORLD_PROJECTION_V001",
+      "strategyId": "CH101_CONTINUOUS_WORLD_PROJECTION_V001",
+      "scores": {
+        "overallScore": 0.833999,
+        "silhouetteScore": 0.847052,
+        "appearanceScore": 0.733662,
+        "colorScore": 0.653626,
+        "faceDetailScore": 0.889147,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "a4b1668c55661f97813813e927e9b1bdcf8530cd57c6a3dd82f040d5e65c4763",
+      "renderedBlendSha256": "47d1756f5a7f316ce3cae3a8f7f0a83827b8f38c9b00a372a10e243c883480f3",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\continuous-projection-review-20260908\\v001\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "fc02f6a5b8ddde43c691681cc9d6d0cae9eec3676bd248ea1260ebe0399d7e27",
+        "pos_x": "dd6408b917d2675eeb891521fe36e3725b36a53114114cb0123eff13de191c59",
+        "pos_y": "3a3515242cc4a1e99636e40b79e414664ecbbdb6bb48fc74708545a9c3c840d0",
+        "neg_x": "e0a6781971170ade251103944ded852b7320dcacc9c116f36b8c359dd80fe605",
+        "three_quarter": "539dbebf947de9cf98f60d38b43fccc88f046069a9e01a827aad0a8d611691cd"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    },
+    {
+      "candidateId": "CH101_ESTIMATED_FACE_CURVATURE_CORRECTION_V001",
+      "strategyId": "CH101_ESTIMATED_FACE_CURVATURE_CORRECTION_V001",
+      "scores": {
+        "overallScore": 0.833983,
+        "silhouetteScore": 0.847052,
+        "appearanceScore": 0.733597,
+        "colorScore": 0.653503,
+        "faceDetailScore": 0.889147,
+        "technicalScore": 1
+      },
+      "evaluationSha256": "a0f350f6b9b041a7dc68c028c45047589c4194b0196bea9ac4486dff53ff98c7",
+      "renderedBlendSha256": "8b385fd94112583a766d913b0c2e046c9caf04fa60ad74e8a9158aa9663ad037",
+      "renderedBlendPath": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\continuous-projection-review-20260908\\face-curvature-v001\\CH101_Review_NOT_PRODUCTION.blend",
+      "rendersSha256": {
+        "neg_y": "a2ee6f40e958465028baff6aea6f8fe395a875b4a8e23d182f06ac32d8ebc3ee",
+        "pos_x": "f2f4ff25005be5d09c08d33c96e93a7d133c336e0454a8d9100b563e7f17260d",
+        "pos_y": "9c224c7f05d56f5a2a445443c4863580cf14f678b2a1eeb0971394bba32353e9",
+        "neg_x": "f1141399489818ab55e035d11ebf81d1289ed52aa0f5dd79ccec2f576b838a9b",
+        "three_quarter": "f6f16dd21d650f8d586b1c25012e81ef3810256f082abfee45e16dfb4e972e8f"
+      },
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "SEMANTIC_COMPONENT_STRUCTURE_MISSING"
+      ]
+    }
+  ],
+  "historicalScoreComparisonAllowed": false,
+  "comparisonBasis": "ALL_INPUTS_RESCORED_WITH_LIGHT_NEUTRAL_BORDER_CANVAS_V002",
+  "selectedCandidate": null,
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "recordedDate": "2026-09-08",
+  "executionEnvironment": "LOCAL_BLENDER_5.2",
+  "providerInferenceExecuted": false,
+  "visualAssessment": {
+    "reviewer": "ASSISTANT_NOT_HUMAN_GATE_B",
+    "decision": "REGENERATE_REQUIRED",
+    "meaningfulOverallImprovement": false,
+    "remaining": [
+      "MALFORMED_FACE_VOLUME",
+      "CROSS_VIEW_IDENTITY_GHOSTING",
+      "UNVERIFIED_SEMANTIC_GEOMETRY",
+      "MISSING_INDEPENDENT_EQUIPMENT"
+    ]
+  }
+}
