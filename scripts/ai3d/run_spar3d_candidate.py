@@ -392,6 +392,9 @@ def main() -> int:
                     )
                 else:
                     report["status"] = "SPAR3D_DIAGNOSTIC_EXECUTED"
+                    # Diagnostic mode forbids candidate registration, not the
+                    # fact that successful mesh-producing inference occurred.
+                    report["actualInference"] = bool(mesh_outputs)
             elif result.returncode != 0:
                 report["status"] = "SPAR3D_EXECUTION_FAILED"
                 report["blockers"] = ["SPAR3D_PROVIDER_RETURNED_NONZERO"]
@@ -421,7 +424,7 @@ def main() -> int:
                         {
                             "schemaVersion": "spar3d-candidate-manifest-v001",
                             "provider": "spar3d",
-                            "strategyId": STRATEGY_ID,
+                            "strategyId": report["strategyId"],
                             "candidateLabel": "001",
                             "mesh": str(canonical_mesh.resolve()),
                             "meshSha256": report["meshSha256"],

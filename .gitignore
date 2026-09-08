@@ -13,6 +13,7 @@ __pycache__/
 artifacts/
 outputs/
 ai3d-work/
+review_assets/
 
 # OS files
 .DS_Store

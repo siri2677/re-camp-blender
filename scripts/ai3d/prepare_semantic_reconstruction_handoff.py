@@ -143,7 +143,15 @@ def _git_head(art_root: Path) -> str:
             return marker_value
     try:
         result = subprocess.run(
-            ["git", "-C", str(art_root), "rev-parse", "HEAD"],
+            [
+                "git",
+                "-c",
+                f"safe.directory={art_root.resolve()}",
+                "-C",
+                str(art_root),
+                "rev-parse",
+                "HEAD",
+            ],
             check=False,
             capture_output=True,
             text=True,

@@ -476,7 +476,7 @@ class HybridQualityStrategyTests(unittest.TestCase):
         self.assertEqual(report["diagnosticMeshCount"], 1)
         self.assertEqual(report["meshSha256"], "mesh-sha256")
         self.assertTrue(report["meshOutputs"][0].endswith("mesh.glb"))
-        self.assertFalse(report["actualInference"])
+        self.assertTrue(report["actualInference"])
         self.assertNotIn("candidateManifest", report)
 
     def test_spar3d_artifact_record_requires_real_mesh_and_preserves_provenance(self):
