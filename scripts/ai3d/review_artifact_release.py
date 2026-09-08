@@ -102,6 +102,19 @@ def _manifest_bytes(manifest: dict[str, Any]) -> bytes:
     return (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
+def _current_branch() -> str:
+    result = subprocess.run(
+        ["git", "-C", str(ROOT), "branch", "--show-current"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    branch = result.stdout.strip()
+    if result.returncode != 0 or not branch:
+        raise RuntimeError("review release publishing requires a named Git branch")
+    return branch
+
+
 def _write_zip_entry(archive: zipfile.ZipFile, name: str, data: bytes) -> None:
     info = zipfile.ZipInfo(name, FIXED_ZIP_TIME)
     info.compress_type = zipfile.ZIP_DEFLATED
@@ -300,6 +313,7 @@ def publish_release(
         tools_commit=tools_commit,
         art_commit=art_commit,
     )
+    target_branch = _current_branch()
     command = [
         "gh",
         "release",
@@ -308,6 +322,8 @@ def publish_release(
         str(output_bundle.resolve()),
         "--repo",
         repo,
+        "--target",
+        target_branch,
         "--title",
         f"{character} review artifact {candidate_id}",
         "--notes",
