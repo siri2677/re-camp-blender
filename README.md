@@ -261,7 +261,10 @@ the validator also confirms that the locked commit contains the exact
 approved-sheet path. The notebook repeats this check inside Colab before
 starting Blender.
 
-Large generated binaries should be kept out of normal Git history. Use a GitHub Release or Git LFS when persistent `.blend` or `.fbx` storage is needed.
+Large generated binaries should be kept out of normal Git history. Use the
+free GitHub Release workflow in [docs/artifacts/README.md](docs/artifacts/README.md)
+for versioned review bundles and a committed latest pointer. GitHub Release or
+Git LFS remain options when persistent `.blend` or `.fbx` storage is needed.
 
 For AI review results, publish the latest non-production payload as a prerelease
 with `scripts/ai3d/publish_review_release.ps1`. The helper records asset SHA256
