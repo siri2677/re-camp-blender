@@ -1,0 +1,263 @@
+{
+  "strategyId": "CH101_SURFACE_BAND_LANDMARK_GUIDE_V001",
+  "status": "LANDMARK_GUIDE_CREATED_NEEDS_ANATOMY_REVIEW",
+  "artifactScope": "UNBOUND_RIG_DIAGNOSTIC_NOT_CHARACTER_CANDIDATE",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "sourceBlendSha256": "db64df69f1c86dbf1605dbcaccbd5af9c613904cc2de67ff05407d1c93f3b80b",
+  "sourceGeometryDigest": "762d2413dd8f548e5c91870e77fdb9601ee289b364d91af7836d9607b2b0bd00",
+  "sourceGeometryAndWeightsUnchanged": true,
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "landmarks": {
+    "NegX_Hand": {
+      "position": [
+        -0.3658859431743622,
+        0.00026501715183258057,
+        0.8538035154342651
+      ],
+      "sampleCount": 117,
+      "sampleExtent": [
+        0.10397610068321228,
+        0.07312104851007462,
+        0.10390335321426392
+      ],
+      "band": {
+        "height": [
+          0.46,
+          0.55
+        ],
+        "signedHalfWidth": [
+          0.72,
+          1.05
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.009442258810887517,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "NegX_Elbow": {
+      "position": [
+        -0.26503485441207886,
+        -0.0005460605025291443,
+        1.0357327461242676
+      ],
+      "sampleCount": 150,
+      "sampleExtent": [
+        0.14571455121040344,
+        0.10359789431095123,
+        0.16430246829986572
+      ],
+      "band": {
+        "height": [
+          0.58,
+          0.68
+        ],
+        "signedHalfWidth": [
+          0.48,
+          0.85
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.04507188246492784,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "NegX_Shoulder": {
+      "position": [
+        -0.13911882042884827,
+        0.048510245978832245,
+        1.242286205291748
+      ],
+      "sampleCount": 157,
+      "sampleExtent": [
+        0.12065310031175613,
+        0.25088778138160706,
+        0.14518022537231445
+      ],
+      "band": {
+        "height": [
+          0.7,
+          0.79
+        ],
+        "signedHalfWidth": [
+          0.22,
+          0.52
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.03249917947376776,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "NegX_Waist": {
+      "position": [
+        -0.09265188872814178,
+        -0.04882329702377319,
+        1.009662389755249
+      ],
+      "sampleCount": 156,
+      "sampleExtent": [
+        0.09349797666072845,
+        0.32250717282295227,
+        0.13344621658325195
+      ],
+      "band": {
+        "height": [
+          0.56,
+          0.64
+        ],
+        "signedHalfWidth": [
+          0.08,
+          0.32
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.01951001305392928,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "PosX_Hand": {
+      "position": [
+        0.3634733259677887,
+        -0.022164195775985718,
+        0.8706108331680298
+      ],
+      "sampleCount": 107,
+      "sampleExtent": [
+        0.09955692291259766,
+        0.07909700274467468,
+        0.10168558359146118
+      ],
+      "band": {
+        "height": [
+          0.46,
+          0.55
+        ],
+        "signedHalfWidth": [
+          0.72,
+          1.05
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.015609533358019293,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "PosX_Elbow": {
+      "position": [
+        0.2510796785354614,
+        -0.010922417044639587,
+        1.0485578775405884
+      ],
+      "sampleCount": 159,
+      "sampleExtent": [
+        0.14534680545330048,
+        0.10507295280694962,
+        0.1637900471687317
+      ],
+      "band": {
+        "height": [
+          0.58,
+          0.68
+        ],
+        "signedHalfWidth": [
+          0.48,
+          0.85
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.04268514556149024,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "PosX_Shoulder": {
+      "position": [
+        0.1486358344554901,
+        0.03246922045946121,
+        1.2438018321990967
+      ],
+      "sampleCount": 138,
+      "sampleExtent": [
+        0.11443298310041428,
+        0.2470053881406784,
+        0.1465153694152832
+      ],
+      "band": {
+        "height": [
+          0.7,
+          0.79
+        ],
+        "signedHalfWidth": [
+          0.22,
+          0.52
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.03870520457065896,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    },
+    "PosX_Waist": {
+      "position": [
+        0.10018929094076157,
+        -0.028177410364151,
+        1.0145020484924316
+      ],
+      "sampleCount": 177,
+      "sampleExtent": [
+        0.09554477781057358,
+        0.33013109862804413,
+        0.13314539194107056
+      ],
+      "band": {
+        "height": [
+          0.56,
+          0.64
+        ],
+        "signedHalfWidth": [
+          0.08,
+          0.32
+        ]
+      },
+      "nearestSurfaceVertexDistance": 0.015202513221782057,
+      "status": "GEOMETRIC_BAND_ESTIMATE_NOT_ANATOMY_VERIFIED"
+    }
+  },
+  "boneCount": 7,
+  "rigStatus": "UNBOUND_GEOMETRIC_GUIDE_NOT_VALIDATED_HUMANOID",
+  "anatomicalLeftRightConfirmed": false,
+  "skinWeightsApplied": false,
+  "equipmentAttached": false,
+  "fullCharacterScore": null,
+  "limitations": [
+    "BANDS_MAY_INCLUDE_CLOTHING_OR_FLOATING_GEOMETRY",
+    "CENTROIDS_ARE_NOT_JOINT_CENTERS",
+    "NO_GRIP_POSE_CLEARANCE_OR_DEFORMATION_VERIFICATION",
+    "NO_FINAL_HUMANOID_MAPPING"
+  ],
+  "blendFile": "CH101_UnboundLandmarkGuide_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "bd7ffb127407230b7862a980fce9f65d2f2bc441ecd4ef117e6e7ead00c78399",
+  "renders": [
+    {
+      "view": "front",
+      "file": "front.png",
+      "sha256": "db302f8194f33983679355bc03c650161c50b7e025ec45f9bb76cd9afe3ce93a"
+    },
+    {
+      "view": "right",
+      "file": "right.png",
+      "sha256": "06ed37236fca8a318d72537774104711fa0aafab4e8929805706391a63fd10da"
+    },
+    {
+      "view": "three_quarter",
+      "file": "three_quarter.png",
+      "sha256": "80a9971c95fb8f93ab9101742c4a90ef7bd5f3e8fc768c26a46641798ee3e9f8"
+    },
+    {
+      "view": "xray_landmark_map",
+      "file": "xray_landmark_map.png",
+      "sha256": "7e382781b4c017b70e164404452556ef68d5fe8265dec8f3924032e254ab58b5",
+      "diagnosticOnly": true,
+      "markerPositionsUnchanged": true
+    }
+  ]
+}

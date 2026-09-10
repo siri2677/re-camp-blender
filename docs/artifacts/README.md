@@ -68,3 +68,11 @@ The initial four-view study remains in `ch101-equipment-part-study-v001`. It doe
 the full-character pointer above. Use the same fetch command with this separate
 pointer to restore the part study. It contains one saber, one sheath and one
 signal ribbon, not a full character or approved Unity package.
+
+## Unbound landmark diagnostic
+
+`CH101-latest-landmark-guide.json` points to `ch101-landmark-guide-review-v001`.
+It preserves a source-mesh copy with eight estimated geometric anchors, a
+non-deforming seven-bone guide and four diagnostic views. No equipment is
+attached. This pointer is intentionally separate from character/equipment
+deliverables, and its debug geometry is not a quality-scored model.

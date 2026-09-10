@@ -4,6 +4,12 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-10: an [unbound landmark guide](docs/plans/ch101-landmark-guide-2026-09-10.md)
+now exists on a preserved copy of the character: eight geometric anchors,
+seven non-deforming guide bones and four diagnostic views. No skin weights or
+equipment attachment are applied; anatomy/left-right mapping is unverified.
+This diagnostic does not replace the full-character candidate or its score.
+
 Update 2026-09-10: [equipment hardware detail study](docs/plans/ch101-equipment-hardware-2026-09-10.md)
 has actually rendered nine views, including isolated sides and close-ups.
 It adds guard insets, grip diamonds, pommel/sheath loops and one ribbon clasp:
