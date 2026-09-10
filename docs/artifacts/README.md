@@ -63,7 +63,8 @@ The bundle remains review-only; it is not a Production Mesh or Unity input.
 ## Independent equipment study
 
 `CH101-latest-equipment-study.json` identifies the latest equipment-only Blend
-and four-view renders in `ch101-equipment-part-study-v001`. It does not replace
+and nine hardware-detail renders in `ch101-equipment-hardware-study-v002`.
+The initial four-view study remains in `ch101-equipment-part-study-v001`. It does not replace
 the full-character pointer above. Use the same fetch command with this separate
 pointer to restore the part study. It contains one saber, one sheath and one
 signal ribbon, not a full character or approved Unity package.

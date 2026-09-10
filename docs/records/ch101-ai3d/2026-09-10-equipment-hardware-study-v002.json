@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "ch101-equipment-hardware-study-v002",
+  "strategyId": "CH101_REFERENCE_EQUIPMENT_HARDWARE_STUDY_V002",
+  "status": "PART_DETAIL_TECHNICAL_PASS_VISUAL_REVIEW_PENDING",
+  "artifactScope": "EQUIPMENT_ONLY",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "meshAudit": [
+    {
+      "object": "CH101_Saber",
+      "vertices": 96,
+      "triangles": 188,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "CH101_Sheath",
+      "vertices": 72,
+      "triangles": 140,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "CH101_SignalRibbon_SINGLE",
+      "vertices": 324,
+      "triangles": 644,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_00",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_01",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_02",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_03",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_04",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_05",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Grip_CyanDiamond_06",
+      "vertices": 8,
+      "triangles": 12,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Guard_CyanInset_-1",
+      "vertices": 16,
+      "triangles": 28,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Guard_CyanInset_1",
+      "vertices": 16,
+      "triangles": 28,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Saber_PommelRing",
+      "vertices": 48,
+      "triangles": 96,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Sheath_EndRing",
+      "vertices": 48,
+      "triangles": 96,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Sheath_CyanBadge",
+      "vertices": 12,
+      "triangles": 20,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Sheath_BadgeBezel",
+      "vertices": 24,
+      "triangles": 48,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Ribbon_SingleClasp",
+      "vertices": 24,
+      "triangles": 48,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    },
+    {
+      "object": "Ribbon_ClaspPin",
+      "vertices": 16,
+      "triangles": 28,
+      "connectedComponents": 1,
+      "nonManifoldEdges": 0,
+      "hasUV": true
+    }
+  ],
+  "totalTriangles": 1448,
+  "uniqueMaterialCount": 6,
+  "canonicalSaberCount": 1,
+  "canonicalRibbonCount": 1,
+  "detailMeshCount": 15,
+  "attachmentAudit": {
+    "sourceBlendSha256": "db64df69f1c86dbf1605dbcaccbd5af9c613904cc2de67ff05407d1c93f3b80b",
+    "armatures": [],
+    "boneNames": {},
+    "sockets": [],
+    "meshObjects": [
+      "geometry_0"
+    ],
+    "status": "BLOCKED_UNVERIFIED_CHARACTER_ATTACHMENT",
+    "attachmentPerformed": false,
+    "reasons": [
+      "NO_REVIEWED_HAND_WAIST_ATTACHMENT_EVIDENCE",
+      "NO_ARMATURE_IN_SOURCE",
+      "NO_WEAPON_SOCKET_IN_SOURCE"
+    ],
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "runtimeSocketMap": {
+    "Socket_Equipment_Primary": "Socket_Weapon_R"
+  },
+  "duplicateAliasTransformCreated": false,
+  "fullCharacterScore": null,
+  "limitations": [
+    "ESTIMATED_DIMENSIONS_AND_DETAIL_PROPORTIONS",
+    "NO_CHARACTER_ATTACHMENT",
+    "NO_MECHANICAL_CLASP_OR_COLLISION_TEST",
+    "PROCEDURAL_TEXTURE_NOT_BAKED",
+    "GRIP_WRAP_RELIEF_AND_BLADE_EDGE_DETAIL_UNFINISHED",
+    "BODY_FACE_HAIR_OUTFIT_UNCHANGED",
+    "NO_RIG_LOD_PHYSICS_VALIDATION"
+  ],
+  "blendFile": "CH101_EquipmentHardware_NOT_PRODUCTION_v002.blend",
+  "blendSha256": "9ac9a4b59c61ebc7a831b02a230c2497552609269b95117e6b2e670d21025845",
+  "renders": [
+    {
+      "view": "front",
+      "file": "front.png",
+      "sha256": "3004815ce6b7c0ca616fe2f086a7e047afe97b9730862473c543aecb0935ce06"
+    },
+    {
+      "view": "back",
+      "file": "back.png",
+      "sha256": "68ad41fd2129433aba6d61ae029b3aa11ba824af6e71689ab6166071929f57e0"
+    },
+    {
+      "view": "three_quarter",
+      "file": "three_quarter.png",
+      "sha256": "cae2f41221c10e06365801f1ac0f0070ae1af90741f08686327252a1db31179e"
+    },
+    {
+      "view": "side",
+      "file": "side.png",
+      "sha256": "d060f65b0ee24d57a0b66ec3e861bb01dab0cc98d4b339d006cf1736615aa8c8"
+    },
+    {
+      "view": "saber_side",
+      "file": "saber_side.png",
+      "sha256": "7ff70cb41724faed35f502ae7a666022521662b10385c83abcb450c8c253cd16",
+      "scope": "CH101_Saber"
+    },
+    {
+      "view": "sheath_side",
+      "file": "sheath_side.png",
+      "sha256": "924624c48165cc2e3e071a9d39dc3a7e759dbe39a3ba08f22a5c5f62caaacbfb",
+      "scope": "CH101_Sheath"
+    },
+    {
+      "view": "grip_guard_close",
+      "file": "grip_guard_close.png",
+      "sha256": "ade82fb5eea21747a32c7870f8b67f3fde17e9f612e0e08b6248d994b4103086",
+      "scope": "CH101_Saber"
+    },
+    {
+      "view": "sheath_badge_close",
+      "file": "sheath_badge_close.png",
+      "sha256": "674de1d21208d82735375b52e5c840a9041ac03fcce7fa778480985c973afddf",
+      "scope": "CH101_Sheath"
+    },
+    {
+      "view": "ribbon_clasp_close",
+      "file": "ribbon_clasp_close.png",
+      "sha256": "626faf63540fd8d1ac4ed8852437b2cf2bb407d42615c35687901424fd6fbdef",
+      "scope": "CH101_SignalRibbon_SINGLE"
+    }
+  ]
+}

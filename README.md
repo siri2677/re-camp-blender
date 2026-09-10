@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-10: [equipment hardware detail study](docs/plans/ch101-equipment-hardware-2026-09-10.md)
+has actually rendered nine views, including isolated sides and close-ups.
+It adds guard insets, grip diamonds, pommel/sheath loops and one ribbon clasp:
+1,448 triangles, six equipment materials. This is still part-only authoring.
+Read-only inspection of the preserved character found only `geometry_0`, no
+Armature and no Sockets; character attachment was **not** performed. The
+equipment pointer is separate from the unchanged full-character pointer.
+
 The recovered SPAR3D binary is now preserved through GitHub Releases; use
 [the latest artifact pointer](docs/artifacts/CH101-latest-review.json).
 The reference gray canvas was being counted as silhouette, and padded texture
