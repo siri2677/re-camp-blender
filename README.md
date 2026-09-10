@@ -4,6 +4,12 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-10: [static equipment-fit diagnosis](docs/plans/ch101-static-equipment-fit-2026-09-10.md)
+now places the saber/sheath against the preserved character and records surface
+overlaps. A bounded three-orientation comparison removes detected away-hand
+saber crossings, but open-hand intersections, sheath interference and combined
+material-budget excess remain. This is **not** an approved or rig-bound fit.
+
 Update 2026-09-10: an [unbound landmark guide](docs/plans/ch101-landmark-guide-2026-09-10.md)
 now exists on a preserved copy of the character: eight geometric anchors,
 seven non-deforming guide bones and four diagnostic views. No skin weights or

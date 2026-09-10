@@ -76,3 +76,10 @@ It preserves a source-mesh copy with eight estimated geometric anchors, a
 non-deforming seven-bone guide and four diagnostic views. No equipment is
 attached. This pointer is intentionally separate from character/equipment
 deliverables, and its debug geometry is not a quality-scored model.
+
+## Static equipment-fit diagnostic
+
+`CH101-latest-static-fit.json` points to `ch101-static-equipment-fit-review-v001`.
+It preserves initial and revised combined placement scenes and surface-overlap
+reports. These show remaining hand/sheath interference; they are not approved
+attachments. Character, equipment and landmark pointers remain separate.

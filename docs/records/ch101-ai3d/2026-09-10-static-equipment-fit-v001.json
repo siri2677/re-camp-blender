@@ -1,0 +1,418 @@
+{
+  "strategyId": "CH101_STATIC_EQUIPMENT_FIT_DIAGNOSTIC_V001",
+  "status": "STATIC_FIT_DIAGNOSTIC_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "artifactScope": "ESTIMATED_ATTACHMENT_DIAGNOSTIC_NOT_PRODUCTION",
+  "sourceBlendSha256": "db64df69f1c86dbf1605dbcaccbd5af9c613904cc2de67ff05407d1c93f3b80b",
+  "hardwareBlendSha256": "9ac9a4b59c61ebc7a831b02a230c2497552609269b95117e6b2e670d21025845",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "hand": {
+    "position": [
+      -0.383402556180954,
+      -0.006279081106185913,
+      0.8452494740486145
+    ],
+    "sampleCount": 77,
+    "forearmDirection": [
+      -0.5276304483413696,
+      -0.02555525116622448,
+      -0.8490895628929138
+    ],
+    "status": "DISTAL_GEOMETRIC_HAND_ESTIMATE_NOT_GRASP_VERIFIED",
+    "depthExtent": 0.06638909876346588
+  },
+  "waist": {
+    "position": [
+      0.21521508693695068,
+      -0.003573477268218994,
+      1.0248000621795654
+    ],
+    "normal": [
+      0.8850975632667542,
+      0.0543566569685936,
+      0.46222054958343506
+    ],
+    "triangleIndex": 10438,
+    "torsoRoiHalfWidthRatio": 0.55,
+    "excludedOuterArmRegion": true,
+    "rayOrigin": [
+      0.605519711971283,
+      -0.003573477268218994,
+      1.0248000621795654
+    ],
+    "rayDirection": [
+      -1,
+      0,
+      0
+    ],
+    "status": "LATERAL_SHELL_HIT_NOT_BELT_ANATOMY_VERIFIED"
+  },
+  "saberMatrix": [
+    [
+      -0.9999999403953552,
+      -0.0,
+      0.0,
+      -0.383402556180954
+    ],
+    [
+      0.0,
+      -0.866025447845459,
+      -0.5,
+      0.4037209153175354
+    ],
+    [
+      0.0,
+      -0.5,
+      0.8660253882408142,
+      0.13510864973068237
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "sheathMatrix": [
+    [
+      -0.9950372576713562,
+      0.0,
+      -0.09950371831655502,
+      0.31564709544181824
+    ],
+    [
+      -0.0,
+      -1.0,
+      0.0,
+      -0.0016709942137822509
+    ],
+    [
+      -0.09950373321771622,
+      0.0,
+      0.9950371384620667,
+      0.34644192457199097
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "poseTrials": [
+    {
+      "name": "forearm_aligned",
+      "axis": [
+        0.5276304483413696,
+        0.02555525116622448,
+        0.8490895628929138
+      ],
+      "matrix": [
+        [
+          -0.8493669033050537,
+          0.013488134369254112,
+          0.5276304483413696,
+          -0.8160595297813416
+        ],
+        [
+          0.0,
+          -0.9996734857559204,
+          0.02555525116622448,
+          -0.027234386652708054
+        ],
+        [
+          0.5278027653694153,
+          0.021705785766243935,
+          0.8490895628929138,
+          0.14899605512619019
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "awayFromHandCrossingTriangles": 19,
+      "nearHandCrossingTriangles": 23
+    },
+    {
+      "name": "vertical",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "matrix": [
+        [
+          -1.0,
+          0.0,
+          0.0,
+          -0.383402556180954
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          -0.006279081106185913
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.025249481201171875
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "awayFromHandCrossingTriangles": 0,
+      "nearHandCrossingTriangles": 38
+    },
+    {
+      "name": "front_pitched",
+      "axis": [
+        0.0,
+        -0.5,
+        0.8660253882408142
+      ],
+      "matrix": [
+        [
+          -0.9999999403953552,
+          -0.0,
+          0.0,
+          -0.383402556180954
+        ],
+        [
+          0.0,
+          -0.866025447845459,
+          -0.5,
+          0.4037209153175354
+        ],
+        [
+          0.0,
+          -0.5,
+          0.8660253882408142,
+          0.13510864973068237
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "awayFromHandCrossingTriangles": 0,
+      "nearHandCrossingTriangles": 34
+    }
+  ],
+  "selectedDiagnosticPose": "front_pitched",
+  "gripAnchorErrorMeters": 2.9802322387695312e-08,
+  "combinedMaterialCount": 9,
+  "materialBudgetStatus": "BLOCKED_COMBINED_MATERIAL_BUDGET",
+  "surfaceOverlapAudit": [
+    {
+      "object": "CH101_Saber",
+      "overlapTrianglePairCount": 85,
+      "uniqueEquipmentTrianglesCrossing": 16,
+      "nearHandCrossingTriangles": 16,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.03587382659316063,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "CH101_Sheath",
+      "overlapTrianglePairCount": 89,
+      "uniqueEquipmentTrianglesCrossing": 38,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 38,
+      "minimumVertexSurfaceDistance": 0.0003007678024005145,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_00",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.03710225969552994,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_01",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.015363462269306183,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_02",
+      "overlapTrianglePairCount": 23,
+      "uniqueEquipmentTrianglesCrossing": 9,
+      "nearHandCrossingTriangles": 9,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.002320914063602686,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_03",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.004232967272400856,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_04",
+      "overlapTrianglePairCount": 19,
+      "uniqueEquipmentTrianglesCrossing": 9,
+      "nearHandCrossingTriangles": 9,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.00024613449932076037,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_05",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.002866515191271901,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Grip_CyanDiamond_06",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.021116478368639946,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Guard_CyanInset_-1",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.08563394844532013,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Guard_CyanInset_1",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.08375899493694305,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Saber_PommelRing",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.05154382064938545,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Sheath_EndRing",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.15963657200336456,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Sheath_CyanBadge",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.0029956321232020855,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "object": "Sheath_BadgeBezel",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 9.009527275338769e-05,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    }
+  ],
+  "characterGeometryWeightsMaterialsUnchanged": true,
+  "skinWeightsApplied": false,
+  "anatomicalLeftRightConfirmed": false,
+  "ribbonPlacement": "STAGED_HIDDEN_NOT_PLACED",
+  "attachmentApproved": false,
+  "graspPoseVerified": false,
+  "fullCharacterScore": null,
+  "limitations": [
+    "OPEN_HAND_GEOMETRY_NOT_GRIP_POSED",
+    "GEOMETRIC_SIDE_LABEL_NOT_VERIFIED_ANATOMY",
+    "STATIC_SURFACE_TEST_NOT_PHYSICS_VALIDATION",
+    "WAIST_HIT_MAY_BE_CLOTHING_NOT_BELT"
+  ],
+  "blendFile": "CH101_StaticEquipmentFit_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "a2de98a552c022b8c6a1f2ec03a34955034e66b6a45fbdf717636266e3600445",
+  "renders": [
+    {
+      "view": "front",
+      "file": "front.png",
+      "sha256": "f4b0521f0bc956b0593e74e61559fc6a3acca5928e7b595ec2e29cb7a725119f"
+    },
+    {
+      "view": "three_quarter",
+      "file": "three_quarter.png",
+      "sha256": "12dffd369e5099007bba9ff9e299280b42f0fe1d7228b6462992fb282f36cdcb"
+    },
+    {
+      "view": "hand_close",
+      "file": "hand_close.png",
+      "sha256": "4401e03958b5e8cf726d4e4117ea234adcbeb889c2cc31bd358f5ee757c41ad7"
+    },
+    {
+      "view": "waist_close",
+      "file": "waist_close.png",
+      "sha256": "e88625334f4a2590a097c88a251cf3fd1705a4d35c8a7d7237d16e5009a6aed3"
+    }
+  ]
+}
