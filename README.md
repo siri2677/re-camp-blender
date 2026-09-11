@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-11: [texture-free attachment surface diagnosis](docs/plans/ch101-attachment-surface-2026-09-11.md)
+shows a fused, fingerless-looking hand volume in front/back clay views, not an
+articulated hand ready to pose. A minimal body/saber test reproduces 16 crossing
+saber triangles. Sampled topology is manifold, so cleanup alone is not the repair.
+The next modeling task is actual palm/thumb/finger surface authoring; no model
+modification or quality pass is claimed by this diagnostic.
+
 Update 2026-09-11: [material consolidation and sheath clearance study](docs/plans/ch101-material-clearance-2026-09-11.md)
 reduces retained character/equipment material kinds from nine to six, preserving
 the sampled Blender appearance (maximum RGB difference 1/255). This is an
