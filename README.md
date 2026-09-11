@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-11: [hand taper and wrist-fit study](docs/plans/ch101-hand-wrist-fit-2026-09-11.md)
+narrows the study wrist while preserving distal fingers. Eight bounded rigid
+poses were measured against a geometric forearm slice. The best distance is
+4.41 cm (from 7.43 cm to that same target), with a 58.15-degree axis mismatch.
+It remains unmerged: 188 new-hand triangles cross the preserved source body.
+The context render is **an overlapping diagnostic, not an attached hand**.
+
 Update 2026-09-11: a [connected hand-authoring study](docs/plans/ch101-hand-authoring-2026-09-11.md)
 now has a palm, thumb and four curled fingers in one manifold mesh (842 vertices,
 1,680 triangles). A localized thumb-path correction removes measured static
