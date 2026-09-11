@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-11: a [connected hand-authoring study](docs/plans/ch101-hand-authoring-2026-09-11.md)
+now has a palm, thumb and four curled fingers in one manifold mesh (842 vertices,
+1,680 triangles). A localized thumb-path correction removes measured static
+saber/detail surface crossings in this part study. It is **not attached to the
+character**: the estimated wrist center is 4.76 cm from the source surface.
+Anatomical proportions, final UV, skinning and full-character QA remain pending.
+
 Update 2026-09-11: [texture-free attachment surface diagnosis](docs/plans/ch101-attachment-surface-2026-09-11.md)
 shows a fused, fingerless-looking hand volume in front/back clay views, not an
 articulated hand ready to pose. A minimal body/saber test reproduces 16 crossing
