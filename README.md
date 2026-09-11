@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-11: [material consolidation and sheath clearance study](docs/plans/ch101-material-clearance-2026-09-11.md)
+reduces retained character/equipment material kinds from nine to six, preserving
+the sampled Blender appearance (maximum RGB difference 1/255). This is an
+attribute shader, **not** a Unity-ready baked atlas. Three fixed-anchor sheath
+orientations do not resolve interference; the original pose is retained.
+Open-hand intersections and malformed/projected character surfaces remain.
+No full-character quality pass or attachment approval is claimed.
+
 Update 2026-09-10: [static equipment-fit diagnosis](docs/plans/ch101-static-equipment-fit-2026-09-10.md)
 now places the saber/sheath against the preserved character and records surface
 overlaps. A bounded three-orientation comparison removes detected away-hand
