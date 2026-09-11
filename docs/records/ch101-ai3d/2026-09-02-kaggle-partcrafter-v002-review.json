@@ -1,0 +1,74 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-partcrafter-review-v002",
+  "recordedAt": "2026-09-02T18:00:00+09:00",
+  "character": "CH101",
+  "runtime": {
+    "platform": "Kaggle",
+    "accelerator": "GPU T4 x2",
+    "gpuMemoryMbPerDevice": 15360,
+    "toolsCommit": "224942d2b1506a3c916a8a2e8cdfc0a6fcbcd333",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8"
+  },
+  "provider": {
+    "name": "partcrafter",
+    "repository": "https://github.com/wgsxm/PartCrafter.git",
+    "commit": "3d773bf02fad51c7ab31a5615573fec93b287b30",
+    "officialEntrypoint": "scripts/inference_partcrafter.py",
+    "executionProfile": {
+      "numParts": 4,
+      "numTokens": 512,
+      "numInferenceSteps": 30,
+      "seed": 101001
+    },
+    "referenceManifestSha256": "9603c7bdf5fc78edebd06f2b77c9043f01c807cd415ab5b0f79f9c7373038f9b",
+    "objectGlbSha256": "f389e5370e9388ce94f7f8c0e9199d234f6d74bb69ed484abc96ca3f49dae8b3",
+    "objectBytes": 8394388,
+    "partGlbSha256": {
+      "part_00.glb": "9e90198f956a1caf93ab28a01450675b4d0e3564b2a41cbef78f34584fdc78d7",
+      "part_01.glb": "6014babe24938f2fd66e79eadbffbb9f1d49171a7beae230aa2fbe573ee37baa",
+      "part_02.glb": "c5ad27bd7a6e022a7a6389c37224f28f6b5151505a672567484ebffcfb8315bb",
+      "part_03.glb": "4daf61d65f3cd2b6d2da1750f7afa7318ad73d09df00066f954de035bd460347"
+    },
+    "reportSha256": "d34bd6d751fe97d15f2cbf998e3dbaf6742ff2c6e22206556a58acf949a0a5b1"
+  },
+  "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+  "status": "REGENERATE_REQUIRED",
+  "executionStatus": "PARTCRAFTER_EXECUTED",
+  "scores": {
+    "overall": {"value": 0.462276, "minimum": 0.60, "gap": 0.137724},
+    "silhouette": {"value": 0.400006, "minimum": 0.50, "gap": 0.099994},
+    "appearance": {"value": 0.469088, "minimum": 0.55, "gap": 0.080912},
+    "color": {"value": 0.232131, "minimum": 0.38, "gap": 0.147869},
+    "faceDetail": {"value": 0.733035, "minimum": 0.25, "gap": 0.0},
+    "technical": {"value": 0.85, "minimum": 0.90, "gap": 0.05}
+  },
+  "failureReasons": [
+    "OVERALL_SCORE_BELOW_MINIMUM",
+    "SOURCE_TRIANGLE_COUNT_ABOVE_MAXIMUM",
+    "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"
+  ],
+  "rootCause": [
+    "PartCrafter emitted four separate provider parts; the review mesh did not satisfy the connected-primary-mesh requirement.",
+    "The generated material/color regions do not match the CH101 reference strongly enough.",
+    "The source mesh exceeded the configured triangle budget before final review export."
+  ],
+  "artifacts": {
+    "kaggleRoot": "/kaggle/working/re-camp-ai3d/CH101/hybrid",
+    "candidateManifest": "candidates/partcrafter/candidate-manifest.json",
+    "refinedBlend": "evaluation/CH101-PARTCRAFTER-001/CH101-PARTCRAFTER-001_refined_NOT_PRODUCTION.blend",
+    "normalizedBlend": "evaluation/CH101-PARTCRAFTER-001/CH101-PARTCRAFTER-001_normalized_NOT_PRODUCTION.blend",
+    "scoreReport": "evaluation/CH101-PARTCRAFTER-001/candidate-score.json",
+    "rankingManifest": "ranking-manifest.json",
+    "executionArchive": "../re-camp-CH101-hybrid-NOT-PRODUCTION.zip",
+    "renderFiles": ["front.png", "right.png", "back.png", "three_quarter.png"]
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Do not rerun PARTCRAFTER_PART_LEVEL_V001. Pivot to a new provider or Blender semantic authoring; preserve this candidate only as review evidence."
+}

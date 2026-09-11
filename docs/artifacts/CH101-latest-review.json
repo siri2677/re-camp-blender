@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "candidateId": "CH101_ESTIMATED_FACE_CURVATURE_CORRECTION_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-continuous-projection-review-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-continuous-projection-review-v001",
+  "assetName": "CH101-continuous-projection-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-continuous-projection-review-v001/CH101-continuous-projection-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 13438232,
+  "bundleSha256": "7f093002263ddae2b65b39e78f6c1f314f62621ce90f415c1193f30938cbff9f",
+  "manifestSha256": "736e006090b3e41fe4042430e800552e79e0a32e2b0696f2ad5f8a1a18a77ee6",
+  "toolsCommit": "4b93fff10d4260a73cf93a7670dd968533bd991b",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

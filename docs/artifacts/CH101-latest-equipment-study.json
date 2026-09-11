@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "EQUIPMENT_ONLY",
+  "fullCharacterCandidate": false,
+  "candidateId": "CH101_REFERENCE_EQUIPMENT_HARDWARE_STUDY_V002",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-equipment-hardware-study-v002",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-equipment-hardware-study-v002",
+  "assetName": "CH101-equipment-hardware-NOT_PRODUCTION-v002.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-equipment-hardware-study-v002/CH101-equipment-hardware-NOT_PRODUCTION-v002.zip",
+  "bundleBytes": 10442363,
+  "bundleSha256": "c5cac7e67bfeb11cfaf0f49e537fa51e2e0813b2015b47be4f1800f301a175e6",
+  "manifestSha256": "7792327b1e08159cf7720cdaad2c16246f455c101edd67105a60b20c9a9d0882",
+  "toolsCommit": "7c53273baa56c52930e5d9fc04383a8f6293da3d",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

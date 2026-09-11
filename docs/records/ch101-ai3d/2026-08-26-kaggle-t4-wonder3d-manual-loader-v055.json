@@ -1,0 +1,75 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-manual-loader-v055",
+  "recordedAt": "2026-08-26",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "ea9703bace1381fc422006d5bd51e40322fdd68b",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceManifestSha256": "9f22189c6c8f18a82c38b1caf5be31981b146d2ad7800521419b7c5cae45cafa",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cudaCapability": "7.5",
+    "status": "READY_GPU_VISIBLE",
+    "blender": "3.0.1",
+    "note": "All provider outputs remain research-only and gate-locked."
+  },
+  "wonder3D": {
+    "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "checkpoint": "flamehaze1115/wonder3d-v1.0",
+    "manualPipelineLoader": {
+      "status": "RESOLVED_FOR_RUNTIME",
+      "cause": "Modern Diffusers remote-code discovery cannot find the provider-local custom UNet module.",
+      "resolution": "Assemble the provider-local UNet with checkpoint VAE, CLIP image encoder, scheduler, and feature extractor.",
+      "providerSourceModified": false
+    },
+    "multiview": {
+      "status": "MULTIVIEW_GENERATED",
+      "actualInference": true,
+      "guidanceScales": [3.0, 1.0],
+      "viewCount": 6,
+      "views": ["front", "front_right", "right", "back", "left", "front_left"],
+      "rgbOutput": "/kaggle/working/re-camp-ai3d/CH101/wonder3d-v105/multiview/cropsize-192-cfg3.0/CH101_front",
+      "normalOutput": "/kaggle/working/re-camp-ai3d/CH101/wonder3d-v106/multiview/cropsize-192-cfg1.0/CH101_front",
+      "referenceManifestSha256Matched": true,
+      "generatedFileHashesPersisted": false,
+      "note": "The session output was not copied into Git; the paths are ephemeral Kaggle paths."
+    },
+    "neus": {
+      "status": "BLOCKED_NEUS_RUNTIME_TOO_SLOW",
+      "inputPreparation": "RGB guidance 3.0 plus normal guidance 1.0; normals converted to RGBA with alpha from non-background threshold for the legacy loader.",
+      "attempts": [
+        {"endIter": 1000, "status": "INTERRUPTED_RUNTIME_TOO_SLOW"},
+        {"endIter": 200, "status": "INTERRUPTED_RUNTIME_TOO_SLOW"},
+        {"endIter": 20, "status": "INTERRUPTED_RUNTIME_TOO_SLOW"}
+      ],
+      "meshCreated": false,
+      "candidateManifestCreated": false,
+      "reviewBlendCreated": false
+    }
+  },
+  "bestCompletedCandidate": {
+    "provider": "tripoSR",
+    "sourceSha256": "c163548a8ef0330fc23826e2739e5f1c1e97ccd8d4baa5ad284106d37c59305d",
+    "score": {
+      "overall": 0.512628,
+      "silhouette": 0.541614,
+      "appearance": 0.302314,
+      "color": 0.170125,
+      "faceDetail": 0.347116,
+      "technical": 0.85
+    },
+    "status": "REGENERATE_REQUIRED",
+    "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+    "scoreCause": "Single-view mesh has no reliable semantic surface labels; the coarse fallback assigns too much dark/skin material while the locked reference is predominantly bright outfit regions."
+  },
+  "decision": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "finalStatus": "REGENERATE_REQUIRED",
+    "nextBlocker": "Obtain a completed multiview mesh extraction or a semantically textured production mesh; do not lower score thresholds."
+  }
+}

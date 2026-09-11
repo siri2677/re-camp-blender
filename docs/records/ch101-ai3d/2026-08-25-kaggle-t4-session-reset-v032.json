@@ -1,0 +1,49 @@
+{
+  "recordVersion": "v032",
+  "date": "2026-08-25",
+  "recordType": "GPU_RETRY_BLOCKED_BEFORE_INFERENCE",
+  "repositories": {
+    "toolsCommit": "2ef48f58354cfc595371abd82ee8c0e19f292c60",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "tripoSRProviderCommit": "107cefdc244c39106fa830359024f6a2f1c78871"
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4 x2",
+    "torch": "2.10.0+cu128",
+    "deviceCapability": "sm_75",
+    "torchKernelSupportsDevice": true,
+    "status": "READY_GPU_WORKSTREAM"
+  },
+  "execution": {
+    "workspaceState": "RESET_OR_RECONNECTED_BEFORE_CANDIDATE_REUSE",
+    "previousCandidateFilesPresent": false,
+    "repositoryReclone": "PASS",
+    "artReclone": "PASS",
+    "providerReclone": "PASS",
+    "referencePreparation": "PASS_NOT_USED_FOR_SCORING",
+    "referenceManifestSha256": "9f22189c6c8f18a82c38b1caf5be31981b146d2ad7800521419b7c5cae45cafa",
+    "dependencyInstall": "STARTED_SESSION_RECONNECT_INTERRUPTED",
+    "actualTripoSRInference": false,
+    "candidateCount": 0,
+    "meshCreated": false,
+    "reviewBlendCreated": false,
+    "unityPackageCreated": false
+  },
+  "decision": {
+    "status": "BLOCKED_KAGGLE_WORKSPACE_RESET_BEFORE_INFERENCE",
+    "reason": "The T4 was compatible, but the session no longer contained the prior candidate files; the recovery cell was interrupted during dependency setup before TripoSR inference.",
+    "scoreAvailable": false,
+    "previousScoreRemainsAuthoritative": "v030 best overall 0.519884 / color 0.136379",
+    "gateBPackage": "NOT_CREATED",
+    "selectedCandidate": null
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Run Kaggle setup, dependency preflight, and three TripoSR generations as separate checkpointed cells, then execute v031 refine/evaluate/rank only after all three candidate manifests exist."
+}

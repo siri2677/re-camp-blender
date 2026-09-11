@@ -1,0 +1,15 @@
+{
+  "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+  "provider": "blenderSemanticAuthoring",
+  "strategyId": "UNIFIED_SEMANTIC_AUTHORING_V002",
+  "sameStrategyReportCount": 1,
+  "sameStrategyRejectedCount": 1,
+  "bestOverallScore": 0.608431,
+  "bestAppearanceScore": 0.346415,
+  "allowSameStrategyRetry": false,
+  "nextAction": "PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

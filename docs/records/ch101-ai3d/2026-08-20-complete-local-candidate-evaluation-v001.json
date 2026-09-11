@@ -1,0 +1,247 @@
+{
+  "recordVersion": "ch101-ai3d-complete-local-candidate-evaluation-v001",
+  "recordedAt": "2026-08-20",
+  "character": "CH101",
+  "runType": "LOCAL_BLENDER_REEVALUATION_FROM_ARCHIVED_COLAB_CANDIDATES",
+  "evaluationCompleteness": "COMPLETE_FOR_ALL_SIX_AVAILABLE_CANDIDATES",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101",
+    "referenceManifest": "reference-views/reference-views-manifest.json"
+  },
+  "tools": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "baseCommitBeforeEvaluationFixes": "a90013c5b20bda91023ee557fa962946d7ebad2a",
+    "python": "3.12.13",
+    "blender": "5.2.0 LTS",
+    "blenderBuildHash": "fbe6228777e7"
+  },
+  "sourceArchive": {
+    "fileName": "re-camp-CH101-ai3d-review-NOT-PRODUCTION (12).zip",
+    "bytes": 47089639,
+    "sha256": "f97683a3a851ee1eb8d2145bf4f1edc92e7623c933b12fa73e052ba744c306cd",
+    "candidateFilesFound": 6,
+    "previouslyScoredCandidatesFound": 4
+  },
+  "rootCause": {
+    "status": "CONFIRMED_AND_CORRECTED",
+    "issue": "Every archived candidate was rendered with its head below its feet because the longest-axis normalization did not validate vertical polarity.",
+    "impact": "The original four-candidate ranking used upside-down renders and omitted two InstantMesh candidates.",
+    "additionalIssues": [
+      "Blender 5.2 imported an untextured GLB DefaultMaterial that prevented the intended review palette fallback.",
+      "Downloaded reference manifests contained Colab absolute paths and were not portable.",
+      "Blender bone heat weighting returned FINISHED while leaving all 97162 LOD0 vertices unweighted."
+    ]
+  },
+  "implementedEvaluationFixes": [
+    "COMPARE_UPRIGHT_AND_VERTICALLY_FLIPPED_RENDER_SCORES",
+    "REJECT_UPSIDE_DOWN_CANDIDATES_BEFORE_ALPHA_REVIEW",
+    "AUTO_RERUN_REFINEMENT_WITH_INVERTED_UP_AXIS_IN_NOTEBOOKS_05_AND_06",
+    "VERIFY_ARCHIVED_REFERENCE_VIEW_SHA256_AND_RESOLVE_LOCAL_FILE_NAMES",
+    "TREAT_GENERIC_DEFAULT_MATERIAL_AS_MISSING_AND_APPLY_REVIEW_PALETTE",
+    "SUPPORT_BLENDER_5_2_OBJ_AND_PLY_IMPORT_OPERATORS",
+    "PRESERVE_ORIENTATION_DIAGNOSTICS_AND_FAILURE_REASONS_IN_RANKING",
+    "AUDIT_VERTEX_WEIGHTS_AND_APPLY_REVIEW_ONLY_NEAREST_BONE_FALLBACK"
+  ],
+  "thresholds": {
+    "minimumOverallScore": 0.5,
+    "minimumSilhouetteScore": 0.35,
+    "minimumAppearanceScore": 0.25,
+    "minimumColorScore": 0.2,
+    "minimumFaceDetailScore": 0.12,
+    "minimumVerticalPolarityImprovement": 0.02,
+    "maximumSourceTriangles": 300000
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "provider": "tripoSR",
+      "attempt": 3,
+      "sourceSha256": "6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4",
+      "refinedGlbSha256": "97b7f0997256081cb2b9b65f6ef7204235c9c1f85ec5bfdbf8432dbb1287b472",
+      "overall": 0.518753,
+      "silhouette": 0.414616,
+      "appearance": 0.597011,
+      "color": 0.41599,
+      "faceDetail": 0.843165,
+      "technical": 1.0,
+      "triangles": 38593,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": true
+    },
+    {
+      "rank": 2,
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "provider": "tripoSR",
+      "attempt": 1,
+      "sourceSha256": "4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5",
+      "refinedGlbSha256": "6fe8c05412dfe55d4975f3dd1789ed27739acb80ec27bc0d651376c1fa5145d8",
+      "overall": 0.510901,
+      "silhouette": 0.392783,
+      "appearance": 0.622368,
+      "color": 0.420206,
+      "faceDetail": 0.905142,
+      "technical": 1.0,
+      "triangles": 35824,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": true
+    },
+    {
+      "rank": 3,
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "provider": "instantMesh",
+      "attempt": 1,
+      "sourceSha256": "320dfdf31f6941b2c552aac206364fa883c934eb856c814ac3445cfdbeec44e2",
+      "refinedGlbSha256": "80c55417f06f7359ba7fa7e470f14f382c08d12e761f878d741159bc29184b1d",
+      "overall": 0.500494,
+      "silhouette": 0.398709,
+      "appearance": 0.565331,
+      "color": 0.433814,
+      "faceDetail": 0.819593,
+      "technical": 1.0,
+      "triangles": 28696,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": true
+    },
+    {
+      "rank": 4,
+      "candidateId": "03-CH101-INSTANTMESH-001",
+      "provider": "instantMesh",
+      "attempt": 3,
+      "sourceSha256": "635a27c27cbc558431ffa8ac8d3de241c9a30c03bbd7da98704ab7eeaa901cff",
+      "refinedGlbSha256": "9b8cfbac3a7c1ad221f25059bd9e04c2249e6fc818095b15a836316d0902c12b",
+      "overall": 0.495826,
+      "silhouette": 0.389219,
+      "appearance": 0.571333,
+      "color": 0.450328,
+      "faceDetail": 0.693345,
+      "technical": 1.0,
+      "triangles": 26864,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": false,
+      "failureReasons": [
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "rank": 5,
+      "candidateId": "02-CH101-INSTANTMESH-001",
+      "provider": "instantMesh",
+      "attempt": 2,
+      "sourceSha256": "74f0915dc10014477289604a9fe941fffcbdb2b5de995841f324c90a31c54d77",
+      "refinedGlbSha256": "4c6e23febee070c8dbdcebc72d32c2d2d20b8a5fc201c8050697a0a60ff2ea88",
+      "overall": 0.482142,
+      "silhouette": 0.38751,
+      "appearance": 0.52104,
+      "color": 0.485327,
+      "faceDetail": 0.532187,
+      "technical": 1.0,
+      "triangles": 28512,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": false,
+      "failureReasons": [
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "rank": 6,
+      "candidateId": "02-CH101-TRIPOSR-001",
+      "provider": "tripoSR",
+      "attempt": 2,
+      "sourceSha256": "5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2",
+      "refinedGlbSha256": "a3e7a85f25f1b675c04207c509446678d0135da3922166cd3e0360c53ac77b12",
+      "overall": 0.473087,
+      "silhouette": 0.391226,
+      "appearance": 0.47516,
+      "color": 0.300228,
+      "faceDetail": 0.704148,
+      "technical": 1.0,
+      "triangles": 37040,
+      "orientation": "UPRIGHT_CONFIRMED",
+      "eligibleForHumanReview": false,
+      "failureReasons": [
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    }
+  ],
+  "automatedDecision": {
+    "status": "AUTO_SELECTED_FOR_HUMAN_REVIEW",
+    "selectedCandidate": "03-CH101-TRIPOSR-001",
+    "selectedCandidateSha256": "97b7f0997256081cb2b9b65f6ef7204235c9c1f85ec5bfdbf8432dbb1287b472",
+    "eligibleCandidateCount": 3,
+    "evaluatedCandidateCount": 6,
+    "renderCount": 30,
+    "allCandidateHashesVerified": true,
+    "allOrientationsUpright": true
+  },
+  "visualReview": {
+    "reviewedCandidates": [
+      "03-CH101-TRIPOSR-001",
+      "01-CH101-TRIPOSR-001",
+      "01-CH101-INSTANTMESH-001"
+    ],
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE_OR_MANUALLY_REMODEL",
+    "findings": [
+      "The face is not recognizably matched to the approved CH101 design and has no production facial topology.",
+      "Hair volume is only approximate; the ponytail and cyan strand design are not reproduced reliably.",
+      "Jacket, shorts, straps, buckles, boots, and color blocking lack the approved structural detail.",
+      "Saber, sheath, ribbon, and pouch geometry are missing or cannot be identified reliably.",
+      "Hands and fingers are fused or malformed; some InstantMesh limbs and boots are disconnected or incomplete.",
+      "The high faceDetailScore is an upper-image edge-overlap heuristic and must not be interpreted as semantic facial identity."
+    ],
+    "humanGateBDecision": "PENDING_HUMAN_REVIEW"
+  },
+  "reviewAsset": {
+    "fileName": "CH101_AI_AutoReview_NOT_PRODUCTION_v001.blend",
+    "sha256": "6a507d6abdc5c7efabc441eff87882095be5939b01f0772d0334f718b0e3a1e1",
+    "reportSha256": "a26eb6bcfeb4ed5d8aeae194089423467b7b412024040ea982b6c37b9a623422",
+    "sourceTriangles": 38593,
+    "lodTriangles": {
+      "LOD0": 20000,
+      "LOD1": 11000,
+      "LOD2": 6000
+    },
+    "boneCount": 22,
+    "weightStatus": "FALLBACK_NEAREST_BONE_WEIGHTED_FOR_REVIEW",
+    "weightAudit": {
+      "status": "PASS",
+      "totalVertexCount": 97162,
+      "weightedVertexCount": 97162,
+      "unweightedVertexCount": 0
+    },
+    "socketCount": 7,
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "faceDriverStatus": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER"
+  },
+  "package": {
+    "fileName": "re-camp-CH101-ai3d-complete-evaluation-NOT-PRODUCTION-v003.zip",
+    "bytes": 50710969,
+    "sha256": "424a5e86e1c1c27647cc2df05e292f7fec8af07cc469ea4a9b6f570e9ce1b72b",
+    "entryCount": 90,
+    "rankingManifestSha256": "f30c78961093d1b4cb7cbcce676bdced7a3dece081a9052345af7f177553d8e5",
+    "contents": [
+      "reference-views",
+      "evaluation-corrected",
+      "review-corrected",
+      "ranking-manifest-corrected-complete.json"
+    ],
+    "trackedInGit": false,
+    "retention": "LOCAL_ARTIFACT_PENDING_GITHUB_RELEASE_OR_GIT_LFS_UPLOAD"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "unityPackageCreated": false,
+    "androidValidationStarted": false
+  },
+  "externalBlockers": {
+    "newWonder3DInference": "BLOCKED_GPU_QUOTA",
+    "productionMesh": "BLOCKED_NO_APPROVED_HIGH_QUALITY_MESH",
+    "unity": "BLOCKED_GATE_B_NOT_APPROVED"
+  }
+}

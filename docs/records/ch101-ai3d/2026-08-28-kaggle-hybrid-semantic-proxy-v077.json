@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "ch101-kaggle-hybrid-execution-record-v001",
+  "recordedAt": "2026-08-28",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "32dbcbc66efee7210d0de1a848aba93f42d4d676",
+  "character": "CH101",
+  "runtime": {
+    "provider": "Kaggle",
+    "gpuCount": 0,
+    "torch": "2.10.0+cpu",
+    "cudaAvailable": false,
+    "blender": "/usr/bin/blender",
+    "blenderVersion": "3.0.1",
+    "note": "Kaggle UI accelerator selection did not expose a CUDA device to the notebook runtime. CPU semantic proxy path remained allowed."
+  },
+  "provenance": {
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "wonder3dCommit": "442aa1e1afb9014e80681d3bf6048e8d728a86ee7",
+    "referenceManifestSha256": "9603c7bdf5fc78edebd06f2b77c9043f01c807cd415ab5b0f79f9c7373038f9b",
+    "candidateManifestSha256": "8b5c683d2f8b1cff1ff24cf6c9645edb57dc2220feba81007fde7a07356113cc",
+    "scoreReportSha256": "339e13987fb7263b5445172f329598fe187bc875d43ef1d5a816cba0959f2eff",
+    "visualReviewSha256": "2bd69c20fb211291d3d17d897c50054dbf85fcbfa539ba0b648177d1651e5b0a",
+    "rankingManifestSha256": "c3de9b4dcd77a931ba831d47724ec61ac291f0e8d306d1f14f2f35febc21e422",
+    "executionReportSha256": "5efff56b8cae8f389ac2e1b6c202625af2c3fcd5358850b612f0446f1db33bb0",
+    "archiveSha256": "99d810e284e82da912e4f396da63b407679f04fc4fd7220ea2089af9af6bb7e7"
+  },
+  "strategies": {
+    "TRELLIS_SINGLE_VIEW_V001": {
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "gpuCount": 0,
+      "minimumVramMb": 24576,
+      "heavyweightInstallAllowed": false,
+      "candidatesRegistered": 0
+    },
+    "SEMANTIC_PROXY_REFERENCE_FITTED_V001": {
+      "status": "REGENERATE_REQUIRED",
+      "maximumRuns": 1,
+      "candidateId": "CH101-SEMANTICPROXY-001",
+      "transportFormat": "OBJ",
+      "candidatePath": "/kaggle/working/re-camp-ai3d/CH101/hybrid/evaluation/CH101-SEMANTICPROXY-001/CH101-SEMANTICPROXY-001_refined.obj",
+      "candidateSha256": "6263f189debb6163d0786154cc2c62d2ed9d842614a94c5cf4322756c435625d"
+    }
+  },
+  "scores": {
+    "overall": 0.505845,
+    "silhouette": 0.484222,
+    "appearance": 0.364404,
+    "color": 0.201315,
+    "faceDetail": 0.449624,
+    "technical": 1.0,
+    "strictMinimums": {
+      "overall": 0.6,
+      "silhouette": 0.5,
+      "appearance": 0.55,
+      "color": 0.38,
+      "faceDetail": 0.25,
+      "technical": 0.9
+    }
+  },
+  "failureReasons": [
+    "OVERALL_IDENTITY_SCORE_WEAK",
+    "SILHOUETTE_PROPORTION_MISMATCH",
+    "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+    "OUTFIT_COLOR_BLOCKING_WEAK",
+    "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM",
+    "SIGNIFICANT_COMPONENT_COUNT_ABOVE_MAXIMUM",
+    "AUTOMATED_SCORE_GATE_FAILED"
+  ],
+  "geometryAudit": {
+    "status": "FAIL",
+    "connectedComponentCount": 60,
+    "significantComponentCount": 35,
+    "largestComponentVertexRatio": 0.05831217,
+    "detachedVertexRatio": 0.94168783,
+    "boundaryEdgeRatio": 0.01568135,
+    "nonManifoldEdgeRatio": 0.0,
+    "degenerateTriangleRatio": 0.0
+  },
+  "decision": {
+    "strictVisualQA": "REGENERATE_REQUIRED",
+    "visualReviewRecommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "selectedCandidate": null,
+    "sameStrategyRetry": "BLOCKED_AFTER_REJECTION",
+    "nextAction": "DO_NOT_REPEAT_SEMANTIC_PROXY; REQUIRE_STRONGER_PROVIDER_OR_SEMANTIC_BLENDER_AUTHORING"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "kaggleArtifacts": {
+    "executionReport": "/kaggle/working/re-camp-ai3d/CH101/hybrid/hybrid-quality-execution-report.json",
+    "archive": "/kaggle/working/re-camp-CH101-hybrid-NOT-PRODUCTION.zip"
+  }
+}

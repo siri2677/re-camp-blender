@@ -1,0 +1,47 @@
+{
+  "recordVersion": "ch101-ai3d-quality-plateau-pivot-v075",
+  "recordedAt": "2026-08-28",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "baseToolsCommit": "547884b3d90806d23c4b93ee5c8837422f66daf7",
+  "character": "CH101",
+  "observedLoop": [
+    "Wonder3D NeuS extraction succeeded but produced weak semantic geometry",
+    "voxel fallback scored better numerically but still failed strict visual review",
+    "repeating the same provider and mesh strategy cannot create missing face, hair, outfit, or equipment geometry"
+  ],
+  "resolution": {
+    "status": "IMPLEMENTED_STATIC_PENDING_KAGGLE_EXECUTION",
+    "strategyId": "WONDER3D_NEUS_VOXEL_COMPARE_V001",
+    "gate": "scripts/ai3d/quality_progress_gate.py",
+    "sameStrategyRejected": "QUALITY_PLATEAU_SAME_STRATEGY",
+    "nextAction": "PIVOT_TO_SEMANTIC_RECONSTRUCTION_OR_NEW_PROVIDER",
+    "sameStrategyRetry": "EXPLICIT_DIAGNOSTIC_OVERRIDE_ONLY"
+  },
+  "currentProjectDecision": {
+    "status": "REGENERATE_REQUIRED_PENDING_PIVOT",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextWorkstream": {
+    "name": "CH101_SEMANTIC_RECONSTRUCTION_HANDOFF",
+    "plan": "docs/plans/ch101-semantic-reconstruction-handoff.md",
+    "inputs": [
+      "CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "CH101_Rin_Turnaround_REVIEW_v001.png",
+      "CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "CH101_Rin_ExpressionSheet_REVIEW_v001.png"
+    ],
+    "deliverables": [
+      "body/outfit/hair/equipment semantic parts",
+      "face landmark plan",
+      "socket placement sheet",
+      "review-only blend"
+    ],
+    "blockedUntil": [
+      "Blender Desktop or compatible Blender environment",
+      "manual/artist semantic modeling or stronger provider"
+    ]
+  }
+}

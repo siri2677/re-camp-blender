@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "ch101-hybrid-quality-strategy-record-v001",
+  "recordedAt": "2026-08-28",
+  "sourceBaselineCommit": "38261fea898e9bd23abeb2af7188f27c255830d5",
+  "strategies": [
+    {
+      "strategyId": "TRELLIS_SINGLE_VIEW_V001",
+      "provider": "trellis",
+      "maximumRuns": 1,
+      "status": "IMPLEMENTED_PREFLIGHT_REQUIRED",
+      "providerCommit": "442aa1e1afb9014e80681d3bf604e8d728a86ee7",
+      "minimumVramMb": 24576
+    },
+    {
+      "strategyId": "SEMANTIC_PROXY_REFERENCE_FITTED_V001",
+      "provider": "semanticProxy",
+      "maximumRuns": 1,
+      "status": "IMPLEMENTED_BLENDER_EXECUTION_PENDING"
+    }
+  ],
+  "pipeline": [
+    "quality_progress_gate",
+    "blender_refine",
+    "candidate_evaluate",
+    "strict_visual_score",
+    "assisted_visual_review",
+    "candidate_rank"
+  ],
+  "qualityPolicy": {
+    "minimumOverall": 0.6,
+    "minimumSilhouette": 0.5,
+    "minimumAppearance": 0.55,
+    "minimumColor": 0.38,
+    "minimumFaceDetail": 0.25,
+    "minimumTechnical": 0.9,
+    "slabGrayboxAccepted": false,
+    "sameStrategyRetry": "BLOCKED_AFTER_REJECTION"
+  },
+  "externalBlockers": [
+    "COMPATIBLE_HIGH_MEMORY_GPU_OR_TRELLIS_PREFLIGHT",
+    "BLENDER_CPU_OR_DESKTOP_AUTHORING_RUNTIME",
+    "HUMAN_GATE_B_REVIEW"
+  ],
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

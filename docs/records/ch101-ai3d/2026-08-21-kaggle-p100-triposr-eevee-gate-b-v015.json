@@ -1,0 +1,119 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-p100-triprosr-eevee-gate-b-v015",
+  "recordedAt": "2026-08-21T14:19:45+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommit": "a9617dd",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "torch": "2.7.1+cu118",
+    "blenderVersion": "3.0.1",
+    "blenderPython": "3.10",
+    "blenderNumpy": "1.23.5",
+    "apiCreditUsed": 0
+  },
+  "reference": {
+    "manifest": "/kaggle/working/re-camp-ai3d/CH101/reference-views/reference-views-manifest.json",
+    "authoritativeSourceSha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+    "frontSha256": "a4bddf65179cb98aa5079955305f0386e8a2b61a730aa3ffdfa0741e92807fe3",
+    "rightSha256": "d9d72cb1409d6eb7ea0a7118bfb11abb15a6d493199d7ecc187c674a6a17f61b",
+    "backSha256": "74f499fe9d9fba413aca2fd80cc7ecc4c40944fe63fca3b7d6faa792567a1541"
+  },
+  "candidateGeneration": {
+    "provider": "TripoSR",
+    "attempts": 3,
+    "mode": "REUSED_EXISTING_CANDIDATES",
+    "manifests": 3,
+    "candidateIds": [
+      "01-CH101-TRIPOSR-001",
+      "02-CH101-TRIPOSR-001",
+      "03-CH101-TRIPOSR-001"
+    ],
+    "apiCreditUsed": 0
+  },
+  "evaluation": {
+    "attempt01": {
+      "renderEngine": "BLENDER_WORKBENCH",
+      "overallScore": 0.493512,
+      "silhouetteScore": 0.4123,
+      "appearanceScore": 0.502069,
+      "colorScore": 0.133117,
+      "faceDetailScore": 0.851401,
+      "technicalScore": 1.0
+    },
+    "attempt02": {
+      "renderEngine": "BLENDER_WORKBENCH",
+      "overallScore": 0.495303,
+      "silhouetteScore": 0.411511,
+      "appearanceScore": 0.511284,
+      "colorScore": 0.130127,
+      "faceDetailScore": 0.910835,
+      "technicalScore": 1.0
+    },
+    "attempt03": {
+      "renderEngine": "BLENDER_EEVEE",
+      "overallScore": 0.523413,
+      "silhouetteScore": 0.445824,
+      "appearanceScore": 0.53451,
+      "colorScore": 0.305002,
+      "faceDetailScore": 0.833498,
+      "technicalScore": 1.0,
+      "sourceCandidateSha256": "3931418232b2147f54c86e3fb38f7eceb8431ba428a39d475daeb2bd8b234867",
+      "refinedCandidateSha256": "408d0acc10020df7fa32e9a36356c1c3047ef1e5d0096b43a9c053793610c4fc",
+      "normalizedBlendSha256": "6655b0b6d3ec0ba9a47b1ad67f1aa5788c9b877cd1e6e7261ca88e1f6ab9c689"
+    }
+  },
+  "ranking": {
+    "status": "AUTO_SELECTED_PENDING_HUMAN_REVIEW",
+    "selectedCandidate": "03-CH101-TRIPOSR-001",
+    "candidates": [
+      {
+        "candidateId": "03-CH101-TRIPOSR-001",
+        "rank": 1,
+        "overallScore": 0.523413,
+        "eligibleForHumanReview": true
+      },
+      {
+        "candidateId": "02-CH101-TRIPOSR-001",
+        "rank": 2,
+        "overallScore": 0.495303,
+        "eligibleForHumanReview": false
+      },
+      {
+        "candidateId": "01-CH101-TRIPOSR-001",
+        "rank": 3,
+        "overallScore": 0.493512,
+        "eligibleForHumanReview": false
+      }
+    ],
+    "minimumOverallScore": 0.5,
+    "failureReasons": []
+  },
+  "gateBPackage": {
+    "status": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+    "contactSheet": "/kaggle/working/re-camp-ai3d/CH101/review/CH101_GateB_ContactSheet_NOT_APPROVED_v001.png",
+    "contactSheetSha256": "1d3516718a53b5804ec2aa361043aadc6a572cca2293854a7e041c71d0eb6ef0",
+    "manifest": "/kaggle/working/re-camp-ai3d/CH101/review/gate-b-review-package.json",
+    "candidateIds": [
+      "03-CH101-TRIPOSR-001",
+      "02-CH101-TRIPOSR-001",
+      "01-CH101-TRIPOSR-001"
+    ],
+    "archive": "/kaggle/working/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip"
+  },
+  "review": {
+    "faceDriver": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "humanGateBDecision": "PENDING_HUMAN_REVIEW"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Human Gate B visual review of the Kaggle archive; do not export Unity package or begin Android validation before approval."
+}

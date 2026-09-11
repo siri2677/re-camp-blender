@@ -1,0 +1,50 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-p100-provider-diagnostics-v006",
+  "recordedAt": "2026-08-20T09:00:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommitBeforeFix": "d653161",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuMemoryMb": 16384,
+    "torch": "2.10.0+cu128",
+    "cudaAvailable": true,
+    "actualInferenceStarted": true,
+    "apiCreditUsed": 0
+  },
+  "providerResults": {
+    "sf3d": {
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "failureReason": "HF_GATED_MODEL_AUTH_REQUIRED",
+      "evidence": "Hugging Face returned 401 for stabilityai/stable-fast-3d"
+    },
+    "instantmesh": {
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "failureReason": "CUDA_EXTENSION_INCOMPATIBLE_WITH_DEVICE",
+      "evidence": "nvdiffrast RasterizeCudaContext failed with CUDA error 209"
+    },
+    "triposr": {
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "failureReason": "CUDA_KERNEL_NOT_COMPILED_FOR_DEVICE",
+      "evidence": "torch 2.10.0+cu128 raised no kernel image is available for execution on the device"
+    }
+  },
+  "pipeline": {
+    "attemptLimit": 3,
+    "attemptsCompleted": 3,
+    "candidateManifestCreated": false,
+    "reviewBlendCreated": false,
+    "archive": "/kaggle/working/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip",
+    "postProcessing": "SKIPPED_NO_DOWNLOADED_CANDIDATES",
+    "ranking": "SKIPPED_NO_SCORE_REPORTS"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Reimport the compatibility-fix notebook from the next tools commit, dynamically build nvdiffrast for the visible GPU architecture, skip gated or unsupported providers before setup, and rerun only after a fresh Kaggle session starts."
+}

@@ -1,0 +1,81 @@
+{
+  "recordVersion": "ch101-ai3d-colab-t4-provider-compatibility-rerun-v003",
+  "recordedAt": "2026-08-19T20:05:44+09:00",
+  "character": "CH101",
+  "runType": "LATEST_PROVIDER_COMPATIBILITY_AND_OOM_RERUN",
+  "toolsLock": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "commit": "933c162537afbf5248b9321acd92f5f272d6bc9a"
+  },
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "runtime": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "apiCreditUsed": 0,
+    "maxAttempts": 3,
+    "notebook": "notebooks/05_ch101_ai3d_free_autobuild.ipynb"
+  },
+  "observations": [
+    {
+      "provider": "sf3d",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "reason": "Hugging Face gated model stabilityai/stable-fast-3d returned 401 Unauthorized",
+      "fallback": "enabled"
+    },
+    {
+      "provider": "instantmesh",
+      "dependencySmokeTest": "PASS",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "reason": "Inference reached geometry prediction but CUDA allocation requested 15.00 GiB while the Tesla T4 exposed 14.56 GiB total and 10.55 GiB free",
+      "compatibilityShim": "cached_download and legacy JAX random KeyArray aliases were injected only into the provider subprocess",
+      "fallback": "enabled"
+    },
+    {
+      "provider": "tripoSR",
+      "status": "GENERATED_AND_EVALUATED",
+      "attempts": [
+        {
+          "attempt": 1,
+          "referenceView": "front",
+          "foregroundRatio": 0.75,
+          "status": "GENERATED"
+        },
+        {
+          "attempt": 2,
+          "referenceView": "right",
+          "foregroundRatio": 0.85,
+          "status": "GENERATED"
+        },
+        {
+          "attempt": 3,
+          "referenceView": "back",
+          "foregroundRatio": 0.95,
+          "status": "GENERATED"
+        }
+      ],
+      "overallScores": [
+        0.45212,
+        0.451603,
+        0.463577
+      ],
+      "bestOverallScore": 0.463577,
+      "gate": "REGENERATE_REQUIRED"
+    }
+  ],
+  "artifacts": {
+    "archive": "/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip",
+    "candidateCount": 3,
+    "reviewBlendCreated": false
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Keep the Unity and Production gates locked; investigate a lower-VRAM InstantMesh configuration or another free multi-view provider before spending another T4 run."
+}
