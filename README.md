@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-14: [hollow cuff interface hypothesis](docs/plans/ch101-cuff-interface-2026-09-14.md)
+adds a separate 128-vertex / 256-triangle hollow cuff, preserving the source body
+and hand. Shared angular correspondence and matched wall triangulation eliminate
+detected cuff self-crossings. This is **not an approved attachment**: five cuff
+triangles still cross the new hand, and the old source hand remains underneath.
+Next: intermediate hand-section clearance fitting, then an explicitly identified
+replacement boundary; no automatic source cutting or Production promotion.
+
 Update 2026-09-11: [closed wrist-loop / rigid pair fit](docs/plans/ch101-wrist-pair-fit-2026-09-11.md)
 finds a 29-point closed geometric section and aligns cloned hand+saber together.
 Center/axis alignment is numerically matched while grip-relative pose is preserved.
