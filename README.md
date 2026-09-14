@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-14: [section-fitted cuff clearance v002](docs/plans/ch101-cuff-clearance-2026-09-14.md)
+resolves the prior five cuff/new-hand crossing triangles in the static study.
+Seven intermediate sections and 128 angular samples are required by the measured
+profiles; 64 samples still intersect. The source hand/body is preserved, **not
+replaced**. The dense 4,608-triangle cuff is a clearance reference, not final
+topology, animation clearance, full-character quality or an approved attachment.
+
 Update 2026-09-14: [hollow cuff interface hypothesis](docs/plans/ch101-cuff-interface-2026-09-14.md)
 adds a separate 128-vertex / 256-triangle hollow cuff, preserving the source body
 and hand. Shared angular correspondence and matched wall triangulation eliminate

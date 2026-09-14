@@ -53,26 +53,51 @@ def radial_offset(points,center,axis,amount):
     return result
 
 
-def shell(collection,source_loop,hand_loop,axis,u):
-    proximal=resample(source_loop['points'],axis,u,center=source_loop['centroid'])
-    distal=resample(hand_loop['points'],axis,u,center=hand_loop['centroid'])
+def shell(collection,source_loop,hand_loop,axis,u,hand=None,count=None):
+    count=(128 if hand is not None else 32) if count is None else count
+    if count<8: raise ValueError('CUFF_RING_RESOLUTION_TOO_LOW')
+    proximal=resample(source_loop['points'],axis,u,count=count,center=source_loop['centroid'])
+    distal=resample(hand_loop['points'],axis,u,count=count,center=hand_loop['centroid'])
     # 1.5mm estimated radial clearance, plus 2mm wall at the distal aperture.
     distal_outer=radial_offset(distal,hand_loop['centroid'],axis,.0035)
     distal_inner=radial_offset(distal,hand_loop['centroid'],axis,.0015)
     proximal_inner=radial_offset(proximal,source_loop['centroid'],axis,-.002)
-    rings=[proximal,distal_outer,distal_inner,proximal_inner]; n=32
+    outer=[proximal]; inner=[proximal_inner]; displacements=[]
+    if hand is not None:
+        source_center=Vector(source_loop['centroid']); hand_center=Vector(hand_loop['centroid'])
+        # End rings alone miss the changing wrist profile. Keep both fixed and
+        # fit seven intervening sections, with a bounded outward-only correction.
+        for step in range(1,8):
+            t=step/8; center=source_center.lerp(hand_center,t)
+            sections=pair.closed_section(hand,center,axis)
+            if len(sections)!=1: raise ValueError('CUFF_HAND_SECTION_AMBIGUOUS')
+            surface=resample(sections[0]['points'],axis,u,count=count,center=center)
+            baseline=[a.lerp(b,t) for a,b in zip(proximal_inner,distal_inner)]
+            fitted=[]
+            for p,h in zip(baseline,surface):
+                r=p-center; r-=axis*r.dot(axis)
+                hr=h-center; hr-=axis*hr.dot(axis)
+                delta=max(0,hr.length+.0015-r.length)
+                if delta>.006: raise ValueError('CUFF_FIT_EXCEEDS_SIX_MM_BOUND')
+                fitted.append(p+r.normalized()*delta); displacements.append(delta)
+            inner.append(fitted); outer.append(radial_offset(fitted,center,axis,.002))
+    outer.append(distal_outer); inner.append(distal_inner)
+    rings=outer+list(reversed(inner)); n=count; ring_count=len(rings); wall_steps=len(outer)-1
     verts=[tuple(p) for ring in rings for p in ring]; faces=[]
-    for k in range(4):
+    for k in range(ring_count):
         for j in range(n):
-            a,b,c,d=k*n+j,k*n+(j+1)%n,((k+1)%4)*n+(j+1)%n,((k+1)%4)*n+j
+            a,b,c,d=k*n+j,k*n+(j+1)%n,((k+1)%ring_count)*n+(j+1)%n,((k+1)%ring_count)*n+j
             # Inner wall runs distal -> proximal: reverse its diagonal so both
             # walls use proximal[j] -> distal[j+1]. Independent quad tessellation
             # can make thin non-planar walls intersect despite separated rings.
-            faces.extend(((a,b,d),(b,c,d)) if k==2 else ((a,b,c),(a,c,d)))
+            faces.extend(((a,b,d),(b,c,d)) if wall_steps<k<ring_count-1 else ((a,b,c),(a,c,d)))
     mesh=bpy.data.meshes.new('Cuff_hollow_shell'); mesh.from_pydata(verts,[],faces); mesh.update()
     bm=bmesh.new(); bm.from_mesh(mesh); bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces)); bm.to_mesh(mesh); bm.free()
     obj=bpy.data.objects.new('CH101_HollowCuff_HYPOTHESIS_NOT_PRODUCTION',mesh); collection.objects.link(obj)
     base.mark(obj); obj['sourceReplacementAllowed']=False; obj['designApproved']=False
+    obj['intermediateSections']=wall_steps-1
+    obj['ringVertexCount']=count
+    obj['maxOutwardCorrectionMeters']=max(displacements,default=0)
     obj.data.materials.append(base.material('CuffStudy_Graphite',(.018,.022,.026)))
     bpy.ops.object.select_all(action='DESELECT'); obj.select_set(True); bpy.context.view_layer.objects.active=obj
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.uv.smart_project(island_margin=.03); bpy.ops.object.mode_set(mode='OBJECT')
@@ -94,22 +119,29 @@ def run(args):
     source_loops=pair.closed_section(body,center,axis)
     hand_loops=pair.closed_section(hand,center-axis*.015,axis)
     collection=bpy.data.collections.new('CUFF_INTERFACE_HYPOTHESIS_UNMERGED'); bpy.context.scene.collection.children.link(collection)
-    cuff=shell(collection,source_loops[0],hand_loops[0],axis,u)
+    fitted=getattr(args,'fit_hand_profile',False)
+    cuff=shell(collection,source_loops[0],hand_loops[0],axis,u,hand=hand if fitted else None)
     audit=author.shape_audit(cuff); self_pairs=wrist.self_surface_pairs(cuff)
     euler=len(cuff.data.vertices)-len(cuff.data.edges)+len(cuff.data.polygons)
     if audit['nonManifoldEdges'] or audit['zeroAreaFaces'] or len(audit['components'])!=1 or euler!=0 or self_pairs: raise ValueError('CUFF_SHELL_INVALID')
     hand_overlap=fit.overlap_report(hand,[cuff],center)
+    if fitted and hand_overlap[0]['uniqueEquipmentTrianglesCrossing']:
+        raise ValueError('CUFF_HAND_INTERSECTION_REMAINS')
     body_overlap=fit.overlap_report(body,[cuff],center)
     for old in sources: old.hide_render=not old.name.startswith('PAIR_STUDY_')
     output.mkdir(parents=True); renders=pair.render_views(output,body,hand,center,axis,source_loops)
     if guide.digest(sources)!=before: raise ValueError('SOURCE_CHANGED')
     for key,value in base.GATES.items(): bpy.context.scene[key]=value
-    blend=output/'CH101_HollowCuffInterface_NOT_PRODUCTION_v001.blend'; bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+    version='v002' if fitted else 'v001'
+    blend=output/f'CH101_HollowCuffInterface_NOT_PRODUCTION_{version}.blend'; bpy.ops.wm.save_as_mainfile(filepath=str(blend))
     if base.sha(source)!=args.source_sha256: raise ValueError('SOURCE_FILE_CHANGED')
-    report=dict(strategyId=STRATEGY,status='HOLLOW_CUFF_HYPOTHESIS_NOT_APPROVED',**base.GATES,
+    report=dict(strategyId='CH101_SECTION_FITTED_CUFF_CLEARANCE_V002' if fitted else STRATEGY,
+        status='STATIC_CUFF_HAND_SURFACE_CLEAR_NOT_APPROVED' if fitted else 'HOLLOW_CUFF_HYPOTHESIS_NOT_APPROVED',**base.GATES,
         sourceBlendSha256=args.source_sha256,artCommit=base.ART_COMMIT,references=refs,
         sourceSection=source_loops[0],handSection=hand_loops[0],distalSectionOffsetMeters=.015,
-        resampledRingVertices=32,correspondence='SHARED_ANGULAR_RAYS_SINGLE_HIT_REQUIRED',distalRadialClearanceMeters=.0015,radialWallOffsetMeters=.002,
+        resampledRingVertices=cuff['ringVertexCount'],intermediateSections=cuff['intermediateSections'],
+        maxOutwardCorrectionMeters=cuff['maxOutwardCorrectionMeters'],outwardCorrectionBoundMeters=.006,
+        correspondence='SHARED_ANGULAR_RAYS_SINGLE_HIT_REQUIRED',distalRadialClearanceMeters=.0015,radialWallOffsetMeters=.002,
         topology=audit,eulerCharacteristic=euler,nonAdjacentSelfSurfaceOverlapPairs=self_pairs,
         cuffVsHand=hand_overlap,cuffVsSourceBody=body_overlap,
         sourceGeometryPreserved=True,sourceHandReplaced=False,cuffWeldedToSource=False,
@@ -124,4 +156,5 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser(); p.add_argument('--source',type=Path,required=True); p.add_argument('--source-sha256',required=True)
     p.add_argument('--art-root',type=Path,required=True); p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--fit-hand-profile',action='store_true',help='Fit intermediate sections; require zero static hand/cuff surface crossings')
     print(json.dumps(run(p.parse_args(sys.argv[sys.argv.index('--')+1:])),indent=2))
