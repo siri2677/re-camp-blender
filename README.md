@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-14: [bounded cuff reduction](docs/plans/ch101-cuff-reduction-2026-09-14.md)
+halves the clearance study from 4,608 to 2,304 triangles. Selected sampled
+bidirectional surface error is at most 0.08777 mm, with zero detected static
+hand/equipment/self crossings. More aggressive trials exceeded the fixed 0.15 mm
+sample-error limit and were rejected. This remains a separate **unmerged study**;
+old source-hand overlap, final topology/material budgets and animation are unresolved.
+
 Update 2026-09-14: [section-fitted cuff clearance v002](docs/plans/ch101-cuff-clearance-2026-09-14.md)
 resolves the prior five cuff/new-hand crossing triangles in the static study.
 Seven intermediate sections and 128 angular samples are required by the measured
