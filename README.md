@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-11: [closed wrist-loop / rigid pair fit](docs/plans/ch101-wrist-pair-fit-2026-09-11.md)
+finds a 29-point closed geometric section and aligns cloned hand+saber together.
+Center/axis alignment is numerically matched while grip-relative pose is preserved.
+This is **not a joined wrist**: source-hand overlap remains, and the new hand's
+near-wrist section area is only about 32% of the source candidate section area.
+Anatomical cuff identity, boundary matching and body replacement remain pending.
+
 Update 2026-09-11: [hand taper and wrist-fit study](docs/plans/ch101-hand-wrist-fit-2026-09-11.md)
 narrows the study wrist while preserving distal fingers. Eight bounded rigid
 poses were measured against a geometric forearm slice. The best distance is
