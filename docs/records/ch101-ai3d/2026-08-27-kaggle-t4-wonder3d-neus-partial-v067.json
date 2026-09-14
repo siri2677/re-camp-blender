@@ -1,0 +1,116 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-neus-partial-v067",
+  "recordedAt": "2026-08-27",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "2735aed6918f495b2d8ffafcb07d44fa4188dae3",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "Wonder3D",
+  "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cudaCapabilities": ["7.5", "7.5"],
+    "python": "3.12.13",
+    "blender": "3.0.1",
+    "status": "READY_GPU_VISIBLE",
+    "selectedWorkstream": "GPU",
+    "apiCreditUsed": 0,
+    "toolsRef": "feature/ch101-free-ai3d-autobuild"
+  },
+  "reuse": {
+    "preparationCheck": "REUSABLE",
+    "cliCheck": "REUSED",
+    "referenceManifestSha256": "71751f17e91fc2416159d9460a16c58233ead8f6efacf896705feb4012f6feb8",
+    "referenceImageSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674",
+    "note": "The existing six-view report and files passed the reuse path; Wonder3D inference was skipped in this retry."
+  },
+  "multiview": {
+    "status": "REUSED",
+    "actualInference": false,
+    "viewCount": 6,
+    "viewNames": ["front", "front_right", "right", "back", "left", "front_left"],
+    "azimuths": [0, 45, 90, 180, -90, -45],
+    "generatedFileCount": 60,
+    "generatedFileSha256Persisted": false,
+    "outputRoot": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview",
+    "generationReport": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview/wonder3d-generation-report.json"
+  },
+  "meshExtraction": {
+    "neus": {
+      "status": "BLOCKED_NEUS_TIMEOUT_PARTIAL_RETAINED",
+      "timeoutSeconds": 120,
+      "compatibilityPatch": "PATCHED",
+      "python312ImpShim": "ALREADY_PRESENT",
+      "processGroupTimeout": true,
+      "meshCreated": true,
+      "meshStatus": "NEUS_MESH_PARTIAL_TIMEOUT",
+      "sourceMesh": "/kaggle/working/provider-wonder3D/NeuS/exp/neus/CH101_front/meshes/tmp.glb",
+      "sourceMeshSha256": "4462b1658359acc9c5d7538887dc79aba699e51e69ea0808df3cb13c7cb8c715",
+      "note": "NeuS emitted an intermediate GLB but did not finish within 120 seconds; the new run-group cleanup prevented the timed-out process from being retained."
+    },
+    "fallback": {
+      "status": "NOT_USED",
+      "maskSource": "rgb-foreground"
+    }
+  },
+  "candidate": {
+    "candidateId": "wonder3D-CH101-001",
+    "candidateSha256": "6951ca166ebb0d8838651d51b43a2dc7a30751290b34b58832e8e34f45e7cc2d",
+    "refinedGlbSha256": "6951ca166ebb0d8838651d51b43a2dc7a30751290b34b58832e8e34f45e7cc2d",
+    "integrityBlendSha256": "9877e295c67078db7ce0fc26ebe36a491a9abdfdf75e7e6c4cf214b85a5384eb",
+    "sourceMeshSha256": "4462b1658359acc9c5d7538887dc79aba699e51e69ea0808df3cb13c7cb8c715",
+    "sourceStatus": "REFINED_REVIEW_CANDIDATE",
+    "triangleCount": 52506,
+    "materialCount": 6,
+    "faceDriver": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED",
+    "score": {
+      "overallScore": 0.474892,
+      "silhouetteScore": 0.486215,
+      "appearanceScore": 0.235407,
+      "colorScore": 0.194787,
+      "faceDetailScore": 0.412924,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "eligibleForHumanReview": false,
+      "failureReasons": [
+        "APPEARANCE_SCORE_BELOW_MINIMUM",
+        "COLOR_SCORE_BELOW_MINIMUM",
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    "ranking": {
+      "rank": 1,
+      "selectedCandidate": null,
+      "automatedSelectedCandidate": null,
+      "orientation": {
+        "front": "pos_x",
+        "back": "neg_x",
+        "right": "neg_y",
+        "status": "UPRIGHT_CONFIRMED"
+      },
+      "selectionDoesNotApproveVisualQuality": true
+    },
+    "renderRoot": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/evaluation/wonder3D-CH101-001/renders"
+  },
+  "decision": {
+    "projectStatus": "REGENERATE_REQUIRED",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "reason": "Partial NeuS capture improved the prior fallback result from overall 0.432967 to 0.474892 and raised technical/face evidence, but appearance 0.235407, color 0.194787, and overall 0.474892 still miss the locked minimums.",
+    "humanReview": "Not requested because the objective score fails the minimum thresholds."
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifactPersistence": {
+    "status": "KAGGLE_WORKING_EPHEMERAL",
+    "archive": "/kaggle/working/re-camp-CH101-wonder3d-NOT-PRODUCTION.zip",
+    "note": "The archive and renders were created in Kaggle and were not copied into Git."
+  },
+  "nextAction": "Use a longer-lived compatible NeuS runtime or a stronger reconstruction/production mesh input; keep Gate B, Production, Unity, and Android locked."
+}

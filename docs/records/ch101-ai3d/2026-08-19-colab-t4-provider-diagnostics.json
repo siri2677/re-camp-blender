@@ -1,0 +1,90 @@
+{
+  "recordVersion": "ch101-ai3d-colab-t4-provider-diagnostics-v001",
+  "recordedAt": "2026-08-19T18:38:09+09:00",
+  "character": "CH101",
+  "runType": "DIAGNOSTIC_RERUN_AFTER_PROVIDER_LOGGING",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101",
+    "referenceManifestSha256": "6dc1db10e09fd382097876c1aef390533f7d432dd66ff26a6a26b72396f0b1d2"
+  },
+  "toolsLock": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "commit": "30b2263b21e86b246f4a82b397c7e03d748dd4e0"
+  },
+  "runtime": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "maxAttempts": 3,
+    "apiCreditUsed": 0,
+    "archiveLocalDownloadVerified": true,
+    "archiveLocalName": "re-camp-CH101-ai3d-review-NOT-PRODUCTION (7).zip"
+  },
+  "providerDiagnostics": [
+    {
+      "provider": "sf3d",
+      "providerCommit": "ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "attempts": 3,
+      "errorCategory": "HUGGINGFACE_GATED_MODEL_ACCESS",
+      "evidence": "GatedRepoError / 401 Unauthorized for stabilityai/stable-fast-3d config.yaml",
+      "artifactPattern": "attempts/{01,02,03}/candidates/sf3d/provider-{failure,stdout,stderr}.json/log"
+    },
+    {
+      "provider": "instantmesh",
+      "providerCommit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "attempts": 3,
+      "errorCategory": "HUGGINGFACE_HUB_COMPATIBILITY",
+      "evidence": "ImportError: cannot import name split_torch_state_dict_into_shards from huggingface_hub",
+      "artifactPattern": "attempts/{01,02,03}/candidates/instantmesh/provider-{failure,stdout,stderr}.json/log"
+    },
+    {
+      "provider": "tripoSR",
+      "providerCommit": "107cefdc244c39106fa830359024f6a2f1c78871",
+      "status": "REUSED_AND_EVALUATED",
+      "attempts": 3,
+      "candidateSha256": [
+        "4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5",
+        "5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2",
+        "6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4"
+      ],
+      "overallScores": [
+        0.45212,
+        0.451603,
+        0.463577
+      ],
+      "bestCandidate": {
+        "attempt": 3,
+        "overallScore": 0.463577,
+        "silhouetteScore": 0.41414,
+        "appearanceScore": 0.377546,
+        "colorScore": 0.261198,
+        "faceDetailScore": 0.411742,
+        "technicalScore": 1.0,
+        "rightSilhouetteScore": 0.262132,
+        "eligibleForHumanReview": false
+      }
+    }
+  ],
+  "diagnosis": {
+    "primaryProviderBlocker": "SF3D_REQUIRES_HUGGINGFACE_ACCESS_APPROVAL_AND_TOKEN_WHEN_GATED",
+    "secondaryProviderBlocker": "INSTANTMESH_NEEDS_COMPATIBLE_HUGGINGFACE_HUB_VERSION",
+    "qualityBlocker": "SINGLE_VIEW_GEOMETRY_SIDE_SILHOUETTE_MISMATCH",
+    "threshold": 0.5,
+    "bestCandidateMarginToThreshold": -0.036423
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "reviewAssetCreated": false
+  },
+  "nextCodeAction": {
+    "instantmesh": "Upgrade huggingface-hub to >=0.26.0 and run an import smoke test before provider execution.",
+    "sf3d": "Keep fallback enabled and require a user-provided HF_TOKEN with accepted gated-model access; never store or print the token.",
+    "tripoSR": "Do not promote single-view candidates; prioritize a genuinely multi-view or reference-conditioned free provider."
+  }
+}

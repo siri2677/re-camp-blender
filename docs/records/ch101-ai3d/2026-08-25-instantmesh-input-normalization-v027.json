@@ -1,0 +1,43 @@
+{
+  "recordVersion": "ch101-ai3d-execution-record-v001",
+  "recordId": "2026-08-25-instantmesh-input-normalization-v027",
+  "status": "IMPLEMENTED_NOT_EXECUTED",
+  "character": "CH101",
+  "provider": "instantMesh",
+  "purpose": "Strengthen the next free GPU candidate run without merging auxiliary art references.",
+  "changes": [
+    "Apply foreground ratio to the actual InstantMesh single-view input canvas.",
+    "Record derived input path, source and derived SHA256, foreground bbox, and auxiliary merge status.",
+    "Use coarse CH101 palette materials by default for review color-blocking only; allow explicit preserve override."
+  ],
+  "previousFailureContext": [
+    "OVERALL_IDENTITY_SCORE_WEAK",
+    "SILHOUETTE_PROPORTION_MISMATCH",
+    "OUTFIT_COLOR_BLOCKING_WEAK",
+    "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"
+  ],
+  "execution": {
+    "gpuInferenceExecuted": false,
+    "candidateGenerated": false,
+    "nextRunRequired": true,
+    "tests": {
+      "unitTests": "PASS_66",
+      "pythonCompile": "PASS",
+      "ai3dPackageValidation": "PASS",
+      "colabPackageValidation": "PASS",
+      "gitDiffCheck": "PASS"
+    }
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "security": {
+    "secretsRecorded": false,
+    "apiKeysRecorded": false,
+    "hfTokensRecorded": false
+  },
+  "nextAction": "Run notebook 05 on a compatible T4/L4/A10 runtime, compare foreground ratios, and keep strict QA locked."
+}

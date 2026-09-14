@@ -1,0 +1,73 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-multiview-v020",
+  "recordedAt": "2026-08-24T14:57:00+09:00",
+  "workstream": "CH101_WONDER3D_MULTIVIEW_AND_NEUS",
+  "character": "CH101",
+  "toolsCommit": "ca2eccd",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": {
+    "name": "wonder3D",
+    "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "expectedViews": 6,
+    "generatedAzimuths": [0, 45, 90, 180, -90, -45],
+    "referenceManifestSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674"
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4 x2",
+    "gpuMemoryMbEach": 15360,
+    "pythonVersion": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "deviceCapability": "sm_75",
+    "torchKernelSupportsDevice": true,
+    "apiCreditUsed": 0
+  },
+  "execution": {
+    "adaptiveStatus": "READY_GPU_WORKSTREAM",
+    "selectedWorkstream": "GPU",
+    "gpuExecutionAllowed": true,
+    "multiview": {
+      "status": "MULTIVIEW_GENERATED",
+      "actualInference": true,
+      "generatedViewCount": 6,
+      "generatedFileSetVerified": true,
+      "completedAt": "2026-08-24T13:56:52+09:00",
+      "meshExtractionPending": true
+    },
+    "meshExtraction": {
+      "status": "BLOCKED_NEUS_RUNTIME_TOO_SLOW",
+      "trainingStarted": true,
+      "attemptedWorkerCounts": [64, 2, 0],
+      "attemptedEndIter": [1000, 200],
+      "meshExtracted": false,
+      "candidateCreated": false,
+      "reviewBlendCreated": false,
+      "reason": "NeuS entered training but did not reach mesh validation within the Kaggle session budget; the 64-worker path stalled and reduced-worker retries were stopped before mesh output."
+    },
+    "outputs": {
+      "multiviewGenerated": true,
+      "candidateCreated": false,
+      "meshExtracted": false,
+      "reviewBlendCreated": false,
+      "unityPackageCreated": false
+    }
+  },
+  "remediation": {
+    "status": "IMPLEMENTED_LOCALLY_PENDING_PUSH",
+    "changes": [
+      "Pin transformers==4.38.2 and tokenizers==0.15.2 with huggingface-hub==0.23.4",
+      "Install onnxruntime==1.20.1 for rembg startup",
+      "Add Hub legacy API compatibility and a PyTorch xformers attention fallback",
+      "Stage Wonder3D views into the NeuS input layout",
+      "Limit legacy NeuS DataLoader workers and collect meshes from exp/neus/<case>"
+    ],
+    "nextAction": "Re-run NeuS with the patched notebook or use a dedicated NeuS runtime; do not rerun Wonder3D when the six-view report and files pass reuse validation."
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

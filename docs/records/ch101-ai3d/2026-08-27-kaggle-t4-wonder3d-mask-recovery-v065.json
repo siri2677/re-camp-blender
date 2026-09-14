@@ -1,0 +1,154 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-mask-recovery-v065",
+  "recordedAt": "2026-08-27",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "5a348c0e8f9b99fc86bce0bc9e3f19ad58284a79",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "Wonder3D",
+  "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+  "referenceManifestSha256": "77487707e18ea248a94a15de0f664bdffca41ba092c814f67b9ff49c3692314c",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cudaCapabilities": ["7.5", "7.5"],
+    "blender": "3.0.1",
+    "status": "READY_GPU_VISIBLE",
+    "selectedWorkstream": "GPU",
+    "apiCreditUsed": 0
+  },
+  "multiview": {
+    "status": "MULTIVIEW_GENERATED",
+    "actualInference": true,
+    "viewCount": 6,
+    "views": [
+      {"name": "front", "azimuth": 0},
+      {"name": "front_right", "azimuth": 45},
+      {"name": "right", "azimuth": 90},
+      {"name": "back", "azimuth": 180},
+      {"name": "left", "azimuth": -90},
+      {"name": "front_left", "azimuth": -45}
+    ],
+    "outputRoot": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview",
+    "generationReport": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview/wonder3d-generation-report.json",
+    "generatedFileSha256Persisted": false,
+    "note": "The six-view files and report were inspected in the Kaggle session but were not copied into Git. Re-download them before the session expires if they are needed."
+  },
+  "rootCause": {
+    "status": "NORMAL_ALPHA_MASK_INVALID_FOR_FOUR_VIEWS",
+    "affectedViews": ["front", "front_right", "back", "front_left"],
+    "symptom": "Wonder3D normal alpha was a crop-sized rectangle instead of the subject silhouette, producing a box-like visual hull.",
+    "resolution": "Derive a conservative foreground mask from Wonder3D RGB-on-black output while preserving the original RGB pixels for review texture sampling.",
+    "repositoryFix": "scripts/ai3d/build_wonder3d_voxel_surface.py now exposes --mask-source normal-alpha|rgb-foreground and records the selected source in voxel-surface-report.json."
+  },
+  "meshExtraction": {
+    "neus": {
+      "status": "BLOCKED_PYTHON312_MASK_CHANNEL_MISMATCH",
+      "note": "The legacy NeuS path reached runtime after an imp compatibility shim but stopped on a tensor channel-shape error; no NeuS mesh was accepted."
+    },
+    "fallback": {
+      "status": "EXPERIMENTAL_VOXEL_SURFACE_MESH",
+      "resolution": 96,
+      "maskSource": "rgb-foreground",
+      "productionMesh": false
+    }
+  },
+  "candidates": [
+    {
+      "candidateId": "wonder3D-voxel-textured-v058",
+      "maskSource": "normal-alpha",
+      "rawMeshSha256": "9200303d79dcf7941c624dcf624861ec41c808edd747575433029449c23a12d8",
+      "refinedGlbSha256": "14df633f67dd8ee462b9621119e2917e9af08412c99d6d79d49863e7cc66d641",
+      "overallScore": 0.705081,
+      "silhouetteScore": 0.801189,
+      "appearanceScore": 0.337234,
+      "colorScore": 0.161761,
+      "faceDetailScore": 0.458993,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "decision": "REJECT_BOX_LIKE_NORMAL_ALPHA_HULL"
+    },
+    {
+      "candidateId": "wonder3D-rgb-mask-v060",
+      "maskSource": "rgb-foreground",
+      "refinedGlbSha256": "2d54afa036ac11023279da9f69a68f5537662d942601391dc99b3155befdc8f6",
+      "overallScore": 0.521697,
+      "silhouetteScore": 0.456528,
+      "appearanceScore": 0.499814,
+      "colorScore": 0.161022,
+      "faceDetailScore": 0.795697,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "decision": "SILHOUETTE_RECOVERED_BUT_SURFACE_IS_TOO_COARSE"
+    },
+    {
+      "candidateId": "wonder3D-CH101-textured-eevee-v064",
+      "sourceCandidateSha256": "07915f9fd738fd632509fb118c6ba6c8f9170fcb73a9429b525d3886de0f7b54",
+      "integrityBlendSha256": "52fd9448a73e99b3bb9277c8ae4effb6d2a972d53b5416fe1691aad46e224610",
+      "overallScore": 0.533389,
+      "silhouetteScore": 0.455545,
+      "appearanceScore": 0.549137,
+      "colorScore": 0.293074,
+      "faceDetailScore": 0.819771,
+      "technicalScore": 1.0,
+      "status": "AUTO_REVIEW_CANDIDATE",
+      "baseGateFailureReasons": [],
+      "strictVisualPolicy": {
+        "status": "REJECT_GATE_B_AND_REGENERATE",
+        "failedThresholds": [
+          "overall 0.533389 < 0.60",
+          "silhouette 0.455545 < 0.50",
+          "appearance 0.549137 < 0.55",
+          "color 0.293074 < 0.38"
+        ]
+      },
+      "decision": "BEST_CURRENT_EEVEE_BASE_SCORE_BUT_NOT_VISUALLY_ACCEPTABLE"
+    },
+    {
+      "candidateId": "wonder3D-CH101-box-textured-v065",
+      "sourceCandidateSha256": "52c40937ba3e0e165c050caf04240029047d44a126934877f590caa13adab279",
+      "integrityBlendSha256": "b69234d2fbe0dbbe31ac83e8c0dd17e760d26c8fafceed155a357e047c4dba61",
+      "overallScore": 0.698609,
+      "silhouetteScore": 0.801287,
+      "appearanceScore": 0.311088,
+      "colorScore": 0.177517,
+      "faceDetailScore": 0.34524,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "decision": "REJECT_BOX_LIKE_NORMAL_ALPHA_HULL"
+    }
+  ],
+  "decision": {
+    "projectStatus": "REGENERATE_REQUIRED",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "reason": "The RGB mask fixes the rectangular-mask failure, but the resulting visual-hull geometry is faceted and lacks reliable face, hair, outfit, and equipment detail. The higher v058/v065 scores are dominated by box-like silhouette metrics and are not quality improvements.",
+    "notProductionMesh": true
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "notebookWiring": {
+    "fallbackPath": "IMPLEMENTED_NOT_YET_EXECUTED",
+    "notebook": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+    "neuSTimeoutSecondsDefault": 1800,
+    "defaultMaskSource": "rgb-foreground",
+    "behavior": "Try NeuS, then run the review-only voxel fallback on failure or timeout; continue to refine/evaluate/rank without unlocking Unity."
+  },
+  "artifactPersistence": {
+    "status": "HASHES_RECORDED_KAGGLE_BINARY_EPHEMERAL",
+    "repositoryArtifacts": [
+      "scripts/ai3d/build_wonder3d_voxel_surface.py",
+      "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+      "tests/test_ai3d_free_pipeline.py"
+    ],
+    "kaggleArtifacts": "The generated .blend/.glb/renders remain in the Kaggle working session only and are not claimed to be present in Git."
+  },
+  "nextAction": "Run notebook 06 on a compatible GPU after pulling this branch, inspect the RGB-mask fallback render, and stop at REGENERATE_REQUIRED if the candidate remains faceted. A real production mesh or a stronger reconstruction provider is still required before Gate B or Unity."
+}

@@ -1,0 +1,117 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-notebook-fallback-v066",
+  "recordedAt": "2026-08-27",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "e9486f256e16c7a80295150307df84f4c89b944c",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "Wonder3D",
+  "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cudaCapabilities": ["7.5", "7.5"],
+    "python": "3.12.13",
+    "blender": "3.0.1",
+    "status": "READY_GPU_VISIBLE",
+    "selectedWorkstream": "GPU",
+    "apiCreditUsed": 0,
+    "toolsRef": "feature/ch101-free-ai3d-autobuild"
+  },
+  "reuse": {
+    "preparationCheck": "REUSABLE",
+    "cliCheck": "NOT_REUSABLE",
+    "reason": "REFERENCE_MANIFEST_SHA256_MISMATCH",
+    "note": "prepare_reference_views regenerated the current deterministic manifest with SHA256 71751f... while the prior report held 77487707...; the CLI correctly regenerated instead of reusing stale evidence."
+  },
+  "multiview": {
+    "status": "MULTIVIEW_GENERATED",
+    "actualInference": true,
+    "viewCount": 6,
+    "viewNames": ["front", "front_right", "right", "back", "left", "front_left"],
+    "azimuths": [0, 45, 90, 180, -90, -45],
+    "referenceManifestSha256": "71751f17e91fc2416159d9460a16c58233ead8f6efacf896705feb4012f6feb8",
+    "referenceImageSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674",
+    "generatedFileCount": 60,
+    "generatedFileSha256Persisted": false,
+    "outputRoot": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview",
+    "generationReport": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/multiview/wonder3d-generation-report.json"
+  },
+  "meshExtraction": {
+    "neus": {
+      "status": "BLOCKED_NEUS_TIMEOUT",
+      "timeoutSeconds": 120,
+      "error": "TimeoutExpired",
+      "meshCreated": false
+    },
+    "fallback": {
+      "status": "EXPERIMENTAL_VOXEL_SURFACE_MESH",
+      "maskSource": "rgb-foreground",
+      "rgbForegroundThreshold": 14,
+      "resolution": 96,
+      "dilation": 0,
+      "meshSha256": "42dadd829babd57a8515f9010f6d8f410d4a7ea64c6d0801bb3e71ca2b9052c7",
+      "materialSha256": "3047f1e8ee48dbb9fe29672581f7225fe2a87fba2ffbd36c4bc5a78119071b3a",
+      "vertexCount": 32762,
+      "triangleCount": 65520,
+      "materialCount": 13,
+      "productionMesh": false
+    }
+  },
+  "candidate": {
+    "candidateId": "wonder3D-CH101-001",
+    "candidateSha256": "96172c7269cc8ec33be1849f4084f208a24c02d4fa7ddb1fea6790f0fa9d6241",
+    "refinedGlbSha256": "96172c7269cc8ec33be1849f4084f208a24c02d4fa7ddb1fea6790f0fa9d6241",
+    "integrityBlendSha256": "28bc628d00de87b70f267ef906cfefbe12510d544bd9de0c85c6170057f963e2",
+    "sourceMeshSha256": "42dadd829babd57a8515f9010f6d8f410d4a7ea64c6d0801bb3e71ca2b9052c7",
+    "sourceStatus": "REFINED_REVIEW_CANDIDATE",
+    "score": {
+      "overallScore": 0.432967,
+      "silhouetteScore": 0.515887,
+      "appearanceScore": 0.050563,
+      "colorScore": 0.049172,
+      "faceDetailScore": 0.046689,
+      "technicalScore": 0.85,
+      "status": "REGENERATE_REQUIRED",
+      "eligibleForHumanReview": false,
+      "failureReasons": [
+        "APPEARANCE_SCORE_BELOW_MINIMUM",
+        "COLOR_SCORE_BELOW_MINIMUM",
+        "FACE_DETAIL_SCORE_BELOW_MINIMUM",
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    "ranking": {
+      "rank": 1,
+      "selectedCandidate": null,
+      "automatedSelectedCandidate": null,
+      "orientation": {
+        "front": "neg_y",
+        "back": "pos_y",
+        "right": "pos_x",
+        "status": "UPRIGHT_CONFIRMED"
+      },
+      "selectionDoesNotApproveVisualQuality": true
+    },
+    "renderRoot": "/kaggle/working/re-camp-ai3d/CH101/wonder3d/evaluation/wonder3D-CH101-001/renders"
+  },
+  "decision": {
+    "projectStatus": "REGENERATE_REQUIRED",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "reason": "The RGB-derived mask prevents the rectangular normal-alpha hull, but the visual-hull fallback remains too faceted and texture/face evidence is too weak for the locked quality bar.",
+    "humanReview": "Not requested because the objective score already fails the minimum thresholds."
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifactPersistence": {
+    "status": "KAGGLE_WORKING_EPHEMERAL",
+    "archive": "/kaggle/working/re-camp-CH101-wonder3d-NOT-PRODUCTION.zip",
+    "note": "The archive and renders were created in Kaggle but were not copied into Git. Download before the session expires if a visual artifact is needed."
+  },
+  "nextAction": "Fix the NeuS Python 3.12 mask/channel incompatibility or provide a stronger reconstruction provider; do not promote this fallback to Gate B, Production Mesh, Unity, or Android."
+}

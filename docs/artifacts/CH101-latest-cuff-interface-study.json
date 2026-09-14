@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "STATIC_CUFF_HAND_CLEARANCE_STUDY_NOT_INTEGRATION",
+  "fullCharacterCandidate": false,
+  "designApproved": false,
+  "attachmentApproved": false,
+  "sourceHandReplaced": false,
+  "anatomicalSeamVerified": false,
+  "wristIntegrationAllowed": false,
+  "staticCuffHandSurfaceCrossingTriangles": 0,
+  "remainingLimitations": ["SOURCE_HAND_REMAINS", "DENSE_STUDY_TOPOLOGY", "NO_ANIMATION_VALIDATION"],
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 6,
+    "date": "2026-09-14"
+  },
+  "candidateId": "CH101_SECTION_FITTED_CUFF_CLEARANCE_V002",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-cuff-clearance-study-v002",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cuff-clearance-study-v002",
+  "assetName": "CH101-cuff-clearance-NOT_PRODUCTION-v002.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-cuff-clearance-study-v002/CH101-cuff-clearance-NOT_PRODUCTION-v002.zip",
+  "bundleBytes": 4488972,
+  "bundleSha256": "243ae2ab4a97283b8c509c886ff8ac875f10779f50443ad8f51ef410aaf59db9",
+  "manifestSha256": "64e8f778927e42c41dcb5ebf43f90082373c44c8483aad999273a801bc663dc2",
+  "toolsCommit": "16eab30ce5bc6d391948cb8ea73d3f42954a15eb",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

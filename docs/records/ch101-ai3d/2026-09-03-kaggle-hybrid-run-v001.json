@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "ch101-kaggle-hybrid-run-v001",
+  "recordedAt": "2026-09-03",
+  "runtime": "kaggle",
+  "notebook": "07_ch101_hybrid_quality_strategies.ipynb",
+  "character": "CH101",
+  "toolsCommit": "92ac1d2",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "repositoryTransport": {
+    "gitCloneInitialStatus": "FAILED_AUTH_PROMPT_IN_KAGGLE",
+    "publicArchiveFallback": "PASS",
+    "lockedLfsPayloadHydration": "PASS",
+    "lfsPayloadSha256Verification": "PASS",
+    "archiveCommitMarkerHandoff": "PASS"
+  },
+  "gpu": {
+    "status": "READY_GPU_VISIBLE",
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "driverVersion": "580.159.04"
+      },
+      {
+        "name": "Tesla T4",
+        "memoryMb": 15360,
+        "driverVersion": "580.159.04"
+      }
+    ],
+    "torchVersion": "2.10.0+cu128",
+    "cudaVersion": "12.8",
+    "torchKernelSupportsDevice": true
+  },
+  "providerResults": {
+    "spar3d": {
+      "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "vramSufficient": true,
+      "cudaRuntimeVisible": true,
+      "torchKernelSupportsDevice": true,
+      "hfTokenPresent": false,
+      "modelAccessAcknowledged": false,
+      "licenseTermsAcknowledged": false,
+      "heavyweightInstallAllowed": false,
+      "actualInference": false,
+      "blockers": [
+        "HF_TOKEN_MISSING",
+        "RE_CAMP_SPAR3D_ACCESS_ACK_MISSING",
+        "RE_CAMP_SPAR3D_LICENSE_ACK_MISSING"
+      ]
+    },
+    "trellis2": {
+      "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "minimumVramMb": 24576,
+      "maximumVisibleVramMb": 15360,
+      "vramSufficient": false,
+      "heavyweightInstallAllowed": false
+    },
+    "trellis16": {
+      "strategyId": "TRELLIS_SINGLE_VIEW_16GB_V002",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "minimumVramMb": 16384,
+      "maximumVisibleVramMb": 15360,
+      "vramSufficient": false,
+      "heavyweightInstallAllowed": false
+    },
+    "partcrafter": {
+      "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+      "status": "QUALITY_PLATEAU_SAME_STRATEGY",
+      "sameStrategyRetry": false
+    }
+  },
+  "execution": {
+    "status": "COMPLETED_WITH_NO_CANDIDATE",
+    "selectedStrategies": [],
+    "candidateCount": 0,
+    "scoreCount": 0,
+    "finalStatus": "NO_CANDIDATE_STRATEGY_READY"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Configure SPAR3D model access and license acknowledgements in Kaggle secrets only if the user chooses to run the gated provider; otherwise keep the result blocked and move to semantic Blender authoring."
+}

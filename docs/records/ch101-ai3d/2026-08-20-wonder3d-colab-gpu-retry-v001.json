@@ -1,0 +1,32 @@
+{
+  "recordVersion": "ch101-ai3d-wonder3d-colab-gpu-retry-v001",
+  "recordedAt": "2026-08-20T11:18:47+09:00",
+  "workstream": "CH101_WONDER3D_RESUME",
+  "character": "CH101",
+  "toolsCommit": "9838614fda678eb99fefcc827b69feb4f7bc31bc",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "notebook": "notebooks/06_ch101_wonder3d_multiview_experiment.ipynb",
+  "notebookBranch": "feature/ch101-free-ai3d-autobuild",
+  "notebookLatestCodeVisible": true,
+  "gpuConnectionAttempt": {
+    "attempted": true,
+    "status": "BLOCKED_GPU_QUOTA",
+    "message": "GPU backend unavailable because of current Colab usage limits",
+    "cpuFallbackSelected": false
+  },
+  "runtime": {
+    "actualInference": false,
+    "providerInstallStarted": false,
+    "candidateManifestCreated": false,
+    "reviewBlendCreated": false,
+    "apiCreditUsed": 0,
+    "gpuCount": 0
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Retry the pinned Notebook after Colab usage limits reset; do not select CPU fallback for Wonder3D inference."
+}

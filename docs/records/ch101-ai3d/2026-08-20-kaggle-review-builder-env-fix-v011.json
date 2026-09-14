@@ -1,0 +1,28 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-review-builder-env-fix-v011",
+  "recordedAt": "2026-08-20T15:45:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommitBeforePatch": "b8db06d",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "pipeline": {
+    "gpu": "Tesla P100-PCIE-16GB",
+    "candidateReuse": "3 TripoSR manifests reused",
+    "refineAndEvaluate": "PASS for all 3 candidates",
+    "scoreReports": 3,
+    "rankingManifest": "CREATED",
+    "reviewBlend": "BLOCKED_BUILDER_ENVIRONMENT_NOT_PROPAGATED"
+  },
+  "failure": {
+    "reason": "Review asset builder was invoked without Blender_ENVIRONMENT, so the GLTF importer could not see the extracted NumPy site.",
+    "evidence": "ModuleNotFoundError: No module named 'numpy'",
+    "candidateFilesDeleted": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "remediation": {
+    "status": "PATCHED_STATICALLY_VALIDATED",
+    "change": "Notebook ranking cell now passes BLENDER_ENVIRONMENT to build_ai3d_review_asset.py.",
+    "nextAction": "Reimport the latest Notebook and rerun through ranking; existing evaluation and ranking artifacts can be reused in the Kaggle session."
+  }
+}

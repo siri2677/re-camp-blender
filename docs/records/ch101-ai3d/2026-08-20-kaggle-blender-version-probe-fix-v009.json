@@ -1,0 +1,28 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-blender-version-probe-fix-v009",
+  "recordedAt": "2026-08-20T14:45:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommitBeforePatch": "5b43e09",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "compatibilityTorch": "2.7.1+cu118",
+    "gpuStatus": "READY_GPU_WORKSTREAM"
+  },
+  "failure": {
+    "status": "BLOCKED_BLENDER_NUMPY_BOOTSTRAP",
+    "reason": "Blender startup logs were parsed by last-line position and produced 'B.lender quit' instead of a Python ABI version.",
+    "heavyInferenceStarted": false,
+    "candidateFilesDeleted": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "remediation": {
+    "status": "PATCHED_STATICALLY_VALIDATED",
+    "change": "Blender Python ABI detection now uses an explicit RE_CAMP_BLENDER_PYTHON marker from a background probe and rejects missing/non-numeric markers.",
+    "nextAction": "Reimport the updated Notebook and rerun the setup cell; reuse the existing three TripoSR candidate manifests after the NumPy probe passes."
+  }
+}
