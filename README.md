@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Retention update 2026-09-18: the 2026-09-14 reduced cuff result is now published
+in [its prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cuff-reduction-study-v001)
+and the six-payload bundle was re-downloaded and hash-verified. The
+[latest cuff pointer](docs/artifacts/CH101-latest-cuff-interface-study.json) targets
+this 2,304-triangle part study. This retention update does not claim new modeling
+or a full-character pass. Next is a reference-backed sleeve/skin boundary study
+on a reversible working copy; the original source hand remains untouched.
+
 Update 2026-09-14: [bounded cuff reduction](docs/plans/ch101-cuff-reduction-2026-09-14.md)
 halves the clearance study from 4,608 to 2,304 triangles. Selected sampled
 bidirectional surface error is at most 0.08777 mm, with zero detected static
