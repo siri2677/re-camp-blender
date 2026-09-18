@@ -23,6 +23,7 @@ NOTEBOOK = ROOT / "notebooks" / "05_ch101_ai3d_free_autobuild.ipynb"
 HYBRID_NOTEBOOK = ROOT / "notebooks" / "07_ch101_hybrid_quality_strategies.ipynb"
 PLAN = ROOT / "docs" / "plans" / "ch101-free-ai3d-autobuild-plan.md"
 PYTHON_SOURCES = (
+    ROOT / "scripts" / "blender" / "build_ch101_sleeve_end_study.py",
     ROOT / "scripts" / "blender" / "review_ch101_wrist_boundary.py",
     ROOT / "scripts" / "blender" / "simplify_ch101_cuff_study.py",
     ROOT / "scripts" / "blender" / "build_ch101_cuff_interface_study.py",

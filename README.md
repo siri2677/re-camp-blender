@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-18: [separate sleeve-end authoring](docs/plans/ch101-sleeve-end-2026-09-18.md)
+adds a hollow 512-vertex / 1,024-triangle graphite-and-gold sleeve study and six
+front/side/back renders. It is an early authored shape hypothesis, **not final
+cloth or a joined sleeve**. New-hand/cuff/equipment static crossings are zero;
+247 sleeve triangles still cross the preserved source body. The 2 mm nominal
+cuff separation and upper opening remain unjoined. Source replacement is locked.
+
 Update 2026-09-18: [non-destructive wrist boundary review](docs/plans/ch101-wrist-boundary-2026-09-18.md)
 adds four source-texture / geometric-side close-ups. The provisional loop does
 not visibly follow the painted cuff edge, and the side texture is distorted.
