@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-18: [non-destructive wrist boundary review](docs/plans/ch101-wrist-boundary-2026-09-18.md)
+adds four source-texture / geometric-side close-ups. The provisional loop does
+not visibly follow the painted cuff edge, and the side texture is distorted.
+It is **not accepted as a sleeve/skin cut boundary**. No original hand was removed.
+Next is separate sleeve-end authoring from approved references on a working copy,
+not cutting the fused source along the colored diagnostic triangle classes.
+
 Retention update 2026-09-18: the 2026-09-14 reduced cuff result is now published
 in [its prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cuff-reduction-study-v001)
 and the six-payload bundle was re-downloaded and hash-verified. The
