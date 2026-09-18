@@ -1,0 +1,13 @@
+{
+  "status": "BOUNDARY_SIZE_MISMATCH_NOT_INTEGRATION",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "wristIntegrationAllowed": false,
+  "blendSha256": "f79851bea699ad2dbb94315e36a67d9f6e19b3488190acfec64bef71a5ea2dfd",
+  "sourceSection": {"points": 29, "areaSquareMeters": 0.002194582612563334},
+  "newHandSection": {"offsetDistalFromWristMeters": 0.005, "points": 82, "areaSquareMeters": 0.0007103886312833374},
+  "method": "closed_section on the saved cloned hand, plane 5 mm distal to its wrist center",
+  "limitations": ["DIFFERENT_PLANES_NOT_MATCHED_BOUNDARIES", "SOURCE_CUFF_OR_SKIN_IDENTITY_UNVERIFIED", "NO_CUT_OR_MERGE"]
+}

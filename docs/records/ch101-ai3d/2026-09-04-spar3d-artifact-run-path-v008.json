@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "ch101-spar3d-artifact-run-path-v008",
+  "recordedAt": "2026-09-04",
+  "runtime": "Kaggle_T4_REQUIRED",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "provider": "spar3d",
+  "strategyId": "SPAR3D_SINGLE_VIEW_V001",
+  "diagnosticBaseline": "docs/records/ch101-ai3d/2026-09-03-spar3d-diagnostic-success-v007.json",
+  "artifactNotebook": "notebooks/09_ch101_spar3d_artifact_run.ipynb",
+  "artifactRecorder": "scripts/ai3d/record_spar3d_artifact.py",
+  "status": "READY_FOR_KAGGLE_ARTIFACT_RUN",
+  "actualInferenceThisRecord": false,
+  "requiredRuntime": {
+    "gpuPreflight": "READY_GPU_VISIBLE",
+    "torchKernelSupportsDevice": true,
+    "minimumVramMb": 8192,
+    "hfSecretValuesRecorded": false,
+    "accessAndLicenseAcknowledgements": true
+  },
+  "expectedArtifacts": [
+    "SPAR3D_EXECUTED",
+    "non-empty source GLB",
+    "source mesh SHA256",
+    "review candidate manifest",
+    "reference manifest SHA256",
+    "tools/art/provider commit provenance"
+  ],
+  "qualityStatus": "PENDING_BLENDER_REFINE_EVALUATE_STRICT_VISUAL_QA",
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Run the new artifact Notebook once on compatible Kaggle GPU, then route the retained candidate through the existing Blender refine/evaluate/strict visual QA path."
+}

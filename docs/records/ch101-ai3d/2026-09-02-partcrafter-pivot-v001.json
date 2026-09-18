@@ -1,0 +1,32 @@
+{
+  "recordVersion": "ch101-ai3d-partcrafter-pivot-v001",
+  "recordedAt": "2026-09-02T00:00:00+09:00",
+  "character": "CH101",
+  "provider": {
+    "name": "partcrafter",
+    "repository": "https://github.com/wgsxm/PartCrafter.git",
+    "commit": "3d773bf02fad51c7ab31a5615573fec93b287b30",
+    "officialEntrypoint": "scripts/inference_partcrafter.py",
+    "minimumVramMb": 8192,
+    "defaultNumParts": 6,
+    "license": "MIT_CODE_LICENSE_VERIFY_MODEL_TERMS"
+  },
+  "strategyId": "PARTCRAFTER_PART_LEVEL_V001",
+  "decision": "SELECTED_LOW_MEMORY_PART_LEVEL_PIVOT",
+  "reason": [
+    "Previous single-surface candidates repeatedly failed semantic boundary review.",
+    "Part-level output is a better fit for body/face, hair, outfit, and equipment inspection.",
+    "Official runtime requirement is compatible with an 8GB-class GPU and therefore below the 15360MB Kaggle T4 profile."
+  ],
+  "executionPolicy": {
+    "maxRuns": 1,
+    "licenseAcknowledgementEnv": "RE_CAMP_PARTCRAFTER_LICENSE_ACK",
+    "setupCommandEnv": "RE_CAMP_PARTCRAFTER_SETUP_COMMAND",
+    "providerPartLabels": "UNLABELED_PENDING_HUMAN_MAPPING",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "status": "READY_FOR_GPU_PREFLIGHT",
+  "actualInference": false,
+  "note": "This record documents the strategy pivot only; no PartCrafter mesh has been generated in the local workspace."
+}

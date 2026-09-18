@@ -1,0 +1,55 @@
+{
+  "recordVersion": "v022",
+  "recordedAt": "2026-08-24",
+  "character": "CH101",
+  "comparisonStatus": "NOT_COMPARABLE",
+  "priorResult": {
+    "record": "2026-08-21-kaggle-p100-triposr-eevee-gate-b-v015.json",
+    "provider": "TripoSR",
+    "candidateId": "03-CH101-TRIPOSR-001",
+    "overallScore": 0.523413,
+    "renderEngine": "BLENDER_EEVEE",
+    "toolsCommit": "a9617dd",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "runtime": "Tesla P100 / torch 2.7.1+cu118",
+    "authoritativeSourceSha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+    "technicalScore": 1.0,
+    "appearanceScore": 0.53451,
+    "colorScore": 0.305002,
+    "faceDetailScore": 0.833498
+  },
+  "currentResult": {
+    "record": "2026-08-24-kaggle-t4-wonder3d-neus-candidate-v021.json",
+    "provider": "Wonder3D NeuS",
+    "candidateId": "wonder3D-CH101-001",
+    "overallScore": 0.496221,
+    "toolsCommit": "d226af384fb395e65ff684d03b65309b3dc68b1b",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "runtime": "2x Tesla T4 / torch 2.10.0+cu128",
+    "referenceManifestSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674",
+    "technicalScore": 0.7,
+    "appearanceScore": 0.054322,
+    "colorScore": 0.151526,
+    "faceDetailScore": 0.001466,
+    "refinedTriangleCount": 542230
+  },
+  "reasons": [
+    "DIFFERENT_PROVIDER_AND_MODEL_FILE",
+    "DIFFERENT_REFERENCE_MANIFEST_SHA256",
+    "DIFFERENT_TOOLS_COMMIT",
+    "DIFFERENT_RUNTIME_AND_BLENDER_ENVIRONMENT",
+    "DIFFERENT_FACE_AND_MATERIAL_CONTENT"
+  ],
+  "finding": "The lower score is caused by candidate and reference provenance differences, not by a confirmed scoring-regression. The current Wonder3D candidate is particularly weak in appearance, color, face detail, and triangle budget.",
+  "nextPlan": [
+    "Rerun or restore the TripoSR candidate against the current pinned reference manifest for an apples-to-apples baseline.",
+    "Keep Wonder3D as a separate candidate family and test higher NeuS quality plus controlled triangle reduction.",
+    "Compare candidates only when provider, source reference SHA256, tools commit, renderer, and score report are recorded together."
+  ],
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

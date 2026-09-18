@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "SEPARATE_SLEEVE_END_SHAPE_HYPOTHESIS_NOT_INTEGRATION",
+  "fullCharacterCandidate": false,
+  "sourceHandReplaced": false,
+  "sleeveCuffWelded": false,
+  "anatomicalSeamVerified": false,
+  "wristIntegrationAllowed": false,
+  "attachmentApproved": false,
+  "designApproved": false,
+  "knownLimitations": ["SOURCE_BODY_INTERSECTIONS_REMAIN", "TWO_MM_NOMINAL_CUFF_GAP", "UPPER_OPENING_UNATTACHED", "EARLY_CLOTH_SHAPE_ONLY"],
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 9,
+    "date": "2026-09-18"
+  },
+  "candidateId": "CH101_SEPARATE_SLEEVE_END_AUTHORING_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-sleeve-end-study-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sleeve-end-study-v001",
+  "assetName": "CH101-sleeve-end-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-sleeve-end-study-v001/CH101-sleeve-end-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 6465127,
+  "bundleSha256": "40e6aa4f61c39124d5a6a96cf13b03586e7c5e51b4a12484fe133304bd1ab863",
+  "manifestSha256": "64b46529c45d9ceefb36b55583c696ca940adfd5dacb286e368a8f22ccd82092",
+  "toolsCommit": "cf5c46a92c7ac781fef1d4b90cc7d888111c7a05",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

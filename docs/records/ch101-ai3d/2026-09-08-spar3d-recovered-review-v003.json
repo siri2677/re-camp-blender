@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "ch101-spar3d-recovered-review-record-v001",
+  "recordedDate": "2026-09-08",
+  "character": "CH101",
+  "strategyId": "CH101_REVIEW_WORLDSPACE_MASKED_TEXTURE_V002",
+  "sourceMesh": "CH101_SPAR3D_Reconstructed_NOT_PRODUCTION_v001.glb",
+  "sourceMeshSha256": "3812e28a8c64b08c549abe44a0cf5714de7b7238db51537300468b83e4560371",
+  "referenceManifestSha256": "e51d1e7b3fdad92868ff5b8a6169b7ecebd2b6b0e67d0d0032f700ccd436a8d4",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "score": {
+    "overall": 0.53343,
+    "silhouette": 0.41465,
+    "appearance": 0.65563,
+    "color": 0.856861,
+    "faceDetail": 0.671387,
+    "technical": 1.0
+  },
+  "thresholds": {
+    "overall": 0.6,
+    "silhouette": 0.5,
+    "appearance": 0.55,
+    "color": 0.38,
+    "faceDetail": 0.25,
+    "technical": 0.9
+  },
+  "qualityDecision": "REJECT_GATE_B_AND_REGENERATE",
+  "reasonCodes": [
+    "OVERALL_IDENTITY_SCORE_WEAK",
+    "SILHOUETTE_PROPORTION_MISMATCH"
+  ],
+  "status": "REVIEW_EVIDENCE_GENERATED_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "retention": "GITHUB_RELEASE_PRERELEASE",
+  "release": {
+    "status": "UPLOADED",
+    "repository": "siri2677/re-camp-blender",
+    "targetBranch": "feature/ch101-free-ai3d-autobuild",
+    "tag": "ch101-ai3d-recovered-review-v003",
+    "url": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-ai3d-recovered-review-v003",
+    "assetName": "CH101-SPAR3D-recovered-review-v003.zip",
+    "assetBytes": 7165522,
+    "assetSha256": "ec6eff9abd770335b2293c541514f850a46cbb3200f5161c24f3bcd9d942c96b",
+    "manifestSha256": "baf5d363783db8d40e5797a1e31f3fec723f36264b425ee7e5921d34ff93bac8",
+    "toolsCommit": "97266dbcc5db3b06ff6abccdd096e8476dcb6951"
+  }
+}
