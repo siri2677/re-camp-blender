@@ -88,8 +88,10 @@ arguments `--source`, `--source-sha256`, `--art-root`, and a new `--output` dire
 - Dedicated release/pointer: `ch101-sleeve-cuff-transition-v001` /
   `docs/artifacts/CH101-latest-sleeve-cuff-transition.json`.
 
-Keep the separate sleeve, cuff and full-character pointers unchanged. Re-download
-and hash-check the new release before recording verified retention.
+The [prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sleeve-cuff-transition-v001)
+was uploaded, re-downloaded and verified on 2026-09-20: all nine payload hashes
+pass. ZIP SHA256: `9adc9dfff93739c00f6a70dc79b64ab23c38b8d035b92fd50d59ee946b1cce15`.
+The separate sleeve, cuff and full-character pointers remain unchanged.
 
 ## Next work
 

@@ -60,6 +60,19 @@ rejects them. The previous profile baseline remains in
 
 The bundle remains review-only; it is not a Production Mesh or Unity input.
 
+## Joined sleeve/cuff part study
+
+`CH101-latest-sleeve-cuff-transition.json` restores the September 20 connected
+authored sleeve/cuff mesh, six context/isolated renders and static QA report from
+`ch101-sleeve-cuff-transition-v001`. All nine release payloads were re-downloaded
+and hash-verified. This does not replace the full-character, separate sleeve or
+cuff pointers. The original body/hand remains present and intersecting; the
+upper opening, final cloth, skinning and animation remain unfinished.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sleeve-cuff-transition.json --output-dir artifacts/CH101-sleeve-cuff-transition
+```
+
 ## Independent equipment study
 
 `CH101-latest-equipment-study.json` identifies the latest equipment-only Blend
