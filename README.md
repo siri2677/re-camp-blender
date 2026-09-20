@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-20: [duplicate-only distal replacement](docs/plans/ch101-distal-replacement-2026-09-20.md)
+removes the fused distal arm/hand region **from a working copy**, closes its end
+inside the authored sleeve and shows the new hand/saber assembly. Body crossings
+against sleeve/hand/saber decrease from 460/119/5 triangles to 0/0/0. The original
+remains preserved and hidden by default. This is a static layered assembly,
+**not welded, rig-bound or production-approved**. Three inherited source
+self-crossing pairs and a separate 48-vertex component remain explicitly recorded.
+
 Update 2026-09-20: [upper sleeve fitting and replacement-region review](docs/plans/ch101-upper-sleeve-fit-2026-09-20.md)
 fits five measured source sections while preserving the joined wrist/cuff and
 all original objects. Upper-band surface crossings decrease from 86 to 0;

@@ -26,6 +26,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "build_ch101_sleeve_end_study.py",
     ROOT / "scripts" / "blender" / "join_ch101_sleeve_cuff_study.py",
     ROOT / "scripts" / "blender" / "fit_ch101_upper_sleeve.py",
+    ROOT / "scripts" / "blender" / "replace_ch101_distal_source_study.py",
     ROOT / "scripts" / "blender" / "review_ch101_wrist_boundary.py",
     ROOT / "scripts" / "blender" / "simplify_ch101_cuff_study.py",
     ROOT / "scripts" / "blender" / "build_ch101_cuff_interface_study.py",
