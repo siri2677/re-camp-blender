@@ -62,6 +62,17 @@ The bundle remains review-only; it is not a Production Mesh or Unity input.
 
 ## Joined sleeve/cuff part study
 
+The follow-up `CH101-latest-upper-sleeve-fit.json` points to
+`ch101-upper-sleeve-fit-v001`: fitted working copy, nine renders and geometric
+replacement-region review. Upper-band surface crossings are zero; 460 joined
+triangles still cross the preserved body below that band. This is not a body
+replacement or anatomical cut approval. All 12 payloads were re-downloaded and
+hash-verified on 2026-09-20.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-sleeve-fit.json --output-dir artifacts/CH101-upper-sleeve-fit
+```
+
 `CH101-latest-sleeve-cuff-transition.json` restores the September 20 connected
 authored sleeve/cuff mesh, six context/isolated renders and static QA report from
 `ch101-sleeve-cuff-transition-v001`. All nine release payloads were re-downloaded

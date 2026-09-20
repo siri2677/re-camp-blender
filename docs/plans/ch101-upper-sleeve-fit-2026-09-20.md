@@ -98,6 +98,11 @@ Script: `scripts/blender/fit_ch101_upper_sleeve.py`. Blender background argument
 - Separate release: `ch101-upper-sleeve-fit-v001`.
 - Separate pointer: `docs/artifacts/CH101-latest-upper-sleeve-fit.json`.
 
+The [prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-fit-v001)
+was published and re-downloaded on 2026-09-20; all 12 payload hashes passed.
+ZIP SHA256: `0a41f1b62f5cda12a55e5cd284d291dda1fe534ab4f63fe4b394ea33fb124eb4`.
+Previous sleeve/cuff and full-character pointers remain unchanged.
+
 ## Next work and gates
 
 Review source-texture and approved-reference context at the proposed upper
