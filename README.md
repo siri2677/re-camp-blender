@@ -4,6 +4,16 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-20: [authored sleeve–cuff transition](docs/plans/ch101-sleeve-cuff-transition-2026-09-20.md)
+connects the previously separate parts on a new 1,664-vertex / 3,328-triangle
+hollow mesh. The 2 mm gap is bridged with shared boundary vertices; static
+hand/equipment crossings, self-crossings and winding errors are zero. Six renders
+and the saved Blend retain the originals. This is **part-to-part continuity only**:
+the preserved body still intersects 578 joined-mesh triangles, the upper opening
+is unattached, and cloth finish/rigging/Gate B remain incomplete. No new
+full-character score is assigned. Next: reference-guided upper sleeve fitting
+and an explicit replacement-region review before any original-body surgery.
+
 Update 2026-09-18: [separate sleeve-end authoring](docs/plans/ch101-sleeve-end-2026-09-18.md)
 adds a hollow 512-vertex / 1,024-triangle graphite-and-gold sleeve study and six
 front/side/back renders. It is an early authored shape hypothesis, **not final
