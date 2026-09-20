@@ -102,9 +102,14 @@ Use a fresh output path. `--no-render` is for diagnosis only. The final report
 explicitly records the non-adjacent BVH scope in its topology metadata; that
 metadata clarification does not change the saved mesh or render evidence.
 
-Separate intended release: `ch101-local-topology-repair-v001`.
+Separate published release: [CH101 local topology repair v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-local-topology-repair-v001).
 Separate restore pointer: `docs/artifacts/CH101-latest-local-topology-repair.json`.
 Prior full-character and part-study pointers are not replaced.
+
+Re-downloaded and verified on 2026-09-20: 10 payloads (Blend, seven renders,
+full report and read-me), 10,335,546 bytes. ZIP SHA256:
+`2d594c592924514e1d1153dc95bf9045e6bf6e86a5be75bc0e94abbcabacaa53`.
+Tools commit: `3e215a7f28eb8a9d5503dab6f01eeda20f33e7db`.
 
 ## Next work
 

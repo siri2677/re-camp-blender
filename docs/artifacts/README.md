@@ -62,6 +62,18 @@ The bundle remains review-only; it is not a Production Mesh or Unity input.
 
 ## Duplicate-only distal replacement assembly
 
+Its follow-up `CH101-latest-local-topology-repair.json` restores the bounded
+one-vertex repair from `ch101-local-topology-repair-v001`. The three inherited
+non-adjacent crossings become zero with approximately 0.05 mm of movement on
+a new working copy. Other vertices, UVs, topology and the separate 48-vertex
+thigh-side strip are preserved. This is not exhaustive solid/deformation
+validation or semantic approval of that strip. All 10 payloads (Blend, seven
+renders, report and read-me) were re-downloaded and verified on 2026-09-20.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-local-topology-repair.json --output-dir artifacts/CH101-local-topology-repair
+```
+
 `CH101-latest-distal-replacement.json` restores the next static working assembly
 from `ch101-distal-replacement-study-v001`. The original source is preserved;
 only a new body copy omits the fused distal arm/hand and receives a temporary
