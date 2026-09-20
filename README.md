@@ -4,6 +4,15 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-20: [upper sleeve fitting and replacement-region review](docs/plans/ch101-upper-sleeve-fit-2026-09-20.md)
+fits five measured source sections while preserving the joined wrist/cuff and
+all original objects. Upper-band surface crossings decrease from 86 to 0;
+whole-part crossings against the preserved body decrease from 578 to 460.
+Nine renders show the new fit and an explicit geometric replacement-region
+hypothesis. **No original source faces are cut and the upper rim is not welded.**
+The faceted cloth and source anatomy still need visual authoring; no new
+full-character score or Gate B approval is claimed.
+
 Update 2026-09-20: [authored sleeve–cuff transition](docs/plans/ch101-sleeve-cuff-transition-2026-09-20.md)
 connects the previously separate parts on a new 1,664-vertex / 3,328-triangle
 hollow mesh. The 2 mm gap is bridged with shared boundary vertices; static

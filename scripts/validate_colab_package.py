@@ -32,6 +32,7 @@ NOTEBOOKS = (
 BLENDER_SCRIPTS = (
     "scripts/blender/build_ch101_sleeve_end_study.py",
     "scripts/blender/join_ch101_sleeve_cuff_study.py",
+    "scripts/blender/fit_ch101_upper_sleeve.py",
     "scripts/blender/review_ch101_wrist_boundary.py",
     "scripts/blender/simplify_ch101_cuff_study.py",
     "scripts/blender/build_ch101_cuff_interface_study.py",
