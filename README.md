@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-20: [bounded local crossing repair](docs/plans/ch101-local-topology-repair-2026-09-20.md)
+resolves the three inherited non-adjacent surface crossings on another working
+copy by moving one vertex approximately 0.05 mm. Other vertices, topology,
+UVs and materials stay unchanged; authored sleeve/hand/saber crossings remain
+zero. The separate 48-vertex thigh-side strip remains preserved and unclassified,
+not automatically deleted. This is a narrow static repair, **not whole-character
+quality approval, exhaustive solid validation or rig/deformation acceptance**.
+
 Update 2026-09-20: [duplicate-only distal replacement](docs/plans/ch101-distal-replacement-2026-09-20.md)
 removes the fused distal arm/hand region **from a working copy**, closes its end
 inside the authored sleeve and shows the new hand/saber assembly. Body crossings
