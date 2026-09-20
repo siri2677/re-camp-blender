@@ -60,6 +60,24 @@ rejects them. The previous profile baseline remains in
 
 The bundle remains review-only; it is not a Production Mesh or Unity input.
 
+## Duplicate-only distal replacement assembly
+
+`CH101-latest-distal-replacement.json` restores the next static working assembly
+from `ch101-distal-replacement-study-v001`. The original source is preserved;
+only a new body copy omits the fused distal arm/hand and receives a temporary
+internal cap. Body-surface crossings with authored sleeve/hand/saber change
+from 460/119/5 to 0/0/0. Three inherited body self-crossing pairs and a separate
+48-vertex component remain; this is not a topology-clean, rigged or approved
+full-character candidate. The interface is layered, not welded, and its
+materials and animated cap coverage still need work.
+
+The Blend, nine renders, full report and read-me (12 payloads) were published,
+re-downloaded and SHA256-verified on 2026-09-20. Previous pointers are unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-distal-replacement.json --output-dir artifacts/CH101-distal-replacement
+```
+
 ## Joined sleeve/cuff part study
 
 The follow-up `CH101-latest-upper-sleeve-fit.json` points to

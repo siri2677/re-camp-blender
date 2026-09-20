@@ -94,6 +94,19 @@ unaffected.
 
 The original full-character, cuff and upper-fit pointers remain unchanged.
 
+### Retention verified
+
+Published as a separate review-only prerelease:
+[CH101 distal replacement assembly v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-distal-replacement-study-v001).
+The 11,213,191-byte ZIP was re-downloaded and all 12 payloads passed manifest
+and SHA256 verification on 2026-09-20. It contains the working-copy Blend,
+nine review renders, full report and `READ_ME_FIRST.txt`.
+
+- ZIP SHA256: `51aff03556a44b26f39d21e4caf1936fd0b360102c24ff6aa61b3f9a03487e5e`.
+- Tools commit: `c022842c18a3b51f31054d205d4cb2da0f11acbe`.
+- Restore using `docs/artifacts/CH101-latest-distal-replacement.json` and the
+  shared `review_artifact_release.py fetch` helper.
+
 ## Next implementation
 
 1. Locate the three inherited self-crossing pairs and identify the 48-vertex
