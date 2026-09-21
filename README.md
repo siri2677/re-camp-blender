@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-21: the [reference-guided continuation plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md)
+now defines staged completion and stop criteria through CH101, roster, Unity
+and Android. Its [first bounded material study](docs/plans/ch101-upper-sleeve-material-2026-09-21.md)
+isolates a 152-vertex forearm mask on a body copy without changing geometry/UVs.
+Eight renders and tests retain evidence. White contamination decreases locally,
+but painted trim is also suppressed and residual boundary defects remain.
+**This is an optional unapproved study, not a completed garment or quality pass.**
+
 Update 2026-09-21: [sleeve surface study](docs/plans/ch101-sleeve-surface-2026-09-21.md)
 continues the verified September 20 assembly on a duplicate: narrower gold trim,
 approved graphite/gold color tokens, and smooth sleeve-side shading. Geometry,
