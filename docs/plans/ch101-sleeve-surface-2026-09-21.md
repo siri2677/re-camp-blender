@@ -74,6 +74,14 @@ blender --background --python-exit-code 1 --python tests/blender/test_sleeve_sur
 The exact input hash is required because correspondence relies on that mesh's
 retained topology. The original source file is never overwritten.
 
+Published separately as [sleeve surface v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sleeve-surface-study-v001),
+with restore pointer `docs/artifacts/CH101-latest-sleeve-surface.json`.
+The ZIP was downloaded again and all ten payloads verified on 2026-09-21.
+Bundle: 10,233,715 bytes, SHA256
+`93f4312e14de4aea3274e8255ffaebec6759b87585b6afb1840a36914f0b0eba`.
+Tools commit: `7cead563874212e0882fcb205a6c8ee3e1353eb5`.
+The separate before/after back and full-front PNGs are also Release assets.
+
 ## Next concrete work
 
 1. Author the upper-arm/sleeve transition against the approved sheet: remove

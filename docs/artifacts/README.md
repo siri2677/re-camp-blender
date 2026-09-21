@@ -4,6 +4,22 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Latest sleeve surface continuation — 2026-09-21
+
+The September 20 repaired distal assembly now has a separate material/shading
+study: [sleeve surface v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sleeve-surface-study-v001).
+It contains the full preserved working scene, seven comparison renders and report,
+but its **change scope is sleeve-only**, not an approved full-character candidate.
+Geometry and original UVs remain fixed. The shader is not Unity-ready; upper-arm
+projection artifacts, contour and trim continuity remain unfinished.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sleeve-surface.json --output-dir artifacts/restored-sleeve-surface
+```
+
+Re-download verified all ten payloads on 2026-09-21. Previous full-character and
+local-topology pointers stay available; do not replace their distinct scopes.
+
 ## Publish from a machine that has the candidate
 
 Install and authenticate the GitHub CLI once:
