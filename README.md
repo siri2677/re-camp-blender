@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-21: [anchored upper trim study](docs/plans/ch101-upper-trim-continuity-2026-09-21.md)
+places a narrow gold line from the lower sleeve's actual rim anchors without
+changing geometry or expanding the existing mask. Eight renders show directional
+alignment, but anchor-to-body distances of 4.25–4.44 mm and the side-view break
+remain: **material alignment is not a welded seam or final pattern**. The
+continuation plan now also distinguishes today's early reauthoring from the
+target: a reference-faithful, rigged, game-ready stylized character.
+
 Update 2026-09-21: the [reference-guided continuation plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md)
 now defines staged completion and stop criteria through CH101, roster, Unity
 and Android. Its [first bounded material study](docs/plans/ch101-upper-sleeve-material-2026-09-21.md)
