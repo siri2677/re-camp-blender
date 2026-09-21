@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-21: [sleeve surface study](docs/plans/ch101-sleeve-surface-2026-09-21.md)
+continues the verified September 20 assembly on a duplicate: narrower gold trim,
+approved graphite/gold color tokens, and smooth sleeve-side shading. Geometry,
+existing UVs and original objects stay unchanged; static surface crossings remain
+zero. Seven before/after/full-view renders show the local change. Upper-source
+white projection artifacts, trim discontinuity, angular contour, unwelded body
+and rigging remain unresolved. **No whole-character score or Gate B approval.**
+
 Update 2026-09-20: [bounded local crossing repair](docs/plans/ch101-local-topology-repair-2026-09-20.md)
 resolves the three inherited non-adjacent surface crossings on another working
 copy by moving one vertex approximately 0.05 mm. Other vertices, topology,
