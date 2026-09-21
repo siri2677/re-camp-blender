@@ -4,6 +4,22 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Upper sleeve local material alternative — 2026-09-21
+
+The [bounded upper sleeve material study](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-material-study-v001)
+is an optional unapproved copy, not a new full-character quality pass. It reduces
+local projection contamination but suppresses painted trim and retains boundary
+defects. Original geometry, UVs and shaders remain recoverable. The continuation
+plan is `docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-sleeve-material.json --output-dir artifacts/restored-upper-sleeve-material
+```
+
+Eleven payloads (Blend, eight renders, report, read-me) were re-downloaded and
+verified on 2026-09-21. This pointer does not replace the prior sleeve-surface
+or full-character pointers. Do not continue by merely expanding the gray mask.
+
 ## Latest sleeve surface continuation — 2026-09-21
 
 The September 20 repaired distal assembly now has a separate material/shading

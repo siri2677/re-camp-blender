@@ -64,6 +64,12 @@ Output `CH101_UpperSleeveMaterial_NOT_PRODUCTION_v001.blend` SHA256:
 `e4f8e156052ec2c6dec32bba19ef2a118144f2f1f0e47852a504f38a1c7d9c98`.
 Art commit: `b6c9b3128358e061eee6184230929413eba84101`.
 
+Release: [upper sleeve material study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-material-study-v001).
+Restore pointer: `docs/artifacts/CH101-latest-upper-sleeve-material.json`.
+Re-download verified all 11 payloads on 2026-09-21. ZIP size: 12,769,413 bytes;
+SHA256: `b7f0aa66dce94098373aad51dba44d8a703176bb3e99bdef0f14b36fbc0dd491`.
+Tools commit: `c51eec120b767164d64dd666b8313772c29a532a`.
+
 ```text
 blender --background --python-exit-code 1 --python scripts/blender/refine_ch101_upper_sleeve_material.py -- --source PATH/CH101_SleeveSurface_NOT_PRODUCTION_v001.blend --art-root PATH/re-camp-art --output PATH/fresh-output
 blender --background --python-exit-code 1 --python tests/blender/test_upper_sleeve_material.py -- --source PATH/CH101_SleeveSurface_NOT_PRODUCTION_v001.blend --artifact PATH/CH101_UpperSleeveMaterial_NOT_PRODUCTION_v001.blend

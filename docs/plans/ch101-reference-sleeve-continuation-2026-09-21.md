@@ -100,6 +100,8 @@ productionPromotionAllowed: false
 ## 진행 기록
 
 - 계획 작성 및 단계 1의 국소 재질 연구 구현·기술 검증 완료.
+- 단계 1 [Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-material-study-v001)
+  게시 및 11개 payload 재다운로드 해시 검증 완료. 이전 기준 파일도 그대로 보존한다.
 - [단계 1 실행 기록](ch101-upper-sleeve-material-2026-09-21.md): 152개 정점,
   영향받는 337개 면, 전후·진단·전체 렌더 8장. Blender 테스트 8개와
   Python 테스트 132개 통과. 원본 형상·UV·가중치 보존 및 정적 교차 0 유지.
