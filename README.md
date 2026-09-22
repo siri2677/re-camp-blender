@@ -4,6 +4,15 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-22: [upper forearm topology patch](docs/plans/ch101-upper-patch-2026-09-22.md)
+replaces 221 source polygons with 321 triangles between two preserved boundary
+loops on a copy. Five Blender tests and static crossing checks pass. Neutral
+views show a more regular upper transition, but the lower kink and upper texture
+streaks remain: **local geometry progress, not finished visual quality**. Next is
+seam-aware UV/material transfer, not another smoothing pass or rig promotion.
+The [quality target](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md)
+now distinguishes simplified stylized-game ambition from today's unfinished state.
+
 Update 2026-09-22: [upper-transition geometry trial](docs/plans/ch101-upper-transition-2026-09-22.md)
 moves 100 vertices by at most 1.288 mm while locking the seam and wrist. Static
 checks pass, but matched clay renders retain the main fold: **insufficient visual
