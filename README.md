@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-22: [shared body–sleeve seam](docs/plans/ch101-body-sleeve-seam-2026-09-22.md)
+connects the 41-vertex body boundary to the 32-vertex sleeve boundary with 73
+shared-edge bridge triangles on a preserved copy. The main body/sleeve are now
+one connected component; the separate 48-vertex strip is preserved. Static
+manifold/winding, UV transfer, self/hand/equipment crossing checks pass.
+Eight renders expose the still-faceted band and unfinished source model.
+**This is real topology work, not rigging, design approval or final quality.**
+
 Update 2026-09-21: [anchored upper trim study](docs/plans/ch101-upper-trim-continuity-2026-09-21.md)
 places a narrow gold line from the lower sleeve's actual rim anchors without
 changing geometry or expanding the existing mask. Eight renders show directional

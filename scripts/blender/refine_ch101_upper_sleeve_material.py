@@ -130,7 +130,7 @@ def diagnostic_copy(source):
     return obj
 
 
-def render(output, before, after, parts, center, axis):
+def render(output, before, after, parts, center, axis, before_extras=()):
     scene = bpy.context.scene
     for obj in scene.objects:
         if obj.type in ('MESH', 'CURVE', 'LIGHT'):
@@ -153,7 +153,7 @@ def render(output, before, after, parts, center, axis):
         lights.append((obj, Vector(delta)))
     rows = []
     def shot(name, target, offset, scale, objects):
-        for obj in [before, after, diagnostic]+parts:
+        for obj in [before, after, diagnostic]+parts+list(before_extras):
             obj.hide_render = obj not in objects
         for light, delta in lights:
             light.location = target+delta
@@ -167,7 +167,7 @@ def render(output, before, after, parts, center, axis):
         rows.append(dict(file=path.name, sha256=c.base.sha(path)))
     for label, obj in [('before', before), ('after', after)]:
         for view, offset in [('front', (-.25, -.7, .15)), ('side', (-.7, .05, .1)), ('back', (.25, .7, .15))]:
-            shot(label+'_'+view, center+axis*.14, offset, .43, [obj]+parts)
+            shot(label+'_'+view, center+axis*.14, offset, .43, [obj]+parts+(list(before_extras) if label == 'before' else []))
     shot('mask_context', center+axis*.14, (-.25, -.7, .15), .70, [diagnostic]+parts)
     shot('assembly_front', Vector((0, 0, .84)), (0, -3, .1), 1.95, [after]+parts)
     diagnostic.hide_render = True
