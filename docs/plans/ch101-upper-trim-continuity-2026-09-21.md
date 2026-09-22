@@ -56,3 +56,9 @@ blender --background --python-exit-code 1 --python tests/blender/test_upper_slee
 
 Review-only gates remain locked: AI_GENERATED_CANDIDATE_NOT_PRODUCTION,
 PENDING_HUMAN_REVIEW, Unity input false and Production promotion false.
+
+Release: https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-trim-study-v001.
+Pointer: `docs/artifacts/CH101-latest-upper-trim.json`. Re-downloaded and verified
+all 11 payloads on 2026-09-22. ZIP SHA256:
+`76b5c62b3977e8a55c520246d7529aed9a1b1e0c94e54a3aa8ae4a9a19c9e0c7`.
+Tools commit: `5f611b2db6a7ab5dc92f82ea548f6fdfe456ce00`.
