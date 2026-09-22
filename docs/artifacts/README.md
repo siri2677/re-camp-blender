@@ -4,6 +4,23 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Bounded upper topology patch — 2026-09-22
+
+[Upper patch v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-patch-study-v001)
+replaces 221 polygons on a copy, preserving the 41/24-vertex boundary loops and
+all original sources. **Local geometry progress, texture rework required**: upper
+streaks and the lower boundary kink remain. This is not a production-quality
+character or an approved garment. Rollback baseline: `CH101-latest-seam-contour.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-patch.json --output-dir artifacts/restored-upper-patch
+```
+
+All 14 payloads (Blend, ten renders, technical report, visual decision, read-me)
+were re-downloaded and SHA256 verified on 2026-09-22. Next: seam-aware UV/material
+correspondence. Gate B, Production and Unity stay locked; full-character pointers
+remain untouched.
+
 ## Upper-transition trial, not adopted — 2026-09-22
 
 [Upper-transition trial v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-transition-trial-v001)

@@ -122,3 +122,27 @@ blender --background --python-exit-code 1 --python tests/blender/test_upper_patc
 The user's simplified stylized-game target is recorded in the main continuation
 plan. This output is far from an established commercial-character quality level;
 neither resemblance to reference art nor this local pass guarantees that target.
+
+## Release and recovery
+
+[Upper patch study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-patch-study-v001)
+contains the Blend, ten renders, full technical report, visual decision and read-me.
+All 14 payloads and the ZIP were re-downloaded and SHA256 verified on 2026-09-22.
+Prior releases and the rollback baseline remain available.
+
+- Pointer: `docs/artifacts/CH101-latest-upper-patch.json`.
+- ZIP bytes: 18,883,136.
+- ZIP SHA256: `35f45959ab0c3deb0cb4136959480bb3a5c81ec6952df0e8843a2433584f68e9`.
+- Tools commit: `fbd9e7d06a3ac1cfedfecc56124c77632139644d`.
+
+Before:
+
+![Neutral before](https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-patch-study-v001/clay_before_side.png)
+
+After (includes new smooth-face normals):
+
+![Neutral after](https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-patch-study-v001/clay_after_side.png)
+
+Remaining texture defects:
+
+![Texture rework required](https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-patch-study-v001/after_side.png)
