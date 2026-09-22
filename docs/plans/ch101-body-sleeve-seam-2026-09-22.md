@@ -87,3 +87,10 @@ blender --background --python-exit-code 1 --python tests/blender/test_body_sleev
 NOT_PRODUCTION; Gate B pending human review; Unity input and Production promotion
 remain false. No final material-budget consolidation, texture bake, rig, animation
 or Unity package is produced. This study is not permission to modify original sources.
+
+Release: [body–sleeve seam v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-body-sleeve-seam-study-v001).
+Restore pointer: `docs/artifacts/CH101-latest-body-sleeve-seam.json`.
+Re-download verification passed for all 11 payloads on 2026-09-22.
+ZIP: 14,804,735 bytes; SHA256
+`c51cba515438618c50b7edd56e2de92e77819ed855bf25202e9034711dfc63cc`.
+Tools commit: `471c81ce8fe66aa887e8eb53f1b51e572720c24f`.

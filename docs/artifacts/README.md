@@ -4,6 +4,21 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Shared body–sleeve seam continuation — 2026-09-22
+
+[Body–sleeve seam v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-body-sleeve-seam-study-v001)
+is the next actual geometry study: 73 bridge triangles share the body/sleeve
+rims on a new working copy. The previous sources and the separate thigh strip
+are preserved. It is not rigged or design-approved; the internal void cap and
+faceted transition remain. Prior pointers describe prior geometry states.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-body-sleeve-seam.json --output-dir artifacts/restored-body-sleeve-seam
+```
+
+Re-downloaded and verified all 11 payloads on 2026-09-22. Do not replace the
+full-character candidate pointer with this scoped study.
+
 ## Upper sleeve local material alternative — 2026-09-21
 
 The [bounded upper sleeve material study](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-material-study-v001)
