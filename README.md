@@ -4,6 +4,13 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-22: [upper-transition geometry trial](docs/plans/ch101-upper-transition-2026-09-22.md)
+moves 100 vertices by at most 1.288 mm while locking the seam and wrist. Static
+checks pass, but matched clay renders retain the main fold: **insufficient visual
+improvement, not adopted**. Do not repeat this relaxation or promote its roughness
+metric into a quality score. Next is bounded topology reauthoring from the prior
+seam-contour baseline; all originals and Gate locks remain preserved.
+
 Update 2026-09-22: [locked-rim seam contour study](docs/plans/ch101-seam-contour-2026-09-22.md)
 subdivides the actual bridge from 73 to 219 triangles, preserving every existing
 vertex and shared rim. A per-triangle altitude limit prevents thin-face inversion;
