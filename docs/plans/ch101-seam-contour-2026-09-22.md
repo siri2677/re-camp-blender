@@ -92,3 +92,19 @@ blender --background --python-exit-code 1 --python tests/blender/test_seam_conto
 `unityInputAllowed=false`; `productionPromotionAllowed=false`.
 No whole-character score, final texture atlas, material-budget approval, rig,
 animation, production promotion or Unity export is produced.
+
+## Published evidence
+
+[Seam contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-seam-contour-study-v001)
+contains the Blend, eight renders, full report and read-me. ZIP and all 11 payloads
+were re-downloaded and SHA256 verified on 2026-09-22. Direct before/after front
+and after-side PNG assets are also available. Previous releases remain intact.
+
+- Restore pointer: `docs/artifacts/CH101-latest-seam-contour.json`.
+- ZIP bytes: 15,851,893.
+- ZIP SHA256: `ba50764bc7b6ed583660e52c7724cbbc5dff91e9429c6621f80a8abcd6b52bf2`.
+- Tools commit: `af14b8bdd11c7f27e143cd4f6013a709aa4c49ca`.
+
+![After front](https://github.com/siri2677/re-camp-blender/releases/download/ch101-seam-contour-study-v001/after_front.png)
+
+![After side, remaining crease](https://github.com/siri2677/re-camp-blender/releases/download/ch101-seam-contour-study-v001/after_side.png)

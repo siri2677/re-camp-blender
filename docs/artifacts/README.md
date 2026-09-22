@@ -4,6 +4,20 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Locked-rim seam contour continuation — 2026-09-22
+
+[Seam contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-seam-contour-study-v001)
+refines the shared seam on a copy, keeping all original vertices and rim edges
+fixed. The 73 added midpoints use a thin-triangle altitude limit. Eight renders
+show softer shading but a remaining side crease; no rig or full-character pass.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-seam-contour.json --output-dir artifacts/restored-seam-contour
+```
+
+All 11 payloads were re-downloaded and SHA256 verified on 2026-09-22. Previous
+seam and full-character pointers remain intact; Unity and Production stay locked.
+
 ## Shared body–sleeve seam continuation — 2026-09-22
 
 [Body–sleeve seam v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-body-sleeve-seam-study-v001)
