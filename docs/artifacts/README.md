@@ -4,6 +4,22 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Upper-transition trial, not adopted — 2026-09-22
+
+[Upper-transition trial v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-transition-trial-v001)
+contains a bounded 100-vertex geometry experiment and ten renders, including
+matched clay views. **Static PASS, visual improvement insufficient:** the main
+notch remains. Preserve this as evidence, not a quality-approved replacement.
+Continue topology authoring from `CH101-latest-seam-contour.json`; do not rerun
+the same relaxation or overwrite the full-character pointer.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-transition-trial.json --output-dir artifacts/restored-upper-transition-trial
+```
+
+All 14 payloads (Blend, ten renders, technical report, visual decision and read-me)
+were re-downloaded and SHA256 verified on 2026-09-22. Gate B remains pending.
+
 ## Locked-rim seam contour continuation — 2026-09-22
 
 [Seam contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-seam-contour-study-v001)

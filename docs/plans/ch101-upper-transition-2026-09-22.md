@@ -116,3 +116,22 @@ unityInputAllowed: false
 productionPromotionAllowed: false
 visualDecision: INSUFFICIENT_IMPROVEMENT_NOT_ADOPTED
 ```
+
+## Release and restore verification
+
+[Upper-transition trial v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-transition-trial-v001)
+is a prerelease of the experiment, not visual acceptance. The ZIP and all 14
+payload SHA256s were re-downloaded and verified on 2026-09-22.
+
+- Pointer: `docs/artifacts/CH101-latest-upper-transition-trial.json`.
+- ZIP bytes: 18,730,344.
+- ZIP SHA256: `8cfaefba5a8305b9b55c0fac14d0f156a2046e23a4d66dcd9cad512d1208db38`.
+- Tools commit: `95595ca6fb9f7c46861ee917b114a72d6b6ad39c`.
+
+Before (neutral material):
+
+![Clay before](https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-transition-trial-v001/clay_before_side.png)
+
+After (principal crease remains):
+
+![Clay after](https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-transition-trial-v001/clay_after_side.png)
