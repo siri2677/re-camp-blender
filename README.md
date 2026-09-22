@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-22: [locked-rim seam contour study](docs/plans/ch101-seam-contour-2026-09-22.md)
+subdivides the actual bridge from 73 to 219 triangles, preserving every existing
+vertex and shared rim. A per-triangle altitude limit prevents thin-face inversion;
+maximum new midpoint offset is 0.191 mm. Static checks and five Blender tests pass.
+Eight renders show softer seam shading, but the side crease and coarse source
+anatomy remain. **Partial static study only; no rig, whole-character quality pass
+or Gate B approval.**
+
 Update 2026-09-22: [shared body–sleeve seam](docs/plans/ch101-body-sleeve-seam-2026-09-22.md)
 connects the 41-vertex body boundary to the 32-vertex sleeve boundary with 73
 shared-edge bridge triangles on a preserved copy. The main body/sleeve are now
