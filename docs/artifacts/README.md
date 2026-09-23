@@ -4,6 +4,23 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Bounded patch albedo bake — 2026-09-23
+
+[Patch albedo bake v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-albedo-bake-v001)
+contains a preserved-copy 321-face patch bake, eight renders, two texture/coverage
+PNGs, full report, visual decision and read-me. All 14 payloads and the ZIP were
+re-downloaded and SHA256 verified. Pointed white streaks decrease; the lower
+notch and coarse source character remain. **Not a whole-character quality pass.**
+Original geometry/UVs/masks and prior releases remain recoverable; the patch
+shader alone uses the new atlas. No rig, Gate B or Unity promotion.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-patch-albedo-bake.json --output-dir artifacts/restored-patch-albedo
+```
+
+Full-character pointers are unchanged. Rollback: upper-patch and seam-contour
+pointers below. Next: bounded coordinated lower seam-interface study.
+
 ## Bounded upper topology patch — 2026-09-22
 
 [Upper patch v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-patch-study-v001)

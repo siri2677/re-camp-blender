@@ -104,3 +104,26 @@ Bundle contents: Blend, eight before/after/context renders, albedo and coverage
 PNGs, full report, this read-me and compact visual decision (14 payload files).
 Publish as a new prerelease and verify ZIP/payload hashes after re-download.
 Never overwrite the previous release or full-character pointer.
+
+## Published and re-downloaded
+
+[Patch albedo bake v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-albedo-bake-v001)
+is a review-only prerelease. ZIP and all 14 payload SHA256 hashes were verified
+after a fresh GitHub download on 2026-09-23. Previous releases remain available.
+
+- Tools commit: `000f5db01d757803b5e34ed779be2aff520b110d`.
+- ZIP: 18,692,747 bytes.
+- ZIP SHA256: `c995294857ddf4d16efe65a1dc280e7976bf6f687d78169e2c14ef7bcff92e6d`.
+- Restore pointer: `docs/artifacts/CH101-latest-patch-albedo-bake.json`.
+
+Before:
+
+![Before side](https://github.com/siri2677/re-camp-blender/releases/download/ch101-patch-albedo-bake-v001/before_side.png)
+
+After (same geometry; albedo-only change):
+
+![After side](https://github.com/siri2677/re-camp-blender/releases/download/ch101-patch-albedo-bake-v001/after_side.png)
+
+Full character remains unfinished:
+
+![Unfinished assembly](https://github.com/siri2677/re-camp-blender/releases/download/ch101-patch-albedo-bake-v001/assembly_front.png)
