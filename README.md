@@ -4,6 +4,14 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-08
 
+Update 2026-09-23: [bounded patch albedo bake](docs/plans/ch101-patch-albedo-bake-2026-09-23.md)
+diagnoses mixed source UV charts in 52 new triangles and bakes only the 321-face
+patch into an explicit isolated atlas. Eight renders show reduced white streaks;
+geometry, old UVs, weights and masks are unchanged. Six Blender tests and 132
+Python tests pass. **Local texture improvement only**: the lower notch and coarse
+whole-character source remain. Next is a coordinated bounded seam-interface study,
+not another UV retry, mask expansion or Production/Unity promotion.
+
 Update 2026-09-22: [upper forearm topology patch](docs/plans/ch101-upper-patch-2026-09-22.md)
 replaces 221 source polygons with 321 triangles between two preserved boundary
 loops on a copy. Five Blender tests and static crossing checks pass. Neutral
