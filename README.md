@@ -2,7 +2,16 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-25
+## Current status — 2026-09-26
+
+Update 2026-09-26: [directional sector profile](docs/plans/ch101-sector-profile-2026-09-26.md)
+targets two residual sleeve ridges: 138 selected vertices (137 actually moved),
+maximum incremental 1.1985 mm. The TOTAL displacement remains below 3 mm against
+the original September 23 albedo mesh, not a renewed per-stage budget. Eight
+Blender tests and static QA pass; eleven renders are retained. Subtle local
+improvement only: side fold and upper material/trim mismatch remain. Do not
+repeat the field or raise the limit. Next is bounded garment contour/material
+authoring, not rigging or a whole-character quality pass.
 
 Update 2026-09-25: [coordinated shared-interface study](docs/plans/ch101-shared-interface-2026-09-25.md)
 continues the verified September 23 albedo copy. Both shared rims, the bridge,

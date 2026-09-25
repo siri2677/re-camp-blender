@@ -30,6 +30,7 @@ NOTEBOOKS = (
     "notebooks/09_ch101_spar3d_artifact_run.ipynb",
 )
 BLENDER_SCRIPTS = (
+    "scripts/blender/refine_ch101_sector_profile.py",
     "scripts/blender/refine_ch101_shared_interface.py",
     "scripts/blender/repair_ch101_local_crossing.py",
     "scripts/blender/build_ch101_sleeve_end_study.py",
