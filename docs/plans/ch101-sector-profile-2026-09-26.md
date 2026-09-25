@@ -91,6 +91,13 @@ disabled. `rigBound=false`, `attachmentApproved=false`, `fullCharacterScore=null
 Keep this in a separate prerelease; do not replace whole-character, albedo or
 shared-interface restoration pointers.
 
+Published and freshly downloaded on 2026-09-26:
+[sector profile study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sector-profile-study-v001).
+All 15 payloads passed SHA256 verification. ZIP: 24,243,862 bytes;
+SHA256 `927f3d807216ad67d2275608e71b4ff4391163677570838f505ff181154bafb0`.
+Tools commit: `fa195908e6f57efb8facdc44ed5b3b94365d6abd`.
+Restore pointer: `docs/artifacts/CH101-latest-sector-profile.json`.
+
 ## Next bounded task
 
 The coordinate-only correction is close to its original 3 mm ceiling. Do not

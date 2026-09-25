@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## September 26 directional sector profile comparison
+
+`CH101-latest-sector-profile.json` restores `ch101-sector-profile-study-v001`:
+the actual Blend, eleven renders, technical report, read-me and visual review.
+All 15 payloads were freshly downloaded and SHA256-verified on 2026-09-26.
+The two local profile lobes preserve a TOTAL 3 mm displacement ceiling against
+the original albedo baseline, not a new budget per stage. Only subtle partial
+improvement; side fold and upper material/trim remain unfinished. No full-character
+pass, 0.6 score, rigging, Unity or Production acceptance. Previous pointers stay intact.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sector-profile.json --output-dir artifacts/CH101-sector-profile
+```
+
 ## September 25 shared-interface comparison
 
 `CH101-latest-shared-interface.json` restores `ch101-shared-interface-study-v001`:
