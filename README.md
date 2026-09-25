@@ -2,7 +2,16 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-08
+## Current status — 2026-09-25
+
+Update 2026-09-25: [coordinated shared-interface study](docs/plans/ch101-shared-interface-2026-09-25.md)
+continues the verified September 23 albedo copy. Both shared rims, the bridge,
+lower sleeve and nearby upper patch move together inside a locked forearm window:
+320 vertices, maximum 2.824 mm. Other 7,916 vertices, topology, old UVs, packed
+atlas, material/mask fields and weights remain unchanged. Static QA and six
+Blender regressions pass. Matched renders show a modestly softer lower notch,
+**not its elimination or final sleeve quality**. No new AI inference, rig or
+whole-character score. Preserve the prior albedo and seam-contour baselines.
 
 Update 2026-09-23: [bounded patch albedo bake](docs/plans/ch101-patch-albedo-bake-2026-09-23.md)
 diagnoses mixed source UV charts in 52 new triangles and bakes only the 321-face
