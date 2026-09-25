@@ -106,6 +106,13 @@ Review-only separate release: `ch101-shared-interface-study-v001`.
 Restore pointer: `docs/artifacts/CH101-latest-shared-interface.json`.
 Never replace the full-character, original albedo or seam-contour pointers.
 
+Published and freshly re-downloaded on 2026-09-25:
+[shared interface study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shared-interface-study-v001).
+All 14 payloads (Blend, ten renders, technical report, read-me and visual decision)
+passed SHA256 verification. ZIP: 21,612,435 bytes;
+SHA256 `2d1ff0ef19caece8b8e9a2e79b177b319b277b93898cd6cf941942fde5742cfd`.
+Tools commit: `7257913291c0267da5df742a46ea0ba7bd1816e7`.
+
 All results retain NOT_PRODUCTION, PENDING_HUMAN_REVIEW, Unity input disabled,
 Production promotion disabled, `rigBound=false`, and `fullCharacterScore=null`.
 

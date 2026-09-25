@@ -1,5 +1,21 @@
 # Review artifact sharing
 
+## September 25 shared-interface comparison
+
+`CH101-latest-shared-interface.json` restores `ch101-shared-interface-study-v001`:
+a duplicate of the September 23 albedo model with coordinated motion across
+both shared sleeve rims. The 320-vertex adjustment stays below 3 mm and preserves
+topology, all UVs, the packed atlas and material masks/weights. Ten renders show
+partial lower-notch improvement, not elimination or final visual acceptance.
+All 14 payloads were re-downloaded and hash-verified on 2026-09-25. Prior albedo,
+seam-contour and full-character pointers remain unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shared-interface.json --output-dir artifacts/CH101-shared-interface
+```
+
+## General publishing and restoration
+
 Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
