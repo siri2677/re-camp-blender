@@ -1,0 +1,62 @@
+{
+  "recordVersion": "ch101-ai3d-trellis2-preflight-pivot-v001",
+  "recordedAt": "2026-09-02",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "a27d0e7",
+  "followUpValidationCommit": "4c9e3b5",
+  "provider": {
+    "name": "trellis2",
+    "repository": "https://github.com/microsoft/TRELLIS.2.git",
+    "commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+    "model": "microsoft/TRELLIS.2-4B",
+    "officialApi": "Trellis2ImageTo3DPipeline",
+    "license": "MIT",
+    "minimumVramMb": 24576,
+    "strategyId": "TRELLIS2_SINGLE_VIEW_V001"
+  },
+  "decision": "PREPARE_ONE_SHOT_PROVIDER_WITH_STRICT_PREFLIGHT",
+  "reason": [
+    "Existing Wonder3D and semantic strategies have recorded rejection or plateau states.",
+    "TRELLIS.2 has an official Python image-to-3D example and a pinned upstream commit.",
+    "The documented runtime requires Linux and an NVIDIA GPU with at least 24 GB VRAM."
+  ],
+  "execution": {
+    "inferenceStarted": false,
+    "meshCreated": false,
+    "candidateRegistered": false,
+    "currentStatus": "BLOCKED_PROVIDER_PREFLIGHT",
+    "nextRequiredInput": "Kaggle or other Linux runtime with supported NVIDIA GPU >= 24 GB",
+    "explicitSetupEnv": "RE_CAMP_TRELLIS2_SETUP_COMMAND",
+    "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS2_LICENSE_ACK"
+  },
+  "localPreflight": {
+    "status": "BLOCKED_PROVIDER_PREFLIGHT",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pythonVersion": "3.14.5",
+    "gpuCount": 0,
+    "torchAvailable": false,
+    "cudaRuntimeVisible": false,
+    "torchKernelSupportsDevice": false,
+    "maximumVisibleVramMb": null,
+    "heavyweightInstallAllowed": false,
+    "reason": "The local host has no visible NVIDIA GPU and cannot satisfy the documented Linux/CUDA/24-GB runtime requirement."
+  },
+  "currentGate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceSha256": "RECORDED_AT_NOTEBOOK_RUNTIME",
+  "notes": [
+    "No API key, HF token, or runtime secret is recorded.",
+    "No TRELLIS.2 score or visual result exists yet.",
+    "A successful run still requires Blender QA and human Gate B review."
+  ],
+  "sources": [
+    "https://github.com/microsoft/TRELLIS.2",
+    "https://github.com/microsoft/TRELLIS.2/blob/main/example.py",
+    "https://huggingface.co/microsoft/TRELLIS.2-4B"
+  ]
+}

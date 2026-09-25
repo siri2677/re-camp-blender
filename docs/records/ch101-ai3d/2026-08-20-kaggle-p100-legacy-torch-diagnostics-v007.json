@@ -1,0 +1,42 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-p100-legacy-torch-diagnostics-v007",
+  "recordedAt": "2026-08-20T09:18:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommit": "a94d508",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "initialTorch": "2.10.0+cu128",
+    "compatibilityTorch": "2.7.1+cu118",
+    "compatibilityTorchSupportsDevice": true,
+    "apiCreditUsed": 0
+  },
+  "providerResults": {
+    "sf3d": {
+      "status": "SKIPPED_MISSING_HF_TOKEN",
+      "reason": "HF_GATED_MODEL_AUTH_REQUIRED"
+    },
+    "instantmesh": {
+      "status": "FAILED_PROVIDER_SETUP",
+      "reason": "CUDA_TOOLKIT_MISMATCH_FOR_LEGACY_PASCAL_GPU",
+      "evidence": "nvdiffrast failed to build after the torch runtime switched to cu118"
+    },
+    "triposr": {
+      "status": "FAILED_PROVIDER_SETUP",
+      "reason": "TORCHMCUBES_BINARY_INCOMPATIBLE_WITH_TORCH_RUNTIME",
+      "evidence": "torchmcubes_module undefined symbol after provider dependency changes"
+    }
+  },
+  "pipeline": {
+    "attemptLimit": 3,
+    "candidateManifestCreated": false,
+    "reviewBlendCreated": false,
+    "postProcessing": "SKIPPED_NO_DOWNLOADED_CANDIDATES",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Use the updated legacy torch restore and torchmcubes rebuild path, skip InstantMesh on Pascal GPUs, then rerun TripoSR first in a fresh Kaggle session."
+}

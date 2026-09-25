@@ -1,0 +1,15 @@
+{
+  "status": "SAMPLED_APPEARANCE_PRESERVED_NOT_QUALITY_APPROVAL",
+  "comparison": "identical camera/light material-before versus material-after",
+  "metric": "foreground RGB absolute difference on 0-255 scale; union alpha > 0",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "views": [
+    {"view": "front", "mean": 0.000022578969947391, "maximum": 1.0, "alphaIdentical": true},
+    {"view": "three_quarter", "mean": 0.00002149064485366214, "maximum": 1.0, "alphaIdentical": true},
+    {"view": "hand_close", "mean": 0.00002433822835951214, "maximum": 1.0, "alphaIdentical": true},
+    {"view": "waist_close", "mean": 0.000016398254569783593, "maximum": 1.0, "alphaIdentical": true}
+  ]
+}

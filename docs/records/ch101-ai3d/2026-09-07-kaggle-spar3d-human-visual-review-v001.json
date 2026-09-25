@@ -1,0 +1,53 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-spar3d-human-visual-review-v001",
+  "recordedAt": "2026-09-07T00:04:18+09:00",
+  "character": "CH101",
+  "candidateId": "CH101-SPAR3D-REF001-MULTIVIEW-TEXTURE-s074",
+  "reviewType": "HUMAN_VISUAL_REVIEW",
+  "status": "REGENERATE_REQUIRED_AFTER_HUMAN_VISUAL_REVIEW",
+  "automatedAssessment": {
+    "status": "AUTO_REVIEW_CANDIDATE",
+    "overall": 0.601063,
+    "silhouette": 0.525667,
+    "appearance": 0.637517,
+    "color": 0.855416,
+    "faceDetail": 0.696685,
+    "technical": 1.0,
+    "failureReasons": []
+  },
+  "humanAssessment": {
+    "decision": "REGENERATE_REQUIRED",
+    "evidence": {
+      "notebook": "https://www.kaggle.com/code/siri9108/ch101-ai3d-free-provider-review/edit",
+      "renderMontage": "remediation-multiview-textures-v011-s074/renders/{neg_y,pos_x,pos_y,three_quarter}.png"
+    },
+    "criteria": {
+      "faceAndHairline": "FAIL_NOT_READABLE",
+      "outfitRegionSeparation": "FAIL_WASHED_OUT",
+      "cyanGoldAccentSeparation": "FAIL_NOT_CONSISTENTLY_VISIBLE",
+      "saberRibbonEquipment": "FAIL_NOT_EXPLICIT",
+      "frontRightBackThreeQuarterConsistency": "FAIL"
+    },
+    "observations": [
+      "The four-view contact sheet reads as a mostly white silhouette with graphite shading rather than a recognizable CH101 surface treatment.",
+      "Face landmarks and hairline are not readable at review scale.",
+      "White canvas pixels were projected as opaque texture, masking the intended base material and weakening semantic color separation.",
+      "The automated color and face metrics are not identity-semantic and do not override the human visual decision."
+    ],
+    "rootCause": "CH101_REVIEW_MULTIVIEW_TEXTURE_PROJECTION_V001 projected the full white reference canvas instead of a foreground-masked reference."
+  },
+  "remediation": {
+    "status": "IMPLEMENTED_NOT_YET_REVERIFIED",
+    "toolsCommit": "a4212b5",
+    "algorithm": "BORDER_CONNECTED_CANVAS_FLOOD_FILL_V001",
+    "change": "Remove only border-connected near-background pixels and mix the masked reference over a neutral base underlay in the review material.",
+    "notProduction": true
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Re-run the review-only texture pass with the foreground canvas mask, render front/right/back/three-quarter views, inspect face-hairline-outfit-equipment visibility, and keep Gate B pending until the masked candidate passes human review."
+}

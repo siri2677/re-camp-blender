@@ -1,0 +1,30 @@
+{
+  "provider": "trellis16",
+  "requiresGpu": true,
+  "status": "BLOCKED_PROVIDER_PREFLIGHT",
+  "pythonVersion": "3.14.5",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "gpuCount": 0,
+  "gpus": [],
+  "torch": {
+    "available": false,
+    "cudaAvailable": null,
+    "version": "",
+    "deviceCapability": null,
+    "torchKernelSupportsDevice": false
+  },
+  "providerPreflight": {
+    "minimumVramMb": 16384,
+    "maximumVisibleVramMb": null,
+    "vramSufficient": false,
+    "cudaRuntimeVisible": false,
+    "torchKernelSupportsDevice": false,
+    "licenseTermsAcknowledged": false,
+    "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS16_LICENSE_ACK",
+    "heavyweightInstallAllowed": false,
+    "linuxRuntime": false
+  },
+  "secretFree": true,
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

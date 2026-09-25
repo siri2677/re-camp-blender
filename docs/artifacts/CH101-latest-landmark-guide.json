@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "UNBOUND_RIG_DIAGNOSTIC_NOT_CHARACTER_CANDIDATE",
+  "fullCharacterCandidate": false,
+  "candidateId": "CH101_SURFACE_BAND_LANDMARK_GUIDE_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-landmark-guide-review-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-landmark-guide-review-v001",
+  "assetName": "CH101-landmark-guide-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-landmark-guide-review-v001/CH101-landmark-guide-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 4175989,
+  "bundleSha256": "5279bbcb269b5163fc2f902dcbb69580989abcba4fb95436f5ff396ed950870a",
+  "manifestSha256": "6eade586d695aec7e82a696f1ea9da611ee84eb8f0da25122fd4bbccf12d2701",
+  "toolsCommit": "26856c4b4e0d0cf4c6927075fc0f8540d0ada033",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

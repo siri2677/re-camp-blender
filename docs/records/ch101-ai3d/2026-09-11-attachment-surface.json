@@ -1,0 +1,115 @@
+{
+  "strategyId": "CH101_ATTACHMENT_SURFACE_DIAGNOSIS_V001",
+  "status": "DIAGNOSIS_ONLY_NOT_REPAIR",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "sourceBlendSha256": "d09d94258c1ff7fd78f28b36060631ba8c394b7ba7e9a36cecdeb4adbc9133c6",
+  "hand": {
+    "center": [
+      -0.3834025263786316,
+      -0.006279081106185913,
+      0.8452494740486145
+    ],
+    "radiusMeters": 0.1,
+    "vertexCount": 118,
+    "inducedComponentSizes": [
+      118
+    ],
+    "exactDuplicateVertexCount": 0,
+    "originalBoundaryEdges": 0,
+    "originalNonManifoldEdges": 0,
+    "nearestSurfaceDistanceMeters": 0.016537779942154884,
+    "axisAlignedExtentMeters": [
+      0.08601966500282288,
+      0.07312104851007462,
+      0.12006944417953491
+    ],
+    "anatomicalRegionVerified": false,
+    "limitation": "SPHERE_ROI_MAY_INCLUDE_CUFF_OR_CLOTHING; COMPONENTS_ARE_NOT_FINGERS; NO_SELF_INTERSECTION_TEST"
+  },
+  "waist": {
+    "center": [
+      0.21521508693695068,
+      -0.003573477268218994,
+      1.0248000621795654
+    ],
+    "radiusMeters": 0.12,
+    "vertexCount": 260,
+    "inducedComponentSizes": [
+      204,
+      40,
+      16
+    ],
+    "exactDuplicateVertexCount": 0,
+    "originalBoundaryEdges": 0,
+    "originalNonManifoldEdges": 0,
+    "nearestSurfaceDistanceMeters": 1.493023660259496e-08,
+    "axisAlignedExtentMeters": [
+      0.22663800418376923,
+      0.13970714062452316,
+      0.21816927194595337
+    ],
+    "anatomicalRegionVerified": false,
+    "limitation": "SPHERE_ROI_MAY_INCLUDE_CUFF_OR_CLOTHING; COMPONENTS_ARE_NOT_FINGERS; NO_SELF_INTERSECTION_TEST"
+  },
+  "minimalSaberOverlap": {
+    "object": "CH101_Saber",
+    "overlapTrianglePairCount": 85,
+    "uniqueEquipmentTrianglesCrossing": 16,
+    "nearHandCrossingTriangles": 16,
+    "awayFromHandCrossingTriangles": 0,
+    "minimumVertexSurfaceDistance": 0.03587382659316063,
+    "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+    "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+  },
+  "sourceUnchanged": true,
+  "graspPoseVerified": false,
+  "attachmentApproved": false,
+  "fullCharacterScore": null,
+  "modelModified": false,
+  "renders": [
+    {
+      "file": "clay_body.png",
+      "sha256": "adb02d8c56ac169add2b11e7e4e4199595be441ecd169f0ae7d4094e591fb8f9",
+      "equipmentShown": true,
+      "materialOverrideOnly": true
+    },
+    {
+      "file": "clay_hand_with_saber.png",
+      "sha256": "15a8b752b3485f7943d232df09a5fd8349aabfdbcbcd166b2a8438137b00cc66",
+      "equipmentShown": true,
+      "materialOverrideOnly": true
+    },
+    {
+      "file": "clay_hand_front.png",
+      "sha256": "0816a1fcbb6d47254172fadd06225f1a6fdd1ca2659824546d5ea37468141cdf",
+      "equipmentShown": false,
+      "materialOverrideOnly": true
+    },
+    {
+      "file": "clay_hand_back.png",
+      "sha256": "5a75c7e3fc43e46fe01957d14535f8afeb8f102c8463e80d90c75310a98722b3",
+      "equipmentShown": false,
+      "materialOverrideOnly": true
+    },
+    {
+      "file": "clay_waist.png",
+      "sha256": "b8dcc0bb75e35b891774601daf7fa3a8c776e841c8c9a575c4ba1ff8260a00c0",
+      "equipmentShown": false,
+      "materialOverrideOnly": true
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "recordVersion": "v021",
+  "recordedAt": "2026-08-24",
+  "character": "CH101",
+  "runtime": {
+    "platform": "Kaggle",
+    "accelerator": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "deviceCapability": "sm_75",
+    "torchKernelSupportsDevice": true,
+    "selectedWorkstream": "GPU"
+  },
+  "commits": {
+    "tools": "d226af384fb395e65ff684d03b65309b3dc68b1b",
+    "art": "b6c9b3128358e061eee6184230929413eba84101",
+    "provider": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "referenceManifestSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674"
+  },
+  "multiview": {
+    "status": "MULTIVIEW_GENERATED",
+    "actualInference": true,
+    "generatedViewCount": 6,
+    "generatedAzimuths": [0, 45, 90, 180, -90, -45]
+  },
+  "meshExtraction": {
+    "provider": "Wonder3D NeuS",
+    "status": "MESH_EXTRACTED",
+    "case": "CH101_train_200b",
+    "trainingEndIter": 200,
+    "checkpointObserved": [100, 200, 300],
+    "meshPath": "NeuS/exp/neus/CH101_train_200b/meshes/tmp.glb",
+    "meshSha256": "1e21ffdd089a2c3ffaa6d77f0c9d70ec53da5ccbc6183e09b85607c7f7c45531",
+    "rawTriangleCount": 543272
+  },
+  "candidate": {
+    "status": "REGENERATE_REQUIRED",
+    "candidateId": "wonder3D-CH101-001",
+    "refinedGlbSha256": "690dee5d54651e5f93a44ed202d63ffc4c04ce6e8770caf5dfc0de0dced6d0d4",
+    "refinedTriangleCount": 542230,
+    "overallScore": 0.496221,
+    "silhouetteScore": 0.634831,
+    "appearanceScore": 0.054322,
+    "colorScore": 0.151526,
+    "faceDetailScore": 0.001466,
+    "technicalScore": 0.7,
+    "failureReasons": [
+      "APPEARANCE_SCORE_BELOW_MINIMUM",
+      "COLOR_SCORE_BELOW_MINIMUM",
+      "FACE_DETAIL_SCORE_BELOW_MINIMUM",
+      "OVERALL_SCORE_BELOW_MINIMUM",
+      "SOURCE_TRIANGLE_COUNT_ABOVE_MAXIMUM"
+    ],
+    "eligibleForHumanReview": false,
+    "faceDriver": "BLOCKED_NO_RELIABLE_FREE_FACE_LANDMARK_TRANSFER",
+    "socketStatus": "AUTO_ESTIMATED_NOT_APPROVED"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "REGENERATE_REQUIRED"
+}

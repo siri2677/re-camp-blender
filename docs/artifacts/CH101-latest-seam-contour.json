@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "candidateId": "CH101_LOCKED_RIM_SEAM_CONTOUR_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-seam-contour-study-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-seam-contour-study-v001",
+  "assetName": "CH101-seam-contour-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-seam-contour-study-v001/CH101-seam-contour-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 15851893,
+  "bundleSha256": "ba50764bc7b6ed583660e52c7724cbbc5dff91e9429c6621f80a8abcd6b52bf2",
+  "manifestSha256": "4ea65215aafba29fa802f13c18ec8ba550f57d38e841b74fc2423e9be8330cd9",
+  "toolsCommit": "af14b8bdd11c7f27e143cd4f6013a709aa4c49ca",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "scope": "LOCKED_RIM_SEAM_CONTOUR_STATIC_STUDY_NOT_FULL_CHARACTER_APPROVAL",
+  "originalSourcesPreserved": true,
+  "originalPositionsExactlyPreserved": true,
+  "sharedBoundaryEdgesLocked": 73,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "verifiedOn": "2026-09-22",
+    "payloadCount": 11,
+    "allPayloadSha256Matched": true
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-trellis-preflight-blocked-v001",
+  "recordedAt": "2026-09-06",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "f88ba09",
+  "runtime": {
+    "platform": "Kaggle",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "gpuCount": 2,
+    "gpus": [
+      { "name": "Tesla T4", "memoryMb": 15360 },
+      { "name": "Tesla T4", "memoryMb": 15360 }
+    ],
+    "cudaVisible": true,
+    "providerInferenceStarted": false
+  },
+  "providers": {
+    "trellis2": {
+      "strategyId": "TRELLIS2_SINGLE_VIEW_V001",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "minimumVramMb": 24576,
+      "maximumVisibleVramMb": 15360,
+      "vramSufficient": false,
+      "licenseTermsAcknowledged": false,
+      "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS2_LICENSE_ACK",
+      "heavyweightInstallAllowed": false
+    },
+    "trellis16": {
+      "strategyId": "TRELLIS_SINGLE_VIEW_16GB_V002",
+      "status": "BLOCKED_PROVIDER_PREFLIGHT",
+      "minimumVramMb": 16384,
+      "maximumVisibleVramMb": 15360,
+      "vramSufficient": false,
+      "licenseTermsAcknowledged": false,
+      "licenseAcknowledgementEnv": "RE_CAMP_TRELLIS16_LICENSE_ACK",
+      "heavyweightInstallAllowed": false
+    }
+  },
+  "decision": {
+    "status": "BLOCKED_PROVIDER_PREFLIGHT",
+    "nextAction": "Use a runtime with at least one visible 16GB GPU and explicit TRELLIS16 acknowledgement/setup command, or a 24GB GPU for TRELLIS2; otherwise perform real Blender semantic refinement. Do not install or retry in this Kaggle T4 session."
+  },
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

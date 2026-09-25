@@ -1,0 +1,17 @@
+{
+  "status": "PART_STUDY_NOT_PRODUCTION",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "correctedBlendSha256": "776a8d86188f5e1f47901d2b990f151dd5be703f540f2bb9e32662fe95c5ac1a",
+  "selfSurfaceProbe": {
+    "method": "BVHTree.overlap(self), retain a<b and exclude any shared triangle vertex",
+    "nonAdjacentTriangleOverlapPairs": 0,
+    "solidContainmentAndAnimationTested": false
+  },
+  "visualDecision": "PART_AUTHORING_PROGRESS_NOT_ANATOMICAL_OR_FULL_CHARACTER_APPROVAL",
+  "remaining": ["SIMPLIFIED_PALM_KNUCKLES_AND_DIGITS", "WRIST_SEAM_UNVERIFIED", "NO_CHARACTER_INTEGRATION", "NO_SKINNING", "NO_FINAL_UV_OR_MATERIAL"],
+  "blenderTests": 4,
+  "pythonUnittests": 132
+}
