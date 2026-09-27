@@ -2,7 +2,15 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-26
+## Current status — 2026-09-27
+
+Update 2026-09-27: [patch trim handoff](docs/plans/ch101-patch-trim-handoff-2026-09-27.md)
+uses the adjacent seam's signed-distance gold line inside the existing near-full
+cloth mask of the baked patch. Geometry, UVs, packed atlas, old fields and other
+material slots remain unchanged. Two gold lanes share the same formula across
+four boundary edges; this is **not whole-boundary continuity**. Eight renders
+show only a subtle change, not material/contour completion. This separate Blender
+shader study is not a newly baked or Unity-ready asset.
 
 Update 2026-09-26: [directional sector profile](docs/plans/ch101-sector-profile-2026-09-26.md)
 targets two residual sleeve ridges: 138 selected vertices (137 actually moved),
