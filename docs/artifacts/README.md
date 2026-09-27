@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## September 27 patch trim shader handoff
+
+`CH101-latest-patch-trim-handoff.json` restores the separate
+`ch101-patch-trim-handoff-study-v001` prerelease. All 12 payloads (Blend, eight
+renders, technical report, read-me and visual decision) were freshly downloaded
+and SHA256-verified on 2026-09-27. This is a patch-only Blender shader study:
+zero geometry movement and no new texture bake. Visible change is subtle;
+whole-boundary continuity, garment/contour quality and Production remain unapproved.
+Do not overwrite the sector-profile or full-character baseline with this pointer.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-patch-trim-handoff.json --output-dir artifacts/CH101-patch-trim-handoff
+```
+
 ## September 26 directional sector profile comparison
 
 `CH101-latest-sector-profile.json` restores `ch101-sector-profile-study-v001`:

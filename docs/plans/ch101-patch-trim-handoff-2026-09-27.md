@@ -90,6 +90,13 @@ blender --background --python-exit-code 1 --python tests/blender/test_patch_trim
 NOT_PRODUCTION and PENDING_HUMAN_REVIEW stay locked, Unity input and Production
 promotion disabled. No rig, human approval or full-character score.
 
+Published and freshly downloaded on 2026-09-27:
+[patch trim handoff study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-trim-handoff-study-v001).
+All 12 payloads passed SHA256 verification. ZIP: 22,935,017 bytes;
+SHA256 `52b7cbc8547ca152db8fb05405734a66e95480c956419f9aba465b649d3bf194`.
+Tools commit: `0c6ce0fa9125c58758f8ecc9b973ac1984abcbde`.
+Restore pointer: `docs/artifacts/CH101-latest-patch-trim-handoff.json`.
+
 ## Next substantive step
 
 Preserve this as a separate shader study, not a replacement for the full-character
