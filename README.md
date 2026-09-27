@@ -4,6 +4,15 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-27
 
+Latest: [explicit garment panel layout](docs/plans/ch101-garment-panel-layout-2026-09-27.md)
+authors a white short oversleeve boundary over a graphite undersleeve, with a
+slanted hem and 3 mm dark binding. A connected 433-face domain gets independent
+materials; no geometry moves and old UVs, masks, shaders and packed atlas remain.
+Front/side/back now show a more readable color boundary, but the source details
+inside the new domain are intentionally replaced. This is a **design hypothesis,
+not exact reference reconstruction, layered cloth geometry or final acceptance**.
+Upper source crossfade and folded geometry remain; no new bake or Unity promotion.
+
 Update 2026-09-27: [patch trim handoff](docs/plans/ch101-patch-trim-handoff-2026-09-27.md)
 uses the adjacent seam's signed-distance gold line inside the existing near-full
 cloth mask of the baked patch. Geometry, UVs, packed atlas, old fields and other
