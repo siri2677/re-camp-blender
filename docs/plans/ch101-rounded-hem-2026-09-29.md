@@ -54,6 +54,21 @@ side crease, upper texture crossfade and floating attachment remain.
   passed (41 Blender scripts, 36 utility scripts, 10 notebooks).
 - Eight renders inspected: front, side, back and isolated, each before/after.
 
+## Shared artifact
+
+- [Review prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-rounded-hem-study-v001).
+- Tools commit `2096eec0fdcf1c5ac47684193dc3297ca664d785`.
+- Blend SHA256 `39f5e07de24a433a7d74ff51a607219ace089162c916a0c1040c96c9b7b31a20`.
+- ZIP `CH101-rounded-hem-NOT_PRODUCTION-v001.zip`, 23,664,893 bytes, SHA256
+  `a032a07d0ead434c785d60a96838903ec85ed30681806fb745a211f4841bbd31`.
+- Fresh download verified ZIP and **12 payloads** on 2026-09-29.
+- Restore pointer: `CH101-latest-rounded-hem.json`. Rollback: original physical
+  binding and panel-layout pointers, both preserved.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-rounded-hem.json --output-dir artifacts/CH101-rounded-hem
+```
+
 ## Reproduce and next step
 
 Restore the prior `CH101-latest-hem-binding.json` artifact first. Use Blender

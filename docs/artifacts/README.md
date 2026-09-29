@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## September 29 rounded binding cross-section
+
+`CH101-latest-rounded-hem.json` restores `ch101-rounded-hem-study-v001`:
+the actual Blend, eight matched renders, technical report, read-me and visual
+review. All 12 payloads were freshly downloaded and SHA256-verified on 2026-09-29.
+Only the separate binding cross-section corners and smooth shading change;
+the old body, original binding and old pointers remain. The rim highlights are
+less segmented, but circumferential kinks, floating attachment and unfinished
+garment structure remain. No rig, runtime optimization or whole-character pass.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-rounded-hem.json --output-dir artifacts/CH101-rounded-hem
+```
+
 ## September 29 physical hem binding
 
 `CH101-latest-hem-binding.json` restores the separate
