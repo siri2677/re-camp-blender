@@ -86,6 +86,14 @@ Six Blender regressions cover panel classes/support, connected region and shader
 contracts, original geometry/UV/field preservation, mutation rejection, copy
 cleanup, input/frame/Gate rejection, saved reopen and all render hashes.
 
+Final six-test Blender run passed; render/save process exited 0. Published and
+freshly downloaded on 2026-09-27:
+[garment panel layout v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-garment-panel-layout-study-v001).
+All 13 payloads passed SHA256 verification. ZIP: 25,797,629 bytes;
+SHA256 `bf58114b4990333ed2303465ce42ffc1e4b36f7f52f8d4fee36d1a4c70c15bc9`.
+Tools commit: `0a60c5458c1dbe59af2750115985f9a5862259d5`.
+Restore pointer: `docs/artifacts/CH101-latest-garment-panel-layout.json`.
+
 ## Next bounded work
 
 Review the hem proportion and whether the reference's short white oversleeve

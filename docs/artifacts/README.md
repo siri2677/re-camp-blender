@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## September 27 explicit garment panel layout
+
+`CH101-latest-garment-panel-layout.json` restores the separate
+`ch101-garment-panel-layout-study-v001` prerelease: Blend, nine renders, technical
+report, read-me and visual decision. All 13 payloads were freshly downloaded and
+SHA256-verified on 2026-09-27. White/graphite color separation is more readable,
+but this intentionally replaces detail inside a new authored panel domain.
+It is not an exact reference pattern, real layered cloth geometry, a new bake,
+or a whole-character pass. Previous full-character and local-study pointers remain.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-garment-panel-layout.json --output-dir artifacts/CH101-garment-panel-layout
+```
+
 ## September 27 patch trim shader handoff
 
 `CH101-latest-patch-trim-handoff.json` restores the separate
