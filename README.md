@@ -2,9 +2,17 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-27
+## Current status — 2026-09-29
 
-Latest: [explicit garment panel layout](docs/plans/ch101-garment-panel-layout-2026-09-27.md)
+Latest: [raised hem binding study](docs/plans/ch101-hem-binding-2026-09-29.md)
+adds a separate closed graphite edge over the existing color hem: 512 vertices,
+1,024 triangles, zero tested intersections, 0.558 mm minimum sampled body gap.
+Original meshes/UVs/materials remain unchanged. The raised edge is visible in
+three matched views, but faceted, floating and unattached: **not a full layered
+oversleeve, animation-safe garment or whole-character quality pass**. No rig,
+new bake or Unity promotion. Next: bounded binding contour/bevel review.
+
+Update 2026-09-27: [explicit garment panel layout](docs/plans/ch101-garment-panel-layout-2026-09-27.md)
 authors a white short oversleeve boundary over a graphite undersleeve, with a
 slanted hem and 3 mm dark binding. A connected 433-face domain gets independent
 materials; no geometry moves and old UVs, masks, shaders and packed atlas remain.
