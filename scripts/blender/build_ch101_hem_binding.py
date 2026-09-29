@@ -69,7 +69,9 @@ def build(body, center, axis, u):
                      originalCumulativeDisplacementBudgetReset=False)
 
 
-def audit(obj, body, parts):
+def audit(obj, body, parts, expected_vertices=SAMPLES*4):
+    if not isinstance(expected_vertices,int) or expected_vertices<=0:
+        raise ValueError('INVALID_EXPECTED_VERTEX_COUNT')
     mesh=obj.data; mesh.calc_loop_triangles()
     bm=bmesh.new(); bm.from_mesh(mesh)
     remaining=set(bm.verts); components=[]
@@ -98,7 +100,7 @@ def audit(obj, body, parts):
     result.update(clearanceSampleCount=len(samples),minimumSampledBodyGapMeters=min(distances),
                   maximumSampledBodyGapMeters=max(distances),continuousClearanceProven=False,
                   sharedVertexSelfPairsExcluded=True,animationTested=False)
-    result['eligible']=(components==[SAMPLES*4] and result['euler']==0 and result['signedVolumeM3']>0
+    result['eligible']=(components==[expected_vertices] and result['euler']==0 and result['signedVolumeM3']>0
         and not any(result[k] for k in ('nonManifoldEdges','nonContiguousEdges','zeroAreaFaces','nonAdjacentSelfIntersectionPairs'))
         and not any(result['intersectionPairsByObject'].values()) and min(distances)>.0002)
     return result

@@ -4,7 +4,15 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-29
 
-Latest: [raised hem binding study](docs/plans/ch101-hem-binding-2026-09-29.md)
+Latest: [rounded hem binding](docs/plans/ch101-rounded-hem-2026-09-29.md)
+rounds only the separate rim's cross-section corners (0.15 mm parameter), with
+smooth shading. Eight matched renders show less segmented rim highlights;
+circumferential path kinks remain. No original geometry moves; zero tested
+intersections, 0.461 mm minimum sampled body gap and 0.0765 mm maximum symmetric
+sampled change. Not attached, rigged, runtime-optimized or a full sleeve shell.
+Next: quantify and review remaining contour kinks, not enlarge the corner radius.
+
+Earlier 2026-09-29: [raised hem binding study](docs/plans/ch101-hem-binding-2026-09-29.md)
 adds a separate closed graphite edge over the existing color hem: 512 vertices,
 1,024 triangles, zero tested intersections, 0.558 mm minimum sampled body gap.
 Original meshes/UVs/materials remain unchanged. The raised edge is visible in
