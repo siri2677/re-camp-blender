@@ -1,5 +1,18 @@
 # Review artifact sharing
 
+## September 29 physical hem binding
+
+`CH101-latest-hem-binding.json` restores the separate
+`ch101-hem-binding-study-v001` prerelease: actual Blend, seven renders, technical
+report, read-me and visual review. All 11 payloads were freshly downloaded and
+SHA256-verified on 2026-09-29. This adds only a narrow closed floating binding;
+it is not a full layered oversleeve, sewn attachment or animation-safe garment.
+Original body meshes/UVs/materials and all older pointers remain unchanged.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-binding.json --output-dir artifacts/CH101-hem-binding
+```
+
 ## September 27 explicit garment panel layout
 
 `CH101-latest-garment-panel-layout.json` restores the separate

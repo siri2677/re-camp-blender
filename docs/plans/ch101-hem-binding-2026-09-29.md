@@ -66,6 +66,22 @@ and a fresh output directory; the builder refuses overwriting artifacts.
 & $blender --background --python-exit-code 1 --python tests/blender/test_hem_binding.py -- --source <panel-layout.blend> --artifact <new-output-directory>/CH101_RaisedHemBinding_NOT_PRODUCTION_v001.blend
 ```
 
+## Shared artifact and recovery
+
+- [Review prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-hem-binding-study-v001).
+- Tools commit: `aeef4f0e242e71b580ba52b1d03e3a73e6a9657a`.
+- Actual Blend: `CH101_RaisedHemBinding_NOT_PRODUCTION_v001.blend`, SHA256
+  `c39909027aa7c85459dc081450f2ba7f327f248474f10ff21de585ee202ed42e`.
+- ZIP: `CH101-hem-binding-NOT_PRODUCTION-v001.zip`, 23,270,400 bytes, SHA256
+  `97c6f37278a077e44b675698c607378481d23ee12ea40ed76d8a8fb060114f64`.
+- Fresh download verified all **11 payloads** and the ZIP hash on 2026-09-29.
+- Restore via `docs/artifacts/CH101-latest-hem-binding.json`; rollback via
+  `CH101-latest-garment-panel-layout.json`. No full-character pointer changed.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-binding.json --output-dir artifacts/CH101-hem-binding
+```
+
 ## Next bounded work
 
 Review the raised binding's thickness and faceted profile against the turnaround.
