@@ -4,7 +4,15 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-30
 
-Latest: [lower white oversleeve shell](docs/plans/ch101-lower-oversleeve-shell-2026-09-30.md)
+Latest: [shared-hem panel cage](docs/plans/ch101-panel-cage-2026-09-30.md)
+authors a smoother white panel and graphite edge as one connected shell with
+64 shared boundary edges. Five Blender tests pass: zero tested intersections,
+1.295 mm minimum sampled body gap, 0.742–0.809 mm sampled wall. Original geometry
+is preserved. Matched views show local surface progress, but the open upper edge
+still reads as a separate cuff. Continue upper jacket-interface authoring from
+this separate cage; whole-character adoption and Gate B remain pending.
+
+Previous: [lower white oversleeve shell](docs/plans/ch101-lower-oversleeve-shell-2026-09-30.md)
 adds real paired surfaces and end walls over an 18 mm lower course. Static QA and
 five Blender tests pass: zero tested intersections, sampled wall 0.450–0.800 mm,
 minimum sampled body gap 0.428 mm. Original meshes are unchanged. **Not adopted**:
