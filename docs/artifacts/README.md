@@ -1,5 +1,17 @@
 # Review artifact sharing
 
+## September 30 shared-hem panel cage
+
+`CH101-latest-panel-cage.json` restores the newer smooth panel/graphite edge in
+one connected shell. ZIP and all 12 payloads freshly fetched and SHA256-verified
+on 2026-09-30. Local authoring can continue from its cage; upper jacket attachment
+is unfinished and whole-character adoption is pending. The rounded-hem rollback
+pointer remains unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-panel-cage.json --output-dir artifacts/restored-panel-cage
+```
+
 ## September 30 lower oversleeve shell
 
 `CH101-latest-lower-oversleeve-shell.json` restores the separate lower-shell
