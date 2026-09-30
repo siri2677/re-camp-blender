@@ -134,3 +134,20 @@ fullCharacterScore: null
 face IDs·UV·seam 대응·기하 검증 report. Git에는 코드·계획·작은 기록만 저장하고
 모델·렌더는 GitHub prerelease에 보관한다. 게시 후 ZIP과 모든 payload를 새로
 다운로드하여 SHA256을 검증한다. 기존 release와 rollback pointer는 보존한다.
+
+## 게시·복원 검증 완료
+
+[어깨 경계 자료 v001 prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-domain-study-v001)
+게시 완료. 파일·전후 10장·report·read-me·판정 JSON을 포함한 ZIP과
+**14개 payload 전체를 새로 다운로드하여 SHA256 PASS**를 확인했다.
+단독 경계/후면/전체 preview도 별도 첨부했다. Release 제목과 notes에
+`NOT ADOPTED / NOT PRODUCTION`을 명시했다.
+
+- Tools commit: `6d2e3d89c5cc7987788f816597cc36637abffbe3`.
+- ZIP: 25,938,705 bytes.
+- ZIP SHA256: `95457321e8f590338560390ef6cc1a6daa0f12d38fa083c7cc03cba1987abb0b`.
+- 복원 pointer: `docs/artifacts/CH101-latest-shoulder-domain.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-domain.json --output-dir artifacts/restored-shoulder-domain
+```

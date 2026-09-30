@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## September 30 shoulder face-graph boundary diagnostic
+
+`CH101-latest-shoulder-domain.json` restores the upper-interface assembly with a
+separate hidden shoulder trial shell, ten renders and face/UV/seam mapping report.
+ZIP and all 14 payloads freshly fetched and SHA256-verified on 2026-09-30.
+Static QA passes but jagged boundaries, coarse folds and a 29.405 mm maximum
+lower correspondence gap remain: **NOT ADOPTED**. The prior upper-interface
+stays visible by default; no source geometry changes or Gate B/Unity promotion.
+Use the domain as boundary-authoring evidence, not a finished sewing pattern.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-domain.json --output-dir artifacts/restored-shoulder-domain
+```
+
 ## September 30 fitted upper sleeve interface
 
 `CH101-latest-upper-interface.json` restores the cage with a connected, fitted
