@@ -2,9 +2,17 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-29
+## Current status — 2026-09-30
 
-Latest: [rounded hem binding](docs/plans/ch101-rounded-hem-2026-09-29.md)
+Latest: [bounded hem contour comparison](docs/plans/ch101-hem-contour-2026-09-30.md)
+resumes the actual September 29 remote state; interrupted September 23 local
+changes are preserved separately. A maximum 0.100036 mm section translation
+reduces peak path turn only 29.396° → 29.216°. Static QA and five Blender tests
+pass, but the visual change is small: **not adopted as a replacement baseline**.
+Ten renders and the Blend remain review evidence. Keep the rounded-hem baseline;
+next is real white-oversleeve layering/attachment authoring, not repeated micro-fits.
+
+Previous: [rounded hem binding](docs/plans/ch101-rounded-hem-2026-09-29.md)
 rounds only the separate rim's cross-section corners (0.15 mm parameter), with
 smooth shading. Eight matched renders show less segmented rim highlights;
 circumferential path kinks remain. No original geometry moves; zero tested
