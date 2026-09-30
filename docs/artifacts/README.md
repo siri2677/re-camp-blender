@@ -1,5 +1,16 @@
 # Review artifact sharing
 
+## September 30 lower oversleeve shell
+
+`CH101-latest-lower-oversleeve-shell.json` restores the separate lower-shell
+study. ZIP and all 13 payloads freshly downloaded and SHA256-verified on
+2026-09-30. Static QA passes, but faceting and floating upper interface remain:
+`adoptionAllowed=false`. The rounded-hem baseline pointer is unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-lower-oversleeve-shell.json --output-dir artifacts/restored-lower-shell
+```
+
 ## September 29 rounded binding cross-section
 
 `CH101-latest-rounded-hem.json` restores `ch101-rounded-hem-study-v001`:

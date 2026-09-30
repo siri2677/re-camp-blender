@@ -109,3 +109,12 @@ blender --background --python-exit-code 1 --python tests/blender/test_oversleeve
 All artifacts retain `AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
 `PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
 `productionPromotionAllowed=false`, `rigBound=false`.
+
+## Published recovery checkpoint
+
+[Lower oversleeve shell study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-lower-oversleeve-shell-study-v001)
+contains the model, eight renders, ray provenance and reports. Fresh fetch
+verified all 13 payloads. ZIP: 24,233,727 bytes; SHA256
+`eb14b1104616818cff9db38200ff71de48ea639d04f9738642884f6859955919`.
+Tools commit: `bf5de21b96eee3ee1ed512c80be8375df54e3b97`.
+Pointer: `docs/artifacts/CH101-latest-lower-oversleeve-shell.json`.
