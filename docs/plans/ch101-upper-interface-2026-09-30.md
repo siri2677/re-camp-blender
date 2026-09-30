@@ -149,3 +149,18 @@ blender --background --python-exit-code 1 --python tests/blender/test_upper_inte
 `sourceStatus=AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
 `gateB=PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
 `productionPromotionAllowed=false`, `rigBound=false`, `fullCharacterScore=null`.
+
+## Published recovery checkpoint
+
+[Fitted upper sleeve interface v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-interface-study-v001)
+contains the model, nine renders, technical report and decision record. Fresh
+fetch verified the ZIP and all **13 payloads** on 2026-09-30. Before/after context
+and rear previews are attached directly to the prerelease.
+Tools commit: `5cf1bbd2207d8f68839b7c1b7ca2f3a392424de3`.
+ZIP: 25,879,316 bytes, SHA256
+`265a9df72138d463f11d39c38040503d7763ad7df370c3182b8278cc16fb3c10`.
+Pointer: `docs/artifacts/CH101-latest-upper-interface.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-interface.json --output-dir artifacts/restored-upper-interface
+```

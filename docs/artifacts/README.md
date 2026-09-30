@@ -1,5 +1,17 @@
 # Review artifact sharing
 
+## September 30 fitted upper sleeve interface
+
+`CH101-latest-upper-interface.json` restores the cage with a connected, fitted
+upper bridge. ZIP and all 13 payloads freshly fetched and SHA256-verified on
+2026-09-30. Maximum sampled upper-edge gap falls to 2.787 mm; source body and
+all retained cage vertices are unchanged. The source jacket topology is still
+separate. Shoulder pattern, upper color transition and human Gate B are pending.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-interface.json --output-dir artifacts/restored-upper-interface
+```
+
 ## September 30 shared-hem panel cage
 
 `CH101-latest-panel-cage.json` restores the newer smooth panel/graphite edge in
