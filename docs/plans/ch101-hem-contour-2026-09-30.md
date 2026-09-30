@@ -122,3 +122,27 @@ blender --background --python-exit-code 1 --python tests/blender/test_hem_contou
 `sourceStatus=AI_GENERATED_CANDIDATE_NOT_PRODUCTION`,
 `gateB=PENDING_HUMAN_REVIEW`, `unityInputAllowed=false`,
 `productionPromotionAllowed=false`, `rigBound=false`, `fullCharacterScore=null`.
+
+## Published comparison and recovery
+
+[Hem contour study v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-hem-contour-study-v001)
+contains the Blend, ten renders, full technical report, read-me and compact visual
+decision. Fresh download verified the ZIP and all **14 payloads** on 2026-09-30.
+The rounded-hem baseline and its pointer remain unchanged.
+
+- Tools commit: `a3d45b96ac576d1fab3e1f917eb67112481cdb51`.
+- ZIP: `CH101-hem-contour-NOT_PRODUCTION-v001.zip`, 24,254,217 bytes.
+- ZIP SHA256: `788bd808ff5ef78011ac0707c3d15a280ea4163e085353293d4a9a167bb17fcb`.
+- Pointer: `docs/artifacts/CH101-latest-hem-contour.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-contour.json --output-dir artifacts/restored-hem-contour
+```
+
+Before (original sharpest sector, same camera and shading):
+
+![Before contour](https://github.com/siri2677/re-camp-blender/releases/download/ch101-hem-contour-study-v001/before_sharp_sector.png)
+
+After (small change, not an adopted replacement):
+
+![After contour](https://github.com/siri2677/re-camp-blender/releases/download/ch101-hem-contour-study-v001/after_sharp_sector.png)

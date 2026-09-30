@@ -89,6 +89,21 @@ Generated 3D files are not committed to ordinary Git history.  Use the
 standard-library helper below to package a review candidate, publish one
 versioned prerelease asset, and commit only the small latest pointer.
 
+## Hem contour comparison, not adopted — 2026-09-30
+
+[Hem contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-hem-contour-study-v001)
+preserves a 0.100036 mm bounded contour trial: peak turn 29.396° → 29.216°.
+Static QA passes but visible change is small. **Keep the September 29 rounded-hem
+baseline**; this artifact is evidence, not a replacement or full-character pass.
+Ten renders include same-camera sharp-sector close-ups. ZIP and all 14 payloads
+were freshly downloaded and SHA256 verified. Originals and all gates stay intact.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-contour.json --output-dir artifacts/restored-hem-contour
+```
+
+Next: actual oversleeve layer/attachment authoring, not repeated micro-smoothing.
+
 ## Bounded patch albedo bake — 2026-09-23
 
 [Patch albedo bake v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-albedo-bake-v001)
