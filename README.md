@@ -4,7 +4,16 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-30
 
-Latest: [bounded hem contour comparison](docs/plans/ch101-hem-contour-2026-09-30.md)
+Latest: [lower white oversleeve shell](docs/plans/ch101-lower-oversleeve-shell-2026-09-30.md)
+adds real paired surfaces and end walls over an 18 mm lower course. Static QA and
+five Blender tests pass: zero tested intersections, sampled wall 0.450–0.800 mm,
+minimum sampled body gap 0.428 mm. Original meshes are unchanged. **Not adopted**:
+front/back expose inherited facets and a floating upper boundary. This is neither
+a complete sleeve nor sewn/rigged production geometry. Keep the rounded-hem
+baseline. Next: reference-guided panel topology and explicit joining loops, not
+another ray-offset copy or smoothing retry. Eight renders and the Blend are saved.
+
+Previous: [bounded hem contour comparison](docs/plans/ch101-hem-contour-2026-09-30.md)
 resumes the actual September 29 remote state; interrupted September 23 local
 changes are preserved separately. A maximum 0.100036 mm section translation
 reduces peak path turn only 29.396° → 29.216°. Static QA and five Blender tests
