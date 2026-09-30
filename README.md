@@ -4,7 +4,16 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-30
 
-Latest: [shared-hem panel cage](docs/plans/ch101-panel-cage-2026-09-30.md)
+Latest: [fitted upper sleeve interface](docs/plans/ch101-upper-interface-2026-09-30.md)
+extends the lower cage into a connected upper bridge. Maximum sampled upper-edge
+gap drops from 11.954 to 2.787 mm; body intersections drop from 24 in the first
+trial to zero after subdividing only the new angular intervals. All 1,152 source
+cage vertices and original meshes remain unchanged. Five Blender tests pass.
+The fitted edge remains separate from the original jacket topology; shoulder
+pattern and upper color transition are unfinished. Next: a branching shoulder
+panel boundary, since ring extrusion beyond +36 mm can hit the torso.
+
+Previous: [shared-hem panel cage](docs/plans/ch101-panel-cage-2026-09-30.md)
 authors a smoother white panel and graphite edge as one connected shell with
 64 shared boundary edges. Five Blender tests pass: zero tested intersections,
 1.295 mm minimum sampled body gap, 0.742–0.809 mm sampled wall. Original geometry
