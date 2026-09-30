@@ -30,6 +30,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "build_ch101_oversleeve_shell.py",
     ROOT / "scripts" / "blender" / "author_ch101_panel_cage.py",
     ROOT / "scripts" / "blender" / "build_ch101_upper_interface.py",
+    ROOT / "scripts" / "blender" / "build_ch101_shoulder_domain.py",
     ROOT / "scripts" / "blender" / "refine_ch101_patch_trim_handoff.py",
     ROOT / "scripts" / "blender" / "refine_ch101_sector_profile.py",
     ROOT / "scripts" / "blender" / "refine_ch101_shared_interface.py",

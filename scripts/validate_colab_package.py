@@ -34,6 +34,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/build_ch101_oversleeve_shell.py",
     "scripts/blender/author_ch101_panel_cage.py",
     "scripts/blender/build_ch101_upper_interface.py",
+    "scripts/blender/build_ch101_shoulder_domain.py",
     "scripts/blender/design_ch101_garment_panel.py",
     "scripts/blender/build_ch101_hem_binding.py",
     "scripts/blender/round_ch101_hem_binding.py",

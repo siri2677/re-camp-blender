@@ -4,7 +4,16 @@ Public Colab and Blender automation workspace for the Re:Camp project.
 
 ## Current status — 2026-09-30
 
-Latest: [fitted upper sleeve interface](docs/plans/ch101-upper-interface-2026-09-30.md)
+Latest: [shoulder face-graph domain](docs/plans/ch101-shoulder-domain-2026-09-30.md)
+identifies 506 connected source faces, transfers four UV layers/materials and
+records two boundary loops. A separate closed trial shell passes static QA after
+fixing short-edge offset reversals; original meshes remain unchanged. **Not
+adopted visually**: jagged source boundaries, coarse folds and a 1.014–29.405 mm
+lower correspondence gap remain. The trial shell is hidden by default; the prior
+upper-interface assembly stays visible. Next: explicit clean panel/seam topology,
+not another source-offset copy or mask expansion. Gate B/Unity remain locked.
+
+Previous: [fitted upper sleeve interface](docs/plans/ch101-upper-interface-2026-09-30.md)
 extends the lower cage into a connected upper bridge. Maximum sampled upper-edge
 gap drops from 11.954 to 2.787 mm; body intersections drop from 24 in the first
 trial to zero after subdividing only the new angular intervals. All 1,152 source
