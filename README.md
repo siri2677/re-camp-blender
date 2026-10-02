@@ -2,9 +2,17 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-09-30
+## Current status — 2026-10-03
 
-Latest: [shoulder face-graph domain](docs/plans/ch101-shoulder-domain-2026-09-30.md)
+Latest: [clipped shoulder chart and seam correspondence](docs/plans/ch101-clipped-shoulder-seam-2026-10-03.md)
+replaces centroid-selected jagged borders with explicit triangle-plane cuts,
+preserves four UV layers by interpolation and maps a 34-point source seam to
+128 ordered sleeve samples. The 2.8 mm gap reflects the existing outer sleeve
+offset; sewing is pending. The open reference chart stays hidden, while the
+prior assembly remains visible. Next: connected shoulder panel topology using
+this common seam parameter and controlled front/back/underarm curves.
+
+Previous: [shoulder face-graph domain](docs/plans/ch101-shoulder-domain-2026-09-30.md)
 identifies 506 connected source faces, transfers four UV layers/materials and
 records two boundary loops. A separate closed trial shell passes static QA after
 fixing short-edge offset reversals; original meshes remain unchanged. **Not
