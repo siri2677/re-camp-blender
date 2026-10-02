@@ -85,3 +85,20 @@ blender --background --python-exit-code 1 --python tests/blender/test_clipped_sh
 
 코드·계획·작은 기록은 Git, 실제 Blend·렌더·전체 correspondence report는
 별도 prerelease에 보관한다. 이전 릴리즈와 전체 캐릭터 기준 포인터는 보존한다.
+
+## 게시·복원 확인
+
+[절단 경계와 소매 대응 v001 릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-clipped-shoulder-seam-study-v001)
+게시 완료. ZIP과 **12개 payload**를 새로 다운로드해 SHA256을 검증했다.
+
+- Tools commit `f9183e3409460ba134b142ce52c29669368d9ca0`.
+- 실제 Blend SHA256 `b50dc04b7d4568a71d71da9b8840a0b5383a78083cb676cd1054cbb746bd83ca`.
+- ZIP 22,410,290 bytes, SHA256
+  `58f220dfb30f94802f11300dcb5a0bf8dd2126c8629ef0495a77142a678e9977`.
+- 복원 pointer `docs/artifacts/CH101-latest-clipped-shoulder-seam.json`.
+- 원본과 rollback은 `CH101-latest-shoulder-domain.json`, 기본 표시 조립본은
+  `CH101-latest-upper-interface.json`로 유지한다.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-clipped-shoulder-seam.json --output-dir artifacts/restored-clipped-shoulder-seam
+```

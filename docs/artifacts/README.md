@@ -1,5 +1,19 @@
 # Review artifact sharing
 
+## October 3 clipped shoulder reference chart and seam correspondence
+
+`CH101-latest-clipped-shoulder-seam.json` restores an open clipped chart with
+four interpolated UV layers and 128 ordered source-to-sleeve seam samples.
+The Blend, eight comparison/diagnostic renders, full report, read-me and visual
+decision were freshly downloaded and all **12 payloads** SHA256-verified on
+2026-10-03. The roughly 2.8 mm gap reflects the existing outer sleeve offset;
+no sewing/weld or finished shoulder garment is claimed. The prior assembly
+remains the default visible state and all older pointers are preserved.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-clipped-shoulder-seam.json --output-dir artifacts/restored-clipped-shoulder-seam
+```
+
 ## September 30 shoulder face-graph boundary diagnostic
 
 `CH101-latest-shoulder-domain.json` restores the upper-interface assembly with a
