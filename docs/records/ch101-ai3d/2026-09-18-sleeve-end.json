@@ -1,0 +1,298 @@
+{
+  "strategyId": "CH101_SEPARATE_SLEEVE_END_AUTHORING_V001",
+  "status": "SEPARATE_SLEEVE_END_DESIGN_HYPOTHESIS",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "sourceBlendSha256": "a354ea0f03347be50c5518ad69fcc5dc2a5044790c879f228f3305fd4f7d6c8f",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "profilesMeters": [
+    [
+      0.002,
+      0.023,
+      0.034
+    ],
+    [
+      0.008,
+      0.024,
+      0.0345
+    ],
+    [
+      0.018,
+      0.027,
+      0.036
+    ],
+    [
+      0.03,
+      0.03,
+      0.036
+    ],
+    [
+      0.047,
+      0.0315,
+      0.037
+    ],
+    [
+      0.065,
+      0.033,
+      0.0375
+    ],
+    [
+      0.083,
+      0.034,
+      0.038
+    ],
+    [
+      0.098,
+      0.035,
+      0.038
+    ]
+  ],
+  "radialWallOffsetMeters": 0.0015,
+  "foldAmplitudeMeters": 0.0007,
+  "placementMethod": "HAND_LOCAL_FRAME_AUTHORED_DIMENSIONS_NOT_ANATOMICAL_REGISTRATION",
+  "axialGapAboveWristReferenceMeters": 0.002,
+  "topology": {
+    "vertices": 512,
+    "triangles": 1024,
+    "components": [
+      512
+    ],
+    "nonManifoldEdges": 0,
+    "zeroAreaFaces": 0,
+    "semanticGroups": [],
+    "selfIntersectionTestPerformed": false,
+    "rigOrWeightsValidated": false
+  },
+  "eulerCharacteristic": 0,
+  "selfSurfacePairs": 0,
+  "studyPartCollisions": [
+    {
+      "target": "PAIR_STUDY_CH101_TaperedHand_NOT_PRODUCTION",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.003303258214145899,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_CH101_Saber",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.051999934017658234,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_00",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.09929454326629639,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_01",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.08422419428825378,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_02",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.07144352048635483,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_03",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.06445924937725067,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_04",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.06351180374622345,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_05",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.06350046396255493,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Grip_CyanDiamond_06",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.06641654670238495,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Guard_CyanInset_-1",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.12375477701425552,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Guard_CyanInset_1",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.1303415149450302,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "PAIR_STUDY_Saber_PommelRing",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.0929759070277214,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    },
+    {
+      "target": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 0,
+      "uniqueEquipmentTrianglesCrossing": 0,
+      "nearHandCrossingTriangles": 0,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.001999870641157031,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    }
+  ],
+  "sourceBodyOverlap": [
+    {
+      "object": "CH101_SleeveEnd_HYPOTHESIS_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 395,
+      "uniqueEquipmentTrianglesCrossing": 247,
+      "nearHandCrossingTriangles": 137,
+      "awayFromHandCrossingTriangles": 110,
+      "minimumVertexSurfaceDistance": 5.857445557921892e-06,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    }
+  ],
+  "sourceGeometryPreserved": true,
+  "sourceHandReplaced": false,
+  "anatomicalSeamVerified": false,
+  "sleeveCuffWelded": false,
+  "designApproved": false,
+  "attachmentApproved": false,
+  "wristIntegrationAllowed": false,
+  "fullCharacterScore": null,
+  "limitations": [
+    "AUTHORED_DIMENSIONS_NOT_MEASURED_FROM_ORTHOGRAPHIC_ART",
+    "UPPER_OPENING_NOT_ATTACHED",
+    "TWO_MM_REFERENCE_PLANE_GAP_IS_NOT_MINIMUM_SURFACE_CLEARANCE",
+    "SOURCE_HAND_REMAINS",
+    "NO_FINAL_ATLAS_SKINNING_OR_ANIMATION"
+  ],
+  "renders": [
+    {
+      "file": "context_front_UNMERGED.png",
+      "sha256": "3e9523b0caac813c92cb5a62c55a54dc59dcdf2c822535ee584e4008e0be2beb",
+      "sourceBodyShown": true,
+      "sourceHandStillExists": true,
+      "merged": false
+    },
+    {
+      "file": "context_side_UNMERGED.png",
+      "sha256": "ef7216ebe7a737906c011dab6df115c4f09730a594404c019f9e098493921014",
+      "sourceBodyShown": true,
+      "sourceHandStillExists": true,
+      "merged": false
+    },
+    {
+      "file": "context_back_UNMERGED.png",
+      "sha256": "bfc6bed90f54e0dfcbe8ff6707286bca90844c7aff26620e6e420a89bdd5c9bb",
+      "sourceBodyShown": true,
+      "sourceHandStillExists": true,
+      "merged": false
+    },
+    {
+      "file": "isolated_front_UNMERGED.png",
+      "sha256": "da0c39c25b6157bbd4be6e30a637ca5670ce8cc6a7774933e3fa96d756a72ebc",
+      "sourceBodyShown": false,
+      "sourceHandStillExists": true,
+      "merged": false
+    },
+    {
+      "file": "isolated_side_UNMERGED.png",
+      "sha256": "40967e1d0b427f3ec99bab721edf4b736e56e7525b693c3fd018ed8f25326383",
+      "sourceBodyShown": false,
+      "sourceHandStillExists": true,
+      "merged": false
+    },
+    {
+      "file": "isolated_back_UNMERGED.png",
+      "sha256": "e4adabedf5aa880f4ca072db0106bed5c02ab302973b5cbe33480e7a1ee64965",
+      "sourceBodyShown": false,
+      "sourceHandStillExists": true,
+      "merged": false
+    }
+  ],
+  "blendFile": "CH101_SleeveEndStudy_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "3023f8d54bc64218f627455e2602048f243b973e0c1aa078380d8f8c91c6328b"
+}

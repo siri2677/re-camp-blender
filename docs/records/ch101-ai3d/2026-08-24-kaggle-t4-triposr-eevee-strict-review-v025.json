@@ -1,0 +1,49 @@
+{
+  "recordVersion": "ch101-ai3d-strict-assisted-review-v025",
+  "recordedAt": "2026-08-24",
+  "evaluationMode": "REPLAYED_FROM_RECORDED_SCORE",
+  "sourceRecord": "2026-08-24-kaggle-t4-triposr-eevee-controlled-v024.json",
+  "toolsCommit": "62fa5bf",
+  "character": "CH101",
+  "candidate": {
+    "candidateId": "tripoSR-CH101-baseline-003-eevee",
+    "refinedCandidateSha256": "b347f8c53dc1385a05b20b06923659954c0dc019849d7268eaefd1d623a6ccb9",
+    "overallScore": 0.529061,
+    "silhouetteScore": 0.452165,
+    "appearanceScore": 0.540615,
+    "colorScore": 0.300492,
+    "faceDetailScore": 0.808445,
+    "technicalScore": 1.0
+  },
+  "visualReviewPolicy": {
+    "minimumAutoReviewOverallScore": 0.6,
+    "minimumAutoReviewSilhouetteScore": 0.5,
+    "minimumAutoReviewAppearanceScore": 0.55,
+    "minimumAutoReviewColorScore": 0.38,
+    "minimumAutoReviewFaceDetailScore": 0.25,
+    "minimumAutoReviewTechnicalScore": 0.9,
+    "decisionMode": "REJECTION_ONLY_AUTO_QA_DEFER_IF_NO_OBJECTIVE_FAILURE"
+  },
+  "decision": {
+    "disposition": "REJECT",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "reasonCodes": [
+      "OVERALL_IDENTITY_SCORE_WEAK",
+      "SILHOUETTE_PROPORTION_MISMATCH",
+      "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+      "OUTFIT_COLOR_BLOCKING_WEAK"
+    ],
+    "notes": [
+      "The candidate is a generic dark gray mesh compared with the locked CH101 design reference.",
+      "The faceDetailScore is not semantic face identity evidence and cannot override the visual rejection.",
+      "No Gate B, Production Mesh, or Unity promotion is granted."
+    ]
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "REGENERATE_WITH_STRONGER_IDENTITY_AND_COLOR_REFERENCE_INPUTS"
+}

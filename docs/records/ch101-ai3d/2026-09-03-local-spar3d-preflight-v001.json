@@ -1,0 +1,35 @@
+{
+  "provider": "spar3d",
+  "requiresGpu": true,
+  "status": "BLOCKED_PROVIDER_PREFLIGHT",
+  "pythonVersion": "3.14.5",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "gpuCount": 0,
+  "gpus": [],
+  "torch": {
+    "available": false,
+    "cudaAvailable": null,
+    "version": "",
+    "deviceCapability": null,
+    "torchKernelSupportsDevice": false
+  },
+  "providerPreflight": {
+    "minimumVramMb": 8192,
+    "maximumVisibleVramMb": null,
+    "vramSufficient": false,
+    "cudaRuntimeVisible": false,
+    "torchKernelSupportsDevice": false,
+    "modelAccessAcknowledged": false,
+    "licenseTermsAcknowledged": false,
+    "hfTokenPresent": false,
+    "tokenEnvironment": null,
+    "accessAcknowledgementEnv": "RE_CAMP_SPAR3D_ACCESS_ACK",
+    "licenseAcknowledgementEnv": "RE_CAMP_SPAR3D_LICENSE_ACK",
+    "officialEntrypoint": "run.py",
+    "lowVramMode": true,
+    "heavyweightInstallAllowed": false
+  },
+  "secretFree": true,
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

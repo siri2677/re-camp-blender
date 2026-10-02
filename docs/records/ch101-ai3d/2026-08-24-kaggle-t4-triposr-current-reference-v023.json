@@ -1,0 +1,128 @@
+{
+  "recordVersion": "v023",
+  "recordedAt": "2026-08-24",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "comparisonStatus": "PARTIALLY_COMPARABLE_NOT_GATE_B",
+  "toolsCommit": "d226af384fb395e65ff684d03b65309b3dc68b1b",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": {
+    "name": "TripoSR",
+    "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "apiCreditUsed": 0
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "gpuCapability": "sm_75",
+    "torch": "2.10.0+cu128",
+    "blenderVersion": "3.0.1",
+    "renderEngine": "BLENDER_WORKBENCH",
+    "referenceGenerationManifestSha256": "68552dfb2d397be5a0a30a6a4d90fb6f354200c4e91b79495ee2c245b6286325",
+    "scoringReferenceManifestSha256": "9f22189c6c8f18a82c38b1caf5be31981b146d2ad7800521419b7c5cae45cafa"
+  },
+  "priorResult": {
+    "record": "2026-08-21-kaggle-p100-triposr-eevee-gate-b-v015.json",
+    "candidateId": "03-CH101-TRIPOSR-001",
+    "overallScore": 0.523413,
+    "renderEngine": "BLENDER_EEVEE",
+    "toolsCommit": "a9617dd",
+    "referenceAuthoritativeSourceSha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+    "technicalScore": 1.0,
+    "appearanceScore": 0.53451,
+    "colorScore": 0.305002,
+    "faceDetailScore": 0.833498
+  },
+  "currentCandidates": [
+    {
+      "attempt": 1,
+      "foregroundRatio": 0.85,
+      "candidateId": "tripoSR-CH101-baseline-001",
+      "sourceCandidateSha256": "20a2e5b33eb6789cd88c1eb040e9f196dcfe0db3411a911cffdd641de6174f93",
+      "refinedCandidateSha256": "864686f827e4cf72f6d9b90a1b4966824feff56e5d8b7bf4b8ef11c14d7ccdd2",
+      "overallScore": 0.455933,
+      "silhouetteScore": 0.415698,
+      "appearanceScore": 0.342917,
+      "colorScore": 0.153408,
+      "faceDetailScore": 0.38229,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": [
+        "UPSIDE_DOWN_ORIENTATION",
+        "COLOR_SCORE_BELOW_MINIMUM",
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "attempt": 2,
+      "foregroundRatio": 0.8,
+      "candidateId": "tripoSR-CH101-baseline-002",
+      "sourceCandidateSha256": "930076e249f12d1ee42de7ff94238614513d2ac91be15c3c7f69cb47632ae745",
+      "refinedCandidateSha256": "0e53a2441fd24483ba6c5254226e0ae65a33a5ac4b15038167118af873e815b2",
+      "overallScore": 0.493954,
+      "silhouetteScore": 0.409209,
+      "appearanceScore": 0.511873,
+      "colorScore": 0.14941,
+      "faceDetailScore": 0.885561,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": [
+        "COLOR_SCORE_BELOW_MINIMUM",
+        "OVERALL_SCORE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "attempt": 3,
+      "foregroundRatio": 0.98,
+      "candidateId": "tripoSR-CH101-baseline-003",
+      "sourceCandidateSha256": "9879ca1954095eb27f5bda73c09ba2952f7010f1a613b2512bcc949b5759ee48",
+      "refinedCandidateSha256": "b347f8c53dc1385a05b20b06923659954c0dc019849d7268eaefd1d623a6ccb9",
+      "overallScore": 0.516883,
+      "silhouetteScore": 0.451398,
+      "appearanceScore": 0.493899,
+      "colorScore": 0.147429,
+      "faceDetailScore": 0.852103,
+      "technicalScore": 1.0,
+      "status": "REGENERATE_REQUIRED",
+      "failureReasons": [
+        "COLOR_SCORE_BELOW_MINIMUM"
+      ]
+    }
+  ],
+  "ranking": {
+    "status": "REGENERATE_REQUIRED",
+    "selectedCandidate": null,
+    "bestCandidateId": "tripoSR-CH101-baseline-003",
+    "bestOverallScore": 0.516883,
+    "minimumOverallScore": 0.5,
+    "minimumColorScore": 0.2,
+    "eligibleForHumanReview": false
+  },
+  "comparisonFinding": {
+    "priorOverallScore": 0.523413,
+    "currentBestOverallScore": 0.516883,
+    "delta": -0.00653,
+    "interpretation": "The current best is not a direct regression of the same scored artifact. Provider family and art commit match, but the reference manifest, tools commit, runtime, and renderer differ. The main confirmed gate failure is the color metric; the current Workbench run also cannot be directly compared with the prior EEVEE run.",
+    "notConfirmed": [
+      "provider quality regression",
+      "scoring algorithm regression"
+    ]
+  },
+  "controlledRendererCheck": {
+    "requested": "BLENDER_EEVEE",
+    "candidateId": "tripoSR-CH101-baseline-003",
+    "status": "BLOCKED_EVALUATION_REPORT_NOT_CREATED",
+    "reason": "Blender glTF importer failed during the isolated EEVEE rerun; no score was accepted from that attempt."
+  },
+  "nextAction": [
+    "Pin the review renderer to EEVEE for a successful controlled rerun of candidate 003.",
+    "If color remains below 0.20, improve reference/material color handling or regenerate the candidate; do not lower the gate.",
+    "Keep Gate B, Production, Unity, and Android locked until the score and human review requirements pass."
+  ],
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

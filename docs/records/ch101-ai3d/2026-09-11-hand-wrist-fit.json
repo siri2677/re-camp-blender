@@ -1,0 +1,282 @@
+{
+  "strategyId": "CH101_HAND_TAPER_AND_BOUNDED_WRIST_FIT_V001",
+  "status": "HAND_WRIST_FIT_STUDY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "sourceBlendSha256": "776a8d86188f5e1f47901d2b990f151dd5be703f540f2bb9e32662fe95c5ac1a",
+  "taper": {
+    "changedVertices": 26,
+    "wristWidthScale": 0.65,
+    "wristDepthScale": 0.85,
+    "unchangedAtOrAboveLocalZ": 0.025,
+    "fingerPathsChanged": false
+  },
+  "surfaceAudit": {
+    "vertices": 842,
+    "triangles": 1680,
+    "components": [
+      842
+    ],
+    "nonManifoldEdges": 0,
+    "zeroAreaFaces": 0,
+    "semanticGroups": [
+      "Palm",
+      "Index",
+      "Middle",
+      "Ring",
+      "Little",
+      "Thumb"
+    ],
+    "selfIntersectionTestPerformed": false,
+    "rigOrWeightsValidated": false
+  },
+  "nonAdjacentSelfSurfaceOverlapPairs": 0,
+  "geometricWristSections": [
+    {
+      "offsetTowardElbowMeters": 0.03,
+      "planeCenter": [
+        -0.36757364869117737,
+        -0.005512423813343048,
+        0.8707221746444702
+      ],
+      "surfaceMedian": [
+        -0.36694449186325073,
+        -0.002562799956649542,
+        0.8710905909538269
+      ],
+      "uniqueIntersectionSamples": 28,
+      "axisAlignedExtentMeters": [
+        0.036546400000000034,
+        0.0630607,
+        0.023257399999999984
+      ],
+      "verifiedAnatomicalSeam": false
+    },
+    {
+      "offsetTowardElbowMeters": 0.045,
+      "planeCenter": [
+        -0.35965919494628906,
+        -0.005129094701260328,
+        0.8834584951400757
+      ],
+      "surfaceMedian": [
+        -0.35913941264152527,
+        0.006595599930733442,
+        0.8825196027755737
+      ],
+      "uniqueIntersectionSamples": 29,
+      "axisAlignedExtentMeters": [
+        0.03924439999999996,
+        0.06556379999999999,
+        0.024761399999999933
+      ],
+      "verifiedAnatomicalSeam": false
+    },
+    {
+      "offsetTowardElbowMeters": 0.06,
+      "planeCenter": [
+        -0.35174474120140076,
+        -0.004745766054838896,
+        0.8961948156356812
+      ],
+      "surfaceMedian": [
+        -0.34711000323295593,
+        0.009255300275981426,
+        0.8940981030464172
+      ],
+      "uniqueIntersectionSamples": 28,
+      "axisAlignedExtentMeters": [
+        0.040526600000000024,
+        0.059931700000000004,
+        0.02526890000000004
+      ],
+      "verifiedAnatomicalSeam": false
+    }
+  ],
+  "targetSectionOffsetMeters": 0.045,
+  "poseTrials": [
+    {
+      "rollDegrees": 0,
+      "slideAlongHandleMeters": 0,
+      "wristCenter": [
+        -0.4174025356769562,
+        0.052610643208026886,
+        0.8792494535446167
+      ],
+      "wristTargetDistanceMeters": 0.07431466694520932,
+      "outwardAxisErrorDegrees": 63.46936210761424,
+      "anchorErrorMeters": 9.313225746154785e-10,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": 90,
+      "slideAlongHandleMeters": 0,
+      "wristCenter": [
+        -0.4514025151729584,
+        -0.03572394698858261,
+        0.828249454498291
+      ],
+      "wristTargetDistanceMeters": 0.11510288133207434,
+      "outwardAxisErrorDegrees": 121.84549313228499,
+      "anchorErrorMeters": 4.656612873077393e-10,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": -90,
+      "slideAlongHandleMeters": 0,
+      "wristCenter": [
+        -0.3154025375843048,
+        0.023165786638855934,
+        0.862249493598938
+      ],
+      "wristTargetDistanceMeters": 0.05097413654465101,
+      "outwardAxisErrorDegrees": 58.15451187667134,
+      "anchorErrorMeters": 4.656612873077393e-10,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": 180,
+      "slideAlongHandleMeters": 0,
+      "wristCenter": [
+        -0.349402517080307,
+        -0.06516881287097931,
+        0.8112494945526123
+      ],
+      "wristTargetDistanceMeters": 0.10160888650066222,
+      "outwardAxisErrorDegrees": 116.53063607115293,
+      "anchorErrorMeters": 4.190951585769653e-09,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": 0,
+      "slideAlongHandleMeters": 0.03,
+      "wristCenter": [
+        -0.4174025356769562,
+        0.037610627710819244,
+        0.9052302241325378
+      ],
+      "wristTargetDistanceMeters": 0.06980183299220817,
+      "outwardAxisErrorDegrees": 63.46936210761424,
+      "anchorErrorMeters": 0.0,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": 90,
+      "slideAlongHandleMeters": 0.03,
+      "wristCenter": [
+        -0.4514025151729584,
+        -0.05072396248579025,
+        0.8542302250862122
+      ],
+      "wristTargetDistanceMeters": 0.11224215518436244,
+      "outwardAxisErrorDegrees": 121.84549313228499,
+      "anchorErrorMeters": 0.0,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": -90,
+      "slideAlongHandleMeters": 0.03,
+      "wristCenter": [
+        -0.3154025375843048,
+        0.008165771141648293,
+        0.8882302641868591
+      ],
+      "wristTargetDistanceMeters": 0.044136054506049904,
+      "outwardAxisErrorDegrees": 58.15451187667134,
+      "anchorErrorMeters": 0.0,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    },
+    {
+      "rollDegrees": 180,
+      "slideAlongHandleMeters": 0.03,
+      "wristCenter": [
+        -0.349402517080307,
+        -0.08016882836818695,
+        0.8372302651405334
+      ],
+      "wristTargetDistanceMeters": 0.09835647658657994,
+      "outwardAxisErrorDegrees": 116.53063607115293,
+      "anchorErrorMeters": 3.725290298461914e-09,
+      "surfaceCrossingTriangles": 0,
+      "eligible": true
+    }
+  ],
+  "selectedPose": {
+    "rollDegrees": -90,
+    "slideAlongHandleMeters": 0.03,
+    "wristCenter": [
+      -0.3154025375843048,
+      0.008165771141648293,
+      0.8882302641868591
+    ],
+    "wristTargetDistanceMeters": 0.044136054506049904,
+    "outwardAxisErrorDegrees": 58.15451187667134,
+    "anchorErrorMeters": 0.0,
+    "surfaceCrossingTriangles": 0,
+    "eligible": true
+  },
+  "originalPoseTargetDistanceMeters": 0.07431466694520932,
+  "sourceGeometryPreserved": true,
+  "sourceHandReplaced": false,
+  "wristSeamVerified": false,
+  "attachmentApproved": false,
+  "graspPoseVerified": false,
+  "fullCharacterScore": null,
+  "limitations": [
+    "SLICE_IS_NOT_ANATOMICAL_SEAM",
+    "RIGID_DISTANCE_MINIMUM_IS_NOT_ATTACHMENT_APPROVAL",
+    "STATIC_SURFACE_TEST_NOT_SOLID_OR_ANIMATION",
+    "PALM_FINGERS_STILL_SIMPLIFIED",
+    "NO_SOURCE_CUT_OR_MERGE"
+  ],
+  "renders": [
+    {
+      "file": "grip_front.png",
+      "sha256": "8e316a98973414263dfb3e91c02169769b6897dcdac87029faec365790bd4cd8",
+      "saberVisible": true
+    },
+    {
+      "file": "grip_back.png",
+      "sha256": "b4b1237d8304ddfbf76637cfc599f4aa8508ad7c566f685fcaf03921ff28205e",
+      "saberVisible": true
+    },
+    {
+      "file": "bare_front.png",
+      "sha256": "5858dd003430caea989aa23cd48770f1500610995ad3a709ae0035477c36b7b1",
+      "saberVisible": false
+    },
+    {
+      "file": "bare_side.png",
+      "sha256": "01451b7a62bb6174ebbd2a085044b58e42ce2274ead792ba634aa23a73d64632",
+      "saberVisible": false
+    },
+    {
+      "file": "wrist_context_UNMERGED.png",
+      "sha256": "9481df5542bdb07bec4149b90f9166024fa843df9df06766974b54353e1b54b2",
+      "sourceHandStillPresent": true,
+      "merged": false
+    }
+  ],
+  "blendFile": "CH101_TaperedHandWristStudy_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "0ac9dac544a025270fcdf2f4446d10a87e212eb6ddb88041f76b1bd752378e82"
+}

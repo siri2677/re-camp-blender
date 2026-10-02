@@ -1,0 +1,138 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-provider-comparison-v040",
+  "recordedAt": "2026-08-26",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "b13758e59c8e7ec3706974c30eaa6ef6dafedb97",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "referenceManifestSha256": "9f22189c6c8f18a82c38b1caf5be31981b146d2ad7800521419b7c5cae45cafa",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cudaCapabilities": ["7.5", "7.5"],
+    "blender": "3.0.1",
+    "status": "READY_GPU_VISIBLE"
+  },
+  "providers": {
+    "tripoSR": {
+      "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+      "attempts": [
+        {
+          "label": "attempt-01",
+          "foregroundRatio": 0.85,
+          "sourceSha256": "9be9e35b1c578fc5f0d9a975133162c2db866f6913a5192521fd7501e01d873e",
+          "overallScore": 0.502286,
+          "silhouetteScore": 0.422259,
+          "appearanceScore": 0.511272,
+          "colorScore": 0.201369,
+          "faceDetailScore": 0.878899,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": true
+        },
+        {
+          "label": "attempt-02-r080",
+          "foregroundRatio": 0.8,
+          "sourceSha256": "4d6a51811ebd067c27d1c9ff3cb3fb2ee5daff0bd9d0a74513b73a24b916662b",
+          "overallScore": 0.49626,
+          "silhouetteScore": 0.41225,
+          "appearanceScore": 0.513192,
+          "colorScore": 0.198187,
+          "faceDetailScore": 0.850684,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": false,
+          "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+        },
+        {
+          "label": "attempt-03-r098",
+          "foregroundRatio": 0.98,
+          "sourceSha256": "12e42c9bcb464e218bc29867996ad479358bddbf25b445f3bbe9a129d2e6f0ba",
+          "overallScore": 0.514884,
+          "silhouetteScore": 0.445515,
+          "appearanceScore": 0.501196,
+          "colorScore": 0.210645,
+          "faceDetailScore": 0.857259,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": true
+        }
+      ],
+      "rankingStatus": "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW",
+      "bestCandidate": "attempt-03-r098",
+      "strictVisualFailureReasons": [
+        "OVERALL_IDENTITY_SCORE_WEAK",
+        "SILHOUETTE_PROPORTION_MISMATCH",
+        "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+        "OUTFIT_COLOR_BLOCKING_WEAK"
+      ]
+    },
+    "stableFast3D": {
+      "commit": "ff21fc491b4dc5314bf6734c7c0dabd86b5f5bb2",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "failureReason": "HF_GATED_MODEL_AUTH_REQUIRED",
+      "manifestCreated": false
+    },
+    "instantMesh": {
+      "commit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "attempts": [
+        {
+          "label": "instantmesh-v037-retry",
+          "foregroundRatio": 0.9,
+          "sourceSha256": "af63a8bbfeb42e81d83d71388bd651aafc8a3b27e9eb345dcb4670f915a881c0",
+          "overallScore": 0.498227,
+          "silhouetteScore": 0.407835,
+          "appearanceScore": 0.532535,
+          "colorScore": 0.351191,
+          "faceDetailScore": 0.789254,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": false,
+          "failureReasons": ["OVERALL_SCORE_BELOW_MINIMUM"]
+        },
+        {
+          "label": "instantmesh-r080",
+          "foregroundRatio": 0.8,
+          "sourceSha256": "371dfe0cdd634c295d824870b2a980e698def2f595f23b6ce5047d0ef1a54b9e",
+          "overallScore": 0.483651,
+          "silhouetteScore": 0.388862,
+          "appearanceScore": 0.523563,
+          "colorScore": 0.347649,
+          "faceDetailScore": 0.820677,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": false,
+          "failureReasons": ["OVERALL_SCORE_BELOW_MINIMUM", "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"]
+        },
+        {
+          "label": "instantmesh-r098",
+          "foregroundRatio": 0.98,
+          "sourceSha256": "352e84d185516924be4f5da694e9138b6c608c1007e6c74d96f0e3c36ac4ff40",
+          "overallScore": 0.508256,
+          "silhouetteScore": 0.413783,
+          "appearanceScore": 0.557187,
+          "colorScore": 0.385785,
+          "faceDetailScore": 0.804984,
+          "technicalScore": 1.0,
+          "eligibleForHumanReview": false,
+          "failureReasons": ["LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"]
+        }
+      ],
+      "rankingStatus": "REGENERATE_REQUIRED",
+      "bestCandidate": "instantmesh-r098"
+    }
+  },
+  "finalDecision": {
+    "status": "REGENERATE_REQUIRED_AFTER_ASSISTED_VISUAL_REVIEW",
+    "bestOverallCandidate": "tripoSR:attempt-03-r098",
+    "bestTextureCandidate": "instantMesh:instantmesh-r098",
+    "alphaReviewReady": false,
+    "productionMesh": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION"
+  },
+  "notes": [
+    "Blender 3.0.1 numpy compatibility was restored with python3-numpy.",
+    "Workbench palette colors were restored from exported palette material names in tools commit b13758e.",
+    "No candidate was promoted to Gate B, Production Mesh, Unity, FBX, GLB package, or Android.",
+    "Kaggle working outputs are temporary; binary artifacts remain outside Git and are represented by SHA256 only.",
+    "Next quality step requires a gated SF3D/HF credential, a better multiview provider, or manual/artist mesh refinement; lowering gates is not allowed."
+  ]
+}

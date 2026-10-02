@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "ch101-spar3d-kaggle-diagnostic-v007",
+  "recordedAt": "2026-09-03",
+  "runtime": "Kaggle",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "c772484f5e22a3dcbba032ab68cf153a76dc1417",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "runtimeCompatibilityPatch": "SPAR3D_T4_BF16_CLI_CHUNKED_ATTENTION_BACKOFF_V005",
+  "settings": {
+    "gpu": "2x Tesla T4 15360MB",
+    "selectedDevice": "GPU 0",
+    "decoderChunkSize": 8192,
+    "attentionQueryChunkSize": 256,
+    "textureResolution": 512,
+    "dependencyPreflight": "READY_IMPORTS"
+  },
+  "reproduction": {
+    "status": "SPAR3D_DIAGNOSTIC_EXECUTED",
+    "returnCode": 0,
+    "diagnosticMeshCount": 1,
+    "meshOutputNonEmpty": true,
+    "candidateRegistered": false,
+    "productionMesh": false,
+    "durationSeconds": 556.428,
+    "referenceDownload": "PASS_MEDIA_GITHUB_LFS_BINARY",
+    "secretValuesRecorded": false
+  },
+  "artifacts": {
+    "meshOutputsRecorded": false,
+    "meshSha256Recorded": false,
+    "metadataRecordingFixAppliedAfterRun": true,
+    "rawProviderLogsPersisted": false,
+    "ephemeralOutputRoot": "/kaggle/working/re-camp-ai3d/CH101/spar3d-diagnostic"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Use the V005 runtime fix as the baseline for the next artifact-producing run; the wrapper now records diagnostic mesh paths and SHA256, then run Blender refine/evaluate/strict visual QA while keeping Production/Unity blocked."
+}

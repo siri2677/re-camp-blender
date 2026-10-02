@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "ch101-spar3d-kaggle-root-cause-v004",
+  "recordedAt": "2026-09-03",
+  "runtime": "Kaggle",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "8826b7105fc03717f1f47ec4f9e954a03312cf0d",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "reproduction": {
+    "status": "SPAR3D_DIAGNOSTIC_FAILED",
+    "returnCode": 1,
+    "gpu": "2x Tesla T4 15360MB",
+    "selectedDevice": "GPU 0",
+    "preflight": "READY_GPU_VISIBLE",
+    "dependencyPreflight": "READY_IMPORTS",
+    "referenceDownload": "PASS_MEDIA_GITHUB_LFS_BINARY",
+    "diagnosticMeshCount": 0,
+    "candidateRegistered": false,
+    "executionFailureDetail": "CUDA out of memory; requested 5.94 GiB with 2.95 GiB free and 11.61 GiB already in use"
+  },
+  "rootCause": {
+    "status": "SOURCE_AND_RUNTIME_CONFIRMED",
+    "code": "SPAR3D_FULL_GRID_DECODER_PEAK_EXCEEDS_16GB_T4",
+    "evidence": "Pinned spar3d/system.py decodes the full 160-tet grid in one call inside triplane_to_meshes(). The patched T4 run reached this path, then attempted a 5.94 GiB allocation while the process already occupied 11.61 GiB on a 14.56 GiB usable GPU.",
+    "notAuthFailure": true,
+    "notCudaKernelFailure": true,
+    "notReferenceFileFailure": true,
+    "notCliDefaultsFailure": true
+  },
+  "fix": {
+    "patchId": "SPAR3D_T4_BF16_CLI_CHUNKED_V003",
+    "script": "scripts/ai3d/patch_spar3d_t4_compat.py",
+    "application": "run_spar3d_candidate.py applies the idempotent patch to the ephemeral provider checkout before execution",
+    "changes": [
+      "Decode the full grid in bounded 65536-vertex chunks",
+      "Expose SPAR3D_DECODER_CHUNK_SIZE for controlled runtime tuning",
+      "Keep T4 FP16 autocast fallback",
+      "Keep unconditional reduction_count_type and target_count defaults",
+      "Preserve detached pinned provider commit"
+    ],
+    "diagnosticTextureResolutionDefault": 512,
+    "productionMesh": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "validation": {
+    "focusedUnitTests": "PASS",
+    "pythonCompile": "PASS",
+    "providerSourcePatchFixture": "PASS",
+    "kaggleRetest": "PENDING_NEW_PATCH_COMMIT"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Push the chunked decoder patch, rerun Notebook 08 once on Kaggle, and record whether SPAR3D produces a non-empty diagnostic mesh without registering a candidate."
+}
