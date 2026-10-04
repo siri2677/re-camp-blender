@@ -61,6 +61,17 @@ blender --background --python-exit-code 1 --python tests/blender/test_shoulder_b
 
 ## 다음 실행
 
+공유: [연구용 릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-branch-boundaries-v001),
+[복원 pointer](../artifacts/CH101-latest-shoulder-branches.json).
+실제 Blend·4렌더·report·read-me·visual review 총 8개 파일과 ZIP의 SHA256을
+재다운로드 후 검증했다. 파일 무결성 검증이지 의상 승인이 아니다.
+
+- tools commit: `eb02025f6b7002a8297e36c128f5a27da6b65512`
+- ZIP: 21,016,432 bytes
+- ZIP SHA256: `9e20782c1b820ef9f4ac60f27a9716ceb2b96d337e2f5f31f3a25bab56f82ca2`
+
+### 제작 순서
+
 1. 4개 face-region별로 제한된 면 재제작을 진행한다. 공유 경계 곡선을 함께 정리하되
    기존 chart 대비 위치 오차와 영역 간 경계 일치를 기록한다. 단순 색상 변경으로 완료 처리하지 않는다.
 2. 임시 clip 외곽을 실제 몸통 부착 경계로 수정하고, coarse-edge 경로를 최종 주름/봉제선으로 확정한다.

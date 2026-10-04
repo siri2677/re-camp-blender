@@ -1,5 +1,22 @@
 # Review artifact sharing
 
+## October 5 shoulder branching boundary hypothesis
+
+`CH101-latest-shoulder-branches.json` restores the Blend containing four disjoint
+boundary routes, four colored reference regions and entry-ring/gap guides.
+Four renders, provenance/path report, read-me and visual review are included.
+ZIP and all **8 payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+This is **an open source-surface design chart, not a new garment or sewn shoulder**.
+The prior assembly remains visible; the chart and `BRANCH_GUIDE_*` objects stay
+hidden by default. All previous pointers and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-branches.json --output-dir artifacts/restored-shoulder-branches
+```
+
+[Execution plan](../plans/ch101-shoulder-branches-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-branch-boundaries-v001).
+
 ## October 5 bounded section-guided shoulder entry
 
 `CH101-latest-section-transition.json` restores the actual Blend, nine renders,
