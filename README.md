@@ -2,9 +2,22 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-10-03
+## Current status — 2026-10-04
 
-Latest: [clipped shoulder chart and seam correspondence](docs/plans/ch101-clipped-shoulder-seam-2026-10-03.md)
+Start with the [updated completed/remaining execution plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md).
+It separates completed tooling/local studies from unfinished geometry, UV/materials,
+whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
+
+Latest: [connected shoulder topology diagnostic](docs/plans/ch101-connected-shoulder-2026-10-04.md).
+The next step was implemented: 128 shared seam edges per skin and preserved sleeve
+vertices. **Rejected, not adopted:** 1,166 non-adjacent self-intersection pairs,
+4 body intersection pairs and sampled wall failure remain. The actual Blend,
+eight renders and failure indices are retained as a hidden diagnostic; the prior
+assembly stays visible. Five regression tests pass **by detecting/rejecting these
+failures**, not by approving the garment. Next: explicit seam-transition and
+front/back/underarm panel curves before rechecking thickness and collision.
+
+Previous: [clipped shoulder chart and seam correspondence](docs/plans/ch101-clipped-shoulder-seam-2026-10-03.md)
 replaces centroid-selected jagged borders with explicit triangle-plane cuts,
 preserves four UV layers by interpolation and maps a 34-point source seam to
 128 ordered sleeve samples. The 2.8 mm gap reflects the existing outer sleeve
