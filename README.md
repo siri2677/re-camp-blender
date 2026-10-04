@@ -2,13 +2,23 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-10-04
+## Current status — 2026-10-05
 
 Start with the [updated completed/remaining execution plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md).
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [connected shoulder topology diagnostic](docs/plans/ch101-connected-shoulder-2026-10-04.md).
+Latest: [12 mm section-guided shoulder entry](docs/plans/ch101-section-transition-2026-10-05.md).
+Separates closed arm contours from open torso paths and preserves the existing
+sleeve seam. Static QA passes for this **bounded local strip only**: zero tested
+self/body/equipment intersections, 0.210 mm minimum sampled body gap and
+0.314–0.800 mm sampled wall. Six Blender tests pass, including saved-file reopen.
+Nine renders still show a raised ridge and angular upper contour: **not adopted
+as the visual baseline**, not a complete shoulder or a new full-character score.
+Next: explicit front/back/underarm branching boundaries to the torso; do not
+blindly extend circular sections beyond the uniquely identifiable arm loop.
+
+Previous: [connected shoulder topology diagnostic](docs/plans/ch101-connected-shoulder-2026-10-04.md).
 The next step was implemented: 128 shared seam edges per skin and preserved sleeve
 vertices. **Rejected, not adopted:** 1,166 non-adjacent self-intersection pairs,
 4 body intersection pairs and sampled wall failure remain. The actual Blend,
