@@ -84,6 +84,17 @@ blender --background --python-exit-code 1 --python tests/blender/test_section_tr
 
 ## 다음 작업
 
+공유 완료: [연구용 프리릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-section-transition-study-v001),
+복원 pointer [CH101-latest-section-transition.json](../artifacts/CH101-latest-section-transition.json).
+실제 Blend·9개 렌더·report·read-me·visual review 총 13개 payload를 새 경로로
+재다운로드해 ZIP 및 각 파일 SHA256을 모두 검증했다. 저장 검증은 외형 승인이 아니다.
+
+- tools commit: `f7bb8071afb011162d2b6d61f0c6aad888c71e43`
+- ZIP 크기: 27,111,771 bytes
+- ZIP SHA256: `0fb40ed789e2168e4605119b630a6b9fdf133ccb8cf3549c0a93ae61061d68fe`
+
+### 이어서 실행할 순서
+
 1. 새 상단 링과 참조 시트에서 앞·뒤·겨드랑이–몸통 분기 제어 경계를 명시한다.
    +14 mm 이후의 모호한 원형 단면을 자동 연장하거나 미세 offset 반복으로 대체하지 않는다.
 2. 돌출된 턱을 포함한 전체 어깨 패널 면 흐름과 몸통 접합 topology를 설계한다.

@@ -1,5 +1,22 @@
 # Review artifact sharing
 
+## October 5 bounded section-guided shoulder entry
+
+`CH101-latest-section-transition.json` restores the actual Blend, nine renders,
+full section/provenance/QA report, read-me and visual review. ZIP and all **13
+payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+Only the 12 mm closed-arm entry strip passes static QA; this is **not the complete
+previously rejected shoulder sheet**. A raised ridge and angular upper contour
+remain, so the study is not adopted as the visual baseline. The previous assembly
+stays visible and the new study stays hidden. No older pointer is replaced.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-section-transition.json --output-dir artifacts/restored-section-transition
+```
+
+[Execution record and next action](../plans/ch101-section-transition-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-section-transition-study-v001).
+
 ## October 4 rejected connected-shoulder diagnostic
 
 `CH101-latest-connected-shoulder-diagnostic.json` restores the actual **rejected**
