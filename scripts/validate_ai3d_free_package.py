@@ -34,6 +34,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "clip_ch101_shoulder_seam.py",
     ROOT / "scripts" / "blender" / "author_ch101_connected_shoulder.py",
     ROOT / "scripts" / "blender" / "build_ch101_section_transition.py",
+    ROOT / "scripts" / "blender" / "design_ch101_shoulder_branches.py",
     ROOT / "scripts" / "blender" / "refine_ch101_patch_trim_handoff.py",
     ROOT / "scripts" / "blender" / "refine_ch101_sector_profile.py",
     ROOT / "scripts" / "blender" / "refine_ch101_shared_interface.py",

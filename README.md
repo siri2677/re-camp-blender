@@ -8,7 +8,15 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [12 mm section-guided shoulder entry](docs/plans/ch101-section-transition-2026-10-05.md).
+Latest: [shoulder branching boundary study](docs/plans/ch101-shoulder-branches-2026-10-05.md).
+Four disjoint source-edge paths divide a 436-vertex / 693-triangle open reference
+chart into four connected face regions. Original meshes remain unchanged; six
+Blender tests pass, including file reopen and rejection of altered paths.
+This is a **panel-boundary hypothesis, not a new garment shell**. Coarse folds,
+entry gaps and the provisional torso clip border remain. Next: constrained
+region retopology and shared-curve refinement before thickness/sewing QA.
+
+Previous: [12 mm section-guided shoulder entry](docs/plans/ch101-section-transition-2026-10-05.md).
 Separates closed arm contours from open torso paths and preserves the existing
 sleeve seam. Static QA passes for this **bounded local strip only**: zero tested
 self/body/equipment intersections, 0.210 mm minimum sampled body gap and
