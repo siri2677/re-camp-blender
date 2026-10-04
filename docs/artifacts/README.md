@@ -1,5 +1,21 @@
 # Review artifact sharing
 
+## October 4 rejected connected-shoulder diagnostic
+
+`CH101-latest-connected-shoulder-diagnostic.json` restores the actual **rejected**
+connection experiment: Blend, eight renders, full report/failure indices, read-me
+and visual review. ZIP and all **12 payloads** were freshly downloaded and SHA256
+verified on 2026-10-04. This verifies storage, **not geometry acceptance**.
+Shared seam topology exists, but self/body intersections and sampled wall failure
+remain. The trial stays hidden; prior upper-interface assembly remains visible.
+No full-character pointer, UV/rig status or Gate B approval is changed.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-connected-shoulder-diagnostic.json --output-dir artifacts/restored-connected-shoulder-diagnostic
+```
+
+[Execution record and next action](../plans/ch101-connected-shoulder-2026-10-04.md).
+
 ## October 3 clipped shoulder reference chart and seam correspondence
 
 `CH101-latest-clipped-shoulder-seam.json` restores an open clipped chart with

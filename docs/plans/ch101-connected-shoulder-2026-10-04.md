@@ -96,3 +96,19 @@ blender --background --python-exit-code 1 --python tests/blender/test_connected_
 `adoptionAllowed=false`, `diagnosticOnly=true`, `rigBound=false`, `fullCharacterScore=null`.
 `sourceStatus=AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `gateB=PENDING_HUMAN_REVIEW`,
 `unityInputAllowed=false`, `productionPromotionAllowed=false`.
+
+## 공유·재다운로드 확인
+
+[거부된 어깨 연결 진단 v001 릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-connected-shoulder-diagnostic-v001)
+게시 완료. ZIP과 **12개 payload**를 새로 내려받아 SHA256을 확인했다.
+
+- Tools commit `4b1de5b96858b9443f69fa7138d8a50eabec7dd4`.
+- ZIP 24,737,254 bytes, SHA256
+  `3c1703b44795fd7731ae7ba06805c412b5f855353ae7616408a07cfe7d7c562e`.
+- 복원 pointer: `docs/artifacts/CH101-latest-connected-shoulder-diagnostic.json`.
+- 상태: `REJECTED_DIAGNOSTIC_AVAILABLE_NOT_APPROVED`.
+  파일 검증 PASS를 형상 승인 PASS로 해석하지 않는다.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-connected-shoulder-diagnostic.json --output-dir artifacts/restored-connected-shoulder-diagnostic
+```
