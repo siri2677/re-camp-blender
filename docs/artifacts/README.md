@@ -1,5 +1,24 @@
 # Review artifact sharing
 
+## October 5 bounded shoulder crease fairing
+
+`CH101-latest-shoulder-crease-fairing.json` restores the actual Blend, eight
+matched before/after renders, full optimization/QA report, read-me, visual review
+and rejected quad-average-objective summary. ZIP and all **13 payloads** were
+freshly downloaded and SHA256-verified on 2026-10-05.
+Render-triangle bending drops 26.16% within the 1.45 mm vertex movement budget;
+all 703 pinned vertices and 88 shared branch edges remain fixed. Large folds,
+irregular edge flow and the provisional torso border remain. This open,
+unoffset study is not adopted as the visual baseline or approved as a garment.
+It stays hidden by default; the previous assembly/full-character pointers remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-crease-fairing.json --output-dir artifacts/restored-shoulder-crease-fairing
+```
+
+[Execution plan](../plans/ch101-shoulder-crease-fairing-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-crease-fairing-v001).
+
 ## October 5 shared shoulder quad work cage
 
 `CH101-latest-shoulder-quad-cage.json` restores the actual Blend with 2,079 quads

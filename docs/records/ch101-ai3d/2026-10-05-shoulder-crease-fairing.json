@@ -36,5 +36,15 @@
   "reviewedRenderCount": 8,
   "blendSha256": "fda96bec01f2ddbab72c559effb7f61e8471340e9730cd34870d31847199908b",
   "sourceStudyPointer": "docs/artifacts/CH101-latest-shoulder-quad-cage.json",
+  "publishedStudyPointer": "docs/artifacts/CH101-latest-shoulder-crease-fairing.json",
+  "releaseTag": "ch101-shoulder-crease-fairing-v001",
+  "toolsCommit": "7675e23f25c78587c96e8f6bafcd12925c9c59b8",
+  "downloadVerification": {
+    "date": "2026-10-05",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 13,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
+  },
   "nextTask": "Design simplified major folds and deformation-aware edge flow, then actual torso attachment border and thickness/shared sleeve connection QA. Bounded smoothing alone is not B completion."
 }

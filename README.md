@@ -17,6 +17,9 @@ irregular junctions and the provisional torso border remain, so this local
 open-surface study is not adopted as the visual baseline or a completed garment.
 Next: explicit major-fold redesign and deformation-aware edge flow, then torso
 attachment/thickness QA. The whole-character score and rig status are unchanged.
+[Actual artifact release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-crease-fairing-v001)
+and [restore pointer](docs/artifacts/CH101-latest-shoulder-crease-fairing.json):
+13 payloads freshly downloaded and SHA256-verified.
 
 Previous: [shared shoulder quad cage](docs/plans/ch101-shoulder-quad-cage-2026-10-05.md).
 Rebuilds the four regions as 2,079 coplanar quads with 88 shared branch edges.

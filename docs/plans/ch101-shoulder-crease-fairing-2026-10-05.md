@@ -69,9 +69,15 @@ blender --background --python-exit-code 1 --python scripts/blender/fair_ch101_sh
 blender --background --python-exit-code 1 --python tests/blender/test_shoulder_crease_fairing.py -- --source <restored-quad.blend> --artifact <new-output-directory>/CH101_CreaseAwareShoulderFairing_NOT_PRODUCTION_v001.blend
 ```
 
-실제 Blend·8장 렌더·report·read-me·visual review·거부 시험 요약을 버전별
-GitHub prerelease로 공유한다. 배포 후 ZIP 및 payload 재다운로드 검증 결과를
-이 절과 새 복원 pointer에 추가한다. 기존 pointer와 전신 rounded-hem 기준본은 유지한다.
+공유 완료: [연구용 릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-crease-fairing-v001),
+[복원 pointer](../artifacts/CH101-latest-shoulder-crease-fairing.json).
+실제 Blend·8장 렌더·report·read-me·visual review·거부 시험 요약 **13개 payload**를
+새 경로로 재다운로드해 ZIP 및 각 파일 SHA256을 검증했다. 다운로드 성공은
+저장/복원 검증이며 의상·외형 승인과 다르다. 기존 pointer와 전신 rounded-hem 기준본은 유지한다.
+
+- tools commit: `7675e23f25c78587c96e8f6bafcd12925c9c59b8`
+- ZIP: 23,110,536 bytes
+- ZIP SHA256: `2a7c0e6b5bb4a58d9cd124dbc1ac16b87acf85e79dab6070226c1567194b8a5a`
 
 ## 이어서 할 순서
 
