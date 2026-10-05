@@ -67,13 +67,14 @@ def bending(obj,edges):
                 maximumDegrees=math.degrees(max(angles)),interiorEdgeCount=len(angles))
 
 
-def move_points(obj,original,adjacency,pinned):
+def move_points(obj,original,adjacency,pinned,maximum_move=None,point_constraint=None,iterations=None,refresh_triangles=False):
     """Descent on render triangles, including each quad's internal diagonal.
 
     Use the source tessellation for stable optimization; the final audit
     independently measures Blender's actual post-movement tessellation.
     """
     base=np.array([list(p) for p in original],dtype=np.float64);points=base.copy()
+    maximum_move=MAX_MOVE if maximum_move is None else maximum_move
     for vertex,point in zip(obj.data.vertices,original):vertex.co=point
     obj.data.update();obj.data.calc_loop_triangles()
     faces=np.array([tuple(f.vertices) for f in obj.data.loop_triangles])
@@ -102,7 +103,20 @@ def move_points(obj,original,adjacency,pinned):
         return angles*angles*lengths
     records=[]
     local_steps=np.array([min(STEP,.1*min(np.linalg.norm(base[i]-base[j]) for j in adjacency[i])) for i in range(len(base))])
-    for iteration in range(ITERATIONS):
+    for iteration in range(ITERATIONS if iterations is None else iterations):
+        if refresh_triangles:
+            for vertex,point in zip(obj.data.vertices,points):vertex.co=point
+            obj.data.update();obj.data.calc_loop_triangles()
+            faces=np.array([tuple(f.vertices) for f in obj.data.loop_triangles])
+            edge_faces=defaultdict(list);vertex_faces=defaultdict(set)
+            for fi,face in enumerate(faces):
+                for i in face:vertex_faces[int(i)].add(fi)
+                for a,b in zip(face,np.roll(face,-1)):edge_faces[tuple(sorted((int(a),int(b))))].append(fi)
+            pairs=[(edge,fs) for edge,fs in edge_faces.items() if len(fs)==2]
+            edge_ids=np.array([e for e,_ in pairs]);face_pairs=np.array([fs for _,fs in pairs])
+            face_edges=defaultdict(set)
+            for ei,fs in enumerate(face_pairs):
+                for fi in fs:face_edges[int(fi)].add(ei)
         n=normals(points,np.arange(len(faces)));current=float(energy(points,n).sum())
         accepted_vertices=0;maximum_step=0
         for i in range(len(points)):
@@ -125,7 +139,10 @@ def move_points(obj,original,adjacency,pinned):
             for backtrack in range(10):
                 trial=points.copy();trial[i]+=direction*(local_steps[i]/2**backtrack)
                 delta=trial[i]-base[i];distance=np.linalg.norm(delta)
-                if distance>MAX_MOVE:trial[i]=base[i]+delta*(MAX_MOVE/distance)
+                if distance>maximum_move:trial[i]=base[i]+delta*(maximum_move/distance)
+                if point_constraint is not None:
+                    trial[i]=point_constraint(i,trial[i])
+                    if np.linalg.norm(trial[i]-base[i])>maximum_move+1e-10:continue
                 trial_normals=n.copy();trial_normals[affected_faces]=normals(trial,affected_faces)
                 value=float(energy(trial,trial_normals,affected_edges).sum())
                 if value<local_current-1e-12:

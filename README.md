@@ -8,7 +8,18 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [bounded shoulder crease fairing](docs/plans/ch101-shoulder-crease-fairing-2026-10-05.md).
+Latest: [feature-locked shoulder quad reconnection](docs/plans/ch101-shoulder-edge-flow-2026-10-05.md).
+Changes 520 faces through 276 quad-edge rotations and bounded geometric correction.
+Regular interior junctions increase 950 → 974; actual render-triangle bending
+drops another 4.56%. Original meshes and 709 pinned study vertices remain fixed;
+zero tested self-intersections and source-chart sample errors within 1.5 mm.
+Sixteen Blender tests pass (nine new + seven prior regressions); twelve shaded/wire
+views were inspected. Major folds and many irregular poles remain: this hidden,
+open study is not the visual baseline, final deformation edge flow or a garment.
+Next: explicit major-fold/path design, then actual torso border and thickness QA.
+The whole-character score, existing baseline and Gate B/Unity restrictions remain.
+
+Previous: [bounded shoulder crease fairing](docs/plans/ch101-shoulder-crease-fairing-2026-10-05.md).
 Moves 1,547 cage vertices by at most 1.450030 mm while all 703 pinned vertices
 and 88 shared branch edges stay fixed. Actual render-triangle bending drops
 26.16%; zero tested non-adjacent self-intersections and orientation errors.
