@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "ch101-deformation-layout-v001",
+  "recordedAt": "2026-10-05",
+  "strategyId": "CH101_SHARED_COURSE_AND_FOLD_LAYOUT_V001",
+  "status": "LOCAL_COURSE_FOLD_LAYOUT_REVIEWED_NOT_ADOPTED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "adoptionAllowed": false,
+  "completeShoulderPanel": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "originalsPreserved": true,
+  "geometryShapeChanged": false,
+  "majorFoldShapeRedesigned": false,
+  "deformationValidated": false,
+  "garmentStaticQA": false,
+  "sourceBodyMovedVertices": 0,
+  "bodyCumulativeMaximumMoveMeters": 0.002999919,
+  "bodyCumulativeMoveLimitMeters": 0.003,
+  "newUVAuthored": false,
+  "defaultStudyVisible": false,
+  "qa": {
+    "vertices": 2707,
+    "triangles": 5056,
+    "courseCount": 3,
+    "courseSharedEdgeCounts": [
+      128,
+      144,
+      177
+    ],
+    "longitudinalRouteCount": 4,
+    "courseBranchCrossings": 12,
+    "domainCounts": [
+      {
+        "domain": 0,
+        "faces": 22,
+        "components": 1
+      },
+      {
+        "domain": 1,
+        "faces": 22,
+        "components": 1
+      },
+      {
+        "domain": 2,
+        "faces": 88,
+        "components": 1
+      },
+      {
+        "domain": 3,
+        "faces": 886,
+        "components": 1
+      },
+      {
+        "domain": 4,
+        "faces": 300,
+        "components": 1
+      },
+      {
+        "domain": 5,
+        "faces": 346,
+        "components": 1
+      },
+      {
+        "domain": 6,
+        "faces": 328,
+        "components": 1
+      },
+      {
+        "domain": 7,
+        "faces": 698,
+        "components": 1
+      },
+      {
+        "domain": 8,
+        "faces": 145,
+        "components": 1
+      },
+      {
+        "domain": 9,
+        "faces": 240,
+        "components": 1
+      },
+      {
+        "domain": 10,
+        "faces": 350,
+        "components": 1
+      },
+      {
+        "domain": 11,
+        "faces": 471,
+        "components": 1
+      },
+      {
+        "domain": 12,
+        "faces": 175,
+        "components": 1
+      },
+      {
+        "domain": 13,
+        "faces": 196,
+        "components": 1
+      },
+      {
+        "domain": 14,
+        "faces": 261,
+        "components": 1
+      },
+      {
+        "domain": 15,
+        "faces": 528,
+        "components": 1
+      }
+    ],
+    "majorFoldGroupCount": 5,
+    "classifiedMajorFoldEdges": 64,
+    "harmonicResidual": 2.1094237467877974e-15,
+    "maximumSourceEdgeErrorMeters": 0,
+    "sourceSurfaceAreaSquareMeters": 0.08297834547631594,
+    "chartSurfaceAreaSquareMeters": 0.08297834529196466,
+    "relativeAreaError": 2.221679441544456e-9,
+    "maximumSourceTriangleRelativeAreaError": 0.0006003202059496171,
+    "connectedComponents": 1,
+    "boundaryLoops": 2,
+    "euler": 0,
+    "zeroAreaFaces": 0,
+    "orientationErrors": 0,
+    "nonAdjacentSelfIntersectionPairs": 0,
+    "originalBodyMovedVertices": 0,
+    "geometryShapeChanged": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "eligible": true
+  },
+  "blenderTestsPassed": 9,
+  "reviewedRenderCount": 12,
+  "savedEditableGuides": 12,
+  "foldPolicies": [
+    {
+      "id": 141,
+      "policy": "DEFER_TORSO_BORDER",
+      "lengthMeters": 0.0426854810279633,
+      "touchesOuterClip": true
+    },
+    {
+      "id": 193,
+      "policy": "REDESIGN_UNDERARM_NETWORK",
+      "lengthMeters": 0.43763306096136484,
+      "touchesOuterClip": false
+    },
+    {
+      "id": 611,
+      "policy": "DEFER_TORSO_BORDER",
+      "lengthMeters": 0.0655690345142649,
+      "touchesOuterClip": true
+    },
+    {
+      "id": 932,
+      "policy": "DEFER_TORSO_BORDER",
+      "lengthMeters": 0.030541467357704133,
+      "touchesOuterClip": true
+    },
+    {
+      "id": 1874,
+      "policy": "REMOVE_MICRO_CREASE_IN_CAP_REBUILD",
+      "lengthMeters": 0.00038422139003140823,
+      "touchesOuterClip": false
+    }
+  ],
+  "blendSha256": "2eec54b4e8b0a829c94304f7ed54fb93b42eb84b469d4470353d38af39370540",
+  "sourceStudyPointer": "docs/artifacts/CH101-latest-shoulder-edge-flow.json",
+  "publishedStudyPointer": "docs/artifacts/CH101-latest-shoulder-deformation-layout.json",
+  "releaseTag": "ch101-shoulder-deformation-layout-v001",
+  "downloadVerification": {
+    "status": "PENDING_PUBLICATION_AND_FRESH_DOWNLOAD"
+  },
+  "nextTask": "Author simplified underarm/cap support curves and actual replacement patch geometry using these domains; finalize actual torso attachment border, then shared sleeve connection/thickness and collision QA."
+}

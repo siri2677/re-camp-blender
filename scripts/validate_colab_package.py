@@ -42,6 +42,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/retopologize_ch101_shoulder_regions.py",
     "scripts/blender/fair_ch101_shoulder_panels.py",
     "scripts/blender/author_ch101_shoulder_edge_flow.py",
+    "scripts/blender/design_ch101_shoulder_deformation_layout.py",
     "scripts/blender/design_ch101_garment_panel.py",
     "scripts/blender/build_ch101_hem_binding.py",
     "scripts/blender/round_ch101_hem_binding.py",

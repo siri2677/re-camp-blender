@@ -8,7 +8,18 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [feature-locked shoulder quad reconnection](docs/plans/ch101-shoulder-edge-flow-2026-10-05.md).
+Latest: [shoulder course and fold design layout](docs/plans/ch101-shoulder-deformation-layout-2026-10-05.md).
+Three actual shared transverse courses cross four longitudinal routes to form
+16 connected surface design domains. All 64 major crease edges are classified:
+44 underarm redesign, 18 deferred until torso border design, two cap micro-crease
+removal candidates. Twelve editable guides and twelve review renders are saved.
+Nine Blender tests pass. Original geometry/UVs/materials/weights are unchanged.
+This is a hidden design chart, not a shape improvement, sewn garment or validated
+deformation mesh. Course spacing/kinks and major folds still need rebuilding.
+Next: author broad underarm/cap support curves and replacement patches, then actual
+torso attachment boundary and thickness/shared-sleeve QA. Gate B/Unity stay locked.
+
+Previous: [feature-locked shoulder quad reconnection](docs/plans/ch101-shoulder-edge-flow-2026-10-05.md).
 Changes 520 faces through 276 quad-edge rotations and bounded geometric correction.
 Regular interior junctions increase 950 → 974; actual render-triangle bending
 drops another 4.56%. Original meshes and 709 pinned study vertices remain fixed;
