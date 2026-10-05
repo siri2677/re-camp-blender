@@ -84,8 +84,20 @@ blender --background --python-exit-code 1 --python scripts/blender/design_ch101_
 blender --background --python-exit-code 1 --python tests/blender/test_shoulder_deformation_layout.py -- --source <restored-edge-flow.blend> --artifact <new-directory>/CH101_ShoulderDeformationLayout_NOT_PRODUCTION_v001.blend
 ```
 
-Blend·12장 렌더·report·read-me·visual review·주름 정책을 별도 연구용 Release에
-보존하고, 공개 후 새 경로 다운로드와 모든 SHA256 검증 결과를 기록한다.
+공유 완료: [연구용 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-deformation-layout-v001),
+[복원 pointer](../artifacts/CH101-latest-shoulder-deformation-layout.json).
+Blend·12장 렌더·report·read-me·visual review·주름 정책 **17개 payload**를 새 경로로
+다운로드해 ZIP과 모든 파일 SHA256을 검증했다. 공유 utility 회귀 검사 2개도 통과했다.
+저장·복원 검증은 주름 형상·의상·변형 승인과 다르다.
+이전 pointer와 전신 rounded-hem 기준본은 유지한다.
+
+- tools commit: `80807a01a8a31e10ab530b61d42f00eb9e0edba8`
+- ZIP: 25,679,903 bytes
+- ZIP SHA256: `b545b60ecc6a19cb9d72337eb514af5b0bcf7e3bf0b885d474812d327764b6c6`
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-deformation-layout.json --output-dir artifacts/restored-shoulder-deformation-layout
+```
 
 ## 이어서 할 순서
 

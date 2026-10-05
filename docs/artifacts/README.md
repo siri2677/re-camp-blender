@@ -1,5 +1,27 @@
 # Review artifact sharing
 
+## October 5 shoulder course and fold design layout
+
+`CH101-latest-shoulder-deformation-layout.json` restores the actual Blend,
+twelve original/course/translucent-fold review views, full provenance/QA report,
+read-me, visual review and authored fold policies. ZIP and all **17 payloads**
+were freshly downloaded and SHA256-verified on 2026-10-05.
+Three actual shared transverse courses cross four longitudinal routes once each,
+forming 16 connected design domains. Twelve editable guides are saved.
+All 64 major crease edges are classified: 44 underarm redesign, 18 deferred
+until actual torso border design, two cap micro-crease removal candidates.
+Original shape/UVs/materials/weights are unchanged. This is a hidden design chart,
+not a shape improvement, final deformation mesh, sewn garment or quality score.
+Course spacing/kinks and source folds still require actual rebuilding. Older
+study pointers, visible assembly and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-deformation-layout.json --output-dir artifacts/restored-shoulder-deformation-layout
+```
+
+[Execution plan](../plans/ch101-shoulder-deformation-layout-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-deformation-layout-v001).
+
 ## October 5 feature-locked shoulder quad reconnection
 
 `CH101-latest-shoulder-edge-flow.json` restores the actual Blend, twelve matched

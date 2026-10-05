@@ -18,6 +18,9 @@ This is a hidden design chart, not a shape improvement, sewn garment or validate
 deformation mesh. Course spacing/kinks and major folds still need rebuilding.
 Next: author broad underarm/cap support curves and replacement patches, then actual
 torso attachment boundary and thickness/shared-sleeve QA. Gate B/Unity stay locked.
+[Actual artifact release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-deformation-layout-v001)
+and [restore pointer](docs/artifacts/CH101-latest-shoulder-deformation-layout.json):
+17 payload files freshly downloaded and SHA256-verified.
 
 Previous: [feature-locked shoulder quad reconnection](docs/plans/ch101-shoulder-edge-flow-2026-10-05.md).
 Changes 520 faces through 276 quad-edge rotations and bounded geometric correction.

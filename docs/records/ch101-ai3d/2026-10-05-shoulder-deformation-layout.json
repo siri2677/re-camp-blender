@@ -174,8 +174,16 @@
   "sourceStudyPointer": "docs/artifacts/CH101-latest-shoulder-edge-flow.json",
   "publishedStudyPointer": "docs/artifacts/CH101-latest-shoulder-deformation-layout.json",
   "releaseTag": "ch101-shoulder-deformation-layout-v001",
+  "toolsCommit": "80807a01a8a31e10ab530b61d42f00eb9e0edba8",
+  "artifactSharingUtilityTestsPassed": 2,
+  "bundleBytes": 25679903,
+  "bundleSha256": "b545b60ecc6a19cb9d72337eb514af5b0bcf7e3bf0b885d474812d327764b6c6",
   "downloadVerification": {
-    "status": "PENDING_PUBLICATION_AND_FRESH_DOWNLOAD"
+    "date": "2026-10-05",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 17,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
   },
   "nextTask": "Author simplified underarm/cap support curves and actual replacement patch geometry using these domains; finalize actual torso attachment border, then shared sleeve connection/thickness and collision QA."
 }
