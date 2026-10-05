@@ -75,6 +75,17 @@ blender --background --python-exit-code 1 --python tests/blender/test_shoulder_q
 
 ## 남은 작업
 
+공유 완료: [연구용 릴리즈](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-quad-cage-v001),
+[복원 pointer](../artifacts/CH101-latest-shoulder-quad-cage.json).
+Blend·12장 렌더·report·read-me·visual review·실패 격자 기록 총 17개 파일을
+새 경로로 재다운로드해 ZIP 및 각 payload의 SHA256을 검증했다.
+
+- tools commit: `15568a509b606e485adb220b57b7d580b145cf23`
+- ZIP: 25,820,712 bytes
+- ZIP SHA256: `43877d19a3ffc029c6153cce162fb089178054fb7323487321abea99e2b23cf8`
+
+### 이어서 제작할 순서
+
 1. 네 영역의 주요 주름과 봉제선만 남기는 crease-aware 형상·edge flow를 설계한다.
    단순 triangle→quad 변환이나 균일 밀도 증가를 추가 품질 개선으로 세지 않는다.
    영역 사이 공유 경계와 참조 대비 이동·오차를 함께 검사한다.

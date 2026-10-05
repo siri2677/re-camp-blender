@@ -1,5 +1,22 @@
 # Review artifact sharing
 
+## October 5 shared shoulder quad work cage
+
+`CH101-latest-shoulder-quad-cage.json` restores the actual Blend with 2,079 quads
+and 88 shared panel branch edges, twelve shaded/wire renders, provenance/QA
+report, read-me, visual review and rejected uniform-grid diagnostics.
+ZIP and all **17 payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+The quad conversion preserves source folds; final shape/edge flow, thickness and
+sleeve/torso attachment remain. The cage stays hidden by default and the previous
+assembly stays visible. Previous pointers and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-quad-cage.json --output-dir artifacts/restored-shoulder-quad-cage
+```
+
+[Execution plan](../plans/ch101-shoulder-quad-cage-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-quad-cage-v001).
+
 ## October 5 shoulder branching boundary hypothesis
 
 `CH101-latest-shoulder-branches.json` restores the Blend containing four disjoint
