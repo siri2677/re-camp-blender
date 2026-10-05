@@ -1,0 +1,151 @@
+{
+  "packageVersion": "ch101-gate-b-review-package-v001",
+  "character": "CH101",
+  "status": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "rankingManifest": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\artifacts\\ch101-ai3d-review-2026-08-19-v012\\ranking-manifest-final-reviewed.json",
+  "rankingManifestSha256": "f78fecdfc0ac0554869eb5d0169235255ca31a2e009884aaf93527620cd21e35",
+  "assistedVisualReview": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\docs\\records\\ch101-ai3d\\2026-08-20-assisted-visual-review-v001.json",
+  "assistedVisualReviewSha256": "086d64331776bd04457a51b9255493cad61f36297c3ea41c3af543aed248dd3c",
+  "contactSheet": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\docs\\records\\ch101-ai3d\\assets\\CH101_GateB_ContactSheet_NOT_APPROVED_v001.png",
+  "contactSheetSha256": "75ffd84a1e0ff097200317f288cc75dcb16ec4fc1a6a9ce0c9fb322f53db79f0",
+  "candidateCount": 3,
+  "candidateIds": [
+    "03-CH101-TRIPOSR-001",
+    "01-CH101-TRIPOSR-001",
+    "01-CH101-INSTANTMESH-001"
+  ],
+  "inputFiles": [
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Reference Front",
+      "fileName": "CH101_front.png",
+      "sha256": "a4bddf65179cb98aa5079955305f0386e8a2b61a730aa3ffdfa0741e92807fe3"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Candidate Front",
+      "fileName": "neg_x.png",
+      "sha256": "f5255406639a458a2590089e731fead344ed7b4ee4410c4db47735a64f34ef39"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Reference Right",
+      "fileName": "CH101_right.png",
+      "sha256": "d9d72cb1409d6eb7ea0a7118bfb11abb15a6d493199d7ecc187c674a6a17f61b"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Candidate Right",
+      "fileName": "neg_y.png",
+      "sha256": "8b63ac34ac0a8b235ff90ec990e1db0a46fa2b13b5029d689ffa48097b60153c"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Reference Back",
+      "fileName": "CH101_back.png",
+      "sha256": "74f499fe9d9fba413aca2fd80cc7ecc4c40944fe63fca3b7d6faa792567a1541"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Candidate Back",
+      "fileName": "pos_x.png",
+      "sha256": "538c5b0833fda9f76d928304b29cf2c4360216804cec6eb4fae3081282c858ef"
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "label": "Candidate 3/4",
+      "fileName": "three_quarter.png",
+      "sha256": "f73c271bbe10e3f4ea74d37d645359db7118b6f139864165d4261c1a3cca55ec"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Reference Front",
+      "fileName": "CH101_front.png",
+      "sha256": "a4bddf65179cb98aa5079955305f0386e8a2b61a730aa3ffdfa0741e92807fe3"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Candidate Front",
+      "fileName": "pos_x.png",
+      "sha256": "db85d3ba87c00bb0b6e37f764672cd199f87a262d36cd81bcb667a204cb325f6"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Reference Right",
+      "fileName": "CH101_right.png",
+      "sha256": "d9d72cb1409d6eb7ea0a7118bfb11abb15a6d493199d7ecc187c674a6a17f61b"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Candidate Right",
+      "fileName": "neg_y.png",
+      "sha256": "8b3d3857f57294b58498cec857fedb05740e3035550dc96775da767a8cbe4a96"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Reference Back",
+      "fileName": "CH101_back.png",
+      "sha256": "74f499fe9d9fba413aca2fd80cc7ecc4c40944fe63fca3b7d6faa792567a1541"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Candidate Back",
+      "fileName": "neg_x.png",
+      "sha256": "009f4075b03bf578064e3c3ff0faa0e604980648a56163d775c149d42bbf4e7a"
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "label": "Candidate 3/4",
+      "fileName": "three_quarter.png",
+      "sha256": "47262d5a9a2da9d50d77ff02087953bf08a8dae959916063d628667f48337d51"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Reference Front",
+      "fileName": "CH101_front.png",
+      "sha256": "a4bddf65179cb98aa5079955305f0386e8a2b61a730aa3ffdfa0741e92807fe3"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Candidate Front",
+      "fileName": "neg_x.png",
+      "sha256": "03c79ef69f2b82ea2cfe9d7ca304ae86774a5dfe9b6f330b56cc82f24616a5b5"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Reference Right",
+      "fileName": "CH101_right.png",
+      "sha256": "d9d72cb1409d6eb7ea0a7118bfb11abb15a6d493199d7ecc187c674a6a17f61b"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Candidate Right",
+      "fileName": "neg_y.png",
+      "sha256": "6502064d1080f06e998d0fb125a4b913956d4a533a3d28cbedd1c8eb1b6974fa"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Reference Back",
+      "fileName": "CH101_back.png",
+      "sha256": "74f499fe9d9fba413aca2fd80cc7ecc4c40944fe63fca3b7d6faa792567a1541"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Candidate Back",
+      "fileName": "pos_x.png",
+      "sha256": "717be44f96d0485cc15f1bd3ac2b05fe3211a05b4dce16280b7f572e6199bba0"
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "label": "Candidate 3/4",
+      "fileName": "three_quarter.png",
+      "sha256": "cd368da1ee74d906b3e520504a51cf1ec2a275de126b222e71a4cf096c15f57b"
+    }
+  ],
+  "recommendation": "REJECT_AND_REGENERATE_OR_MANUALLY_REMODEL",
+  "humanGateBDecision": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

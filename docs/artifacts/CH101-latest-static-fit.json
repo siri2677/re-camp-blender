@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "ESTIMATED_ATTACHMENT_DIAGNOSTIC_NOT_PRODUCTION",
+  "fullCharacterCandidate": false,
+  "attachmentApproved": false,
+  "candidateId": "CH101_STATIC_EQUIPMENT_FIT_DIAGNOSTIC_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-static-equipment-fit-review-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-static-equipment-fit-review-v001",
+  "assetName": "CH101-static-fit-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-static-equipment-fit-review-v001/CH101-static-fit-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 9797720,
+  "bundleSha256": "5efdc4c9c7cd0cefb696e002d83226e3c5da0d85263841e090d765c10177bc4a",
+  "manifestSha256": "c2cb68220c6997014b21addafd63003420de651de7319745a4cdeb37910d260d",
+  "toolsCommit": "af7744560d5dcf889e4956dc9a269b1c1f0d30a7",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

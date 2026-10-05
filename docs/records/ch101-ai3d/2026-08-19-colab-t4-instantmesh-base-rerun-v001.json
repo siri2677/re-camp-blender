@@ -1,0 +1,107 @@
+{
+  "recordVersion": "ch101-ai3d-colab-t4-instantmesh-base-rerun-v001",
+  "recordedAt": "2026-08-19T20:36:58+09:00",
+  "character": "CH101",
+  "runType": "T4_SAFE_BASE_PROFILE_RERUN",
+  "toolsLock": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "commit": "d394eaeed371ae415a1d90e45e7b45e38b858879a"
+  },
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "runtime": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "apiCreditUsed": 0,
+    "maxAttempts": 3,
+    "notebook": "notebooks/05_ch101_ai3d_free_autobuild.ipynb",
+    "providerExecutionCommit": "d394eaeed371ae415a1d90e45e7b45e38b858879a"
+  },
+  "observations": [
+    {
+      "provider": "sf3d",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "reason": "Hugging Face gated model stabilityai/stable-fast-3d returned 401 Unauthorized",
+      "fallback": "enabled"
+    },
+    {
+      "provider": "instantmesh",
+      "status": "GENERATED_AND_EVALUATED",
+      "config": "configs/instant-mesh-base.yaml",
+      "memoryProfile": "T4_SAFE_BASE",
+      "view": 4,
+      "dependencySmokeTest": "PASS",
+      "compatibilityShim": "cached_download and legacy JAX random aliases were injected only into the provider subprocess",
+      "attempts": [
+        {
+          "attempt": 1,
+          "referenceView": "front",
+          "status": "GENERATED",
+          "output": "OBJ",
+          "candidatePath": "/content/re-camp-ai3d/CH101/attempts/01/candidates/instantmesh/CH101_instantmesh_cand_001/CH101_front.obj",
+          "candidateSha256": "320dfdf31f6941b2c552aac206364fa883c934eb856c814ac3445cfdbeec44e2",
+          "candidateManifestSha256": "3ff367e2dd49cf44426e7c5729cd255925f78b601987e61cfe38684f417941",
+          "scores": {
+            "overall": 0.461022,
+            "silhouette": 0.398524,
+            "appearance": 0.407925,
+            "color": 0.41122,
+            "faceDetail": 0.345587
+          }
+        },
+        {
+          "attempt": 2,
+          "referenceView": "right",
+          "status": "GENERATED",
+          "output": "OBJ",
+          "candidatePath": "/content/re-camp-ai3d/CH101/attempts/02/candidates/instantmesh/CH101_instantmesh_cand_001/CH101_right.obj",
+          "candidateSha256": "74f0915dc10014477289604a9fe941fffcbdb2b5de995841f324c90a31c54d77",
+          "candidateManifestSha256": "501f80c47c72317513867a90b0944da134f966b551965c220e0b1befdcc99ba2",
+          "scores": {
+            "overall": 0.454798,
+            "silhouette": 0.386502,
+            "appearance": 0.414286,
+            "color": 0.432927,
+            "faceDetail": 0.359831
+          }
+        },
+        {
+          "attempt": 3,
+          "referenceView": "back",
+          "status": "GENERATED",
+          "output": "OBJ",
+          "candidatePath": "/content/re-camp-ai3d/CH101/attempts/03/candidates/instantmesh/CH101_instantmesh_cand_001/CH101_back.obj",
+          "candidateSha256": "635a27c27cbc558431ffa8ac8d3de241c9a30c03bbd7da98704ab7eeaa901cff",
+          "candidateManifestSha256": "b475981c6b7c2bfb4a09c983d86817b9e0f49c85d24404407b2c840e34d219d2",
+          "scores": {
+            "overall": 0.45889,
+            "silhouette": 0.388853,
+            "appearance": 0.424542,
+            "color": 0.447594,
+            "faceDetail": 0.368874
+          }
+        }
+      ],
+      "bestOverallScore": 0.461022,
+      "correctedRanking": "/content/re-camp-ai3d/CH101/ranking-manifest-corrected.json",
+      "gate": "REGENERATE_REQUIRED",
+      "rootCause": "The T4-safe base profile removes the CUDA OOM, but sparse single-view InstantMesh candidates still do not meet the visual threshold."
+    }
+  ],
+  "artifacts": {
+    "candidateCount": 3,
+    "candidateFormats": ["OBJ"],
+    "reviewBlendCreated": false,
+    "archive": "/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Keep Unity and Production gates locked; evaluate another free multi-view or reference-conditioned provider, or improve reference conditioning and scoring before another T4 run."
+}

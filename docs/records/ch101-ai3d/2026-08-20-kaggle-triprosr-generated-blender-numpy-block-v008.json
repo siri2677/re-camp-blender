@@ -1,0 +1,48 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-triposr-generated-blender-numpy-block-v008",
+  "recordedAt": "2026-08-20T14:30:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommit": "3bf8506",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "compatibilityTorch": "2.7.1+cu118",
+    "compatibilityTorchSupportsDevice": true,
+    "apiCreditUsed": 0
+  },
+  "providerResults": {
+    "sf3d": {
+      "status": "SKIPPED_MISSING_HF_TOKEN",
+      "reason": "HF_GATED_MODEL_AUTH_REQUIRED"
+    },
+    "instantmesh": {
+      "status": "SKIPPED_NVDIFFRAST_TOOLKIT_INCOMPATIBLE",
+      "reason": "CUDA_TOOLKIT_MISMATCH_FOR_LEGACY_PASCAL_GPU"
+    },
+    "triposr": {
+      "status": "GENERATED",
+      "attempts": 3,
+      "candidateManifests": 3,
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    }
+  },
+  "pipeline": {
+    "candidateManifestsCreated": true,
+    "candidateFilesSha256Recorded": true,
+    "reviewBlendCreated": false,
+    "scoreReportsCreated": false,
+    "postProcessing": "BLOCKED_BLENDER_NUMPY_MISSING",
+    "failureEvidence": "Blender 3.0.1 GLTF importer raised ModuleNotFoundError: No module named 'numpy'",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "remediation": {
+    "status": "PATCHED_AND_STATICALLY_VALIDATED",
+    "change": "Notebook now downloads a Blender-Python-compatible NumPy wheel, extracts it to an isolated PYTHONPATH, and probes NumPy before GLB intake.",
+    "nextAction": "Reimport the updated Notebook in the same Kaggle session, reuse the three generated TripoSR manifests, then run Blender refine/evaluate and ranking cells."
+  }
+}

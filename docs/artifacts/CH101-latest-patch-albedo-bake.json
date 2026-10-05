@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "candidateId": "CH101_BOUNDED_PATCH_ALBEDO_BAKE_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-patch-albedo-bake-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-albedo-bake-v001",
+  "assetName": "CH101-patch-albedo-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-patch-albedo-bake-v001/CH101-patch-albedo-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 18692747,
+  "bundleSha256": "c995294857ddf4d16efe65a1dc280e7976bf6f687d78169e2c14ef7bcff92e6d",
+  "manifestSha256": "ea6a0173464842ffdf891425cba5d68c349e152f06766d8785b92d2e24c12747",
+  "toolsCommit": "000f5db01d757803b5e34ed779be2aff520b110d",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "scope": "BOUNDED_321_FACE_PATCH_ALBEDO_ONLY",
+  "visualDecision": "LOCAL_TEXTURE_IMPROVEMENT_NOT_FINAL_VISUAL_ACCEPTANCE",
+  "blendSha256": "84d73be3ada9f946a930c5dd96b7a228fde36fabad7e5320f2597b49e15490e9",
+  "fullCharacterScore": null,
+  "downloadVerification": {
+    "date": "2026-09-23",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 14,
+    "zipAndPayloadSHA256": "PASS"
+  },
+  "rollbackPointers": ["CH101-latest-upper-patch.json", "CH101-latest-seam-contour.json"]
+}

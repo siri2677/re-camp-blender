@@ -1,0 +1,28 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-blender-numpy-marker-fix-v010",
+  "recordedAt": "2026-08-20T15:00:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommitBeforePatch": "35cb61e",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuCapability": "sm_60",
+    "blenderPython": "3.10",
+    "numpyWheel": "numpy-1.23.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "gpuStatus": "READY_GPU_WORKSTREAM"
+  },
+  "observation": {
+    "numpyImport": "SUCCEEDED",
+    "displayIssue": "Blender's final log line was 'Blender quit', so the probe output was recorded incorrectly despite a successful import.",
+    "candidateFilesPreserved": true,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "remediation": {
+    "status": "PATCHED_STATICALLY_VALIDATED",
+    "change": "NumPy probe now emits and parses RE_CAMP_BLENDER_NUMPY=<version> instead of trusting the final Blender log line.",
+    "nextAction": "Reimport the latest Notebook, run setup, then execute the reference and provider cells so existing TripoSR candidates are reused before Blender refinement."
+  }
+}

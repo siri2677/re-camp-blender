@@ -1,0 +1,541 @@
+# Review artifact sharing
+
+## October 5 shoulder course and fold design layout
+
+`CH101-latest-shoulder-deformation-layout.json` restores the actual Blend,
+twelve original/course/translucent-fold review views, full provenance/QA report,
+read-me, visual review and authored fold policies. ZIP and all **17 payloads**
+were freshly downloaded and SHA256-verified on 2026-10-05.
+Three actual shared transverse courses cross four longitudinal routes once each,
+forming 16 connected design domains. Twelve editable guides are saved.
+All 64 major crease edges are classified: 44 underarm redesign, 18 deferred
+until actual torso border design, two cap micro-crease removal candidates.
+Original shape/UVs/materials/weights are unchanged. This is a hidden design chart,
+not a shape improvement, final deformation mesh, sewn garment or quality score.
+Course spacing/kinks and source folds still require actual rebuilding. Older
+study pointers, visible assembly and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-deformation-layout.json --output-dir artifacts/restored-shoulder-deformation-layout
+```
+
+[Execution plan](../plans/ch101-shoulder-deformation-layout-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-deformation-layout-v001).
+
+## October 5 feature-locked shoulder quad reconnection
+
+`CH101-latest-shoulder-edge-flow.json` restores the actual Blend, twelve matched
+shaded/wire renders, full operation/QA report, read-me, visual review and rejected
+reconnection-trial summary. ZIP and all **17 payloads** were freshly downloaded
+and SHA256-verified on 2026-10-05.
+276 quad-edge rotations plus bounded correction change 520 faces; regular
+interior junctions increase 950 → 974 and render-triangle bending drops another
+4.56%. Original meshes, 709 pinned study vertices and shared boundaries stay fixed.
+Major folds, 926 irregular interior junctions and the provisional torso border
+remain. This hidden open study is not the visual baseline, a complete garment
+or final deformation-ready edge flow. No older/full-character pointer is replaced.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-edge-flow.json --output-dir artifacts/restored-shoulder-edge-flow
+```
+
+[Execution plan](../plans/ch101-shoulder-edge-flow-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-edge-flow-v001).
+
+## October 5 bounded shoulder crease fairing
+
+`CH101-latest-shoulder-crease-fairing.json` restores the actual Blend, eight
+matched before/after renders, full optimization/QA report, read-me, visual review
+and rejected quad-average-objective summary. ZIP and all **13 payloads** were
+freshly downloaded and SHA256-verified on 2026-10-05.
+Render-triangle bending drops 26.16% within the 1.45 mm vertex movement budget;
+all 703 pinned vertices and 88 shared branch edges remain fixed. Large folds,
+irregular edge flow and the provisional torso border remain. This open,
+unoffset study is not adopted as the visual baseline or approved as a garment.
+It stays hidden by default; the previous assembly/full-character pointers remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-crease-fairing.json --output-dir artifacts/restored-shoulder-crease-fairing
+```
+
+[Execution plan](../plans/ch101-shoulder-crease-fairing-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-crease-fairing-v001).
+
+## October 5 shared shoulder quad work cage
+
+`CH101-latest-shoulder-quad-cage.json` restores the actual Blend with 2,079 quads
+and 88 shared panel branch edges, twelve shaded/wire renders, provenance/QA
+report, read-me, visual review and rejected uniform-grid diagnostics.
+ZIP and all **17 payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+The quad conversion preserves source folds; final shape/edge flow, thickness and
+sleeve/torso attachment remain. The cage stays hidden by default and the previous
+assembly stays visible. Previous pointers and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-quad-cage.json --output-dir artifacts/restored-shoulder-quad-cage
+```
+
+[Execution plan](../plans/ch101-shoulder-quad-cage-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-quad-cage-v001).
+
+## October 5 shoulder branching boundary hypothesis
+
+`CH101-latest-shoulder-branches.json` restores the Blend containing four disjoint
+boundary routes, four colored reference regions and entry-ring/gap guides.
+Four renders, provenance/path report, read-me and visual review are included.
+ZIP and all **8 payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+This is **an open source-surface design chart, not a new garment or sewn shoulder**.
+The prior assembly remains visible; the chart and `BRANCH_GUIDE_*` objects stay
+hidden by default. All previous pointers and the full-character baseline remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-branches.json --output-dir artifacts/restored-shoulder-branches
+```
+
+[Execution plan](../plans/ch101-shoulder-branches-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-branch-boundaries-v001).
+
+## October 5 bounded section-guided shoulder entry
+
+`CH101-latest-section-transition.json` restores the actual Blend, nine renders,
+full section/provenance/QA report, read-me and visual review. ZIP and all **13
+payloads** were freshly downloaded and SHA256-verified on 2026-10-05.
+Only the 12 mm closed-arm entry strip passes static QA; this is **not the complete
+previously rejected shoulder sheet**. A raised ridge and angular upper contour
+remain, so the study is not adopted as the visual baseline. The previous assembly
+stays visible and the new study stays hidden. No older pointer is replaced.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-section-transition.json --output-dir artifacts/restored-section-transition
+```
+
+[Execution record and next action](../plans/ch101-section-transition-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-section-transition-study-v001).
+
+## October 4 rejected connected-shoulder diagnostic
+
+`CH101-latest-connected-shoulder-diagnostic.json` restores the actual **rejected**
+connection experiment: Blend, eight renders, full report/failure indices, read-me
+and visual review. ZIP and all **12 payloads** were freshly downloaded and SHA256
+verified on 2026-10-04. This verifies storage, **not geometry acceptance**.
+Shared seam topology exists, but self/body intersections and sampled wall failure
+remain. The trial stays hidden; prior upper-interface assembly remains visible.
+No full-character pointer, UV/rig status or Gate B approval is changed.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-connected-shoulder-diagnostic.json --output-dir artifacts/restored-connected-shoulder-diagnostic
+```
+
+[Execution record and next action](../plans/ch101-connected-shoulder-2026-10-04.md).
+
+## October 3 clipped shoulder reference chart and seam correspondence
+
+`CH101-latest-clipped-shoulder-seam.json` restores an open clipped chart with
+four interpolated UV layers and 128 ordered source-to-sleeve seam samples.
+The Blend, eight comparison/diagnostic renders, full report, read-me and visual
+decision were freshly downloaded and all **12 payloads** SHA256-verified on
+2026-10-03. The roughly 2.8 mm gap reflects the existing outer sleeve offset;
+no sewing/weld or finished shoulder garment is claimed. The prior assembly
+remains the default visible state and all older pointers are preserved.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-clipped-shoulder-seam.json --output-dir artifacts/restored-clipped-shoulder-seam
+```
+
+## September 30 shoulder face-graph boundary diagnostic
+
+`CH101-latest-shoulder-domain.json` restores the upper-interface assembly with a
+separate hidden shoulder trial shell, ten renders and face/UV/seam mapping report.
+ZIP and all 14 payloads freshly fetched and SHA256-verified on 2026-09-30.
+Static QA passes but jagged boundaries, coarse folds and a 29.405 mm maximum
+lower correspondence gap remain: **NOT ADOPTED**. The prior upper-interface
+stays visible by default; no source geometry changes or Gate B/Unity promotion.
+Use the domain as boundary-authoring evidence, not a finished sewing pattern.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-domain.json --output-dir artifacts/restored-shoulder-domain
+```
+
+## September 30 fitted upper sleeve interface
+
+`CH101-latest-upper-interface.json` restores the cage with a connected, fitted
+upper bridge. ZIP and all 13 payloads freshly fetched and SHA256-verified on
+2026-09-30. Maximum sampled upper-edge gap falls to 2.787 mm; source body and
+all retained cage vertices are unchanged. The source jacket topology is still
+separate. Shoulder pattern, upper color transition and human Gate B are pending.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-interface.json --output-dir artifacts/restored-upper-interface
+```
+
+## September 30 shared-hem panel cage
+
+`CH101-latest-panel-cage.json` restores the newer smooth panel/graphite edge in
+one connected shell. ZIP and all 12 payloads freshly fetched and SHA256-verified
+on 2026-09-30. Local authoring can continue from its cage; upper jacket attachment
+is unfinished and whole-character adoption is pending. The rounded-hem rollback
+pointer remains unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-panel-cage.json --output-dir artifacts/restored-panel-cage
+```
+
+## September 30 lower oversleeve shell
+
+`CH101-latest-lower-oversleeve-shell.json` restores the separate lower-shell
+study. ZIP and all 13 payloads freshly downloaded and SHA256-verified on
+2026-09-30. Static QA passes, but faceting and floating upper interface remain:
+`adoptionAllowed=false`. The rounded-hem baseline pointer is unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-lower-oversleeve-shell.json --output-dir artifacts/restored-lower-shell
+```
+
+## September 29 rounded binding cross-section
+
+`CH101-latest-rounded-hem.json` restores `ch101-rounded-hem-study-v001`:
+the actual Blend, eight matched renders, technical report, read-me and visual
+review. All 12 payloads were freshly downloaded and SHA256-verified on 2026-09-29.
+Only the separate binding cross-section corners and smooth shading change;
+the old body, original binding and old pointers remain. The rim highlights are
+less segmented, but circumferential kinks, floating attachment and unfinished
+garment structure remain. No rig, runtime optimization or whole-character pass.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-rounded-hem.json --output-dir artifacts/CH101-rounded-hem
+```
+
+## September 29 physical hem binding
+
+`CH101-latest-hem-binding.json` restores the separate
+`ch101-hem-binding-study-v001` prerelease: actual Blend, seven renders, technical
+report, read-me and visual review. All 11 payloads were freshly downloaded and
+SHA256-verified on 2026-09-29. This adds only a narrow closed floating binding;
+it is not a full layered oversleeve, sewn attachment or animation-safe garment.
+Original body meshes/UVs/materials and all older pointers remain unchanged.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-binding.json --output-dir artifacts/CH101-hem-binding
+```
+
+## September 27 explicit garment panel layout
+
+`CH101-latest-garment-panel-layout.json` restores the separate
+`ch101-garment-panel-layout-study-v001` prerelease: Blend, nine renders, technical
+report, read-me and visual decision. All 13 payloads were freshly downloaded and
+SHA256-verified on 2026-09-27. White/graphite color separation is more readable,
+but this intentionally replaces detail inside a new authored panel domain.
+It is not an exact reference pattern, real layered cloth geometry, a new bake,
+or a whole-character pass. Previous full-character and local-study pointers remain.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-garment-panel-layout.json --output-dir artifacts/CH101-garment-panel-layout
+```
+
+## September 27 patch trim shader handoff
+
+`CH101-latest-patch-trim-handoff.json` restores the separate
+`ch101-patch-trim-handoff-study-v001` prerelease. All 12 payloads (Blend, eight
+renders, technical report, read-me and visual decision) were freshly downloaded
+and SHA256-verified on 2026-09-27. This is a patch-only Blender shader study:
+zero geometry movement and no new texture bake. Visible change is subtle;
+whole-boundary continuity, garment/contour quality and Production remain unapproved.
+Do not overwrite the sector-profile or full-character baseline with this pointer.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-patch-trim-handoff.json --output-dir artifacts/CH101-patch-trim-handoff
+```
+
+## September 26 directional sector profile comparison
+
+`CH101-latest-sector-profile.json` restores `ch101-sector-profile-study-v001`:
+the actual Blend, eleven renders, technical report, read-me and visual review.
+All 15 payloads were freshly downloaded and SHA256-verified on 2026-09-26.
+The two local profile lobes preserve a TOTAL 3 mm displacement ceiling against
+the original albedo baseline, not a new budget per stage. Only subtle partial
+improvement; side fold and upper material/trim remain unfinished. No full-character
+pass, 0.6 score, rigging, Unity or Production acceptance. Previous pointers stay intact.
+
+```bash
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sector-profile.json --output-dir artifacts/CH101-sector-profile
+```
+
+## September 25 shared-interface comparison
+
+`CH101-latest-shared-interface.json` restores `ch101-shared-interface-study-v001`:
+a duplicate of the September 23 albedo model with coordinated motion across
+both shared sleeve rims. The 320-vertex adjustment stays below 3 mm and preserves
+topology, all UVs, the packed atlas and material masks/weights. Ten renders show
+partial lower-notch improvement, not elimination or final visual acceptance.
+All 14 payloads were re-downloaded and hash-verified on 2026-09-25. Prior albedo,
+seam-contour and full-character pointers remain unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shared-interface.json --output-dir artifacts/CH101-shared-interface
+```
+
+## General publishing and restoration
+
+Generated 3D files are not committed to ordinary Git history.  Use the
+standard-library helper below to package a review candidate, publish one
+versioned prerelease asset, and commit only the small latest pointer.
+
+## Hem contour comparison, not adopted — 2026-09-30
+
+[Hem contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-hem-contour-study-v001)
+preserves a 0.100036 mm bounded contour trial: peak turn 29.396° → 29.216°.
+Static QA passes but visible change is small. **Keep the September 29 rounded-hem
+baseline**; this artifact is evidence, not a replacement or full-character pass.
+Ten renders include same-camera sharp-sector close-ups. ZIP and all 14 payloads
+were freshly downloaded and SHA256 verified. Originals and all gates stay intact.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-hem-contour.json --output-dir artifacts/restored-hem-contour
+```
+
+Next: actual oversleeve layer/attachment authoring, not repeated micro-smoothing.
+
+## Bounded patch albedo bake — 2026-09-23
+
+[Patch albedo bake v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-patch-albedo-bake-v001)
+contains a preserved-copy 321-face patch bake, eight renders, two texture/coverage
+PNGs, full report, visual decision and read-me. All 14 payloads and the ZIP were
+re-downloaded and SHA256 verified. Pointed white streaks decrease; the lower
+notch and coarse source character remain. **Not a whole-character quality pass.**
+Original geometry/UVs/masks and prior releases remain recoverable; the patch
+shader alone uses the new atlas. No rig, Gate B or Unity promotion.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-patch-albedo-bake.json --output-dir artifacts/restored-patch-albedo
+```
+
+Full-character pointers are unchanged. Rollback: upper-patch and seam-contour
+pointers below. Next: bounded coordinated lower seam-interface study.
+
+## Bounded upper topology patch — 2026-09-22
+
+[Upper patch v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-patch-study-v001)
+replaces 221 polygons on a copy, preserving the 41/24-vertex boundary loops and
+all original sources. **Local geometry progress, texture rework required**: upper
+streaks and the lower boundary kink remain. This is not a production-quality
+character or an approved garment. Rollback baseline: `CH101-latest-seam-contour.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-patch.json --output-dir artifacts/restored-upper-patch
+```
+
+All 14 payloads (Blend, ten renders, technical report, visual decision, read-me)
+were re-downloaded and SHA256 verified on 2026-09-22. Next: seam-aware UV/material
+correspondence. Gate B, Production and Unity stay locked; full-character pointers
+remain untouched.
+
+## Upper-transition trial, not adopted — 2026-09-22
+
+[Upper-transition trial v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-transition-trial-v001)
+contains a bounded 100-vertex geometry experiment and ten renders, including
+matched clay views. **Static PASS, visual improvement insufficient:** the main
+notch remains. Preserve this as evidence, not a quality-approved replacement.
+Continue topology authoring from `CH101-latest-seam-contour.json`; do not rerun
+the same relaxation or overwrite the full-character pointer.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-transition-trial.json --output-dir artifacts/restored-upper-transition-trial
+```
+
+All 14 payloads (Blend, ten renders, technical report, visual decision and read-me)
+were re-downloaded and SHA256 verified on 2026-09-22. Gate B remains pending.
+
+## Locked-rim seam contour continuation — 2026-09-22
+
+[Seam contour v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-seam-contour-study-v001)
+refines the shared seam on a copy, keeping all original vertices and rim edges
+fixed. The 73 added midpoints use a thin-triangle altitude limit. Eight renders
+show softer shading but a remaining side crease; no rig or full-character pass.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-seam-contour.json --output-dir artifacts/restored-seam-contour
+```
+
+All 11 payloads were re-downloaded and SHA256 verified on 2026-09-22. Previous
+seam and full-character pointers remain intact; Unity and Production stay locked.
+
+## Shared body–sleeve seam continuation — 2026-09-22
+
+[Body–sleeve seam v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-body-sleeve-seam-study-v001)
+is the next actual geometry study: 73 bridge triangles share the body/sleeve
+rims on a new working copy. The previous sources and the separate thigh strip
+are preserved. It is not rigged or design-approved; the internal void cap and
+faceted transition remain. Prior pointers describe prior geometry states.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-body-sleeve-seam.json --output-dir artifacts/restored-body-sleeve-seam
+```
+
+Re-downloaded and verified all 11 payloads on 2026-09-22. Do not replace the
+full-character candidate pointer with this scoped study.
+
+## Upper sleeve local material alternative — 2026-09-21
+
+The [bounded upper sleeve material study](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-sleeve-material-study-v001)
+is an optional unapproved copy, not a new full-character quality pass. It reduces
+local projection contamination but suppresses painted trim and retains boundary
+defects. Original geometry, UVs and shaders remain recoverable. The continuation
+plan is `docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-sleeve-material.json --output-dir artifacts/restored-upper-sleeve-material
+```
+
+Eleven payloads (Blend, eight renders, report, read-me) were re-downloaded and
+verified on 2026-09-21. This pointer does not replace the prior sleeve-surface
+or full-character pointers. Do not continue by merely expanding the gray mask.
+
+## Latest sleeve surface continuation — 2026-09-21
+
+The September 20 repaired distal assembly now has a separate material/shading
+study: [sleeve surface v001](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-sleeve-surface-study-v001).
+It contains the full preserved working scene, seven comparison renders and report,
+but its **change scope is sleeve-only**, not an approved full-character candidate.
+Geometry and original UVs remain fixed. The shader is not Unity-ready; upper-arm
+projection artifacts, contour and trim continuity remain unfinished.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sleeve-surface.json --output-dir artifacts/restored-sleeve-surface
+```
+
+Re-download verified all ten payloads on 2026-09-21. Previous full-character and
+local-topology pointers stay available; do not replace their distinct scopes.
+
+## Publish from a machine that has the candidate
+
+Install and authenticate the GitHub CLI once:
+
+```text
+gh auth login
+```
+
+Then run:
+
+```text
+python scripts/ai3d/review_artifact_release.py publish --artifact-root path/to/remediation-multiview-textures-v012-mask-s074 --output-bundle artifacts/CH101-SPAR3D-REF001-MASK-s074.zip --repo siri2677/re-camp-blender --release-tag ch101-ai3d-review-s074 --candidate-id CH101-SPAR3D-REF001-MULTIVIEW-TEXTURE-MASK-s074 --tools-commit 0000000000000000000000000000000000000000 --art-commit b6c9b3128358e061eee6184230929413eba84101
+```
+
+The command verifies every payload before upload and writes
+`docs/artifacts/CH101-latest-review.json`.  Commit and push that pointer:
+
+```text
+git add docs/artifacts/CH101-latest-review.json
+git commit -m "docs: point to latest CH101 review artifact"
+git push
+```
+
+Replace the placeholder tools commit with the exact commit used to produce
+the candidate.  Never put tokens, credentials, or `.env` files in the
+artifact directory.
+
+## Fetch from Kaggle, Blender, or another workstation
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-review.json --output-dir artifacts/CH101-latest-review
+```
+
+The fetch command downloads the public Release asset, checks its byte count
+and SHA256, safely extracts it, and verifies every file against the embedded
+manifest.  The manifest always enforces
+`AI_GENERATED_CANDIDATE_NOT_PRODUCTION`, `PENDING_HUMAN_REVIEW`, disabled
+Unity input, and disabled Production promotion.
+
+The committed pointer in `docs/artifacts/CH101-latest-review.json` now points
+to the latest recovered CH101 SPAR3D review bundle:
+
+- Release: `ch101-continuous-projection-review-v001`
+- Bundle: `CH101-continuous-projection-NOT_PRODUCTION-v001.zip`
+- Bundle SHA256: `7f093002263ddae2b65b39e78f6c1f314f62621ce90f415c1193f30938cbff9f`
+- Decision: `REJECT_GATE_B_AND_REGENERATE`
+
+This contains continuous projection and bounded face-curvature experiments,
+plus the source profile Blend, same-evaluator comparison and comparison image.
+The 40-payload ZIP preserves the latest experiments, not an approved or improved
+selection. Their scores are effectively unchanged and semantic/visual QA still
+rejects them. The previous profile baseline remains in
+`ch101-reference-correction-review-v001`.
+
+The bundle remains review-only; it is not a Production Mesh or Unity input.
+
+## Duplicate-only distal replacement assembly
+
+Its follow-up `CH101-latest-local-topology-repair.json` restores the bounded
+one-vertex repair from `ch101-local-topology-repair-v001`. The three inherited
+non-adjacent crossings become zero with approximately 0.05 mm of movement on
+a new working copy. Other vertices, UVs, topology and the separate 48-vertex
+thigh-side strip are preserved. This is not exhaustive solid/deformation
+validation or semantic approval of that strip. All 10 payloads (Blend, seven
+renders, report and read-me) were re-downloaded and verified on 2026-09-20.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-local-topology-repair.json --output-dir artifacts/CH101-local-topology-repair
+```
+
+`CH101-latest-distal-replacement.json` restores the next static working assembly
+from `ch101-distal-replacement-study-v001`. The original source is preserved;
+only a new body copy omits the fused distal arm/hand and receives a temporary
+internal cap. Body-surface crossings with authored sleeve/hand/saber change
+from 460/119/5 to 0/0/0. Three inherited body self-crossing pairs and a separate
+48-vertex component remain; this is not a topology-clean, rigged or approved
+full-character candidate. The interface is layered, not welded, and its
+materials and animated cap coverage still need work.
+
+The Blend, nine renders, full report and read-me (12 payloads) were published,
+re-downloaded and SHA256-verified on 2026-09-20. Previous pointers are unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-distal-replacement.json --output-dir artifacts/CH101-distal-replacement
+```
+
+## Joined sleeve/cuff part study
+
+The follow-up `CH101-latest-upper-sleeve-fit.json` points to
+`ch101-upper-sleeve-fit-v001`: fitted working copy, nine renders and geometric
+replacement-region review. Upper-band surface crossings are zero; 460 joined
+triangles still cross the preserved body below that band. This is not a body
+replacement or anatomical cut approval. All 12 payloads were re-downloaded and
+hash-verified on 2026-09-20.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-upper-sleeve-fit.json --output-dir artifacts/CH101-upper-sleeve-fit
+```
+
+`CH101-latest-sleeve-cuff-transition.json` restores the September 20 connected
+authored sleeve/cuff mesh, six context/isolated renders and static QA report from
+`ch101-sleeve-cuff-transition-v001`. All nine release payloads were re-downloaded
+and hash-verified. This does not replace the full-character, separate sleeve or
+cuff pointers. The original body/hand remains present and intersecting; the
+upper opening, final cloth, skinning and animation remain unfinished.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-sleeve-cuff-transition.json --output-dir artifacts/CH101-sleeve-cuff-transition
+```
+
+## Independent equipment study
+
+`CH101-latest-equipment-study.json` identifies the latest equipment-only Blend
+and nine hardware-detail renders in `ch101-equipment-hardware-study-v002`.
+The initial four-view study remains in `ch101-equipment-part-study-v001`. It does not replace
+the full-character pointer above. Use the same fetch command with this separate
+pointer to restore the part study. It contains one saber, one sheath and one
+signal ribbon, not a full character or approved Unity package.
+
+## Unbound landmark diagnostic
+
+`CH101-latest-landmark-guide.json` points to `ch101-landmark-guide-review-v001`.
+It preserves a source-mesh copy with eight estimated geometric anchors, a
+non-deforming seven-bone guide and four diagnostic views. No equipment is
+attached. This pointer is intentionally separate from character/equipment
+deliverables, and its debug geometry is not a quality-scored model.
+
+## Static equipment-fit diagnostic
+
+`CH101-latest-static-fit.json` points to `ch101-static-equipment-fit-review-v001`.
+It preserves initial and revised combined placement scenes and surface-overlap
+reports. These show remaining hand/sheath interference; they are not approved
+attachments. Character, equipment and landmark pointers remain separate.

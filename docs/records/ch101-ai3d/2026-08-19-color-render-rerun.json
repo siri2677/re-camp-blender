@@ -1,0 +1,121 @@
+{
+  "recordVersion": "ch101-ai3d-color-render-rerun-v001",
+  "recordedAt": "2026-08-19",
+  "character": "CH101",
+  "runType": "EVALUATION_ONLY_FROM_EXISTING_TRIPOSR_CANDIDATES",
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "branch": "current/art-roster-gate-a-ch102",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101",
+    "referenceManifest": "reference-views/reference-views-manifest.json"
+  },
+  "tools": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "pipelineCommit": "e6d9c1946ede26fe7669fcfa1b49597981877811"
+  },
+  "rendererChange": {
+    "previousEngine": "BLENDER_WORKBENCH",
+    "currentEngine": "BLENDER_EEVEE_NEXT",
+    "reason": "Headless Workbench rendered the palette fallback as near-gray pixels; Eevee preserves Principled material colors for review scoring."
+  },
+  "candidateRuns": [
+    {
+      "attempt": 1,
+      "referenceView": "front",
+      "candidateSha256": "4f19519e60a3418dc34ee18eabc851be191f13e69ebad4f92e8f8cfecf0c37c5",
+      "baseline": {
+        "overall": 0.439426,
+        "silhouette": 0.389754,
+        "appearance": 0.344345,
+        "color": 0.153887,
+        "faceDetail": 0.397967
+      },
+      "improved": {
+        "overall": 0.45212,
+        "silhouette": 0.39242,
+        "appearance": 0.388189,
+        "color": 0.250803,
+        "faceDetail": 0.426753,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "attempt": 2,
+      "referenceView": "right",
+      "candidateSha256": "5bc4b0be382888d156ee9a66d0c6c6343212387c47945892cb4ad9877a6755e2",
+      "baseline": {
+        "overall": 0.443631,
+        "silhouette": 0.390096,
+        "appearance": 0.360276,
+        "color": 0.151301,
+        "faceDetail": 0.473074
+      },
+      "improved": {
+        "overall": 0.451603,
+        "silhouette": 0.390909,
+        "appearance": 0.390049,
+        "color": 0.219866,
+        "faceDetail": 0.503231,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    },
+    {
+      "attempt": 3,
+      "referenceView": "back",
+      "candidateSha256": "6b4fa95833ca6d25f121c0da80e259167161ff8bda6cf9cb7861d07254f03cb4",
+      "baseline": {
+        "overall": 0.452043,
+        "silhouette": 0.413896,
+        "appearance": 0.332043,
+        "color": 0.146237,
+        "faceDetail": 0.391916
+      },
+      "improved": {
+        "overall": 0.463577,
+        "silhouette": 0.41414,
+        "appearance": 0.377546,
+        "color": 0.261198,
+        "faceDetail": 0.411742,
+        "technical": 1.0
+      },
+      "status": "REGENERATE_REQUIRED"
+    }
+  ],
+  "appliedReviewFixes": {
+    "paletteFallbackUsed": true,
+    "workbenchMaterialsSynced": 6,
+    "renderedMaterialPixelsVerified": true,
+    "providerFallbackVerifiedEarlier": true
+  },
+  "diagnosis": {
+    "colorPipeline": "PASS_COLOR_VISIBILITY_IMPROVED",
+    "remainingPrimaryLimitation": "SINGLE_VIEW_TRIPOSR_GEOMETRY_DOES_NOT_MATCH_THE_LOCKED_TURNAROUND",
+    "nextImprovement": "MULTI_VIEW_OR_REFERENCE_CONDITIONED_GEOMETRY_RECONSTRUCTION",
+    "productionImpact": "NO_AUTO_PROMOTION"
+  },
+  "runtimeVerification": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "toolsHead": "e6d9c1946ede26fe7669fcfa1b49597981877811",
+    "candidateGenerationWasReused": true,
+    "evaluationAndRanking": "PASS",
+    "rankingResult": "All candidates below threshold; regeneration required",
+    "rankingManifest": "/content/re-camp-ai3d/CH101/ranking-manifest.json"
+  },
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "selectedCandidate": null,
+    "reviewAssetCreated": false
+  },
+  "persistence": {
+    "trackedInGit": true,
+    "binaryArtifactsTracked": false,
+    "binaryRetention": "Use GitHub Release or Git LFS after recording final SHA256."
+  }
+}

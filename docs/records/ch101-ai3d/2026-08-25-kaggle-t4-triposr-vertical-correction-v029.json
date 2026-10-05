@@ -1,0 +1,91 @@
+{
+  "recordVersion": "v029",
+  "date": "2026-08-25",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4 x2",
+    "torch": "2.10.0+cu128",
+    "deviceCapability": "7.5",
+    "torchKernelSupportsDevice": true,
+    "status": "READY_GPU_WORKSTREAM"
+  },
+  "repositories": {
+    "toolsCommit": "50e3a42",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "tripoSRProviderCommit": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "branch": "feature/ch101-free-ai3d-autobuild"
+  },
+  "reference": {
+    "character": "CH101",
+    "generationProfile": "CH101_V005_IDENTITY_RECOVERY",
+    "authoritativeSourceSha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+    "foregroundRatios": [0.8, 0.9, 0.98],
+    "auxiliaryReferencesMerged": false
+  },
+  "execution": {
+    "providerPath": "InstantMesh failed, TripoSR fallback generated three candidates",
+    "evaluationAttempt": "ALL",
+    "verticalPolarityCorrection": "APPLIED_WHEN_UPSIDE_DOWN_DETECTED",
+    "candidateCountEvaluated": 3
+  },
+  "candidates": [
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "930076e249f12d1ee42de7ff94238614513d2ac91be15c3c7f69cb47632ae745",
+      "refinedGlbSha256": "0e53a2441fd24483ba6c5254226e0ae65a33a5ac4b15038167118af873e815b2",
+      "verticalPolarityCorrectionApplied": true,
+      "overallScore": 0.497417,
+      "silhouetteScore": 0.412004,
+      "appearanceScore": 0.518457,
+      "colorScore": 0.137409,
+      "faceDetailScore": 0.887614,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+    },
+    {
+      "candidateId": "02-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "5268a4aaf75c0d21fc1ae89456fffc6f586c0fce9e8af431d56a40e3bbb2d599",
+      "refinedGlbSha256": "8618d628ac4eaf1b433499ce3e6ff3e6178c0b4a36c2bb61af46bf2f920945d5",
+      "verticalPolarityCorrectionApplied": true,
+      "overallScore": 0.496654,
+      "silhouetteScore": 0.414319,
+      "appearanceScore": 0.509385,
+      "colorScore": 0.132872,
+      "faceDetailScore": 0.90043,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "9879ca1954095eb27f5bda73c09ba2952f7010f1a613b2512bcc949b5759ee48",
+      "refinedGlbSha256": "b347f8c53dc1385a05b20b06923659954c0dc019849d7268eaefd1d623a6ccb9",
+      "verticalPolarityCorrectionApplied": true,
+      "overallScore": 0.519884,
+      "silhouetteScore": 0.454987,
+      "appearanceScore": 0.496568,
+      "colorScore": 0.136379,
+      "faceDetailScore": 0.842843,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"]
+    }
+  ],
+  "decision": {
+    "status": "REGENERATE_REQUIRED",
+    "automaticVisualQA": "REJECT_GATE_B_AND_REGENERATE",
+    "reviewedCandidateCount": 3,
+    "rejectedCandidateCount": 3,
+    "bestCandidate": "03-CH101-TRIPOSR-001",
+    "bestOverallScore": 0.519884,
+    "bestCandidateColorScore": 0.136379,
+    "gateBPackage": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+    "gateBCandidateOrder": ["03-CH101-TRIPOSR-001", "01-CH101-TRIPOSR-001", "02-CH101-TRIPOSR-001"],
+    "gateBPackageDigest": "623d557fa74e99bc2a27ba87bde86485a620cb196ac2f67e13798c5d31c78130"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Improve color/material correspondence and reference color blocking; rerun automatic review with vertical correction enabled."
+}

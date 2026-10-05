@@ -1,0 +1,55 @@
+{
+  "recordVersion": "ch101-ai3d-colab-t4-provider-compatibility-rerun-v002",
+  "recordedAt": "2026-08-19T19:10:00+09:00",
+  "character": "CH101",
+  "runType": "PATCHED_PROVIDER_COMPATIBILITY_RERUN",
+  "toolsLock": {
+    "repository": "https://github.com/siri2677/re-camp-blender.git",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "commit": "6d33b193a8c9193e8e864ea72233aac761d77472"
+  },
+  "artLock": {
+    "repository": "https://github.com/siri2677/re-camp.git",
+    "commit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "runtime": {
+    "platform": "Google Colab",
+    "accelerator": "Tesla T4",
+    "apiCreditUsed": 0,
+    "maxAttempts": 3
+  },
+  "observations": [
+    {
+      "provider": "sf3d",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "reason": "Hugging Face gated model stabilityai/stable-fast-3d returned 401 Unauthorized",
+      "fallback": "enabled"
+    },
+    {
+      "provider": "instantmesh",
+      "dependencySmokeTest": "HELPER_IMPORT_PASS_DIFFUSERS_IMPORT_FAIL",
+      "status": "FAILED_PROVIDER_EXECUTION",
+      "reason": "diffusers==0.20.2 imports removed huggingface_hub.cached_download after the hub range was pinned to >=0.26.0,<1.0",
+      "correction": "Add an isolated sitecustomize compatibility shim for cached_download; do not modify the provider checkout or unlock Unity"
+    },
+    {
+      "provider": "tripoSR",
+      "status": "REUSED_AND_EVALUATED",
+      "overallScores": [
+        0.45212,
+        0.451603,
+        0.463577
+      ],
+      "gate": "REGENERATE_REQUIRED",
+      "archive": "/content/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip"
+    }
+  ],
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "reviewAssetCreated": false
+  },
+  "nextAction": "Rerun the latest branch with scripts/ai3d/instantmesh_hf_compat_sitecustomize.py injected as sitecustomize; keep SF3D gated access and all promotion gates unchanged."
+}

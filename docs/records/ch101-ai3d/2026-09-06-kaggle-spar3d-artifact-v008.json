@@ -1,0 +1,55 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-spar3d-artifact-v008-v001",
+  "recordedAt": "2026-09-06",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "898dee6356588e53c63c6720fb1333283c2a4ede",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "runtime": {
+    "platform": "Kaggle",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "gpuCount": 2,
+    "gpus": [
+      { "name": "Tesla T4", "memoryMb": 15360 },
+      { "name": "Tesla T4", "memoryMb": 15360 }
+    ],
+    "textureResolution": 512,
+    "targetCount": 20000,
+    "lowVramMode": true
+  },
+  "preflight": {
+    "status": "READY_GPU_VISIBLE",
+    "minimumVramMb": 8192,
+    "maximumVisibleVramMb": 15360,
+    "vramSufficient": true,
+    "modelAccessAcknowledged": true,
+    "licenseTermsAcknowledged": true,
+    "heavyweightInstallAllowed": true
+  },
+  "execution": {
+    "status": "SPAR3D_EXECUTED",
+    "actualInference": true,
+    "returnCode": 0,
+    "durationSeconds": 438.707,
+    "sourceArtifact": {
+      "path": "provider-output/CH101_spar3d_cand_001.glb",
+      "format": "glb",
+      "bytes": 552664,
+      "sha256": "5c4889065d8c5e5548fa51a9558f04f19e88770690a654b138ee46e271d31101"
+    },
+    "candidateManifestSha256": "f96a5a67d64934a09e6243abe585661a4c4f6dd6f02224f0763b8aa21d8e36a1",
+    "runtimeCompatibilityPatch": "SPAR3D_T4_BF16_CLI_CHUNKED_ATTENTION_BACKOFF_V005"
+  },
+  "quality": {
+    "status": "PENDING_BLENDER_REFINE_EVALUATE_STRICT_VISUAL_QA",
+    "candidateStatus": "SPAR3D_CANDIDATE_REGISTERED_REVIEW_ONLY"
+  },
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "nextAction": "Install Blender and xvfb in the active Kaggle session, then reuse this registered artifact for Blender refine/evaluate/strict visual QA. Do not rerun SPAR3D."
+}

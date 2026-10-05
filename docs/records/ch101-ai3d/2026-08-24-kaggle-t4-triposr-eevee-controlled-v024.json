@@ -1,0 +1,76 @@
+{
+  "recordVersion": "v024",
+  "recordedAt": "2026-08-24",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "status": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+  "toolsCommit": "2ddc284545561e0267d639ce328be9a69c7a63ca",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": {
+    "name": "TripoSR",
+    "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "apiCreditUsed": 0
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "gpuCapability": "sm_75",
+    "torch": "2.10.0+cu128",
+    "blenderVersion": "3.0.1",
+    "renderEngine": "BLENDER_EEVEE",
+    "referenceGenerationManifestSha256": "68552dfb2d397be5a0a30a6a4d90fb6f354200c4e91b79495ee2c245b6286325",
+    "scoringReferenceManifestSha256": "9f22189c6c8f18a82c38b1caf5be31981b146d2ad7800521419b7c5cae45cafa"
+  },
+  "candidate": {
+    "candidateId": "tripoSR-CH101-baseline-003-eevee",
+    "sourceCandidateSha256": "9879ca1954095eb27f5bda73c09ba2952f7010f1a613b2512bcc949b5759ee48",
+    "refinedCandidateSha256": "b347f8c53dc1385a05b20b06923659954c0dc019849d7268eaefd1d623a6ccb9",
+    "reusedNormalizedBlendSha256": "0e4eb54c00f609eb8e25b359ed16d6dea63a63fe6e42a35b21732824d2b428ec",
+    "integrityBlendSha256": "c2e75117549e7ddd2fea66e26d449feda67609982ac2f39c2aa6589a16fce473",
+    "reuseMode": "REUSED_NORMALIZED_BLEND_NO_TRANSPORT_GLTF_REIMPORT"
+  },
+  "evaluation": {
+    "overallScore": 0.529061,
+    "silhouetteScore": 0.452165,
+    "appearanceScore": 0.540615,
+    "colorScore": 0.300492,
+    "faceDetailScore": 0.808445,
+    "technicalScore": 1.0,
+    "minimumOverallScore": 0.5,
+    "minimumColorScore": 0.2,
+    "status": "AUTO_REVIEW_CANDIDATE",
+    "failureReasons": [],
+    "eligibleForHumanReview": true,
+    "scoreReportSha256": "c40113e0b742ea3bf9565176acfab11424f582e9a8ad44341a32b6d7a59cdcf1",
+    "evaluationReportSha256": "121bfb5b20cc8da2a365064408d93010a23d94a1e159141c7c8201e231b9ed35"
+  },
+  "rendererComparison": {
+    "sameCandidateWorkbenchOverall": 0.516883,
+    "eeveeOverall": 0.529061,
+    "eeveeDeltaFromWorkbench": 0.012178,
+    "priorP100EeveeOverall": 0.523413,
+    "eeveeDeltaFromPrior": 0.005648,
+    "finding": "The earlier lower score was materially affected by the Workbench renderer. With the same normalized candidate rerendered in EEVEE, appearance and color recover and the automated score exceeds the prior EEVEE result. This is a renderer-controlled result, not a Production Mesh approval."
+  },
+  "gateBPackage": {
+    "status": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+    "rankingManifestSha256": "7d0bc79869951ab40d6ff34d744ff28ed84427807d1bdea6e41d41c7cc05ae31",
+    "assistedVisualReviewSha256": "d36c30588e6dc613f4aebc4361316f66e125b5f0123434f10898200c1d25531f",
+    "contactSheetSha256": "fc12c59de7c6525acce1a6c48a350b7af119aac2c8d50ef996f76b54eafb4b03",
+    "candidateIds": [
+      "tripoSR-CH101-baseline-003-eevee"
+    ],
+    "humanGateBDecision": "PENDING_HUMAN_REVIEW"
+  },
+  "nextAction": [
+    "Human visual review of the EEVEE contact sheet: silhouette, face, hair, outfit, equipment, and proportions.",
+    "If Gate B is approved, generate the production handoff and only then consider Unity import.",
+    "If Gate B is rejected, return to candidate regeneration or manual Blender refinement."
+  ],
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

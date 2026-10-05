@@ -1,0 +1,54 @@
+{
+  "recordVersion": "v031",
+  "date": "2026-08-25",
+  "recordType": "LOCAL_REVIEW_AUTOMATION_UPDATE",
+  "repositories": {
+    "toolsCommit": "a14a06f",
+    "branch": "feature/ch101-free-ai3d-autobuild",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+  },
+  "change": {
+    "status": "IMPLEMENTED_NOT_YET_GPU_REMEASURED",
+    "scope": "CH101 review-only palette blocking",
+    "algorithm": "CH101_REVIEW_BLOCKING_XZ_FRONT_V002",
+    "details": [
+      "Use global candidate bounds rather than each mesh object's local height.",
+      "Block graphite outfit/shorts, white jacket/boots, warm skin, hair, and sparse cyan/gold accents using normalized height, X position, and front-facing normals.",
+      "Record per-object palette assignment counts and algorithm version in the refinement report.",
+      "Keep the legacy height-band fallback for CH102 through CH105 until each roster palette is calibrated."
+    ],
+    "metricPolicy": "UNCHANGED_GLOBAL_COLOR_HISTOGRAM_AND_HARD_GATES"
+  },
+  "verification": {
+    "blenderScriptCompile": "PASS",
+    "unitTests": {
+      "command": "python -m unittest discover -s tests -p test_*.py",
+      "count": 66,
+      "status": "PASS"
+    },
+    "ai3dPackageValidator": "PASS",
+    "colabPackageValidator": "PASS",
+    "gitDiffCheck": "PASS",
+    "actualT4Rerun": "PENDING"
+  },
+  "previousRuntimeBaseline": {
+    "record": "2026-08-25-kaggle-t4-triposr-palette-v030.json",
+    "bestCandidate": "tripoSR-CH101-baseline-003",
+    "bestOverallScore": 0.519884,
+    "bestColorScore": 0.136379,
+    "status": "REGENERATE_REQUIRED"
+  },
+  "decision": {
+    "status": "REGENERATE_REQUIRED_UNTIL_T4_REMEASUREMENT",
+    "reason": "The v031 change is a review-material blocking improvement only; it has not been assigned a new runtime score yet.",
+    "gateBPackage": "NOT_CREATED",
+    "selectedCandidate": null
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "On a compatible GPU, update the Kaggle checkout to a14a06f and rerun TripoSR refine/evaluate/rank for all three existing candidates before judging score movement."
+}

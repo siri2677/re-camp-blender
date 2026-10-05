@@ -1,0 +1,114 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-strict-assisted-review-v026",
+  "recordedAt": "2026-08-24",
+  "evaluationMode": "KAGGLE_T4_INSTANTMESH_REEVALUATION",
+  "toolsCommit": "a89b7411fde1ef9ae18dcab6cd9fe58493ec3e8e",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "character": "CH101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "2x Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "deviceCapability": "sm_75",
+    "torchKernelSupportsDevice": true,
+    "blender": "3.0.1"
+  },
+  "providers": {
+    "stableFast3D": {
+      "status": "SKIPPED_MISSING_HF_TOKEN"
+    },
+    "instantMesh": {
+      "status": "GENERATED",
+      "commit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+      "attemptCount": 3
+    },
+    "tripoSR": {
+      "status": "NOT_REACHED_AFTER_INSTANTMESH_SUCCESS",
+      "commit": "107cefdc244c39106fa830359024f6a2f1c78871"
+    }
+  },
+  "candidates": [
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "sourceSha256": "c01570c7c153387dba60a8e5e262c24fc9fea92551f9db0cd98d8e6499618642",
+      "refinedGlbSha256": "710dd2b08c05cb3a095fc00368cdaed6ad0aa4daae23509e3b29eb3af185daa4",
+      "overallScore": 0.44508,
+      "silhouetteScore": 0.402714,
+      "appearanceScore": 0.333264,
+      "colorScore": 0.179879,
+      "faceDetailScore": 0.374365,
+      "technicalScore": 1.0,
+      "qualityHardGate": "FAIL"
+    },
+    {
+      "candidateId": "02-CH101-INSTANTMESH-001",
+      "sourceSha256": "830a948bec0fc1e039eb5d6a6746a7292bee87c437e18593725b0e280b4acf2d",
+      "refinedGlbSha256": "bbdc7b225bef0231b19aa04b7ef83b7574b11ef78840e89b85a0877749121f84",
+      "overallScore": 0.44508,
+      "silhouetteScore": 0.402714,
+      "appearanceScore": 0.333264,
+      "colorScore": 0.179879,
+      "faceDetailScore": 0.374365,
+      "technicalScore": 1.0,
+      "qualityHardGate": "FAIL"
+    },
+    {
+      "candidateId": "03-CH101-INSTANTMESH-001",
+      "sourceSha256": "741a2e8e510d167df3b96f88b5ea65d1410eed8bdfbf2e5f8090d82e4dc657ba",
+      "refinedGlbSha256": "960173ada430fd99ae40df2157c8193c1e4e8888179576de80752fe26f5a1ac6",
+      "overallScore": 0.44508,
+      "silhouetteScore": 0.402714,
+      "appearanceScore": 0.333264,
+      "colorScore": 0.179879,
+      "faceDetailScore": 0.374365,
+      "technicalScore": 1.0,
+      "qualityHardGate": "FAIL",
+      "hardGateReason": "LARGEST_CONNECTED_COMPONENT_BELOW_MINIMUM"
+    }
+  ],
+  "visualReviewPolicy": {
+    "minimumAutoReviewOverallScore": 0.6,
+    "minimumAutoReviewSilhouetteScore": 0.5,
+    "minimumAutoReviewAppearanceScore": 0.55,
+    "minimumAutoReviewColorScore": 0.38,
+    "minimumAutoReviewFaceDetailScore": 0.25,
+    "minimumAutoReviewTechnicalScore": 0.9,
+    "decisionMode": "REJECTION_ONLY_AUTO_QA_DEFER_IF_NO_OBJECTIVE_FAILURE"
+  },
+  "decision": {
+    "disposition": "REJECT",
+    "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+    "reviewedCandidateCount": 3,
+    "rejectedCandidateCount": 3,
+    "reasonCodes": [
+      "OVERALL_IDENTITY_SCORE_WEAK",
+      "SILHOUETTE_PROPORTION_MISMATCH",
+      "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+      "OUTFIT_COLOR_BLOCKING_WEAK",
+      "GEOMETRY_OR_RENDER_HARD_GATE_FAILED",
+      "AUTOMATED_SCORE_GATE_FAILED"
+    ],
+    "notes": [
+      "All three InstantMesh attempts produced the same score profile and remain generic relative to the locked CH101 identity reference.",
+      "The Blender 3.0 OBJ importer compatibility issue was fixed and the full refine/evaluate/score path completed.",
+      "No Gate B, Production Mesh, Unity input, or production promotion is granted."
+    ]
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifacts": {
+    "gateBPackageStatus": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+    "candidateIds": [
+      "01-CH101-INSTANTMESH-001",
+      "02-CH101-INSTANTMESH-001",
+      "03-CH101-INSTANTMESH-001"
+    ],
+    "archive": "Kaggle output: /kaggle/working/re-camp-CH101-ai3d-review-NOT-PRODUCTION.zip"
+  },
+  "nextAction": "REGENERATE_WITH_STRONGER_IDENTITY_AND_COLOR_REFERENCE_INPUTS"
+}

@@ -1,0 +1,708 @@
+{
+  "strategyId": "CH101_BOUNDED_CUFF_SIMPLIFICATION_V001",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "sourceBlendSha256": "99de9dfcbd084b8ad35a72ddf35386423240f31b13df841efe3b5fbd3e191199",
+  "references": [
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+    },
+    {
+      "path": "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\art_refs\\characters\\rin\\concept\\CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+      "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+    }
+  ],
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "sourceTriangles": 4608,
+  "trials": [
+    {
+      "ratio": 0.5,
+      "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+      "eligible": true,
+      "rejectionReasons": [],
+      "topology": {
+        "vertices": 1152,
+        "triangles": 2304,
+        "components": [
+          1152
+        ],
+        "nonManifoldEdges": 0,
+        "zeroAreaFaces": 0,
+        "semanticGroups": [],
+        "selfIntersectionTestPerformed": false,
+        "rigOrWeightsValidated": false
+      },
+      "eulerCharacteristic": 0,
+      "selfSurfacePairs": 0,
+      "handSurfaceOverlap": {
+        "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+        "overlapTrianglePairCount": 0,
+        "uniqueEquipmentTrianglesCrossing": 0,
+        "nearHandCrossingTriangles": 0,
+        "awayFromHandCrossingTriangles": 0,
+        "minimumVertexSurfaceDistance": 0.0003938793670386076,
+        "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+        "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+      },
+      "equipmentSurfaceOverlaps": [
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.03676939010620117,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.08048712462186813,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.06505431979894638,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.05233834683895111,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04736216366291046,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04702064022421837,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.0471821203827858,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.048184558749198914,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.10971056669950485,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.11782561242580414,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.07544814050197601,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        }
+      ],
+      "referenceToTrialSamples": {
+        "sampleCount": 20736,
+        "maxMeters": 6.605817179661244e-05
+      },
+      "trialToReferenceSamples": {
+        "sampleCount": 10368,
+        "maxMeters": 8.776823960943148e-05
+      },
+      "maxSampledErrorLimitMeters": 0.00015,
+      "finiteUV": true,
+      "reversedNormalSamples": 0,
+      "limitations": [
+        "SAMPLED_DISTANCE_NOT_CONTINUOUS_HAUSDORFF_BOUND",
+        "NO_CONTAINMENT_OR_ANIMATION_PROOF",
+        "UV_LAYOUT_NOT_FINAL_ATLAS"
+      ]
+    },
+    {
+      "ratio": 0.25,
+      "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+      "eligible": false,
+      "rejectionReasons": [
+        "SAMPLED_SURFACE_ERROR_EXCEEDED"
+      ],
+      "topology": {
+        "vertices": 576,
+        "triangles": 1152,
+        "components": [
+          576
+        ],
+        "nonManifoldEdges": 0,
+        "zeroAreaFaces": 0,
+        "semanticGroups": [],
+        "selfIntersectionTestPerformed": false,
+        "rigOrWeightsValidated": false
+      },
+      "eulerCharacteristic": 0,
+      "selfSurfacePairs": 0,
+      "handSurfaceOverlap": {
+        "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+        "overlapTrianglePairCount": 0,
+        "uniqueEquipmentTrianglesCrossing": 0,
+        "nearHandCrossingTriangles": 0,
+        "awayFromHandCrossingTriangles": 0,
+        "minimumVertexSurfaceDistance": 0.0003938793670386076,
+        "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+        "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+      },
+      "equipmentSurfaceOverlaps": [
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.03676622733473778,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.08042527735233307,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.06504610180854797,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.05235609784722328,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.047350626438856125,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04702064022421837,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04718323424458504,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.048184558749198914,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.10973437875509262,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.11788066476583481,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.25_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.07544814050197601,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        }
+      ],
+      "referenceToTrialSamples": {
+        "sampleCount": 20736,
+        "maxMeters": 0.00016445772780571133
+      },
+      "trialToReferenceSamples": {
+        "sampleCount": 5184,
+        "maxMeters": 0.00017811910947784781
+      },
+      "maxSampledErrorLimitMeters": 0.00015,
+      "finiteUV": true,
+      "reversedNormalSamples": 0,
+      "limitations": [
+        "SAMPLED_DISTANCE_NOT_CONTINUOUS_HAUSDORFF_BOUND",
+        "NO_CONTAINMENT_OR_ANIMATION_PROOF",
+        "UV_LAYOUT_NOT_FINAL_ATLAS"
+      ]
+    },
+    {
+      "ratio": 0.125,
+      "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+      "eligible": false,
+      "rejectionReasons": [
+        "SAMPLED_SURFACE_ERROR_EXCEEDED"
+      ],
+      "topology": {
+        "vertices": 288,
+        "triangles": 576,
+        "components": [
+          288
+        ],
+        "nonManifoldEdges": 0,
+        "zeroAreaFaces": 0,
+        "semanticGroups": [],
+        "selfIntersectionTestPerformed": false,
+        "rigOrWeightsValidated": false
+      },
+      "eulerCharacteristic": 0,
+      "selfSurfacePairs": 0,
+      "handSurfaceOverlap": {
+        "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+        "overlapTrianglePairCount": 0,
+        "uniqueEquipmentTrianglesCrossing": 0,
+        "nearHandCrossingTriangles": 0,
+        "awayFromHandCrossingTriangles": 0,
+        "minimumVertexSurfaceDistance": 0.0005527777830138803,
+        "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+        "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+      },
+      "equipmentSurfaceOverlaps": [
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.0367715060710907,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.08047458529472351,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.0650559514760971,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.05240464210510254,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.047408878803253174,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04708408936858177,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.047189220786094666,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.048161160200834274,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.10987812280654907,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.11783846467733383,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.125_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.07553313672542572,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        }
+      ],
+      "referenceToTrialSamples": {
+        "sampleCount": 20736,
+        "maxMeters": 0.0004316514532547444
+      },
+      "trialToReferenceSamples": {
+        "sampleCount": 2592,
+        "maxMeters": 0.0004292572848498821
+      },
+      "maxSampledErrorLimitMeters": 0.00015,
+      "finiteUV": true,
+      "reversedNormalSamples": 0,
+      "limitations": [
+        "SAMPLED_DISTANCE_NOT_CONTINUOUS_HAUSDORFF_BOUND",
+        "NO_CONTAINMENT_OR_ANIMATION_PROOF",
+        "UV_LAYOUT_NOT_FINAL_ATLAS"
+      ]
+    },
+    {
+      "ratio": 0.0625,
+      "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+      "eligible": false,
+      "rejectionReasons": [
+        "SAMPLED_SURFACE_ERROR_EXCEEDED"
+      ],
+      "topology": {
+        "vertices": 144,
+        "triangles": 288,
+        "components": [
+          144
+        ],
+        "nonManifoldEdges": 0,
+        "zeroAreaFaces": 0,
+        "semanticGroups": [],
+        "selfIntersectionTestPerformed": false,
+        "rigOrWeightsValidated": false
+      },
+      "eulerCharacteristic": 0,
+      "selfSurfacePairs": 0,
+      "handSurfaceOverlap": {
+        "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+        "overlapTrianglePairCount": 0,
+        "uniqueEquipmentTrianglesCrossing": 0,
+        "nearHandCrossingTriangles": 0,
+        "awayFromHandCrossingTriangles": 0,
+        "minimumVertexSurfaceDistance": 0.0008405668777413666,
+        "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+        "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+      },
+      "equipmentSurfaceOverlaps": [
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.03678382560610771,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.08047458529472351,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.0650559514760971,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.052526116371154785,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.047435954213142395,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04708408936858177,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04735898599028587,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.04826867952942848,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.10987812280654907,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.11783846467733383,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        },
+        {
+          "object": "CUFF_REDUCTION_0.0625_NOT_PRODUCTION",
+          "overlapTrianglePairCount": 0,
+          "uniqueEquipmentTrianglesCrossing": 0,
+          "nearHandCrossingTriangles": 0,
+          "awayFromHandCrossingTriangles": 0,
+          "minimumVertexSurfaceDistance": 0.07550591230392456,
+          "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+          "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+        }
+      ],
+      "referenceToTrialSamples": {
+        "sampleCount": 20736,
+        "maxMeters": 0.0006647072150371969
+      },
+      "trialToReferenceSamples": {
+        "sampleCount": 1296,
+        "maxMeters": 0.0007161895628087223
+      },
+      "maxSampledErrorLimitMeters": 0.00015,
+      "finiteUV": true,
+      "reversedNormalSamples": 0,
+      "limitations": [
+        "SAMPLED_DISTANCE_NOT_CONTINUOUS_HAUSDORFF_BOUND",
+        "NO_CONTAINMENT_OR_ANIMATION_PROOF",
+        "UV_LAYOUT_NOT_FINAL_ATLAS"
+      ]
+    }
+  ],
+  "sourceHandReplaced": false,
+  "anatomicalSeamVerified": false,
+  "wristIntegrationAllowed": false,
+  "attachmentApproved": false,
+  "designApproved": false,
+  "fullCharacterScore": null,
+  "status": "REDUCED_STATIC_CUFF_STUDY_NOT_APPROVED",
+  "selectedTrial": 0,
+  "sourceGeometryPreserved": true,
+  "renders": [
+    {
+      "file": "context_front_UNMERGED.png",
+      "sha256": "06af9a5726605be093afb7d9a56c3350b098dae1012a94db7381b098c9ff9b7b",
+      "sourceBodyShown": true,
+      "sourceHandStillPresent": true,
+      "merged": false
+    },
+    {
+      "file": "context_side_UNMERGED.png",
+      "sha256": "6153430441f6d15b7a3f9688c0c1f86bed60650fbd0463ba2de136f846d20af9",
+      "sourceBodyShown": true,
+      "sourceHandStillPresent": true,
+      "merged": false
+    },
+    {
+      "file": "isolated_pair.png",
+      "sha256": "0f890693498a238965add9064c3ffdd5d02b09900fc369d634424d17099d6c30",
+      "sourceBodyShown": false,
+      "sourceHandStillPresent": true,
+      "merged": false
+    }
+  ],
+  "blendFile": "CH101_ReducedCuff_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "a354ea0f03347be50c5518ad69fcc5dc2a5044790c879f228f3305fd4f7d6c8f",
+  "cuffVsPreservedBody": [
+    {
+      "object": "CUFF_REDUCTION_0.5_NOT_PRODUCTION",
+      "overlapTrianglePairCount": 392,
+      "uniqueEquipmentTrianglesCrossing": 336,
+      "nearHandCrossingTriangles": 336,
+      "awayFromHandCrossingTriangles": 0,
+      "minimumVertexSurfaceDistance": 0.0,
+      "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+      "limitation": "NOT_SOLID_CONTAINMENT_OR_SWEPT_ANIMATION_COLLISION_TEST"
+    }
+  ],
+  "sourceCuffPreservedHidden": true,
+  "unselectedTrialsPreservedHidden": true
+}
