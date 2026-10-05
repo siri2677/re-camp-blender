@@ -8,7 +8,16 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [shoulder branching boundary study](docs/plans/ch101-shoulder-branches-2026-10-05.md).
+Latest: [shared shoulder quad cage](docs/plans/ch101-shoulder-quad-cage-2026-10-05.md).
+Rebuilds the four regions as 2,079 coplanar quads with 88 shared branch edges.
+Zero tested self-intersections and orientation errors; maximum finite sampled
+surface difference 0.0162 mm. Six Blender tests cover source preservation,
+shared boundaries, reopened files and rejection of the unsafe structured grid.
+Shaded/wire views retain coarse source folds and many irregular junctions.
+This is an open topology work cage; shape redesign, thickness and sleeve/torso
+attachment remain. Next: crease-aware simplification and final panel edge flow.
+
+Previous: [shoulder branching boundary study](docs/plans/ch101-shoulder-branches-2026-10-05.md).
 Four disjoint source-edge paths divide a 436-vertex / 693-triangle open reference
 chart into four connected face regions. Original meshes remain unchanged; six
 Blender tests pass, including file reopen and rejection of altered paths.
