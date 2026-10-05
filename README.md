@@ -18,6 +18,9 @@ views were inspected. Major folds and many irregular poles remain: this hidden,
 open study is not the visual baseline, final deformation edge flow or a garment.
 Next: explicit major-fold/path design, then actual torso border and thickness QA.
 The whole-character score, existing baseline and Gate B/Unity restrictions remain.
+[Actual artifact release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-edge-flow-v001)
+and [restore pointer](docs/artifacts/CH101-latest-shoulder-edge-flow.json):
+17 payload files freshly downloaded and SHA256-verified.
 
 Previous: [bounded shoulder crease fairing](docs/plans/ch101-shoulder-crease-fairing-2026-10-05.md).
 Moves 1,547 cage vertices by at most 1.450030 mm while all 703 pinned vertices

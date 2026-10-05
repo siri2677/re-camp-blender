@@ -110,8 +110,15 @@
   "sourceStudyPointer": "docs/artifacts/CH101-latest-shoulder-crease-fairing.json",
   "publishedStudyPointer": "docs/artifacts/CH101-latest-shoulder-edge-flow.json",
   "releaseTag": "ch101-shoulder-edge-flow-v001",
+  "toolsCommit": "709559987ed95b03d187fa417359959e1b3019f9",
+  "bundleBytes": 25636897,
+  "bundleSha256": "b96e2e46dcaf7ef8a35b495ba56b1eee4a8f664c70b91bb9612ce7ff1572eef6",
   "downloadVerification": {
-    "status": "PENDING_PUBLICATION_AND_FRESH_DOWNLOAD"
+    "date": "2026-10-05",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 17,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
   },
   "nextTask": "Design major folds and deformation-aware paths explicitly; finalize actual torso attachment border before thickness/shared sleeve connection QA. Local reconnection is not complete garment retopology."
 }

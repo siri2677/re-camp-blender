@@ -1,5 +1,25 @@
 # Review artifact sharing
 
+## October 5 feature-locked shoulder quad reconnection
+
+`CH101-latest-shoulder-edge-flow.json` restores the actual Blend, twelve matched
+shaded/wire renders, full operation/QA report, read-me, visual review and rejected
+reconnection-trial summary. ZIP and all **17 payloads** were freshly downloaded
+and SHA256-verified on 2026-10-05.
+276 quad-edge rotations plus bounded correction change 520 faces; regular
+interior junctions increase 950 → 974 and render-triangle bending drops another
+4.56%. Original meshes, 709 pinned study vertices and shared boundaries stay fixed.
+Major folds, 926 irregular interior junctions and the provisional torso border
+remain. This hidden open study is not the visual baseline, a complete garment
+or final deformation-ready edge flow. No older/full-character pointer is replaced.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-edge-flow.json --output-dir artifacts/restored-shoulder-edge-flow
+```
+
+[Execution plan](../plans/ch101-shoulder-edge-flow-2026-10-05.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-edge-flow-v001).
+
 ## October 5 bounded shoulder crease fairing
 
 `CH101-latest-shoulder-crease-fairing.json` restores the actual Blend, eight

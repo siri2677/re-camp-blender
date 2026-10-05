@@ -70,8 +70,9 @@ def bending(obj,edges):
 def move_points(obj,original,adjacency,pinned,maximum_move=None,point_constraint=None,iterations=None,refresh_triangles=False):
     """Descent on render triangles, including each quad's internal diagonal.
 
-    Use the source tessellation for stable optimization; the final audit
-    independently measures Blender's actual post-movement tessellation.
+    Default to source tessellation for the original five-iteration recipe.
+    Reconnection callers can refresh Blender tessellation on each iteration;
+    the final audit independently measures post-movement render triangles.
     """
     base=np.array([list(p) for p in original],dtype=np.float64);points=base.copy()
     maximum_move=MAX_MOVE if maximum_move is None else maximum_move

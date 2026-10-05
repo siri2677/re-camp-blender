@@ -76,9 +76,20 @@ blender --background --python-exit-code 1 --python scripts/blender/author_ch101_
 blender --background --python-exit-code 1 --python tests/blender/test_shoulder_edge_flow.py -- --source <restored-fairing.blend> --artifact <new-output-directory>/CH101_FeatureLockedShoulderEdgeFlow_NOT_PRODUCTION_v001.blend
 ```
 
-실제 Blend·12장 렌더·QA report·read-me·visual review·거부 시험 요약을
-별도 연구용 Release로 공유한다. 공개 후 새 경로 다운로드와 ZIP/개별 SHA256
-검증 결과를 여기에 기록한다. 이전 pointer와 전신 rounded-hem 기준본을 대체하지 않는다.
+공유 완료: [연구용 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-shoulder-edge-flow-v001),
+[복원 pointer](../artifacts/CH101-latest-shoulder-edge-flow.json).
+실제 Blend·12장 렌더·QA report·read-me·visual review·거부 시험 요약 **17개 payload**를
+새 경로로 다운로드해 ZIP 및 모든 파일 SHA256 검증을 통과했다.
+이는 저장·복원 검증이지 의상·변형·외형 승인이 아니다. 이전 pointer와 전신
+rounded-hem 기준본을 대체하지 않는다.
+
+- tools commit: `709559987ed95b03d187fa417359959e1b3019f9`
+- ZIP: 25,636,897 bytes
+- ZIP SHA256: `b96e2e46dcaf7ef8a35b495ba56b1eee4a8f664c70b91bb9612ce7ff1572eef6`
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-shoulder-edge-flow.json --output-dir artifacts/restored-shoulder-edge-flow
+```
 
 ## 이어서 할 순서
 
