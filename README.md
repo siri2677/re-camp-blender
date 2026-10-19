@@ -8,7 +8,20 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [boundary-locked cap patch replacement](docs/plans/ch101-cap-replacement-2026-10-19.md).
+Latest: [domain-locked underarm disk replacements](docs/plans/ch101-underarm-disks-2026-10-19.md).
+Five independent disks in domains 6/7 replace 46 triangles with 36, removing
+five interior vertices while retaining all 907 layout edges and the preceding cap.
+Selected patch + attachment edges over 55° drop 10 → 0; whole-study bending drops
+2.37%. The global 134.76° fold remains elsewhere, so this is not broad rebuilding.
+Original-chart sampled errors stay 1.442278 / 1.480045 mm within the unchanged
+1.5 mm bound; immediate-source differences are disclosed separately in the plan.
+Twelve Blender tests and two sharing tests pass; sixteen views were inspected.
+Original meshes/UVs/materials/weights and the previous visible assembly stay fixed.
+The new study and five editable patch guides stay hidden, not a visual baseline.
+Next: broad support curves at the remaining major-fold/course constraints, then
+actual torso border, garment thickness/sewing, UV and deformation QA.
+
+Previous: [boundary-locked cap patch replacement](docs/plans/ch101-cap-replacement-2026-10-19.md).
 Actually replaces a classified 20-triangle disk with 14 triangles and removes
 three interior vertices. All 16 perimeter vertices and 907 layout edges remain
 fixed. Local maximum fold drops 63.39° → 34.95°; local bending drops 30.11%
