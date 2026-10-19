@@ -1,5 +1,28 @@
 # Review artifact sharing
 
+## October 19 independent domain-locked underarm disks
+
+`CH101-latest-underarm-disks.json` restores the actual Blend, sixteen matched
+broad/close/wire/translucent diagnostic renders, full operation/QA report, read-me,
+visual review and selection/rejection trace. ZIP and all **21 payloads** were
+freshly downloaded and SHA256-verified on 2026-10-19.
+Five independent disks replace 46 triangles with 36 while preserving all 907
+layout edges, retained point positions and the preceding cap patch.
+Whole-study bending drops 2.3693%; original-chart sampled errors remain
+1.442278 / 1.480045 mm under the unchanged cumulative 1.5 mm bound.
+Immediate-source differences (1.227855 / 1.616557 mm) are separately disclosed.
+The shaded change is local; the global 134.76° fold and narrow triangles remain.
+This hidden open study is not broad underarm/shoulder rebuilding, a final garment,
+rig or full-character score. Prior meshes/UVs/materials/weights, the visible
+assembly, old pointers and full-character baseline remain unchanged.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-disks.json --output-dir artifacts/restored-underarm-disks
+```
+
+[Execution plan and upstream inputs](../plans/ch101-underarm-disks-2026-10-19.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-disks-v001).
+
 ## October 19 boundary-locked cap patch replacement
 
 `CH101-latest-cap-replacement.json` restores the actual Blend, twelve matched

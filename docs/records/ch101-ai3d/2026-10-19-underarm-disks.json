@@ -191,8 +191,15 @@
   "layoutMetadataPointer": "docs/artifacts/CH101-latest-shoulder-deformation-layout.json",
   "publishedStudyPointer": "docs/artifacts/CH101-latest-underarm-disks.json",
   "releaseTag": "ch101-underarm-disks-v001",
+  "toolsCommit": "a4be0f5a1016dea25fb957875fab8d7887413d61",
+  "bundleBytes": 28672931,
+  "bundleSha256": "db9ef5c53e11a1d47b557f23e655da3b9b522d98271c51dcfcf98b5a9c3184a0",
   "downloadVerification": {
-    "status": "PENDING_PUBLICATION_AND_FRESH_DOWNLOAD"
+    "date": "2026-10-19",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 21,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
   },
   "nextTask": "Design broad support curves at the remaining major folds and resolve course/region constraints explicitly; do not repeat star elimination or expand the original-chart bound to claim full rebuilding. Then actual torso border, garment and deformation QA."
 }

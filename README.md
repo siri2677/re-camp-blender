@@ -20,6 +20,9 @@ Original meshes/UVs/materials/weights and the previous visible assembly stay fix
 The new study and five editable patch guides stay hidden, not a visual baseline.
 Next: broad support curves at the remaining major-fold/course constraints, then
 actual torso border, garment thickness/sewing, UV and deformation QA.
+[Actual artifact release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-disks-v001)
+and [restore pointer](docs/artifacts/CH101-latest-underarm-disks.json):
+21 payload files freshly downloaded and SHA256-verified.
 
 Previous: [boundary-locked cap patch replacement](docs/plans/ch101-cap-replacement-2026-10-19.md).
 Actually replaces a classified 20-triangle disk with 14 triangles and removes

@@ -106,8 +106,19 @@ blender --background --python-exit-code 1 --python scripts/blender/rebuild_ch101
 blender --background --python-exit-code 1 --python tests/blender/test_underarm_disks.py -- --source <restored-cap>/extracted/CH101_BoundaryLockedCapReplacement_NOT_PRODUCTION_v001.blend --layout-report <restored-layout>/extracted/deformation-layout-report.json --artifact <new-directory>/CH101_DomainLockedUnderarmDisks_NOT_PRODUCTION_v001.blend
 ```
 
-Blend·16장 렌더·report·read-me·시각 검토·선택/거부 기록을 별도 연구용 Release에
-보존하고, 새 경로 재다운로드와 모든 SHA256 검증 결과를 기록한다.
+공유 완료: [연구용 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-disks-v001),
+[복원 pointer](../artifacts/CH101-latest-underarm-disks.json).
+Blend·16장 렌더·report·read-me·시각 검토·선택/거부 기록 **21개 payload**를 새 경로로
+다운로드해 ZIP과 모든 파일 SHA256을 검증했다. 저장·복원 검증은 의상/외형/변형
+승인과 다르며 이전 pointer·전신 기준본을 대체하지 않는다.
+
+- tools commit: `a4be0f5a1016dea25fb957875fab8d7887413d61`
+- ZIP: 28,672,931 bytes
+- ZIP SHA256: `db9ef5c53e11a1d47b557f23e655da3b9b522d98271c51dcfcf98b5a9c3184a0`
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-disks.json --output-dir artifacts/restored-underarm-disks
+```
 
 ## 이어서 할 순서
 
