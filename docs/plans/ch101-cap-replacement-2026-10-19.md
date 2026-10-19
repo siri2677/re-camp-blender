@@ -91,8 +91,19 @@ blender --background --python-exit-code 1 --python scripts/blender/rebuild_ch101
 blender --background --python-exit-code 1 --python tests/blender/test_cap_replacement.py -- --source <restored-layout.blend> --artifact <new-output-directory>/CH101_BoundaryLockedCapReplacement_NOT_PRODUCTION_v001.blend
 ```
 
-Blend·12장 렌더·report·read-me·시각 검토·거부 시험/겨드랑이 진단을 별도
-연구용 Release로 저장하고, 새 경로 재다운로드와 모든 SHA256 검증 결과를 기록한다.
+공유 완료: [연구용 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cap-replacement-v001),
+[복원 pointer](../artifacts/CH101-latest-cap-replacement.json).
+Blend·12장 렌더·report·read-me·시각 검토·거부 시험/겨드랑이 진단 **17개 payload**를
+새 경로로 재다운로드해 ZIP 및 모든 파일 SHA256을 검증했다.
+저장·복원 검증은 최종 의상·외형·변형 승인과 다르며 이전 pointer와 전신 기준본을 유지한다.
+
+- tools commit: `6e953c25a1cec297c69bc91949c44575f7093e1d`
+- ZIP: 26,652,278 bytes
+- ZIP SHA256: `d00a40ec0afa2bad1f45bbf55e5f61b463075ce96f0d98258b82118260dc8fb5`
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-cap-replacement.json --output-dir artifacts/restored-cap-replacement
+```
 
 ## 이어서 할 순서
 

@@ -1,5 +1,26 @@
 # Review artifact sharing
 
+## October 19 boundary-locked cap patch replacement
+
+`CH101-latest-cap-replacement.json` restores the actual Blend, twelve matched
+broad/close shaded/wire renders, full operation/QA report, read-me, visual review
+and rejected-trial/underarm diagnostic. ZIP and all **17 payloads** were freshly
+downloaded and SHA256-verified on 2026-10-19.
+A 20-triangle cap micro-crease disk is replaced by 14 triangles, removing three
+interior vertices while its 16 perimeter points and all 907 layout edges stay fixed.
+Local maximum fold drops 63.39° → 34.95° and local bending drops 30.11%;
+whole-study bending drops only 0.15%. Original-chart samples remain within 1.5 mm.
+The shaded difference is subtle. This hidden open study is not full cap/underarm
+rebuilding, a final garment, rig or full-character score. Original meshes,
+UVs/materials/weights, the prior visible assembly and all older pointers remain.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-cap-replacement.json --output-dir artifacts/restored-cap-replacement
+```
+
+[Execution plan](../plans/ch101-cap-replacement-2026-10-19.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cap-replacement-v001).
+
 ## October 5 shoulder course and fold design layout
 
 `CH101-latest-shoulder-deformation-layout.json` restores the actual Blend,

@@ -19,6 +19,9 @@ Original meshes/UVs/materials/weights and the prior visible assembly are preserv
 Next: extract valid underarm disks without crossing course/region controls, then
 broad support curves/replacement patches and actual torso attachment/thickness QA.
 This hidden unoffset study is not a final garment, rig or new full-character score.
+[Actual artifact release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-cap-replacement-v001)
+and [restore pointer](docs/artifacts/CH101-latest-cap-replacement.json):
+17 payload files freshly downloaded and SHA256-verified.
 
 Previous: [shoulder course and fold design layout](docs/plans/ch101-shoulder-deformation-layout-2026-10-05.md).
 Three actual shared transverse courses cross four longitudinal routes to form

@@ -87,8 +87,15 @@
   "sourceStudyPointer": "docs/artifacts/CH101-latest-shoulder-deformation-layout.json",
   "publishedStudyPointer": "docs/artifacts/CH101-latest-cap-replacement.json",
   "releaseTag": "ch101-cap-replacement-v001",
+  "toolsCommit": "6e953c25a1cec297c69bc91949c44575f7093e1d",
+  "bundleBytes": 26652278,
+  "bundleSha256": "d00a40ec0afa2bad1f45bbf55e5f61b463075ce96f0d98258b82118260dc8fb5",
   "downloadVerification": {
-    "status": "PENDING_PUBLICATION_AND_FRESH_DOWNLOAD"
+    "date": "2026-10-19",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 17,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
   },
   "nextTask": "Extract separate valid underarm disks inside layout domains, preserving courses and region borders. Author broad support curves/replacement geometry, then actual torso attachment boundary and garment/deformation QA."
 }
