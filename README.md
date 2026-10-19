@@ -2,13 +2,25 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-10-05
+## Current status — 2026-10-19
 
 Start with the [updated completed/remaining execution plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md).
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [shoulder course and fold design layout](docs/plans/ch101-shoulder-deformation-layout-2026-10-05.md).
+Latest: [boundary-locked cap patch replacement](docs/plans/ch101-cap-replacement-2026-10-19.md).
+Actually replaces a classified 20-triangle disk with 14 triangles and removes
+three interior vertices. All 16 perimeter vertices and 907 layout edges remain
+fixed. Local maximum fold drops 63.39° → 34.95°; local bending drops 30.11%
+(whole-study bending only 0.15%). Original-chart sample error stays within 1.5 mm.
+Ten Blender tests and two sharing tests pass; twelve shaded/wire views inspected.
+The shaded difference is subtle; full cap/underarm rebuilding remains unfinished.
+Original meshes/UVs/materials/weights and the prior visible assembly are preserved.
+Next: extract valid underarm disks without crossing course/region controls, then
+broad support curves/replacement patches and actual torso attachment/thickness QA.
+This hidden unoffset study is not a final garment, rig or new full-character score.
+
+Previous: [shoulder course and fold design layout](docs/plans/ch101-shoulder-deformation-layout-2026-10-05.md).
 Three actual shared transverse courses cross four longitudinal routes to form
 16 connected surface design domains. All 64 major crease edges are classified:
 44 underarm redesign, 18 deferred until torso border design, two cap micro-crease
