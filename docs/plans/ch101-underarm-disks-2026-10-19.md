@@ -122,6 +122,10 @@ python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH
 
 ## 이어서 할 순서
 
+후속으로 [넓은 지지 곡선과 제한 검토](ch101-underarm-support-curves-2026-10-19.md)를
+진행했다. 제한 내 곡선 3개와 45개 판단을 저장했지만 실제 면/course 경계는 그대로다.
+현재 다음 작업은 해당 문서의 multi-face patch 구획/경계 설계를 따른다.
+
 1. 남은 큰 주름과 course/영역 경계가 충돌하는 구간의 넓은 지지 곡선을 설계한다.
    단일 정점 disk 제거를 계속 반복해 전체 재제작 완료로 세지 않는다.
    원본 1.5 mm 조건 안에서의 가능 범위를 먼저 검증하고, 필요 변경이 이를 넘으면

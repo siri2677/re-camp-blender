@@ -81,7 +81,23 @@ Blender CPU 검사 범위: 45개 판단 재현, 전체 구간 provenance, 끝점
 파일/12장 렌더 해시, Gate 잠금, 입력 해시와 출력 덮어쓰기 방지다.
 Blender 5.2.0 LTS CPU 검사 **11개 통과**(40.072초), 공유 utility 검사 **2개 통과**.
 AI3D/Colab validator도 통과했다(10 notebooks / 57 Blender scripts / 36 utilities).
-공유 해시는 아래 배포 기록에 추가한다.
+공유 ZIP과 17개 실제 파일을 새 경로로 다운로드해 모든 SHA256을 확인했다.
+다운로드한 Blend에서도 11개 검사를 다시 실행해 통과했다(65.757초).
+
+## 배포 기록
+
+- [연구용 사전 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-curves-v001).
+- [복원 pointer](../artifacts/CH101-latest-underarm-support-curves.json).
+- tools commit: `7b9166aafa0d990174c8caef5d884285be79b0fa`.
+- Blend SHA256: `ef10dda26d6d54770b8a3f45d2919f96a39782825ad9121d93053024bc0d0930`.
+- ZIP: 26,907,768 bytes; SHA256 `5618811430c0a18aa74d51f94ec142cc6511be385f0633f5118b3b49902b9df7`.
+- manifest SHA256: `a83f5fd6074d38773fc17d4eaa7ad658a8a890274c692886472a3c691744dc78`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-support-curves.json --output-dir artifacts/restored-underarm-support-curves
+```
+
+저장·복원 통과는 의상이나 Gate B 승인이 아니다. 이전 pointer들을 바꾸지 않았다.
 
 ## 재현 입력
 

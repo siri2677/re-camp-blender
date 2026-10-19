@@ -306,7 +306,18 @@
     "renderOnlyGhostSaved": false
   },
   "sharing": {
-    "status": "PENDING_UPLOAD"
+    "status": "FETCHED_AND_VERIFIED",
+    "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-curves-v001",
+    "pointer": "docs/artifacts/CH101-latest-underarm-support-curves.json",
+    "toolsCommit": "7b9166aafa0d990174c8caef5d884285be79b0fa",
+    "bundleBytes": 26907768,
+    "bundleSha256": "5618811430c0a18aa74d51f94ec142cc6511be385f0633f5118b3b49902b9df7",
+    "manifestSha256": "a83f5fd6074d38773fc17d4eaa7ad658a8a890274c692886472a3c691744dc78",
+    "payloadCount": 17,
+    "zipAndAllPayloadSHA256": "PASS",
+    "restoredBlenderTestsPassed": 11,
+    "restoredBlenderTestSeconds": 65.757,
+    "artifactRestorationIsNotGarmentApproval": true
   },
   "next": "Design broad multi-face patch boundaries with explicit original course correspondence; do not silently unprotect 907 edges or relax the original-chart cumulative 1.5 mm bound."
 }

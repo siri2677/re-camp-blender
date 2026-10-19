@@ -18,6 +18,10 @@ Strong comparison fits leave the original surface by 13–23 mm and are not appl
 This is guide feasibility, not surface/deformation QA, an impossibility proof,
 an approved silhouette or a full-character score. Next: broad multi-face patch
 boundary design and actual mesh QA within the unchanged cumulative 1.5 mm bound.
+Blender 11 tests, sharing 2 tests and both package validators pass.
+[Actual Blend and comparisons](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-curves-v001)
+and [restore pointer](docs/artifacts/CH101-latest-underarm-support-curves.json):
+17 payloads freshly downloaded and SHA256-verified.
 
 Previous: [domain-locked underarm disk replacements](docs/plans/ch101-underarm-disks-2026-10-19.md).
 Five independent disks in domains 6/7 replace 46 triangles with 36, removing

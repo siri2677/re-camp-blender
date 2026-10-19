@@ -1,5 +1,31 @@
 # Review artifact sharing
 
+## October 19 broad underarm support-curve feasibility
+
+`CH101-latest-underarm-support-curves.json` restores the actual Blend, twelve
+four-direction translucent comparisons, full report, read-me, visual diagnostic
+and design/selection review. ZIP and all **17 payloads** were freshly downloaded
+and SHA256-verified on 2026-10-19. ZIP: 26,907,768 bytes; SHA256
+`5618811430c0a18aa74d51f94ec142cc6511be385f0633f5118b3b49902b9df7`.
+Three whole course sectors have bounded editable proposals; original-chart guide
+sample distances are 1.290640 / 0.662065 / 0.721417 mm. The separate two-way
+curve corridor and adjacent-domain guards also pass. All 45 trials are recorded.
+Nine hidden curves distinguish source, bounded and rejected stronger comparison.
+No mesh, existing course boundary, cap/disk patch, original UV/material/weight,
+prior guide, default visible assembly or full-character baseline was changed.
+This is guide feasibility, not a new garment surface or deformation approval.
+The rejected red fits leave the original chart by 13–23 mm; they are not applied.
+This does not prove every other broad redesign impossible. Blender 11 tests,
+sharing 2 tests and both package validators pass. Gate B remains pending;
+adoption, Unity and production remain disabled.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-support-curves.json --output-dir artifacts/restored-underarm-support-curves
+```
+
+[Execution plan and pinned upstream inputs](../plans/ch101-underarm-support-curves-2026-10-19.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-curves-v001).
+
 ## October 19 independent domain-locked underarm disks
 
 `CH101-latest-underarm-disks.json` restores the actual Blend, sixteen matched
