@@ -1,5 +1,33 @@
 # Review artifact sharing
 
+## October 19 one multi-interior underarm panel
+
+`CH101-latest-underarm-panels.json` restores the actual Blend, seventeen
+broad/location/close/wire/comparison renders, full operation/selection/QA report,
+read-me, visual diagnostic and selection review. ZIP and all **22 payloads** were
+freshly downloaded and SHA256-verified on 2026-10-19. ZIP: 30,633,995 bytes; SHA256
+`93cb0b934141a119c9668d9a2594a3c044ea010cc5fed0686575bc1d98e3c135`.
+The [actual before/after preview](https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-panels-v001/panel_before_after.png)
+is also a separately uploaded PNG; its GitHub asset digest matches the ZIP payload.
+
+One 42.346 mm sector changes 21 triangles / 3 interior vertices into 17 triangles
+with 1 inserted support knot. Local maximum fold 74.75° → 37.23°; local bending
+drops 57.35%, whole-study bending only 1.37%. Original-chart sample errors remain
+1.442278 / 1.480045 mm; extra patch probes give 1.085629 / 1.449994 mm.
+All 907 layout edges, prior cap + five disks, original geometry/UV/material/weight,
+old guides, visible assembly and full-character baseline remain unchanged.
+The global 134.76° fold remains. This hidden open surface is not complete underarm
+redesign, a sewn/thickened garment, rig/deformation approval or a character score.
+Blender 14 tests, sharing 2 tests and both package validators pass. Gate B pending;
+adoption, Unity and production remain disabled.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-panels.json --output-dir artifacts/restored-underarm-panels
+```
+
+[Execution plan and pinned upstream inputs](../plans/ch101-underarm-panels-2026-10-19.md).
+[Download release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-panels-v001).
+
 ## October 19 broad underarm support-curve feasibility
 
 `CH101-latest-underarm-support-curves.json` restores the actual Blend, twelve

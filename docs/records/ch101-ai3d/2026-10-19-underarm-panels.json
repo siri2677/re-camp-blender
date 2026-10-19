@@ -385,7 +385,21 @@
     "ai3dFreeValidator": "PASS"
   },
   "sharing": {
-    "status": "PENDING_UPLOAD"
+    "status": "FETCHED_AND_VERIFIED",
+    "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-panels-v001",
+    "pointer": "docs/artifacts/CH101-latest-underarm-panels.json",
+    "toolsCommit": "c5f81064f76a33dac93c256a6be26c33f08f0f82",
+    "bundleBytes": 30633995,
+    "bundleSha256": "93cb0b934141a119c9668d9a2594a3c044ea010cc5fed0686575bc1d98e3c135",
+    "manifestSha256": "29bf499343be8ae8d9846d41e129e5bbdaa3ca67a5c4ea753796e80a9282f318",
+    "payloadCount": 22,
+    "zipAndAllPayloadSHA256": "PASS",
+    "previewUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-panels-v001/panel_before_after.png",
+    "previewSha256": "ead9c0b8206c3df7905a8515551ca35fda994cd6e255fb13f82bd07938c2f4c6",
+    "previewAssetDigest": "PASS",
+    "restoredBlenderTestsPassed": 14,
+    "restoredBlenderTestSeconds": 87.690,
+    "artifactRestorationIsNotGarmentApproval": true
   },
   "next": "Expand remaining panels with interior controls; preserve the cumulative original-chart bound and explicitly separate any proposed course-boundary change."
 }

@@ -87,7 +87,28 @@
 전체 68개 구획·16개 면 안의 선택을 재현하고, 실제 면/지지점/경계/이전 패치 보존,
 오차·꺾임·굴곡 조건의 독립적인 실패, provenance/map/NaN/곡선 변조 거부,
 모든 원본 메시·UV·재질·가중치·곡선·표시 상태, 저장 후 재개방·렌더 해시·Gate 잠금과
-입력 해시/덮어쓰기 방지를 확인했다. 공유 해시는 배포 검증 후 덧붙인다.
+입력 해시/덮어쓰기 방지를 확인했다.
+
+## 배포 기록
+
+[연구용 사전 Release](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-panels-v001),
+[복원 pointer](../artifacts/CH101-latest-underarm-panels.json),
+[실제 전후 PNG 미리보기](https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-panels-v001/panel_before_after.png).
+Blend·17장 렌더·report·read-me·시각/선택 검토 **22개 파일**을 새 경로로 다운로드해
+ZIP과 모든 payload SHA256을 검증했다. 별도 PNG asset digest도 payload와 일치한다.
+다운로드한 Blend로 14개 검사를 다시 실행해 통과했다(87.690초).
+
+- tools commit: `c5f81064f76a33dac93c256a6be26c33f08f0f82`.
+- Blend SHA256: `48844f26a0182f6243081fbbfb036269c8436a8dd9ec79dc129addaf184ad362`.
+- ZIP: 30,633,995 bytes; SHA256 `93cb0b934141a119c9668d9a2594a3c044ea010cc5fed0686575bc1d98e3c135`.
+- manifest SHA256: `29bf499343be8ae8d9846d41e129e5bbdaa3ca67a5c4ea753796e80a9282f318`.
+- preview SHA256: `ead9c0b8206c3df7905a8515551ca35fda994cd6e255fb13f82bd07938c2f4c6`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-panels.json --output-dir artifacts/restored-underarm-panels
+```
+
+저장·복원 검증은 의상/외형/변형 또는 사람 Gate B 승인이 아니다.
 
 ## 재현
 

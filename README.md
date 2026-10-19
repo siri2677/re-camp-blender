@@ -22,6 +22,11 @@ adopted as the visual baseline. Next: remaining broad panels with interior
 support controls, then the actual torso border, sewing/thickness and UV/rig QA.
 Blender 14 tests, sharing 2 tests and both package validators pass; all seventeen
 actual geometry renders were inspected, including the labeled patch comparison.
+[Actual Blend and seventeen renders](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-panels-v001)
+and [restore pointer](docs/artifacts/CH101-latest-underarm-panels.json):
+22 payload files freshly downloaded and SHA256-verified.
+[Before/after PNG preview](https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-panels-v001/panel_before_after.png)
+is also a separate release asset for viewing without extracting the ZIP.
 
 Previous: [broad underarm support-curve feasibility](docs/plans/ch101-underarm-support-curves-2026-10-19.md).
 Three whole underarm course sectors (about 17–20 cm) now have endpoint-fixed,
