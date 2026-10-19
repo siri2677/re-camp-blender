@@ -42,6 +42,7 @@ PYTHON_SOURCES = (
     ROOT / "scripts" / "blender" / "rebuild_ch101_cap_patch.py",
     ROOT / "scripts" / "blender" / "rebuild_ch101_underarm_disks.py",
     ROOT / "scripts" / "blender" / "design_ch101_underarm_support_curves.py",
+    ROOT / "scripts" / "blender" / "rebuild_ch101_underarm_panels.py",
     ROOT / "scripts" / "blender" / "refine_ch101_patch_trim_handoff.py",
     ROOT / "scripts" / "blender" / "refine_ch101_sector_profile.py",
     ROOT / "scripts" / "blender" / "refine_ch101_shared_interface.py",

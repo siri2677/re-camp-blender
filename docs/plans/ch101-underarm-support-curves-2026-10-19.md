@@ -115,6 +115,10 @@ blender --background --python-exit-code 1 --python tests/blender/test_underarm_s
 
 ## 이어서 할 순서
 
+후속으로 [다중 내부 정점 패치 실제 교체](ch101-underarm-panels-2026-10-19.md)를
+진행했다. 내부 지지점 하나로 원본 조건을 유지하는 약 42 mm 한 구역의 21→17삼각형을
+교체했다. 겨드랑이 전체 재제작은 아니며, 현재 다음 작업은 해당 문서를 따른다.
+
 1. 제한 내 곡선을 이용할 **넓은 multi-face replacement patch 구획/경계**를 설계한다.
    기존 cap와 5개 disk, 외곽/seam 및 영역 대응을 명시한다. 곡선 통과를 면 통과로
    바꾸어 쓰지 않고 실제 메시에서 원본 양방향 누적 1.5 mm·토폴로지·교차를 다시 검사한다.

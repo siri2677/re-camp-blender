@@ -8,7 +8,22 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [broad underarm support-curve feasibility](docs/plans/ch101-underarm-support-curves-2026-10-19.md).
+Latest: [boundary-locked multi-interior underarm panel](docs/plans/ch101-underarm-panels-2026-10-19.md).
+One 42.346 mm sector now replaces 21 real triangles with 17, removing three
+interior vertices and inserting one error-driven support knot. Local maximum
+fold drops 74.75° → 37.23°; local bending drops 57.35%, whole-study bending only
+1.37%. All 907 layout edges, the previous cap + five disks, original meshes,
+UV/materials/weights and prior guides remain fixed. Original-chart sample errors
+stay 1.442278 / 1.480045 mm, with extra patch probes 1.085629 / 1.449994 mm.
+Actual Blender renders include a labeled before/after patch diagnostic.
+The global 134.76° fold remains; this is not full underarm rebuilding, a sewn
+garment, deformation approval or a character score. The hidden study is not
+adopted as the visual baseline. Next: remaining broad panels with interior
+support controls, then the actual torso border, sewing/thickness and UV/rig QA.
+Blender 14 tests, sharing 2 tests and both package validators pass; all seventeen
+actual geometry renders were inspected, including the labeled patch comparison.
+
+Previous: [broad underarm support-curve feasibility](docs/plans/ch101-underarm-support-curves-2026-10-19.md).
 Three whole underarm course sectors (about 17–20 cm) now have endpoint-fixed,
 editable bounded proposals, with all 45 declared fairing trials recorded.
 Original-chart guide sample distances are 1.290640 / 0.662065 / 0.721417 mm.
