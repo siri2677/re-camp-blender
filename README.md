@@ -8,7 +8,18 @@ Start with the [updated completed/remaining execution plan](docs/plans/ch101-ref
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [domain-locked underarm disk replacements](docs/plans/ch101-underarm-disks-2026-10-19.md).
+Latest: [broad underarm support-curve feasibility](docs/plans/ch101-underarm-support-curves-2026-10-19.md).
+Three whole underarm course sectors (about 17–20 cm) now have endpoint-fixed,
+editable bounded proposals, with all 45 declared fairing trials recorded.
+Original-chart guide sample distances are 1.290640 / 0.662065 / 0.721417 mm.
+Nine hidden curves distinguish source, bounded proposal and rejected stronger
+comparison; no mesh faces or protected course boundaries were changed.
+Strong comparison fits leave the original surface by 13–23 mm and are not applied.
+This is guide feasibility, not surface/deformation QA, an impossibility proof,
+an approved silhouette or a full-character score. Next: broad multi-face patch
+boundary design and actual mesh QA within the unchanged cumulative 1.5 mm bound.
+
+Previous: [domain-locked underarm disk replacements](docs/plans/ch101-underarm-disks-2026-10-19.md).
 Five independent disks in domains 6/7 replace 46 triangles with 36, removing
 five interior vertices while retaining all 907 layout edges and the preceding cap.
 Selected patch + attachment edges over 55° drop 10 → 0; whole-study bending drops

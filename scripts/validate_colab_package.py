@@ -45,6 +45,7 @@ BLENDER_SCRIPTS = (
     "scripts/blender/design_ch101_shoulder_deformation_layout.py",
     "scripts/blender/rebuild_ch101_cap_patch.py",
     "scripts/blender/rebuild_ch101_underarm_disks.py",
+    "scripts/blender/design_ch101_underarm_support_curves.py",
     "scripts/blender/design_ch101_garment_panel.py",
     "scripts/blender/build_ch101_hem_binding.py",
     "scripts/blender/round_ch101_hem_binding.py",
