@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "ch101-section-transition-v001",
+  "recordedAt": "2026-10-05",
+  "strategyId": "CH101_SECTION_GUIDED_SHOULDER_ENTRY_V001",
+  "status": "LOCAL_STATIC_PASS_VISUAL_BASELINE_NOT_ADOPTED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "adoptionAllowed": false,
+  "staticQAEligible": true,
+  "completeShoulderPanel": false,
+  "scopeSpanMeters": 0.012,
+  "originalsPreserved": true,
+  "bodyMovedVertices": 0,
+  "sourceSleeveVerticesRetained": 2176,
+  "vertices": 10368,
+  "faces": 18752,
+  "triangles": 20736,
+  "sharedSeamEdgesInnerOuter": [
+    128,
+    128
+  ],
+  "nonAdjacentSelfIntersectionPairs": 0,
+  "bodyIntersectionPairs": 0,
+  "minimumSampledBodyGapMeters": 0.0002103497536154464,
+  "newPanelWallRangeMeters": [
+    0.0003139234322588891,
+    0.0008000506786629558
+  ],
+  "maximumNewSourceOffsetMeters": 0.004300030087504648,
+  "newPanelOffsetLimitMetersIncludingWall": 0.006,
+  "newPanelUVAuthored": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "blendSha256": "0d89a0bf4f842c2debb15f896f4fb6a641c0ac7e35befe43cd1b2db5b8aced84",
+  "sourceStudyPointer": "docs/artifacts/CH101-latest-connected-shoulder-diagnostic.json",
+  "visibleAssemblyPointer": "docs/artifacts/CH101-latest-upper-interface.json",
+  "blenderRegressionTestsPassed": 6,
+  "reviewedImageCount": 9,
+  "nextTask": "Author explicit front/back/underarm branching boundaries from the new upper ring to the torso, then rebuild full shoulder topology and re-run unchanged QA. Do not extend ambiguous circular sections."
+}

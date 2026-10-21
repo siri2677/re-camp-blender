@@ -1,0 +1,405 @@
+{
+  "schemaVersion": "ch101-underarm-panels-v001",
+  "recordedAt": "2026-10-19",
+  "strategyId": "CH101_BOUNDARY_LOCKED_MULTI_INTERIOR_UNDERARM_PANELS_V001",
+  "status": "ONE_MULTI_INTERIOR_PANEL_REVIEWED_VISUAL_BASELINE_NOT_ADOPTED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "adoptionAllowed": false,
+  "completeShoulderPanel": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "fullUnderarmRebuilt": false,
+  "majorFoldShapeRedesigned": false,
+  "deformationValidated": false,
+  "garmentStaticQA": false,
+  "originalsPreserved": true,
+  "geometryShapeChanged": true,
+  "courseBoundaryRelocationApplied": false,
+  "newUVAuthored": false,
+  "defaultStudyVisible": false,
+  "bodyMovedVertices": 0,
+  "bodyCumulativeMaximumMoveMeters": 0.002999919,
+  "bodyCumulativeMoveLimitMeters": 0.003,
+  "previousCapAndUnderarmDisksPreserved": true,
+  "sourceBlendSha256": "ef10dda26d6d54770b8a3f45d2919f96a39782825ad9121d93053024bc0d0930",
+  "curveReportSha256": "9fabffce970e35917ff320751fa219c27f83108e9b3f1180aa48fe0f3a13b689",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "blendFile": "CH101_BoundaryLockedUnderarmPanels_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "48844f26a0182f6243081fbbfb036269c8436a8dd9ec79dc129addaf184ad362",
+  "qa": {
+    "vertices": 2697,
+    "triangles": 5036,
+    "patches": [
+      {
+        "seedVertex": 910,
+        "domain": 7,
+        "removedTriangles": 21,
+        "replacementTriangles": 17,
+        "removedInteriorVertices": 3,
+        "extentMeters": 0.04234581964620471,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.03724586570514044,
+          "maximumDegrees": 74.74753438967937,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.01588407214701332,
+          "maximumDegrees": 37.23212956202113,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      }
+    ],
+    "maximumForwardOriginalChartSampleErrorMeters": 0.0014422779204323888,
+    "maximumReverseOriginalChartSampleErrorMeters": 0.0014800451463088393,
+    "forwardSampleCount": 15466,
+    "reverseSampleCount": 1129,
+    "maximumReverseWitness": {
+      "referenceSampleIndex": 106,
+      "point": [
+        -0.16038726270198822,
+        0.035803571343421936,
+        1.114530324935913
+      ],
+      "nearestPoint": [
+        -0.1612355262041092,
+        0.035337258130311966,
+        1.115649938583374
+      ],
+      "triangleIndex": 1255
+    },
+    "nonAdjacentSelfIntersectionPairs": 0,
+    "nonContiguousInteriorEdges": 0,
+    "zeroAreaFaces": 0,
+    "connectedComponents": 1,
+    "boundaryLoops": 2,
+    "euler": 0,
+    "beforeBending": {
+      "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+      "weightedRadiansSquaredMeters": 1.556252371060025,
+      "maximumDegrees": 134.75586205992974,
+      "interiorEdgeCount": 7381
+    },
+    "afterBending": {
+      "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+      "weightedRadiansSquaredMeters": 1.5348905731572282,
+      "maximumDegrees": 134.75586205992974,
+      "interiorEdgeCount": 7375
+    },
+    "eligible": true,
+    "densePatchQA": {
+      "barycentricGridDivisions": 12,
+      "forwardSamples": 1547,
+      "reverseLocalOriginalSamples": 221,
+      "maximumForwardPatchToOriginalChartMeters": 0.0010856286389753222,
+      "maximumReverseAssignedOriginalChartToPatchMeters": 0.0014499938115477562,
+      "reverseAssignment": "NEAREST_TRIANGLE_ON_UNMODIFIED_STUDY_BELONGS_TO_REMOVED_PANEL",
+      "continuousBoundProved": false,
+      "eligible": true
+    },
+    "panelCount": 1,
+    "preservedLayoutEdges": 907,
+    "preservedPreviousPatchFaces": 50,
+    "removedInteriorVertices": 3,
+    "addedSupportVertices": 1,
+    "maximumRetainedVertexMoveMeters": 0,
+    "originalBodyMovedVertices": 0,
+    "previousCapAndUnderarmDisksPreserved": true,
+    "geometryShapeChanged": true,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false
+  },
+  "guideQA": {
+    "guideCount": 1,
+    "maximumPositionErrorMeters": 0
+  },
+  "selectionReview": {
+    "recordedAt": "2026-10-19",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "adoptionAllowed": false,
+    "completeShoulderPanel": false,
+    "rigBound": false,
+    "fullCharacterScore": null,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "partitionCandidates": 68,
+    "boundaryTriangulationsPassingLocalConditions": 7,
+    "actualPanelVariants": 16,
+    "eligibleVariants": 2,
+    "appliedPanels": 1,
+    "selectionMethod": "ONE_LOWEST_GLOBAL_BENDING_FULL_QA_PASSING_PANEL_FROM_DECLARED_FAMILY",
+    "selected": {
+      "seedVertex": 910,
+      "domain": 7,
+      "faceRings": 2,
+      "supportTargetMeters": 0.00145
+    },
+    "sourceSeedIndexBasis": "INPUT_DOMAIN_LOCKED_UNDERARM_DISK_MESH",
+    "extentMeters": 0.04234581964620471,
+    "removedTriangles": 21,
+    "replacementTriangles": 17,
+    "removedInteriorVertices": 3,
+    "addedSupportVertices": 1,
+    "sourceWithoutSupportReverseErrorMeters": 0.0015792102785781026,
+    "selectedSupportOffsetFromUncorrectedPanelMeters": 0.00012921646644211372,
+    "qa": {
+      "vertices": 2697,
+      "triangles": 5036,
+      "patches": [
+        {
+          "seedVertex": 910,
+          "domain": 7,
+          "removedTriangles": 21,
+          "replacementTriangles": 17,
+          "removedInteriorVertices": 3,
+          "extentMeters": 0.04234581964620471,
+          "before": {
+            "weightedRadiansSquaredMeters": 0.03724586570514044,
+            "maximumDegrees": 74.74753438967937,
+            "edgesAbove55Degrees": 2
+          },
+          "after": {
+            "weightedRadiansSquaredMeters": 0.01588407214701332,
+            "maximumDegrees": 37.23212956202113,
+            "edgesAbove55Degrees": 0
+          },
+          "eligible": true
+        }
+      ],
+      "maximumForwardOriginalChartSampleErrorMeters": 0.0014422779204323888,
+      "maximumReverseOriginalChartSampleErrorMeters": 0.0014800451463088393,
+      "forwardSampleCount": 15466,
+      "reverseSampleCount": 1129,
+      "maximumReverseWitness": {
+        "referenceSampleIndex": 106,
+        "point": [
+          -0.16038726270198822,
+          0.035803571343421936,
+          1.114530324935913
+        ],
+        "nearestPoint": [
+          -0.1612355262041092,
+          0.035337258130311966,
+          1.115649938583374
+        ],
+        "triangleIndex": 1255
+      },
+      "nonAdjacentSelfIntersectionPairs": 0,
+      "nonContiguousInteriorEdges": 0,
+      "zeroAreaFaces": 0,
+      "connectedComponents": 1,
+      "boundaryLoops": 2,
+      "euler": 0,
+      "beforeBending": {
+        "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+        "weightedRadiansSquaredMeters": 1.556252371060025,
+        "maximumDegrees": 134.75586205992974,
+        "interiorEdgeCount": 7381
+      },
+      "afterBending": {
+        "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+        "weightedRadiansSquaredMeters": 1.5348905731572282,
+        "maximumDegrees": 134.75586205992974,
+        "interiorEdgeCount": 7375
+      },
+      "eligible": true,
+      "densePatchQA": {
+        "barycentricGridDivisions": 12,
+        "forwardSamples": 1547,
+        "reverseLocalOriginalSamples": 221,
+        "maximumForwardPatchToOriginalChartMeters": 0.0010856286389753222,
+        "maximumReverseAssignedOriginalChartToPatchMeters": 0.0014499938115477562,
+        "reverseAssignment": "NEAREST_TRIANGLE_ON_UNMODIFIED_STUDY_BELONGS_TO_REMOVED_PANEL",
+        "continuousBoundProved": false,
+        "eligible": true
+      },
+      "panelCount": 1,
+      "preservedLayoutEdges": 907,
+      "preservedPreviousPatchFaces": 50,
+      "removedInteriorVertices": 3,
+      "addedSupportVertices": 1,
+      "maximumRetainedVertexMoveMeters": 0,
+      "originalBodyMovedVertices": 0,
+      "previousCapAndUnderarmDisksPreserved": true,
+      "geometryShapeChanged": true,
+      "fullUnderarmRebuilt": false,
+      "majorFoldShapeRedesigned": false,
+      "deformationValidated": false,
+      "garmentStaticQA": false
+    },
+    "partitionAndTriangulationRejectionCounts": [
+      {
+        "Name": "BOUNDARY_EXCEEDS_DECLARED_DP_BUDGET",
+        "Count": 6
+      },
+      {
+        "Name": "NO_PREDICTED_PANEL_BENDING_GAIN",
+        "Count": 6
+      },
+      {
+        "Name": "NO_SAFE_CAP_BOUNDARY_TRIANGULATION",
+        "Count": 55
+      },
+      {
+        "Name": "NOT_MULTI_INTERIOR_PANEL",
+        "Count": 43
+      },
+      {
+        "Name": "PATCH_TOUCHES_OPEN_BORDER",
+        "Count": 3
+      }
+    ],
+    "examples": [
+      {
+        "seed": 1071,
+        "supportTargetMeters": 0.00145,
+        "originalSurfacePass": true,
+        "maximumLocalDegrees": 88.85615072417613,
+        "accepted": false,
+        "reason": "FOLD_ABOVE_55_DEGREES"
+      },
+      {
+        "seed": 1101,
+        "supportTargetMeters": 0.00145,
+        "originalSurfacePass": true,
+        "accepted": false,
+        "reason": "GLOBAL_AND_LOCAL_BENDING_INCREASE"
+      }
+    ],
+    "allBroadDesignsRuledOut": false,
+    "next": "Expand remaining panels with interior controls; preserve the cumulative original-chart bound and explicitly separate any proposed course-boundary change."
+  },
+  "visualReview": {
+    "recordedAt": "2026-10-19",
+    "reviewer": "CODEX_VISUAL_DIAGNOSTIC_NOT_HUMAN_GATE_B",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "adoptionAllowed": false,
+    "completeShoulderPanel": false,
+    "rigBound": false,
+    "fullCharacterScore": null,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "inspectedRenders": [
+      {
+        "file": "before/branch_front.png",
+        "sha256": "402bcf53a0a8ba340ea070cb7b1b645970d859bf6419be5dd9818eed6833f425"
+      },
+      {
+        "file": "before/branch_side.png",
+        "sha256": "fd7609d62490f14aa877cfbc181cc7231f1c11cfa658c521ba7a75329479d686"
+      },
+      {
+        "file": "before/branch_back.png",
+        "sha256": "29694522d04e30a1954e96ef09bdfa89a783525520638c33d5958499ecab6d81"
+      },
+      {
+        "file": "before/branch_oblique.png",
+        "sha256": "1b27474cf08f996ee812b7e0dd15124554b69ae22945a6627ebd4a592ee36ae9"
+      },
+      {
+        "file": "after/branch_front.png",
+        "sha256": "d8db285ac9826d9131e7fc32280c758971ffd7d83a7ecbbcc4f895c8aefb287f"
+      },
+      {
+        "file": "after/branch_side.png",
+        "sha256": "232f3713b4d1370ab293b5e8f7fe1836b138f51ac697238f986d5c85c924159d"
+      },
+      {
+        "file": "after/branch_back.png",
+        "sha256": "28c5afe366c25b4449e58403fd9174116060e29c11718c78372970f191f05da0"
+      },
+      {
+        "file": "after/branch_oblique.png",
+        "sha256": "82942db6c1ebf768363034227bc15f5c7f2a55e5cc481acce5dd754251a1e317"
+      },
+      {
+        "file": "location/branch_front.png",
+        "sha256": "682a8a6eec5e2425f4b4948490f531315f9381f47d3e6229d73b9dcd0e03cfc7"
+      },
+      {
+        "file": "location/branch_side.png",
+        "sha256": "efd7910a47a0ffdced2bc6813260a5c7d9b2b013739860ebaa10ef7f80ffc30e"
+      },
+      {
+        "file": "location/branch_back.png",
+        "sha256": "329c70013c919681edec18581fbf2c45b2ebcf6d8459b7c211b5ea820062f537"
+      },
+      {
+        "file": "location/branch_oblique.png",
+        "sha256": "3c0229338dbcf530d0424c034e29f405d30aab968e757f05a4f318233f758791"
+      },
+      {
+        "file": "panel_before_after.png",
+        "sha256": "ead9c0b8206c3df7905a8515551ca35fda994cd6e255fb13f82bd07938c2f4c6"
+      },
+      {
+        "file": "before_close/side_wire.png",
+        "sha256": "33d86d55fcd9325385178c0ff2635f594a70710c3d59cc1d40cbc92550956817"
+      },
+      {
+        "file": "before_close/back_wire.png",
+        "sha256": "2abdcb2e0dfb86c96a3b4baaecf2537d0a9f4cc87d20c15b35182c248d2c4ce5"
+      },
+      {
+        "file": "after_close/side_wire.png",
+        "sha256": "9104759bbdeb50c417ced937014d042faab38203f774af68aca35a023db3f619"
+      },
+      {
+        "file": "after_close/back_wire.png",
+        "sha256": "60133eeea18ed3e382d290f219c073765acdc7b460a46db69e3f8a263c97be80"
+      }
+    ],
+    "primaryPreview": "panel_before_after.png",
+    "findings": [
+      "The labeled side-by-side image renders actual source and replacement faces with identical materials, camera and lights. It shows a topology change, not an AI illustration or complete character.",
+      "The isolated old 21-triangle patch becomes 17 triangles with one interior support. Its exterior boundary is unchanged.",
+      "Broad colored views remain very similar; major folds, irregular narrow triangles and the provisional torso clip remain.",
+      "The translucent outline and close wires locate the small replaced sector. Render-only ghosts, text and wire copies are not saved into the Blend."
+    ],
+    "visualBaselineAdopted": false,
+    "geometryShapeChanged": true,
+    "fullCharacterCompletionShown": false
+  },
+  "tests": {
+    "status": "PASS",
+    "blenderVersion": "5.2.0 LTS",
+    "blenderTestsPassed": 14,
+    "blenderTestSeconds": 75.624,
+    "artifactSharingTestsPassed": 2,
+    "colabValidator": "PASS: 10 notebooks / 58 Blender scripts / 36 utilities",
+    "ai3dFreeValidator": "PASS"
+  },
+  "sharing": {
+    "status": "FETCHED_AND_VERIFIED",
+    "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-panels-v001",
+    "pointer": "docs/artifacts/CH101-latest-underarm-panels.json",
+    "toolsCommit": "c5f81064f76a33dac93c256a6be26c33f08f0f82",
+    "bundleBytes": 30633995,
+    "bundleSha256": "93cb0b934141a119c9668d9a2594a3c044ea010cc5fed0686575bc1d98e3c135",
+    "manifestSha256": "29bf499343be8ae8d9846d41e129e5bbdaa3ca67a5c4ea753796e80a9282f318",
+    "payloadCount": 22,
+    "zipAndAllPayloadSHA256": "PASS",
+    "previewUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-panels-v001/panel_before_after.png",
+    "previewSha256": "ead9c0b8206c3df7905a8515551ca35fda994cd6e255fb13f82bd07938c2f4c6",
+    "previewAssetDigest": "PASS",
+    "restoredBlenderTestsPassed": 14,
+    "restoredBlenderTestSeconds": 87.690,
+    "artifactRestorationIsNotGarmentApproval": true
+  },
+  "next": "Expand remaining panels with interior controls; preserve the cumulative original-chart bound and explicitly separate any proposed course-boundary change."
+}

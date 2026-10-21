@@ -1,0 +1,71 @@
+{
+  "recordVersion": "ch101-v005-no-gpu-preflight-v001",
+  "recordedAt": "2026-08-20",
+  "character": "CH101",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "generationProfile": "CH101_V005_IDENTITY_RECOVERY",
+  "runtime": {
+    "platform": "Windows-11",
+    "gpuCount": 0,
+    "gpuStatus": "BLOCKED_GPU_UNAVAILABLE",
+    "blenderAvailable": false,
+    "actualInference": false
+  },
+  "referencePreflight": {
+    "status": "PASS",
+    "manifestStatus": "REFERENCE_VIEWS_READY",
+    "singleViewReferenceSequence": [
+      "front",
+      "front",
+      "front"
+    ],
+    "foregroundRatios": [
+      0.8,
+      0.9,
+      0.98
+    ],
+    "auxiliaryReferences": [
+      {
+        "path": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+        "role": "IDENTITY_AND_SILHOUETTE_ANCHOR",
+        "sha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c"
+      },
+      {
+        "path": "art_refs/characters/rin/concept/CH101_Rin_ExpressionSheet_REVIEW_v001.png",
+        "role": "FACE_IDENTITY_AUXILIARY",
+        "sha256": "fd5988979bf7340dfeb8d1de128a49b2df97d5468354ec1449b0577384fb0048"
+      },
+      {
+        "path": "art_refs/characters/rin/concept/CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+        "role": "EQUIPMENT_AUXILIARY",
+        "sha256": "b9a01637e70518fe338e686345442579f36f2dc2190ae32ddda53f26cd00325b"
+      }
+    ]
+  },
+  "checks": {
+    "colabPackageValidator": "PASS",
+    "ai3dPackageValidator": "PASS",
+    "pythonCompile": "PASS",
+    "unitTests": 58,
+    "unitTestStatus": "PASS",
+    "providerRuntimePreflight": "PASS_WITH_BLOCKED_PROVIDERS",
+    "tripoDryRun": "PASS",
+    "unityHandoffStaticValidation": "PASS"
+  },
+  "status": "ADAPTIVE_NO_GPU_COMPLETED",
+  "nextAction": "RETRY_NOTEBOOK_05_WHEN_GPU_RETURNS",
+  "gate": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "blockedTasks": [
+    "Stable Fast 3D inference",
+    "InstantMesh inference",
+    "TripoSR inference",
+    "Wonder3D multiview inference and NeuS mesh extraction",
+    "Production Mesh generation",
+    "Unity import and Play Mode"
+  ]
+}

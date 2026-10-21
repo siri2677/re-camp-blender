@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "ch101-underarm-disks-v001",
+  "recordedAt": "2026-10-19",
+  "strategyId": "CH101_DOMAIN_LOCKED_UNDERARM_DISK_REPLACEMENT_V001",
+  "status": "LOCAL_UNDERARM_DISKS_REVIEWED_VISUAL_BASELINE_NOT_ADOPTED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "adoptionAllowed": false,
+  "completeShoulderPanel": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "fullUnderarmRebuilt": false,
+  "majorFoldShapeRedesigned": false,
+  "deformationValidated": false,
+  "garmentStaticQA": false,
+  "originalsPreserved": true,
+  "bodyMovedVertices": 0,
+  "previousCapPatchPreserved": true,
+  "bodyCumulativeMaximumMoveMeters": 0.002999919,
+  "bodyCumulativeMoveLimitMeters": 0.003,
+  "geometryShapeChanged": true,
+  "newUVAuthored": false,
+  "defaultStudyVisible": false,
+  "qa": {
+    "vertices": 2699,
+    "triangles": 5040,
+    "patchCount": 5,
+    "removedInteriorVertices": 5,
+    "removedTriangles": 46,
+    "replacementTriangles": 36,
+    "touchedDomains": [
+      6,
+      7
+    ],
+    "preservedLayoutEdges": 907,
+    "maximumRetainedVertexMoveMeters": 0,
+    "patches": [
+      {
+        "seedVertex": 900,
+        "domain": 7,
+        "sourceTriangles": 14,
+        "replacementTriangles": 12,
+        "boundaryVertices": 14,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.03041969980558282,
+          "maximumDegrees": 83.46464528017819,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.01752757848255346,
+          "maximumDegrees": 45.59134195510586,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      },
+      {
+        "seedVertex": 757,
+        "domain": 6,
+        "sourceTriangles": 4,
+        "replacementTriangles": 2,
+        "boundaryVertices": 4,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.03621597715349092,
+          "maximumDegrees": 57.110715537520825,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.025616003889545935,
+          "maximumDegrees": 45.59890980470624,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      },
+      {
+        "seedVertex": 1014,
+        "domain": 6,
+        "sourceTriangles": 4,
+        "replacementTriangles": 2,
+        "boundaryVertices": 4,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.020034283702332442,
+          "maximumDegrees": 65.83567431537598,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.011132650572925794,
+          "maximumDegrees": 37.81768850975549,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      },
+      {
+        "seedVertex": 1030,
+        "domain": 6,
+        "sourceTriangles": 12,
+        "replacementTriangles": 10,
+        "boundaryVertices": 12,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.02171466325917327,
+          "maximumDegrees": 58.154949008778225,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.018328754806477672,
+          "maximumDegrees": 51.27892243924552,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      },
+      {
+        "seedVertex": 914,
+        "domain": 7,
+        "sourceTriangles": 12,
+        "replacementTriangles": 10,
+        "boundaryVertices": 12,
+        "before": {
+          "weightedRadiansSquaredMeters": 0.019895584791751728,
+          "maximumDegrees": 56.410371845689816,
+          "edgesAbove55Degrees": 2
+        },
+        "after": {
+          "weightedRadiansSquaredMeters": 0.017908649654207423,
+          "maximumDegrees": 52.263647887359184,
+          "edgesAbove55Degrees": 0
+        },
+        "eligible": true
+      }
+    ],
+    "beforeBending": {
+      "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+      "weightedRadiansSquaredMeters": 1.5940189477099826,
+      "maximumDegrees": 134.75586205992974,
+      "interiorEdgeCount": 7396
+    },
+    "afterBending": {
+      "measurement": "RENDER_TRIANGLE_DIHEDRAL_BENDING",
+      "weightedRadiansSquaredMeters": 1.556252371060025,
+      "maximumDegrees": 134.75586205992974,
+      "interiorEdgeCount": 7381
+    },
+    "maximumForwardOriginalChartSampleErrorMeters": 0.0014422779204323888,
+    "maximumReverseOriginalChartSampleErrorMeters": 0.0014800451463088393,
+    "forwardSampleCount": 15478,
+    "reverseSampleCount": 1129,
+    "maximumNewPatchToSourceStudySampleErrorMeters": 0.0012278547510504723,
+    "maximumRemovedPatchToNewSurfaceSampleErrorMeters": 0.0016165567794814706,
+    "nonAdjacentSelfIntersectionPairs": 0,
+    "nonContiguousInteriorEdges": 0,
+    "zeroAreaFaces": 0,
+    "connectedComponents": 1,
+    "boundaryLoops": 2,
+    "euler": 0,
+    "previousCapPatchPreserved": true,
+    "originalBodyMovedVertices": 0,
+    "geometryShapeChanged": true,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "eligible": true
+  },
+  "guideQA": {
+    "guideCount": 5,
+    "maximumPositionErrorMeters": 0
+  },
+  "localBendingReductionFraction": 0.2944068433137069,
+  "wholeStudyBendingReductionFraction": 0.02369267737012437,
+  "selectionStatusCounts": {
+    "REJECTED_CANDIDATE": 27,
+    "REJECTED_GLOBAL_QA": 10,
+    "ACCEPTED": 5,
+    "SKIPPED_NEIGHBOR_OVERLAP": 3
+  },
+  "rejectionReasons": {
+    "PROTECTED_LAYOUT_VERTEX": 2,
+    "NO_SAFE_CAP_BOUNDARY_TRIANGULATION": 20,
+    "NO_PREDICTED_BENDING_IMPROVEMENT": 5
+  },
+  "blenderTestsPassed": 12,
+  "artifactSharingUtilityTestsPassed": 2,
+  "reviewedRenderCount": 16,
+  "validation": {
+    "notebooks": 10,
+    "blenderScripts": 56,
+    "utilities": 36
+  },
+  "blendSha256": "153bdb0528548ca587c0276d5a99eb49b823d36ed823145a2173eb0c7016a8bb",
+  "sourceStudyPointer": "docs/artifacts/CH101-latest-cap-replacement.json",
+  "layoutMetadataPointer": "docs/artifacts/CH101-latest-shoulder-deformation-layout.json",
+  "publishedStudyPointer": "docs/artifacts/CH101-latest-underarm-disks.json",
+  "releaseTag": "ch101-underarm-disks-v001",
+  "toolsCommit": "a4be0f5a1016dea25fb957875fab8d7887413d61",
+  "bundleBytes": 28672931,
+  "bundleSha256": "db9ef5c53e11a1d47b557f23e655da3b9b522d98271c51dcfcf98b5a9c3184a0",
+  "downloadVerification": {
+    "date": "2026-10-19",
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 21,
+    "zipAndPayloadSHA256": "PASS",
+    "garmentAcceptance": false
+  },
+  "nextTask": "Design broad support curves at the remaining major folds and resolve course/region constraints explicitly; do not repeat star elimination or expand the original-chart bound to claim full rebuilding. Then actual torso border, garment and deformation QA."
+}

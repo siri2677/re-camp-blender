@@ -1,0 +1,20 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-ranking-output-fix-v012",
+  "recordedAt": "2026-08-20T16:00:00+09:00",
+  "workstream": "CH101_FREE_AI3D_PROVIDER_RUNTIME",
+  "character": "CH101",
+  "toolsCommitBeforePatch": "e796fa9",
+  "pipeline": {
+    "refineAndEvaluate": "PASS_FOR_THREE_CANDIDATES",
+    "rankingManifest": "CREATED",
+    "reviewBlend": "CREATED_AFTER_ENV_FIX",
+    "reviewStatus": "AI_GENERATED_REVIEW_NOT_PRODUCTION",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "remediation": {
+    "status": "PATCHED_STATICALLY_VALIDATED",
+    "change": "Ranking cell now prints candidate status, scores, selected candidate, and gate fields for auditable Kaggle output.",
+    "nextAction": "Rerun the lightweight ranking cell and archive cell; then inspect the printed score threshold result before any human Gate B review."
+  }
+}

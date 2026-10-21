@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "ch101-spar3d-kaggle-root-cause-v003",
+  "recordedAt": "2026-09-03",
+  "runtime": "Kaggle",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "character": "CH101",
+  "toolsCommit": "477684558271feb25a67e1e364f9eed55208f8b7",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": "spar3d",
+  "providerCommit": "fdc311b16809e6a8adc2f5a3407ebb3db1a95bd1",
+  "model": "stabilityai/stable-point-aware-3d",
+  "reproduction": {
+    "status": "SPAR3D_DIAGNOSTIC_FAILED",
+    "returnCode": 1,
+    "gpu": "2x Tesla T4 15360MB",
+    "preflight": "READY_GPU_VISIBLE",
+    "dependencyPreflight": "READY_IMPORTS",
+    "referenceDownload": "PASS_MEDIA_GITHUB_LFS_BINARY",
+    "diagnosticMeshCount": 0,
+    "candidateRegistered": false,
+    "executionFailureDetail": "AttributeError: Namespace object has no attribute reduction_count_type"
+  },
+  "rootCause": {
+    "status": "SOURCE_CONFIRMED",
+    "code": "SPAR3D_OPTIONAL_REMESH_CLI_DEFAULTS_MISSING",
+    "evidence": "Pinned run.py adds reduction_count_type and target_count only when an optional remesh backend imports successfully, but later reads both values unconditionally. Kaggle's default install had neither optional backend; remesh=none did not need either backend, but the unconditional read still terminated the runner.",
+    "notAuthFailure": true,
+    "notVramPreflightFailure": true,
+    "notReferenceFileFailure": true
+  },
+  "fix": {
+    "patchId": "SPAR3D_T4_BF16_CLI_DEFAULTS_V002",
+    "script": "scripts/ai3d/patch_spar3d_t4_compat.py",
+    "application": "run_spar3d_candidate.py applies the idempotent patch before dependency/runtime execution",
+    "changes": [
+      "Define reduction_count_type=keep and target_count=2000 unconditionally",
+      "Keep FP16 fallback for CUDA devices without BF16 support",
+      "Preserve the detached pinned provider commit",
+      "Abort if patch markers or provider commit do not match"
+    ],
+    "productionMesh": false,
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "validation": {
+    "focusedUnitTest": "PASS",
+    "pythonCompile": "PASS",
+    "providerSourcePatchFixture": "PASS",
+    "kaggleRetest": "PENDING_NEW_PATCH_COMMIT"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Push the CLI-default compatibility patch, rerun Notebook 08 once on Kaggle, and record the next provider result without registering a candidate unless a non-empty mesh is actually produced."
+}

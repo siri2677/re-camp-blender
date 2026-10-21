@@ -1,0 +1,4 @@
+Metadata-Version: 2.1
+Name: xformers
+Version: 0.0.30
+Summary: Process-local availability marker for Wonder3D standard attention fallback

@@ -1,0 +1,99 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-semantic-connected-v004-v001",
+  "recordedAt": "2026-09-06",
+  "character": "CH101",
+  "branch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "104b402",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "runtime": {
+    "platform": "Kaggle",
+    "blender": "3.0.1",
+    "evaluationRenderSize": 256,
+    "providerRuns": 0,
+    "note": "Deterministic Blender semantic authoring and downstream review calibration; no provider retry."
+  },
+  "strategy": {
+    "strategyId": "SEMANTIC_CONNECTED_AUTHORING_V004",
+    "candidateId": "CH101-BLENDERSEMANTICCONNECTEDAUTHORING-004",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "connectivity": {
+      "status": "PASS",
+      "connectedComponentCount": 1,
+      "largestComponentVertexRatio": 1.0,
+      "looseVertexCount": 0,
+      "nonManifoldEdgeCount": 0,
+      "degenerateTriangleCount": 0
+    },
+    "semanticComponentAudit": {
+      "status": "PASS",
+      "bodyFace": 2,
+      "hair": 1,
+      "outfit": 1,
+      "equipment": 1,
+      "slabGrayboxAccepted": false
+    }
+  },
+  "candidateRuns": [
+    {
+      "materialMode": "preserve",
+      "overallScore": 0.514213,
+      "silhouetteScore": 0.500207,
+      "appearanceScore": 0.356315,
+      "colorScore": 0.191087,
+      "faceDetailScore": 0.499612,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "qualityHardGate": "PASS"
+    },
+    {
+      "materialMode": "palette",
+      "candidateSha256": "e8a6394e986b56a161cdd4cad04da6ca2f113039b152bc5d6fdfbc1c1fceeeb3",
+      "overallScore": 0.522828,
+      "silhouetteScore": 0.500207,
+      "appearanceScore": 0.390773,
+      "colorScore": 0.18844,
+      "faceDetailScore": 0.455767,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "qualityHardGate": "PASS",
+      "assistedVisualQA": {
+        "disposition": "REJECT",
+        "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+        "reasonCodes": [
+          "OVERALL_IDENTITY_SCORE_WEAK",
+          "OUTFIT_HAIR_EQUIPMENT_EDGES_WEAK",
+          "OUTFIT_COLOR_BLOCKING_WEAK",
+          "AUTOMATED_SCORE_GATE_FAILED"
+        ]
+      }
+    },
+    {
+      "materialMode": "multiview_reference_texture",
+      "candidateSha256": "e7c7b370392d28364936ad76f0a19d2c227cdd766e1a1a6eb6c26e1ed57f7d4c",
+      "overallScore": 0.50904,
+      "silhouetteScore": 0.500207,
+      "appearanceScore": 0.335621,
+      "colorScore": 0.123385,
+      "faceDetailScore": 0.501347,
+      "technicalScore": 1.0,
+      "failureReasons": ["COLOR_SCORE_BELOW_MINIMUM"],
+      "qualityHardGate": "PASS",
+      "assistedVisualQA": {
+        "disposition": "REJECT",
+        "recommendation": "REJECT_GATE_B_AND_REGENERATE",
+        "rankingStatus": "REGENERATE_REQUIRED"
+      },
+      "decisionNote": "Reference texture projection reduced appearance and color versus the palette variant."
+    }
+  ],
+  "decision": {
+    "status": "REGENERATE_REQUIRED",
+    "alphaReviewReady": false,
+    "strictVisualQAMet": false,
+    "bestTechnicalCandidate": "CH101-BLENDERSEMANTICCONNECTEDAUTHORING-004-PALETTE",
+    "nextAction": "Do not rerun V004 or apply another coarse palette/reference projection loop. Acquire a stronger free multiview/provider artifact or perform real artist/Blender semantic refinement targeting outfit, hair, equipment, and reference-conditioned color."
+  }
+}

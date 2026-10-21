@@ -1,0 +1,18 @@
+{
+  "status": "UNMERGED_OVERLAPPING_DIAGNOSTIC_NOT_ATTACHMENT",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "wristIntegrationAllowed": false,
+  "blendSha256": "0ac9dac544a025270fcdf2f4446d10a87e212eb6ddb88041f76b1bd752378e82",
+  "probe": "saved scene: geometry_0 versus CH101_TaperedHand_NOT_PRODUCTION",
+  "method": "BVH_TRIANGLE_SURFACE_OVERLAP_PLUS_VERTEX_DISTANCE",
+  "trianglePairs": 260,
+  "uniqueNewHandTrianglesCrossingSourceBody": 188,
+  "minimumVertexSurfaceDistanceMeters": 0.000008329234333359636,
+  "originalHandStillPresent": true,
+  "sourceHandReplaced": false,
+  "attachmentApproved": false,
+  "warning": "Context view may look connected; geometry is unmerged and overlapping."
+}

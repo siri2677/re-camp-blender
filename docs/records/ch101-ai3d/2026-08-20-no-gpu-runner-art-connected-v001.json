@@ -1,0 +1,230 @@
+{
+  "workstream": "NO_GPU",
+  "recordedAt": "2026-08-20T02:01:44.087685+00:00",
+  "gpuRequired": false,
+  "steps": [
+    {
+      "name": "colab-package-validation",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "scripts/validate_colab_package.py"
+      ],
+      "stdoutTail": "Source tree check passed: b6c9b3128358e061eee6184230929413eba84101 contains art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png\nColab Blender package validation passed (7 notebooks, 7 Blender scripts, and 12 utility scripts checked).\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "free-ai3d-package-validation",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "scripts/validate_ai3d_free_package.py"
+      ],
+      "stdoutTail": "AI 3D free package validation passed.\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "python-compile",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "compileall",
+        "-q",
+        "scripts",
+        "tests"
+      ],
+      "stdoutTail": "",
+      "stderrTail": ""
+    },
+    {
+      "name": "unittest",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py"
+      ],
+      "stdoutTail": "",
+      "stderrTail": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 1.189s\n\nOK\n"
+    },
+    {
+      "name": "provider-runtime-preflight",
+      "status": "PASS_WITH_BLOCKED_PROVIDERS",
+      "providers": {
+        "sf3d": {
+          "provider": "sf3d",
+          "requiresGpu": true,
+          "status": "BLOCKED_GPU_UNAVAILABLE",
+          "pythonVersion": "3.14.5",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "gpuCount": 0,
+          "gpus": [],
+          "torch": {
+            "available": false,
+            "cudaAvailable": null,
+            "version": ""
+          },
+          "secretFree": true,
+          "unityInputAllowed": false,
+          "productionPromotionAllowed": false,
+          "returnCode": 2,
+          "stdoutTail": "{\n  \"provider\": \"sf3d\",\n  \"requiresGpu\": true,\n  \"status\": \"BLOCKED_GPU_UNAVAILABLE\",\n  \"pythonVersion\": \"3.14.5\",\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"gpuCount\": 0,\n  \"gpus\": [],\n  \"torch\": {\n    \"available\": false,\n    \"cudaAvailable\": null,\n    \"version\": \"\"\n  },\n  \"secretFree\": true,\n  \"unityInputAllowed\": false,\n  \"productionPromotionAllowed\": false\n}\n",
+          "stderrTail": ""
+        },
+        "instantmesh": {
+          "provider": "instantmesh",
+          "requiresGpu": true,
+          "status": "BLOCKED_GPU_UNAVAILABLE",
+          "pythonVersion": "3.14.5",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "gpuCount": 0,
+          "gpus": [],
+          "torch": {
+            "available": false,
+            "cudaAvailable": null,
+            "version": ""
+          },
+          "secretFree": true,
+          "unityInputAllowed": false,
+          "productionPromotionAllowed": false,
+          "returnCode": 2,
+          "stdoutTail": "{\n  \"provider\": \"instantmesh\",\n  \"requiresGpu\": true,\n  \"status\": \"BLOCKED_GPU_UNAVAILABLE\",\n  \"pythonVersion\": \"3.14.5\",\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"gpuCount\": 0,\n  \"gpus\": [],\n  \"torch\": {\n    \"available\": false,\n    \"cudaAvailable\": null,\n    \"version\": \"\"\n  },\n  \"secretFree\": true,\n  \"unityInputAllowed\": false,\n  \"productionPromotionAllowed\": false\n}\n",
+          "stderrTail": ""
+        },
+        "triposr": {
+          "provider": "triposr",
+          "requiresGpu": true,
+          "status": "BLOCKED_GPU_UNAVAILABLE",
+          "pythonVersion": "3.14.5",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "gpuCount": 0,
+          "gpus": [],
+          "torch": {
+            "available": false,
+            "cudaAvailable": null,
+            "version": ""
+          },
+          "secretFree": true,
+          "unityInputAllowed": false,
+          "productionPromotionAllowed": false,
+          "returnCode": 2,
+          "stdoutTail": "{\n  \"provider\": \"triposr\",\n  \"requiresGpu\": true,\n  \"status\": \"BLOCKED_GPU_UNAVAILABLE\",\n  \"pythonVersion\": \"3.14.5\",\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"gpuCount\": 0,\n  \"gpus\": [],\n  \"torch\": {\n    \"available\": false,\n    \"cudaAvailable\": null,\n    \"version\": \"\"\n  },\n  \"secretFree\": true,\n  \"unityInputAllowed\": false,\n  \"productionPromotionAllowed\": false\n}\n",
+          "stderrTail": ""
+        },
+        "wonder3D": {
+          "provider": "wonder3D",
+          "requiresGpu": true,
+          "status": "BLOCKED_GPU_UNAVAILABLE",
+          "pythonVersion": "3.14.5",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "gpuCount": 0,
+          "gpus": [],
+          "torch": {
+            "available": false,
+            "cudaAvailable": null,
+            "version": ""
+          },
+          "secretFree": true,
+          "unityInputAllowed": false,
+          "productionPromotionAllowed": false,
+          "returnCode": 2,
+          "stdoutTail": "{\n  \"provider\": \"wonder3D\",\n  \"requiresGpu\": true,\n  \"status\": \"BLOCKED_GPU_UNAVAILABLE\",\n  \"pythonVersion\": \"3.14.5\",\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"gpuCount\": 0,\n  \"gpus\": [],\n  \"torch\": {\n    \"available\": false,\n    \"cudaAvailable\": null,\n    \"version\": \"\"\n  },\n  \"secretFree\": true,\n  \"unityInputAllowed\": false,\n  \"productionPromotionAllowed\": false\n}\n",
+          "stderrTail": ""
+        },
+        "tripo": {
+          "provider": "tripo",
+          "requiresGpu": false,
+          "status": "READY_NO_GPU_REQUIRED",
+          "pythonVersion": "3.14.5",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "gpuCount": 0,
+          "gpus": [],
+          "torch": {
+            "available": false,
+            "cudaAvailable": null,
+            "version": ""
+          },
+          "secretFree": true,
+          "unityInputAllowed": false,
+          "productionPromotionAllowed": false,
+          "returnCode": 0,
+          "stdoutTail": "{\n  \"provider\": \"tripo\",\n  \"requiresGpu\": false,\n  \"status\": \"READY_NO_GPU_REQUIRED\",\n  \"pythonVersion\": \"3.14.5\",\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"gpuCount\": 0,\n  \"gpus\": [],\n  \"torch\": {\n    \"available\": false,\n    \"cudaAvailable\": null,\n    \"version\": \"\"\n  },\n  \"secretFree\": true,\n  \"unityInputAllowed\": false,\n  \"productionPromotionAllowed\": false\n}\n",
+          "stderrTail": ""
+        }
+      },
+      "blockedProviders": [
+        "sf3d",
+        "instantmesh",
+        "triposr",
+        "wonder3D"
+      ],
+      "unexpectedFailures": [],
+      "unityInputAllowed": false,
+      "productionPromotionAllowed": false
+    },
+    {
+      "name": "prepare-reference-views",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\scripts\\ai3d\\prepare_reference_views.py",
+        "--art-root",
+        "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art",
+        "--output-dir",
+        "C:\\Users\\PARKSA~1\\AppData\\Local\\Temp\\re-camp-no-gpu-3kpfu56_\\reference-views"
+      ],
+      "stdoutTail": "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Temp\\re-camp-no-gpu-3kpfu56_\\reference-views\\reference-views-manifest.json\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "tripo-multiview-dry-run",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-blender\\scripts\\ai3d\\tripo_api.py",
+        "--reference-manifest",
+        "C:\\Users\\PARKSA~1\\AppData\\Local\\Temp\\re-camp-no-gpu-3kpfu56_\\reference-views\\reference-views-manifest.json",
+        "--output-dir",
+        "C:\\Users\\PARKSA~1\\AppData\\Local\\Temp\\re-camp-no-gpu-3kpfu56_\\tripo-dry-run",
+        "--candidate-count",
+        "1"
+      ],
+      "stdoutTail": "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Temp\\re-camp-no-gpu-3kpfu56_\\tripo-dry-run\\tripo-dry-run-plan.json\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "unity-handoff-static-validation",
+      "status": "PASS",
+      "returnCode": 0,
+      "command": [
+        "C:\\Users\\ParkSanghyeok\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "C:\\Users\\ParkSanghyeok\\Documents\\Codex\\2026-08-11\\so\\work\\re-camp-art\\scripts\\validate_unity_character_handoff.py"
+      ],
+      "stdoutTail": "Unity character handoff manifest validation passed (CH101-CH105 contract checked).\n",
+      "stderrTail": ""
+    }
+  ],
+  "status": "PASS_WITH_BLOCKED_OR_SKIPPED_EXTERNAL_STEPS",
+  "blockedGpuTasks": [
+    "Stable Fast 3D inference",
+    "InstantMesh inference",
+    "TripoSR inference",
+    "Wonder3D multiview inference and NeuS mesh extraction",
+    "production mesh generation",
+    "Unity import and Play Mode"
+  ],
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

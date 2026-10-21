@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "DUPLICATE_ONLY_STATIC_DISTAL_REPLACEMENT_ASSEMBLY",
+  "fullCharacterCandidate": false,
+  "originalSourcePreserved": true,
+  "sourceReplacementOnWorkingCopy": true,
+  "sourceHandReplacedInWorkingAssembly": true,
+  "weldedToSleeve": false,
+  "capIsTemporary": true,
+  "rigBound": false,
+  "anatomicalSeamVerified": false,
+  "designApproved": false,
+  "attachmentApproved": false,
+  "knownLimitations": [
+    "THREE_INHERITED_SELF_CROSSING_PAIRS_REMAIN",
+    "INHERITED_48_VERTEX_COMPONENT_REQUIRES_IDENTIFICATION",
+    "LAYERED_STATIC_INTERFACE_NOT_WELDED_OR_POSE_VERIFIED",
+    "PROVISIONAL_MATERIALS_AND_VISIBLE_STYLE_MISMATCH",
+    "NO_RIG_ANIMATION_FBX_OR_UNITY_ACCEPTANCE"
+  ],
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 12,
+    "date": "2026-09-20"
+  },
+  "candidateId": "CH101_DUPLICATE_DISTAL_REPLACEMENT_STATIC_ASSEMBLY_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-distal-replacement-study-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-distal-replacement-study-v001",
+  "assetName": "CH101-distal-replacement-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-distal-replacement-study-v001/CH101-distal-replacement-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 11213191,
+  "bundleSha256": "51aff03556a44b26f39d21e4caf1936fd0b360102c24ff6aa61b3f9a03487e5e",
+  "manifestSha256": "18a81cec672392a6d9f2f5ff8a6ea4ab3bf3a855be79e964e348e0d8c12ca332",
+  "toolsCommit": "c022842c18a3b51f31054d205d4cb2da0f11acbe",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

@@ -1,0 +1,61 @@
+{
+  "recordVersion": "current-roster-ai3d-reference-view-preflight-v001",
+  "recordedAt": "2026-08-20",
+  "contractVersion": "current-roster-ai3d-pipeline-v001",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "status": "CURRENT_ROSTER_REFERENCE_VIEWS_READY",
+  "characters": [
+    {
+      "character": "CH101",
+      "generationSourceRole": "CLEAN_CROP_HELPER_ONLY",
+      "viewSha256": {
+        "front": "054b38e963091a03664ae002694d327516b6d09f0370cc77a56e74f7127b286b",
+        "right": "20c0aa20e1bf8a30045a8321d3a6eb7071bad81187c052e47969e8064057561e",
+        "back": "21de4d3667a842e4e8a5b010604384e717be7d03e4f8eff68fed3775eeaa2473"
+      }
+    },
+    {
+      "character": "CH102",
+      "generationSourceRole": "CLEAN_CROP_HELPER_ONLY",
+      "viewSha256": {
+        "front": "a89ff214f13c32420ca140e68687a1780b456021ae4c429f9ab74c862c03d1f2",
+        "right": "2103f870a713bdacb28de5b24a951aa8d9e205596ac00248f873eabc2c74e64c",
+        "back": "ae1c43c74df0df1d6da78bf2c7f79d7806eba5404abbbb3f3e66375805aa8915"
+      }
+    },
+    {
+      "character": "CH103",
+      "generationSourceRole": "CLEAN_CROP_HELPER_ONLY",
+      "viewSha256": {
+        "front": "d714a202b9a4c165f8398bcbb8dcdbf6ed00a05b2d29ada99ecbca33d57a2797",
+        "right": "369af6c29d7f51ac0fb22b77b59956d8b44011aa57f09413702ebfb728b90985",
+        "back": "6293b6eba25920897befaec53a4a4596316767bc3f9d7a34caa80716286c53b8"
+      }
+    },
+    {
+      "character": "CH104",
+      "generationSourceRole": "CLEAN_CROP_HELPER_ONLY",
+      "viewSha256": {
+        "front": "ba322fef76a4a2d93eff846bcc925c229ef5355df31fbe7c7e8fe884e15228f5",
+        "right": "ad58e0cb5613c15db0fb2d6c35f9cc7b9457f560877a0441db609b51cbdc05b8",
+        "back": "32c44af85b8f645211ea0d8b46a597b3c53437612e0cb2334572dbadf5a0b480"
+      }
+    },
+    {
+      "character": "CH105",
+      "generationSourceRole": "APPROVED_CHARACTER_SHEET_TOP_ROW_FALLBACK",
+      "viewSha256": {
+        "front": "bfddcf7e05980d3dbe38f43841041d0b9237920c42d11c6c5acc407595073735",
+        "right": "4c0d1cc51814089d27973ed0467f131cff6e8b4391119560f1831f6899b50b7f",
+        "back": "a4294a06c1cafcb9dfb12dde174458880eb4432a9aacbbfe8959d687fba6e1ac"
+      }
+    }
+  ],
+  "contactSheet": "docs/records/current-roster-ai3d/assets/CurrentRoster_ReferenceViews_NOT_PRODUCTION_v001.png",
+  "contactSheetSha256": "9260f1b600cf37db3df519ec2f2fdf8de431e1b8b2c1042c3a489c80b8fcdc35",
+  "gpuRequired": false,
+  "actualInference": false,
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

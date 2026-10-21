@@ -1,0 +1,112 @@
+{
+  "contractVersion": "current-roster-socket-contract-v001",
+  "commonRuntimeSockets": [
+    "Socket_Equipment_Primary",
+    "Socket_VFXCenter",
+    "Socket_CameraFocus"
+  ],
+  "characters": [
+    {
+      "code": "CH101",
+      "subject": "AmasawaRin",
+      "modelNamePrefix": "CH101",
+      "productionBlend": "CH101_A_HighRes_Production_v001.blend",
+      "sourceReference": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "detailSockets": [
+        "Socket_Weapon_R",
+        "Socket_BladeTip",
+        "Socket_Ribbon_L",
+        "Socket_Ribbon_R"
+      ],
+      "runtimeSocketMap": {
+        "Socket_Equipment_Primary": "Socket_Weapon_R",
+        "Socket_VFXCenter": "Socket_VFXCenter",
+        "Socket_CameraFocus": "Socket_CameraFocus"
+      }
+    },
+    {
+      "code": "CH102",
+      "subject": "KisaragiMao",
+      "modelNamePrefix": "CH102",
+      "productionBlend": "CH102_A_HighRes_Production_v001.blend",
+      "sourceReference": "art_refs/characters/mao/concept/CH102_Mao_CharacterSheet_APPROVED_v001.png",
+      "detailSockets": [
+        "Socket_Weapon_R",
+        "Socket_BowRoot",
+        "Socket_BowGrip_L",
+        "Socket_BowGrip_R"
+      ],
+      "runtimeSocketMap": {
+        "Socket_Equipment_Primary": "Socket_Weapon_R",
+        "Socket_VFXCenter": "Socket_VFXCenter",
+        "Socket_CameraFocus": "Socket_CameraFocus"
+      }
+    },
+    {
+      "code": "CH103",
+      "subject": "KanadeNozomi",
+      "modelNamePrefix": "CH103",
+      "productionBlend": "CH103_A_HighRes_Production_v001.blend",
+      "sourceReference": "art_refs/characters/nozomi/concept/CH103_Nozomi_CharacterSheet_APPROVED_v001.png",
+      "detailSockets": [
+        "Socket_Equipment_R",
+        "Socket_BatonGrip",
+        "Socket_BatonOrb",
+        "Socket_VeilRoot_L",
+        "Socket_VeilRoot_R",
+        "Socket_VeilWaist_L",
+        "Socket_VeilWaist_R"
+      ],
+      "runtimeSocketMap": {
+        "Socket_Equipment_Primary": "Socket_Equipment_R",
+        "Socket_VFXCenter": "Socket_VFXCenter",
+        "Socket_CameraFocus": "Socket_CameraFocus"
+      }
+    },
+    {
+      "code": "CH104",
+      "subject": "ShionTategami",
+      "modelNamePrefix": "CH104",
+      "productionBlend": "CH104_A_HighRes_Production_v001.blend",
+      "sourceReference": "art_refs/characters/shion/concept/CH104_Shion_CharacterSheet_APPROVED_v001.png",
+      "detailSockets": [
+        "Socket_FanGrip",
+        "Socket_FanPivot",
+        "Socket_FanBeam",
+        "Socket_MapRing_Carry",
+        "Socket_MapRingCore"
+      ],
+      "runtimeSocketMap": {
+        "Socket_Equipment_Primary": "Socket_Equipment_Primary",
+        "Socket_VFXCenter": "Socket_VFXCenter",
+        "Socket_CameraFocus": "Socket_CameraFocus"
+      }
+    },
+    {
+      "code": "CH105",
+      "subject": "KuroganeAkari",
+      "modelNamePrefix": "CH105",
+      "productionBlend": "CH105_A_HighRes_Production_v001.blend",
+      "sourceReference": "art_refs/characters/akari/concept/CH105_Akari_CharacterSheet_APPROVED_v001.png",
+      "detailSockets": [
+        "Socket_Gauntlet_L_Wrist",
+        "Socket_Gauntlet_R_Wrist",
+        "Socket_Gauntlet_L_Knuckle",
+        "Socket_Gauntlet_R_Knuckle",
+        "Socket_AnchorRing_Carry",
+        "Socket_AnchorRing_Active",
+        "Socket_AnchorRing_CableAttach"
+      ],
+      "runtimeSocketMap": {
+        "Socket_Equipment_Primary": "Socket_Equipment_Primary",
+        "Socket_Gauntlet_L": "Socket_Gauntlet_L_Wrist",
+        "Socket_Gauntlet_R": "Socket_Gauntlet_R_Wrist",
+        "Socket_AnchorRing_Carry": "Socket_AnchorRing_Carry",
+        "Socket_AnchorRing_Active": "Socket_AnchorRing_Active",
+        "Socket_LineAttach": "Socket_AnchorRing_CableAttach",
+        "Socket_VFXCenter": "Socket_VFXCenter",
+        "Socket_CameraFocus": "Socket_CameraFocus"
+      }
+    }
+  ]
+}

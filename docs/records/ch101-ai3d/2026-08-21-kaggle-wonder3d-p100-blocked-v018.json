@@ -1,0 +1,55 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-wonder3d-p100-blocked-v018",
+  "recordedAt": "2026-08-21T16:12:36+09:00",
+  "workstream": "CH101_WONDER3D_MULTIVIEW",
+  "character": "CH101",
+  "toolsCommit": "273cd52",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": {
+    "name": "wonder3D",
+    "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "expectedViews": 6,
+    "referenceManifestSha256": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674"
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuMemoryMb": 16384,
+    "pythonVersion": "3.12.13",
+    "torch": "2.7.1+cu118",
+    "cuda": "11.8",
+    "deviceCapability": "sm_60",
+    "apiCreditUsed": 0
+  },
+  "execution": {
+    "adaptiveStatus": "READY_GPU_WORKSTREAM",
+    "gpuExecutionAllowed": true,
+    "tinyCudaNN": "BLOCKED_OPTIONAL_BUILD",
+    "generationStatus": "FAILED_PROVIDER_EXECUTION",
+    "actualInference": false,
+    "failure": {
+      "type": "DEPENDENCY_INTERPRETER_MISMATCH_OR_HUB_API_MISSING",
+      "message": "ImportError: cannot import name 'split_torch_state_dict_into_shards' from 'huggingface_hub'",
+      "providerStderrTail": "accelerate loaded from /usr/local/bin/accelerate and imported huggingface_hub without split_torch_state_dict_into_shards",
+      "sessionStateAfterFailure": "KAGGLE_CELL_QUEUE_OR_SESSION_RECONNECT_REQUIRED"
+    },
+    "outputs": {
+      "multiviewGenerated": false,
+      "candidateCreated": false,
+      "meshExtracted": false,
+      "reviewBlendCreated": false,
+      "unityPackageCreated": false
+    }
+  },
+  "remediation": {
+    "commit": "c5ea2ae",
+    "change": "Launch accelerate through the same sys.executable that installed provider dependencies",
+    "status": "PENDING_KAGGLE_RERUN"
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

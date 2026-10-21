@@ -1,0 +1,52 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-p100-unsupported-torch-v019",
+  "recordedAt": "2026-08-24T11:23:27+09:00",
+  "workstream": "CH101_WONDER3D_PREFLIGHT",
+  "character": "CH101",
+  "toolsCommit": "bccdc53",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "provider": {
+    "name": "wonder3D",
+    "commit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24"
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla P100-PCIE-16GB",
+    "gpuMemoryMb": 16384,
+    "pythonVersion": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "deviceCapability": "sm_60",
+    "torchArchList": ["sm_70", "sm_75", "sm_80", "sm_86", "sm_90", "sm_100", "sm_120"],
+    "torchKernelSupportsDevice": false,
+    "apiCreditUsed": 0
+  },
+  "preflight": {
+    "observedStatusBeforeFix": "READY_GPU_WORKSTREAM",
+    "correctedStatus": "BLOCKED_GPU_UNSUPPORTED",
+    "selectedWorkstreamAfterFix": "NO_GPU",
+    "heavyInstallStarted": false,
+    "actualInference": false,
+    "nextAction": "RUN_NO_GPU_MAINTENANCE_AND_RETRY_WITH_COMPATIBLE_TORCH_RUNTIME",
+    "verifiedInKaggle": {
+      "verifiedAt": "2026-08-24T11:25:32+09:00",
+      "verifiedCommit": "21a2572",
+      "adaptiveStatus": "ADAPTIVE_NO_GPU_COMPLETED",
+      "selectedWorkstream": "NO_GPU",
+      "providerSetupCellExecuted": false
+    }
+  },
+  "outputs": {
+    "multiviewGenerated": false,
+    "candidateCreated": false,
+    "meshExtracted": false,
+    "reviewBlendCreated": false,
+    "unityPackageCreated": false
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  }
+}

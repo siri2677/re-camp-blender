@@ -1,0 +1,323 @@
+{
+  "schemaVersion": "ch101-underarm-support-curves-v001",
+  "recordedAt": "2026-10-19",
+  "strategyId": "CH101_BROAD_UNDERARM_SUPPORT_CURVE_FEASIBILITY_V001",
+  "status": "GUIDE_FEASIBILITY_REVIEWED_NOT_SURFACE_REBUILD",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "adoptionAllowed": false,
+  "completeShoulderPanel": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "fullUnderarmRebuilt": false,
+  "majorFoldShapeRedesigned": false,
+  "deformationValidated": false,
+  "garmentStaticQA": false,
+  "originalsPreserved": true,
+  "geometryShapeChanged": false,
+  "courseBoundaryRelocationApplied": false,
+  "bodyMovedVertices": 0,
+  "bodyCumulativeMaximumMoveMeters": 0.002999919,
+  "bodyCumulativeMoveLimitMeters": 0.003,
+  "previousCapAndUnderarmDisksPreserved": true,
+  "meshVertices": 2699,
+  "meshTriangles": 5040,
+  "preservedLayoutEdges": 907,
+  "unchangedMaximumSurfaceFoldDegrees": 134.75586205992974,
+  "sourceBlendSha256": "153bdb0528548ca587c0276d5a99eb49b823d36ed823145a2173eb0c7016a8bb",
+  "sourceReportSha256": "74a762ba537fb6f1b2ee7d22cffd130ea36d427b8c689cfff431f9d8a712fa6a",
+  "layoutReportSha256": "ed9f9e3b5e0451a190401868e230f7c0258561c4a860acc7fd5af5633527d3ea",
+  "capReportSha256": "47df4f246311d2eea4166216787e110d9365c8fb26677b98b182fc670f162415",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "blendFile": "CH101_BroadUnderarmSupportCurves_NOT_PRODUCTION_v001.blend",
+  "blendSha256": "ef10dda26d6d54770b8a3f45d2919f96a39782825ad9121d93053024bc0d0930",
+  "designSummary": {
+    "recordedAt": "2026-10-19",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "adoptionAllowed": false,
+    "completeShoulderPanel": false,
+    "rigBound": false,
+    "fullCharacterScore": null,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "stage": "BROAD_SUPPORT_CURVE_PROPOSALS_ONLY",
+    "declaredTrials": 45,
+    "boundedCurves": 3,
+    "editableCurves": 9,
+    "sourceCourseVertices": [
+      64,
+      60,
+      52
+    ],
+    "originalFoldNetworkCrossings": [
+      1,
+      2,
+      4
+    ],
+    "selected": [
+      {
+        "course": 0,
+        "qa": {
+          "weight": 2,
+          "lengthMeters": 0.18872458692716093,
+          "maximumTurnDegrees": 30.83392053944023,
+          "discreteCurvatureSquaredIntegralPerMeter": 2691.7078073260022,
+          "maximumOriginalChartDistanceMeters": 0.0012906399788334966,
+          "maximumAdjacentDomainDistanceMeters": 0.0002735413145273924,
+          "maximumSourceArcToProposalMeters": 0.0012685057835672931,
+          "maximumProposalToSourceArcMeters": 0.000808109287129289,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 833,
+          "sourceArcSamples": 834,
+          "guideCorridorPassed": true
+        }
+      },
+      {
+        "course": 1,
+        "qa": {
+          "weight": 2,
+          "lengthMeters": 0.2005244395812702,
+          "maximumTurnDegrees": 26.822803656617197,
+          "discreteCurvatureSquaredIntegralPerMeter": 1722.7345696760012,
+          "maximumOriginalChartDistanceMeters": 0.0006620654021389782,
+          "maximumAdjacentDomainDistanceMeters": 0.0006620587664656341,
+          "maximumSourceArcToProposalMeters": 0.0012332466805929558,
+          "maximumProposalToSourceArcMeters": 0.0007847900153189711,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 872,
+          "sourceArcSamples": 868,
+          "guideCorridorPassed": true
+        }
+      },
+      {
+        "course": 2,
+        "qa": {
+          "weight": 8,
+          "lengthMeters": 0.17228240135959388,
+          "maximumTurnDegrees": 20.78712755508927,
+          "discreteCurvatureSquaredIntegralPerMeter": 1163.6398747146216,
+          "maximumOriginalChartDistanceMeters": 0.0007214171346276999,
+          "maximumAdjacentDomainDistanceMeters": 0.0007214830839075148,
+          "maximumSourceArcToProposalMeters": 0.0011204716902889292,
+          "maximumProposalToSourceArcMeters": 0.0007747702335721123,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 756,
+          "sourceArcSamples": 736,
+          "guideCorridorPassed": true
+        }
+      }
+    ],
+    "strongComparisons": [
+      {
+        "course": 0,
+        "qa": {
+          "weight": 2097152,
+          "lengthMeters": 0.13829364803585237,
+          "maximumTurnDegrees": 0.9378385517947461,
+          "discreteCurvatureSquaredIntegralPerMeter": 13.702725531262299,
+          "maximumOriginalChartDistanceMeters": 0.022451579570770264,
+          "maximumAdjacentDomainDistanceMeters": 0.022140946239233017,
+          "maximumSourceArcToProposalMeters": 0.02848585066689677,
+          "maximumProposalToSourceArcMeters": 0.02559584932450161,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 615,
+          "sourceArcSamples": 834,
+          "guideCorridorPassed": false
+        },
+        "applied": false
+      },
+      {
+        "course": 1,
+        "qa": {
+          "weight": 2097152,
+          "lengthMeters": 0.15296559058860346,
+          "maximumTurnDegrees": 0.5487113957612174,
+          "discreteCurvatureSquaredIntegralPerMeter": 4.957459469756306,
+          "maximumOriginalChartDistanceMeters": 0.022525949403643608,
+          "maximumAdjacentDomainDistanceMeters": 0.02309371531009674,
+          "maximumSourceArcToProposalMeters": 0.026564345760256212,
+          "maximumProposalToSourceArcMeters": 0.02436652869816339,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 641,
+          "sourceArcSamples": 868,
+          "guideCorridorPassed": false
+        },
+        "applied": false
+      },
+      {
+        "course": 2,
+        "qa": {
+          "weight": 2097152,
+          "lengthMeters": 0.13120088001162328,
+          "maximumTurnDegrees": 0.5118824537057828,
+          "discreteCurvatureSquaredIntegralPerMeter": 5.091649028343055,
+          "maximumOriginalChartDistanceMeters": 0.013002930209040642,
+          "maximumAdjacentDomainDistanceMeters": 0.013058826327323914,
+          "maximumSourceArcToProposalMeters": 0.023096640944944184,
+          "maximumProposalToSourceArcMeters": 0.017588785316353127,
+          "maximumEndpointMoveMeters": 0,
+          "proposalSamples": 641,
+          "sourceArcSamples": 736,
+          "guideCorridorPassed": false
+        },
+        "applied": false
+      }
+    ],
+    "additionalCorridorGuard": "Source arc to proposal and proposal to source arc <=1.5 mm, independently of original-surface distance",
+    "firstAdditionalCorridorFailuresMeters": [
+      0.0015445955917984429,
+      0.0015432570411108236,
+      0.0015562193620478942
+    ],
+    "separation": {
+      "pairs": [
+        {
+          "coursePair": [
+            0,
+            1
+          ],
+          "minimumSampleToOtherPolylineMeters": 0.006964080415225867,
+          "centerlineSeparationLowerBoundMeters": 0.006839080415225867
+        },
+        {
+          "coursePair": [
+            0,
+            2
+          ],
+          "minimumSampleToOtherPolylineMeters": 0.04390963798786551,
+          "centerlineSeparationLowerBoundMeters": 0.04378463798786551
+        },
+        {
+          "coursePair": [
+            1,
+            2
+          ],
+          "minimumSampleToOtherPolylineMeters": 0.015318768207688457,
+          "centerlineSeparationLowerBoundMeters": 0.015193768207688457
+        }
+      ],
+      "nonAdjacentSelfIntersectingSegmentPairs": [
+        0,
+        0,
+        0
+      ],
+      "centerlineContactToleranceMeters": 1e-8,
+      "centerlinesSeparated": true,
+      "garmentClearanceValidated": false
+    },
+    "oldLayoutEdgesUnchanged": 907,
+    "geometryShapeChanged": false,
+    "courseBoundaryRelocationApplied": false,
+    "continuousBoundProved": false,
+    "allPossibleBroadDesignsRuledOut": false,
+    "next": "Design broad multi-face patch boundaries with explicit original course correspondence; do not silently unprotect 907 edges or relax the original-chart cumulative 1.5 mm bound."
+  },
+  "guideQA": {
+    "guideCount": 9,
+    "maximumStoredPointErrorMeters": 0
+  },
+  "tests": {
+    "blenderVersion": "5.2.0 LTS",
+    "blenderTestsPassed": 11,
+    "artifactSharingTestsPassed": 2,
+    "colabValidator": "PASS: 10 notebooks / 57 Blender scripts / 36 utilities",
+    "ai3dFreeValidator": "PASS"
+  },
+  "visualReview": {
+    "recordedAt": "2026-10-19",
+    "reviewer": "CODEX_VISUAL_DIAGNOSTIC_NOT_HUMAN_GATE_B",
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false,
+    "adoptionAllowed": false,
+    "completeShoulderPanel": false,
+    "rigBound": false,
+    "fullCharacterScore": null,
+    "fullUnderarmRebuilt": false,
+    "majorFoldShapeRedesigned": false,
+    "deformationValidated": false,
+    "garmentStaticQA": false,
+    "inspectedRenders": [
+      {
+        "file": "source/branch_front.png",
+        "sha256": "d2cbea8f6e3b3b2ba5294bae7748ff73d476dc130016682941ad344fa026a155"
+      },
+      {
+        "file": "source/branch_side.png",
+        "sha256": "fa97c50cd4a91cd2bb33c5a7a431cfcb4c6323aef9ce07880970574bd1f3328a"
+      },
+      {
+        "file": "source/branch_back.png",
+        "sha256": "ca03850c2ff9e800fa15301dd3b2803eb6b1ffecd0eb17ac96c4d03ce2f2fa91"
+      },
+      {
+        "file": "source/branch_oblique.png",
+        "sha256": "3ffae73e9a85a23e0782614dc1fee2568970857b7d165061ac9a7b7d7b041d73"
+      },
+      {
+        "file": "bounded/branch_front.png",
+        "sha256": "ee31bbcb811acb922c5f7b51dbdc6b598a0ed885c69384d7326ae8bf63fbff10"
+      },
+      {
+        "file": "bounded/branch_side.png",
+        "sha256": "93e72a933c6eba1c864ddcc5c975df7ac0c3cb18b80feb8784c030e44a7066c9"
+      },
+      {
+        "file": "bounded/branch_back.png",
+        "sha256": "e217e46f155b08afb299d549118dcbe8cfb289cfadb0614b60593eca1e9120c5"
+      },
+      {
+        "file": "bounded/branch_oblique.png",
+        "sha256": "6086f610208dff9b7ddabea7f24811ed1c10aebc5034625434f22030c6a65d95"
+      },
+      {
+        "file": "target/branch_front.png",
+        "sha256": "b31ca4d1b00c2eaed9a71e6df1e4e0c6b0e1d20659567544300e487974089bdf"
+      },
+      {
+        "file": "target/branch_side.png",
+        "sha256": "f31aacf732adb8b686f0a6f905cc34653ea94b19d23b8277dc631494737efec5"
+      },
+      {
+        "file": "target/branch_back.png",
+        "sha256": "0317a41d88b8b1032f2ddc04ea2bc9e612b2064855032d70bb853dc3d41eebb0"
+      },
+      {
+        "file": "target/branch_oblique.png",
+        "sha256": "0d8399c35f5300e099dd541e21b2d951dd3b64e9418d68d73969d7acbef6573c"
+      }
+    ],
+    "findings": [
+      "Amber paths show three complete jagged underarm course arcs on the unchanged translucent study.",
+      "Cyan proposals reduce small kinks but follow the existing major folds; they do not establish a redesigned cloth surface.",
+      "Red strong-fairing comparisons span across the folds but depart by 13–23 mm from the original chart and are not applied.",
+      "Front/back views show irregular folds and the provisional torso clip remain. No garment, deformation or whole-character visual approval."
+    ],
+    "visualBaselineAdopted": false,
+    "geometryShapeChanged": false,
+    "renderOnlyGhostSaved": false
+  },
+  "sharing": {
+    "status": "FETCHED_AND_VERIFIED",
+    "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-curves-v001",
+    "pointer": "docs/artifacts/CH101-latest-underarm-support-curves.json",
+    "toolsCommit": "7b9166aafa0d990174c8caef5d884285be79b0fa",
+    "bundleBytes": 26907768,
+    "bundleSha256": "5618811430c0a18aa74d51f94ec142cc6511be385f0633f5118b3b49902b9df7",
+    "manifestSha256": "a83f5fd6074d38773fc17d4eaa7ad658a8a890274c692886472a3c691744dc78",
+    "payloadCount": 17,
+    "zipAndAllPayloadSHA256": "PASS",
+    "restoredBlenderTestsPassed": 11,
+    "restoredBlenderTestSeconds": 65.757,
+    "artifactRestorationIsNotGarmentApproval": true
+  },
+  "next": "Design broad multi-face patch boundaries with explicit original course correspondence; do not silently unprotect 907 edges or relax the original-chart cumulative 1.5 mm bound."
+}

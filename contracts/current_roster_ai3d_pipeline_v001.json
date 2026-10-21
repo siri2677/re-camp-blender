@@ -1,0 +1,252 @@
+{
+  "contractVersion": "current-roster-ai3d-pipeline-v001",
+  "createdAt": "2026-08-20",
+  "baseContract": "ch101_ai3d_free_pipeline_v001.json",
+  "characters": [
+    {
+      "character": "CH101",
+      "subject": "AmasawaRin",
+      "authoritativeSource": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+      "generationSource": {
+        "path": "art_refs/characters/rin/concept/CH101_Rin_Turnaround_REVIEW_v001.png",
+        "role": "CLEAN_CROP_HELPER_ONLY",
+        "expectedSize": [
+          1665,
+          944
+        ]
+      },
+      "referenceViews": {
+        "front": {
+          "providerKey": "front",
+          "crop": [
+            32,
+            12,
+            520,
+            936
+          ]
+        },
+        "right": {
+          "providerKey": "right",
+          "crop": [
+            500,
+            12,
+            890,
+            936
+          ]
+        },
+        "back": {
+          "providerKey": "back",
+          "crop": [
+            872,
+            12,
+            1360,
+            936
+          ]
+        }
+      },
+      "auxiliaryReferences": [
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_CharacterSheet_APPROVED_v001.png",
+          "role": "IDENTITY_AND_SILHOUETTE_ANCHOR"
+        },
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_ExpressionSheet_REVIEW_v001.png",
+          "role": "FACE_IDENTITY_AUXILIARY"
+        },
+        {
+          "path": "art_refs/characters/rin/concept/CH101_Rin_EquipmentSheet_REVIEW_v001.png",
+          "role": "EQUIPMENT_AUXILIARY"
+        }
+      ],
+      "generationStrategy": {
+        "profile": "CH101_V005_IDENTITY_RECOVERY",
+        "singleViewReferenceSequence": [
+          "front",
+          "front",
+          "front"
+        ],
+        "foregroundRatios": [
+          0.8,
+          0.9,
+          0.98
+        ],
+        "reasonCodes": [
+          "FACE_IDENTITY_NOT_RECOGNIZABLE",
+          "HAIR_AND_PONYTAIL_STRUCTURE_MISMATCH",
+          "OUTFIT_STRUCTURE_AND_COLOR_BLOCKING_MISMATCH",
+          "EQUIPMENT_GEOMETRY_MISSING_OR_UNIDENTIFIABLE",
+          "HANDS_AND_FINGERS_MALFORMED"
+        ],
+        "note": "Keep provider input as a single neutral full-body front view; auxiliary references are recorded for traceability and human review, not silently merged into the model input."
+      }
+    },
+    {
+      "character": "CH102",
+      "subject": "KisaragiMao",
+      "authoritativeSource": "art_refs/characters/mao/concept/CH102_Mao_CharacterSheet_APPROVED_v001.png",
+      "generationSource": {
+        "path": "art_refs/characters/mao/concept/CH102_Mao_Turnaround_REVIEW_v001.png",
+        "role": "CLEAN_CROP_HELPER_ONLY",
+        "expectedSize": [
+          1641,
+          958
+        ]
+      },
+      "referenceViews": {
+        "front": {
+          "providerKey": "front",
+          "crop": [
+            120,
+            20,
+            540,
+            930
+          ]
+        },
+        "right": {
+          "providerKey": "right",
+          "crop": [
+            620,
+            20,
+            1010,
+            930
+          ]
+        },
+        "back": {
+          "providerKey": "back",
+          "crop": [
+            1100,
+            20,
+            1540,
+            930
+          ]
+        }
+      }
+    },
+    {
+      "character": "CH103",
+      "subject": "KanadeNozomi",
+      "authoritativeSource": "art_refs/characters/nozomi/concept/CH103_Nozomi_CharacterSheet_APPROVED_v001.png",
+      "generationSource": {
+        "path": "art_refs/characters/nozomi/concept/CH103_Nozomi_Turnaround_REVIEW_v001.png",
+        "role": "CLEAN_CROP_HELPER_ONLY",
+        "expectedSize": [
+          1672,
+          941
+        ]
+      },
+      "referenceViews": {
+        "front": {
+          "providerKey": "front",
+          "crop": [
+            150,
+            15,
+            620,
+            925
+          ]
+        },
+        "right": {
+          "providerKey": "right",
+          "crop": [
+            620,
+            15,
+            1020,
+            925
+          ]
+        },
+        "back": {
+          "providerKey": "back",
+          "crop": [
+            1090,
+            15,
+            1540,
+            925
+          ]
+        }
+      }
+    },
+    {
+      "character": "CH104",
+      "subject": "ShionTategami",
+      "authoritativeSource": "art_refs/characters/shion/concept/CH104_Shion_CharacterSheet_APPROVED_v001.png",
+      "generationSource": {
+        "path": "art_refs/characters/shion/concept/CH104_Shion_Turnaround_REVIEW_v001.png",
+        "role": "CLEAN_CROP_HELPER_ONLY",
+        "expectedSize": [
+          1672,
+          941
+        ]
+      },
+      "referenceViews": {
+        "front": {
+          "providerKey": "front",
+          "crop": [
+            70,
+            20,
+            530,
+            925
+          ]
+        },
+        "right": {
+          "providerKey": "right",
+          "crop": [
+            1210,
+            20,
+            1550,
+            925
+          ]
+        },
+        "back": {
+          "providerKey": "back",
+          "crop": [
+            610,
+            20,
+            1060,
+            925
+          ]
+        }
+      }
+    },
+    {
+      "character": "CH105",
+      "subject": "KuroganeAkari",
+      "authoritativeSource": "art_refs/characters/akari/concept/CH105_Akari_CharacterSheet_APPROVED_v001.png",
+      "generationSource": {
+        "path": "art_refs/characters/akari/concept/CH105_Akari_CharacterSheet_APPROVED_v001.png",
+        "role": "APPROVED_CHARACTER_SHEET_TOP_ROW_FALLBACK",
+        "expectedSize": [
+          1536,
+          1024
+        ]
+      },
+      "referenceViews": {
+        "front": {
+          "providerKey": "front",
+          "crop": [
+            0,
+            0,
+            512,
+            512
+          ]
+        },
+        "right": {
+          "providerKey": "right",
+          "crop": [
+            512,
+            0,
+            1024,
+            512
+          ]
+        },
+        "back": {
+          "providerKey": "back",
+          "crop": [
+            1024,
+            0,
+            1536,
+            512
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-05",
+  "strategyId": "CH101_SOURCE_SURFACE_BRANCH_BOUNDARIES_V001",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "status": "BOUNDARY_HYPOTHESIS_NOT_VISUAL_BASELINE",
+  "adoptionAllowed": false,
+  "completeShoulderPanel": false,
+  "rigBound": false,
+  "fullCharacterScore": null,
+  "nextTask": "Use each bounded face region for constrained surface retopology, refine torso endpoints and smooth shared branch curves with source-error checks; then create thickness and sew to entry topology before garment QA. Do not count graph partition as completed shoulder geometry.",
+  "schemaVersion": "ch101-shoulder-branch-boundaries-v001",
+  "sourceBlendSha256": "0d89a0bf4f842c2debb15f896f4fb6a641c0ac7e35befe43cd1b2db5b8aced84",
+  "blendSha256": "341074e648341a27c51290e0a29650b1297604506eb2defeec9f5010bf04577e",
+  "vertices": 436,
+  "triangles": 693,
+  "branches": 4,
+  "regionFaceCounts": [
+    151,
+    221,
+    162,
+    159
+  ],
+  "nonAdjacentChartSelfIntersectionPairs": 0,
+  "maximumSourcePositionErrorMeters": 0,
+  "originalBodyMovedVertices": 0,
+  "chartQAEligible": true,
+  "garmentStaticQA": false,
+  "blenderTestsPassed": 6,
+  "sourceStudyPointer": "docs/artifacts/CH101-latest-section-transition.json"
+}

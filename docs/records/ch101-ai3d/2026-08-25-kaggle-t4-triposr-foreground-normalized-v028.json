@@ -1,0 +1,94 @@
+{
+  "recordVersion": "v028",
+  "date": "2026-08-25",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4 x2",
+    "torch": "2.10.0+cu128",
+    "deviceCapability": "7.5",
+    "torchKernelSupportsDevice": true,
+    "status": "READY_GPU_WORKSTREAM"
+  },
+  "repositories": {
+    "toolsCommit": "50e3a42",
+    "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+    "instantMeshProviderCommit": "08822c52fdc399b93ea00e4fa9e596344ed52ccc",
+    "tripoSRProviderCommit": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "branch": "feature/ch101-free-ai3d-autobuild"
+  },
+  "reference": {
+    "character": "CH101",
+    "generationProfile": "CH101_V005_IDENTITY_RECOVERY",
+    "authoritativeSourceSha256": "0ce9c2d94236059966f3159737a6b056716720ff9e3b9f3f75592f4d9b6f561c",
+    "views": {
+      "front": "551720b61c9370738fedb5bb4f7697381e38ef688cc4189566377bfaf61a0674",
+      "right": "75a73b66d6b2e34e04d4ff3e3bd1df881e8d619381dab184a80ab11a625cf6fb",
+      "back": "3449894985e7c9a80c2aa97710537b5704c415c7ea5972ab5632d62ba394b5e0"
+    },
+    "auxiliaryReferencesMerged": false
+  },
+  "execution": {
+    "instantMesh": "FAILED_NONZERO_EXIT_FALLBACK_USED",
+    "fallbackProvider": "tripoSR",
+    "attemptCount": 3,
+    "foregroundRatios": [0.8, 0.9, 0.98],
+    "evaluationAttempt": "ALL",
+    "candidateCountEvaluated": 3,
+    "candidateStatuses": ["GENERATED", "GENERATED", "GENERATED"]
+  },
+  "candidates": [
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "930076e249f12d1ee42de7ff94238614513d2ac91be15c3c7f69cb47632ae745",
+      "refinedGlbSha256": "ec6c0a3f45215ebafddbf91e7de13ae8217117da9e2c224ad5f25187f928149d",
+      "overallScore": 0.454041,
+      "silhouetteScore": 0.411806,
+      "appearanceScore": 0.345469,
+      "colorScore": 0.144193,
+      "faceDetailScore": 0.395069,
+      "technicalScore": 1.0,
+      "failureReasons": ["UPSIDE_DOWN_ORIENTATION", "COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+    },
+    {
+      "candidateId": "02-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "5268a4aaf75c0d21fc1ae89456fffc6f586c0fce9e8af431d56a40e3bbb2d599",
+      "refinedGlbSha256": "99301ccc4befd740a844e0bd22f543da25c8b474d3640635b5d5a10100f3526d",
+      "overallScore": 0.454932,
+      "silhouetteScore": 0.414114,
+      "appearanceScore": 0.34303,
+      "colorScore": 0.140277,
+      "faceDetailScore": 0.39186,
+      "technicalScore": 1.0,
+      "failureReasons": ["UPSIDE_DOWN_ORIENTATION", "COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+    },
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "sourceCandidateSha256": "9879ca1954095eb27f5bda73c09ba2952f7010f1a613b2512bcc949b5759ee48",
+      "refinedGlbSha256": "786a0e33c48e7a459f5617c4475d941c13463dfcb2c56fa6807e6439398a778d",
+      "overallScore": 0.480015,
+      "silhouetteScore": 0.454796,
+      "appearanceScore": 0.337589,
+      "colorScore": 0.149075,
+      "faceDetailScore": 0.420295,
+      "technicalScore": 1.0,
+      "failureReasons": ["UPSIDE_DOWN_ORIENTATION", "COLOR_SCORE_BELOW_MINIMUM", "OVERALL_SCORE_BELOW_MINIMUM"]
+    }
+  ],
+  "decision": {
+    "status": "REGENERATE_REQUIRED",
+    "automaticVisualQA": "REJECT_GATE_B_AND_REGENERATE",
+    "reviewedCandidateCount": 3,
+    "rejectedCandidateCount": 3,
+    "bestCandidate": "03-CH101-TRIPOSR-001",
+    "bestOverallScore": 0.480015,
+    "gateBPackage": "GATE_B_REVIEW_PACKAGE_READY_NOT_APPROVED",
+    "gateBCandidateOrder": ["03-CH101-TRIPOSR-001", "02-CH101-TRIPOSR-001", "01-CH101-TRIPOSR-001"]
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "nextAction": "Improve reference/color/silhouette input and rerun the three-attempt TripoSR/InstantMesh fallback; do not import into Unity."
+}

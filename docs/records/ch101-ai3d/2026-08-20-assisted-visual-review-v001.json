@@ -1,0 +1,55 @@
+{
+  "reviewVersion": "ch101-assisted-visual-review-v001",
+  "recordedAt": "2026-08-20",
+  "character": "CH101",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "reviewerClass": "ASSISTED_VISUAL_QA_NOT_HUMAN_GATE_B",
+  "scope": "TOP_THREE_AUTOMATED_SCORE_CANDIDATES",
+  "recommendation": "REJECT_AND_REGENERATE_OR_MANUALLY_REMODEL",
+  "candidateReviews": [
+    {
+      "candidateId": "03-CH101-TRIPOSR-001",
+      "candidateSha256": "97b7f0997256081cb2b9b65f6ef7204235c9c1f85ec5bfdbf8432dbb1287b472",
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "FACE_IDENTITY_NOT_RECOGNIZABLE",
+        "HAIR_AND_PONYTAIL_STRUCTURE_MISMATCH",
+        "OUTFIT_STRUCTURE_AND_COLOR_BLOCKING_MISMATCH",
+        "EQUIPMENT_GEOMETRY_MISSING_OR_UNIDENTIFIABLE",
+        "HANDS_AND_FINGERS_MALFORMED"
+      ]
+    },
+    {
+      "candidateId": "01-CH101-TRIPOSR-001",
+      "candidateSha256": "6fe8c05412dfe55d4975f3dd1789ed27739acb80ec27bc0d651376c1fa5145d8",
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "FACE_IDENTITY_NOT_RECOGNIZABLE",
+        "HAIR_AND_PONYTAIL_STRUCTURE_MISMATCH",
+        "OUTFIT_STRUCTURE_AND_COLOR_BLOCKING_MISMATCH",
+        "EQUIPMENT_GEOMETRY_MISSING_OR_UNIDENTIFIABLE",
+        "HANDS_AND_FINGERS_MALFORMED"
+      ]
+    },
+    {
+      "candidateId": "01-CH101-INSTANTMESH-001",
+      "candidateSha256": "80c55417f06f7359ba7fa7e470f14f382c08d12e761f878d741159bc29184b1d",
+      "disposition": "REJECT",
+      "reasonCodes": [
+        "FACE_IDENTITY_NOT_RECOGNIZABLE",
+        "HAIR_AND_PONYTAIL_STRUCTURE_MISMATCH",
+        "OUTFIT_STRUCTURE_AND_COLOR_BLOCKING_MISMATCH",
+        "EQUIPMENT_GEOMETRY_MISSING_OR_UNIDENTIFIABLE",
+        "DETACHED_LOWER_LIMB_OR_BOOT",
+        "HANDS_AND_FINGERS_MALFORMED"
+      ]
+    }
+  ],
+  "metricLimitations": {
+    "faceDetailScore": "UPPER_IMAGE_EDGE_OVERLAP_NOT_SEMANTIC_FACE_IDENTITY",
+    "geometryHardGates": "TOPOLOGY_AND_RENDER_FRAGMENTATION_ONLY_NOT_SEMANTIC_DESIGN_MATCH"
+  },
+  "humanGateBDecision": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false
+}

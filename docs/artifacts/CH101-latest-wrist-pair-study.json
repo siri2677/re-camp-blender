@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "PROVISIONAL_WRIST_PAIR_ALIGNMENT_NOT_INTEGRATION",
+  "fullCharacterCandidate": false,
+  "sourceHandReplaced": false,
+  "anatomicalSeamVerified": false,
+  "wristIntegrationAllowed": false,
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 7,
+    "date": "2026-09-14"
+  },
+  "candidateId": "CH101_CLOSED_WRIST_LOOP_RIGID_PAIR_FIT_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-wrist-pair-fit-study-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-wrist-pair-fit-study-v001",
+  "assetName": "CH101-wrist-pair-study-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-wrist-pair-fit-study-v001/CH101-wrist-pair-study-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 4340584,
+  "bundleSha256": "947f3509906e902f091813ed33a8e03e80d1d1f97b16b901c48ee9a48d5cdd6e",
+  "manifestSha256": "ac7c34f74f2de367befdd62da2b332becf70c8b96cd6fda447bb94dc08356c83",
+  "toolsCommit": "10a2364fbb1ed38e2809c1e1e2377ee7022e7484",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}

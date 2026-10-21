@@ -1,0 +1,82 @@
+{
+  "recordVersion": "ch101-ai3d-kaggle-t4-wonder3d-voxel-textured-alpha-review-v056",
+  "recordedAt": "2026-08-26",
+  "workBranch": "feature/ch101-free-ai3d-autobuild",
+  "toolsCommit": "4ff0bd9bbd6964d166164aad6486bafd47d1f276",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "character": "CH101",
+  "runtime": {
+    "platform": "Kaggle",
+    "gpu": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "blender": "3.0.1",
+    "provider": "Wonder3D",
+    "providerCommit": "d894f827aa8c2917761a0dad3ab40df74c7a5b24",
+    "referenceManifestSha256": "71751f17e91fc2416159d9460a16c58233ead8f6efacf896705feb4012f6feb8",
+    "generationReportSha256": "a5a1bd34272d1d5f2376e9b2392b56b40ba38050dbafc1d8d42e8e6c0f3aaf3f"
+  },
+  "multiview": {
+    "status": "MULTIVIEW_GENERATED",
+    "viewCount": 6,
+    "rgbSha256": {
+      "back": "1dcdc4f992f3ab5a3b81d9253a6516248ce0ec7d03c0284fed4d3188d0ae6d3b",
+      "front": "2758c68cdbeb921d4eb01065de314554eeec04f13b493cebfea335560f413f0a",
+      "front_left": "0015af3bf9912884a56ae3cbcac64d3429fe62da6d42341d300d6689fb1b8e86",
+      "front_right": "a7d5700ff9367fa24438e6aaa86062134d28d854d683f93876570e090855efc0",
+      "left": "ff039c0f5f8a78a958b5089ca56189d9b715d94523038c3bdc7112202f6cbf34",
+      "right": "89b1b0050f90525f3d0060f5f1a0fed0aa04868923274debdcfc5f6d56aec388"
+    },
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "meshExtraction": {
+    "neus": "BLOCKED_NEUS_RUNTIME_TOO_SLOW",
+    "fallback": "EXPERIMENTAL_VOXEL_SURFACE_MESH",
+    "resolution": 96,
+    "vertexCount": 10063,
+    "triangleCount": 20136,
+    "maskSource": "Wonder3D normal alpha",
+    "colorSource": "Wonder3D RGB multi-view projection",
+    "fallbackIsProductionMesh": false
+  },
+  "candidate": {
+    "candidateId": "wonder3D-voxel-textured",
+    "transportCandidateSha256": "f56b8ca2be53d2ba91a01ba5ed28f9ec64c2a46eaf539deaf76f77d10e1285a8",
+    "normalizedReviewBlendSha256": "3c21228cc228f822427462d41fd012d345cf314001d3d2ff0f16ecdd29f56ebf",
+    "evaluationReportSha256": "303113605a4f541866d6abe9c8ae3485c5acec8a1a6551301590238fb1c274fd",
+    "scoreReportSha256": "85803f55375c780211c2df07b260318293198e277e23da7a1d04638ee05a85d6",
+    "assistedVisualReviewSha256": "02678e36bc8c06b88212c47a426d4ae5ca9be0581cf457c7278faf8808682688",
+    "scores": {
+      "overallScore": 0.758976,
+      "silhouetteScore": 0.797221,
+      "appearanceScore": 0.563129,
+      "colorScore": 0.863743,
+      "faceDetailScore": 0.524969,
+      "technicalScore": 1.0,
+      "status": "AUTO_REVIEW_CANDIDATE",
+      "eligibleForHumanReview": true,
+      "failureReasons": []
+    },
+    "strictVisualQa": {
+      "recommendation": "DEFER_TO_HUMAN_GATE_B_REVIEW",
+      "disposition": "DEFER_TO_HUMAN_REVIEW",
+      "reasonCodes": [],
+      "faceMetricRequiresHumanConfirmation": true
+    }
+  },
+  "gates": {
+    "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+    "gateB": "PENDING_HUMAN_REVIEW",
+    "unityInputAllowed": false,
+    "productionPromotionAllowed": false
+  },
+  "artifactPersistence": {
+    "status": "HASHES_RECORDED_KAGGLE_BINARY_EPHEMERAL",
+    "note": "The Kaggle working-session blend and renders are not claimed to be present in Git. Re-download the reviewed blend before the session expires if a local artifact is required.",
+    "repositoryAutomation": [
+      "scripts/ai3d/build_wonder3d_voxel_surface.py",
+      "scripts/blender/apply_review_multiview_textures.py"
+    ]
+  },
+  "nextAction": "HUMAN_GATE_B_REVIEW_OF_SILHOUETTE_FACE_HAIR_OUTFIT_EQUIPMENT_AND_TEXTURE_PROJECTION"
+}

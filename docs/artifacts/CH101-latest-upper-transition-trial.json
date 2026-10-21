@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "candidateId": "CH101_BOUNDED_UPPER_TRANSITION_RADIAL_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-upper-transition-trial-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-upper-transition-trial-v001",
+  "assetName": "CH101-upper-transition-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-upper-transition-trial-v001/CH101-upper-transition-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 18730344,
+  "bundleSha256": "8cfaefba5a8305b9b55c0fac14d0f156a2046e23a4d66dcd9cad512d1208db38",
+  "manifestSha256": "7e1b23386efa20ce36c591364939ba5f6ba622673f7d3125387dc83122f4b8d6",
+  "toolsCommit": "95595ca6fb9f7c46861ee917b114a72d6b6ad39c",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101",
+  "scope": "UNADOPTED_LOCAL_GEOMETRY_EXPERIMENT_NOT_FULL_CHARACTER_CANDIDATE",
+  "visualDecision": "INSUFFICIENT_IMPROVEMENT_NOT_ADOPTED",
+  "visualReviewBy": "ASSISTANT_NOT_HUMAN_GATE_B",
+  "sameRelaxationStrategyRepeatAllowed": false,
+  "continuationBaselinePointer": "docs/artifacts/CH101-latest-seam-contour.json",
+  "fullCharacterScore": null,
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "verifiedOn": "2026-09-22",
+    "payloadCount": 14,
+    "allPayloadSha256Matched": true
+  }
+}

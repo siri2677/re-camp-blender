@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "ch101-review-artifact-pointer-v001",
+  "character": "CH101",
+  "artifactScope": "NONDESTRUCTIVE_BOUNDARY_DIAGNOSTIC_NOT_ANATOMICAL_APPROVAL",
+  "fullCharacterCandidate": false,
+  "cutAllowed": false,
+  "sourceHandReplaced": false,
+  "anatomicalSeamVerified": false,
+  "wristIntegrationAllowed": false,
+  "attachmentApproved": false,
+  "assistantVisualAssessment": "PROVISIONAL_LOOP_NOT_ACCEPTED_AS_SLEEVE_SKIN_SEAM",
+  "downloadVerification": {
+    "status": "FETCHED_AND_VERIFIED",
+    "payloadCount": 7,
+    "date": "2026-09-18"
+  },
+  "candidateId": "CH101_NONDESTRUCTIVE_WRIST_BOUNDARY_REVIEW_V001",
+  "status": "REVIEW_ARTIFACT_READY_NOT_APPROVED",
+  "sourceStatus": "AI_GENERATED_CANDIDATE_NOT_PRODUCTION",
+  "gateB": "PENDING_HUMAN_REVIEW",
+  "unityInputAllowed": false,
+  "productionPromotionAllowed": false,
+  "releaseTag": "ch101-wrist-boundary-review-v001",
+  "releaseUrl": "https://github.com/siri2677/re-camp-blender/releases/tag/ch101-wrist-boundary-review-v001",
+  "assetName": "CH101-wrist-boundary-NOT_PRODUCTION-v001.zip",
+  "downloadUrl": "https://github.com/siri2677/re-camp-blender/releases/download/ch101-wrist-boundary-review-v001/CH101-wrist-boundary-NOT_PRODUCTION-v001.zip",
+  "bundleBytes": 6155331,
+  "bundleSha256": "7d611f2b61793845054c8591d5a0795847bfd6f5e1536b346a6793582fe97634",
+  "manifestSha256": "98865900530d91f797c3207e31339c4eb59f041cdba78a5c8c4fadef587a1258",
+  "toolsCommit": "cf0231c50fc4b2694dbdc9eb2fa82697e4120c1b",
+  "artCommit": "b6c9b3128358e061eee6184230929413eba84101"
+}
