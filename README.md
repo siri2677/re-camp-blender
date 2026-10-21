@@ -20,6 +20,13 @@ Global 134.76° fold remains. Read-only classification finds 63 edges above 55°
 including 55 unprotected edges; the largest is unprotected in domain 6.
 Next: ridge/support-preserving partition of that remaining network, not another
 run of the same remove-and-fill family. Gate B, Unity and production stay locked.
+[Actual Blend and seventeen renders](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-mesh-v001)
+and [restore pointer](docs/artifacts/CH101-latest-underarm-support-mesh.json):
+22 payloads freshly downloaded and SHA256-verified.
+Eleven new Blender tests also pass on the downloaded Blend, alongside fourteen
+previous-panel regressions and 132 Python tests. Both package validators pass.
+[Actual before/after PNG](https://github.com/siri2677/re-camp-blender/releases/download/ch101-underarm-support-mesh-v001/panel_before_after.png)
+is also attached for viewing without extracting the ZIP.
 
 Previous: [boundary-locked multi-interior underarm panel](docs/plans/ch101-underarm-panels-2026-10-19.md).
 One 42.346 mm sector now replaces 21 real triangles with 17, removing three

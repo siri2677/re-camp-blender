@@ -1,5 +1,20 @@
 # Review artifact sharing
 
+## October 21 bidirectional-error underarm support mesh
+
+`CH101-latest-underarm-support-mesh.json` restores the actual October 19 assembly
+plus a new hidden 28.495 mm domain-5 replacement. Thirty-two triangles become 24
+with one selected support knot; original geometry and 907 layout edges remain.
+The local maximum fold drops 88.75°→54.29°, but the global 134.76° fold remains.
+This is a local open-surface study, not a visual baseline, sewn garment or Gate B.
+ZIP and all 22 payloads were freshly fetched and SHA256-verified on 2026-10-21.
+The separate `panel_before_after.png` asset shows actual Blender geometry.
+The remaining-fold report distinguishes protected from unprotected edges.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-support-mesh.json --output-dir artifacts/restored-underarm-support-mesh
+```
+
 ## October 19 one multi-interior underarm panel
 
 `CH101-latest-underarm-panels.json` restores the actual Blend, seventeen

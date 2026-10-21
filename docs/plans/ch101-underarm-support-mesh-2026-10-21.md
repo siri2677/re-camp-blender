@@ -115,7 +115,7 @@ blender --background --python-exit-code 1 --python tests/blender/test_underarm_s
 
 Blender 신규 검사 11개(전체 10개 + 읽기 전용 진단 검사), 이전 패널 회귀 검사 14개,
 Python unittest 132개, AI3D/Colab validator(10 notebooks / 59 Blender scripts / 36 utilities),
-compile/diff 검사를 수행한다. optional source-tree 검사는 환경변수 미설정으로 skipped이고,
+compile/diff 검사를 모두 통과했다. optional source-tree 검사는 환경변수 미설정으로 skipped이고,
 실제 실행에서는 input/art/reference 해시를 별도 검증했다.
 
 산출물: Blend, 실제 전후/위치/와이어 렌더 17장, 전체 탐색·선택·QA report,
@@ -134,4 +134,24 @@ garmentStaticQA: false
 deformationValidated: false
 rigBound: false
 fullCharacterScore: null
+```
+
+## 배포·복원 검증
+
+[연구용 prerelease](https://github.com/siri2677/re-camp-blender/releases/tag/ch101-underarm-support-mesh-v001)에
+Blend·렌더·report·잔여 주름 진단·read-me·시각 판정을 보관했다.
+새 폴더로 ZIP과 **22개 payload 전체를 다운로드하여 SHA256 PASS**를 확인했다.
+`panel_before_after.png`를 ZIP 밖에도 첨부했다. 배포 검증은 모델 품질 승인과 별개다.
+다운로드한 Blend로 신규 **11개 검사 전체를 다시 실행해 통과**했다(47.517초).
+별도 preview asset도 새 다운로드 후 해시가 ZIP 내부 payload와 일치함을 확인했다.
+
+- Tools commit: `7647ebbc93405750f9bcdd7164df87b05a91e1a4`.
+- ZIP: 30,245,368 bytes, SHA256
+  `34ed55bc26815cc64a19cba8ca22a24a17058c371cca1dee8bc0433dfb3aff02`.
+- manifest SHA256: `be734c7dbd8631551e5a6f2281eedfe8f59eb89c94ad69ff20d704af1ba310ea`.
+- preview SHA256: `5e633859ea51dfaca7db3d5b4c15d2d5f1131f9188722f56a56c463e37e33358`.
+- 복원 pointer: `docs/artifacts/CH101-latest-underarm-support-mesh.json`.
+
+```text
+python scripts/ai3d/review_artifact_release.py fetch --pointer docs/artifacts/CH101-latest-underarm-support-mesh.json --output-dir artifacts/restored-underarm-support-mesh
 ```
