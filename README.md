@@ -2,13 +2,26 @@
 
 Public Colab and Blender automation workspace for the Re:Camp project.
 
-## Current status — 2026-10-19
+## Current status — 2026-10-21
 
 Start with the [updated completed/remaining execution plan](docs/plans/ch101-reference-sleeve-continuation-2026-09-21.md).
 It separates completed tooling/local studies from unfinished geometry, UV/materials,
 whole-character cleanup, rig/deformation, human Gate B and Unity/Android work.
 
-Latest: [boundary-locked multi-interior underarm panel](docs/plans/ch101-underarm-panels-2026-10-19.md).
+Latest: [bidirectional-error underarm support mesh](docs/plans/ch101-underarm-support-mesh-2026-10-21.md).
+Continues the actual October 19 mesh, preserving its previous patch and all 907
+layout edges. Forward-only violations no longer incorrectly select an unrelated
+reverse witness. A bounded four-knot search selects one additional 28.495 mm
+panel with **one** support: 32→24 triangles, local maximum fold 88.75°→54.29°,
+local bending −48.88% / whole-study bending −2.04%. Original-chart finite sample
+errors stay 1.442278 / 1.480045 mm. Seventeen actual renders show a local change,
+not a whole-character pass; the hidden study is not the visual baseline.
+Global 134.76° fold remains. Read-only classification finds 63 edges above 55°,
+including 55 unprotected edges; the largest is unprotected in domain 6.
+Next: ridge/support-preserving partition of that remaining network, not another
+run of the same remove-and-fill family. Gate B, Unity and production stay locked.
+
+Previous: [boundary-locked multi-interior underarm panel](docs/plans/ch101-underarm-panels-2026-10-19.md).
 One 42.346 mm sector now replaces 21 real triangles with 17, removing three
 interior vertices and inserting one error-driven support knot. Local maximum
 fold drops 74.75° → 37.23°; local bending drops 57.35%, whole-study bending only

@@ -477,7 +477,10 @@ def render_comparison(output,source,obj,op):
     label_shader.inputs['Emission Color'].default_value=(.85,.92,.96,1)
     label_shader.inputs['Emission Strength'].default_value=1.
     new_materials=[material,wire_material,label_material]
-    for sign,item,selected,label,caption in [(-1,source,row['removedFaces'],'BEFORE','21 TRIANGLES'),(1,obj,op['patchFaceIndices'][0],'AFTER','17 TRIANGLES + 1 SUPPORT')]:
+    old_caption=f"{len(row['removedFaces'])} TRIANGLES"
+    count=len(row.get('supportPoints',[]))
+    new_caption=f"{len(op['patchFaceIndices'][0])} TRIANGLES + {count} SUPPORT"+('S' if count!=1 else '')
+    for sign,item,selected,label,caption in [(-1,source,row['removedFaces'],'BEFORE',old_caption),(1,obj,op['patchFaceIndices'][0],'AFTER',new_caption)]:
         offset=right*(sign*.035)
         ids=sorted({i for fi in selected for i in item.data.polygons[fi].vertices})
         mapping={j:i for i,j in enumerate(ids)}
